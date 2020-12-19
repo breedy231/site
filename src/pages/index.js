@@ -1,9 +1,18 @@
 import React from "react"
+import styled from "styled-components"
+
+
+
+const Header = styled.h1`
+  font-weight: bold;
+  font-size: xx-large;
+`
+
 
 export default function Home() {
   return <body>
       
-    <h1>Brendan Reed</h1>
+    <Header>Brendan Reed</Header>
     <h2>Software engineer in Boston</h2>
 
     <div>
