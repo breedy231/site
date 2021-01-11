@@ -2,7 +2,6 @@ import React from "react"
 import styled from "styled-components"
 
 import Icon from "../components/icon"
-import Layout from "./layouts"
 
 const HeaderRow = styled.div`
     display: flex;
@@ -27,14 +26,12 @@ const IconBox = styled.div`
 
 export default function Header() {
   return (
-      <Layout>
-        <HeaderRow>
-            <Name>Brendan Reed</Name>
-            <IconBox>
-                <Icon link="/about" name="About me" />
-                <Icon link="TODO github" name="Github" />
-            </IconBox>
-        </HeaderRow>
-      </Layout>
+    <HeaderRow>
+        <a href="/"><Name>Brendan Reed</Name></a>
+        <IconBox>
+            <Icon link="/about" name="About me" />
+            <Icon link="http://www.github.com/breedy231" name="Github" />
+        </IconBox>
+    </HeaderRow>
   )
 }
