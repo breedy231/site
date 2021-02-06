@@ -7,7 +7,6 @@ const HeaderRow = styled.div`
     display: flex;
 `
 
-
 const Name = styled.p`
     flex-grow: 10;
     padding-top: 10px;
@@ -29,8 +28,7 @@ export default function Header() {
     <HeaderRow>
         <a href="/"><Name>Brendan Reed</Name></a>
         <IconBox>
-            <Icon link="/about" name="About me" />
-            <Icon link="http://www.github.com/breedy231" name="Github" />
+            <Icon link="/about" name="About" />
         </IconBox>
     </HeaderRow>
   )

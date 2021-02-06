@@ -1,14 +1,15 @@
 import React from "react"
+import InfoContainer from "../components/infoContainer"
 
-import Layout from "../components/layouts"
+import Layout from "../components/layout"
 
 
 export default function Home() {
   return (
       <Layout>
-        <body>
-            <h2>Software engineer in Boston</h2>
-        </body>
+        <InfoContainer>
+          <h2>Software Engineer in Boston</h2>
+        </InfoContainer>
       </Layout>
   ) 
 }
