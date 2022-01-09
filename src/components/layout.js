@@ -1,15 +1,25 @@
 import React from "react"
 import "./layout.sass"
+import { useStaticQuery, graphql } from 'gatsby'
 
 export default function Layout({ children }) {
+
+  const data = useStaticQuery(graphql`
+    {
+      site {
+        id
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `)
+
+
   return (
-    <html lang="en">
-       <head>
-          <title>Brendan Reed</title>
-        </head>
-        <div style={{ margin: `0 auto`, padding: `0 1rem` }}>
-            {children}
-        </div>
-    </html>
+    <div style={{ margin: `0 auto`, padding: `0 1rem` }}>
+      <title>{data.site.siteMetadata.title}</title>
+        {children}
+    </div>
   )
 }
