@@ -17,9 +17,15 @@ export default function Layout({ children }) {
 
 
   return (
-    <div style={{ margin: `0 auto`, padding: `0 1rem` }}>
-      <title>{data.site.siteMetadata.title}</title>
-        {children}
-    </div>
+
+    <html lang="en">
+      <body>
+        <div style={{ margin: `0 auto`, padding: `0 1rem` }}>
+          <title>{data.site.siteMetadata.title}</title>
+            {children}
+        </div>
+      </body>
+    </html>
+    
   )
 }

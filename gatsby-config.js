@@ -9,6 +9,7 @@ module.exports = {
 		`gatsby-plugin-styled-components`,
 		`gatsby-plugin-sass`,
 		`gatsby-plugin-csp`,
+		`gatsby-plugin-netlify`,
 		{
 			resolve: `gatsby-plugin-manifest`,
 			options: {
