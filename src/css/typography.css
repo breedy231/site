@@ -5,3 +5,18 @@
     font-stretch: 75% 125%;
     font-style: normal;
    }
+
+@font-face {
+    font-family: 'Poppins Regular';
+    src: url("../fonts/Poppins/Poppins-Regular.ttf")
+}
+
+@font-face {
+    font-family: 'Poppins Bold';
+    src: url("../fonts/Poppins/Poppins-Bold.ttf")
+}
+
+@font-face {
+    font-family: 'Poppins SemiBold';
+    src: url("../fonts/Poppins/Poppins-SemiBold.ttf")
+}

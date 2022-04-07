@@ -1,16 +1,17 @@
 import React from "react"
-import InfoContainer from "../components/infoContainer"
 import styled from "styled-components"
 
 import Layout from "../components/layout"
 
-const StyledDiv = styled.div`
-    display: flex;
-    flex-direction: row;
 
-    font-size: 25px;
-    background-color: #d6a0dc;
-`;
+const StyledHeader = styled.p`
+    font-family: 'Poppins Bold' ;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    color: #DA300F;
+`
 
 const StyledContentDiv = styled.div`
     display: flex;
@@ -24,54 +25,96 @@ const StyledContentDiv = styled.div`
     align-items: center;
 `;
 
-const StyledHeaderDiv = styled.div`
+const StyledTextDiv = styled.div`
+    max-width: 700px;
+`;
+
+const StyledMainText = styled.p`
+    font-family: 'Poppins Regular';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 48px;
+    color: #FFFFFF;
+`
+
+const StyledSubText = styled.p`
+    font-family: 'Poppins Regular';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 39px;
+
+    color: #FFFFFF;
+
+    & > a {
+        text-decoration-color: #DA300F;
+    }
+
+    & > a:visited {
+        color: #FFFFFF;
+    }
+
+    & > a:link {
+        color: #FFFFFF;
+    }
 
 `;
 
-const StyledTextDiv = styled.div`
-    max-width: 750px;
+const MiniCols = styled.div`
+    display: flex;
+    flex-direction: column;
 
     & > p {
-        font-size: 30px;
-
-        & > a {
-            text-decoration: none;
-        }
+        font-size: 20px;
+        color: #FFFFFF;
+        margin-right: 150px;
+        margin-bottom: -15px;
     }
 
+    & > a {
+        font-size: 20px;
+        color: #FFFFFF;
+        margin-right: 150px;
+        margin-top: 18px;
+
+        text-decoration: underline;
+        text-decoration-color: #DA300F;
+    }
+`;
+
+const MiniColHeader = styled.p`
+    font-family: 'Poppins Bold';
+`;
+
+const MiniRow = styled.div`
+    display: flex;
+    flex-direction: row;
 `;
 
 export default function New() {
   return (
       <Layout>
-        <StyledDiv>
-            <p>Brendan Reed</p>
-            <InfoContainer>
-                <p>Blog</p>
-                <p>Projects</p>
-                <a href="mailto:bren.reed@protonmail.com">Contact</a>
-            </InfoContainer>
-        </StyledDiv>
         <StyledContentDiv>
-            <StyledHeaderDiv>
-                <span>Hi, I'm Brendan👋🏻</span>
-            </StyledHeaderDiv>
             <StyledTextDiv>
-                <p>
-                    I'm a software engineer, foodie, and movie nerd living in Cambridge, Massachusetts. 
-                </p>
-                <p>
-                    Currently working at Klaviyo building new analytics tools. I've previously worked at Zipari, Carbonite, and Catalant. 
-                </p>
-                <p>
-                    This is my personal site where I'll share what I'm working on, things I'm learning, and other stuff that I'm interested in. 
-                </p>
-                <p>
-                If you want to get in touch with me, you can email me at <a href="mailto:bren.reed@protonmail.com">bren.reed@protonmail.com </a>. If you want to see my code, check me out on <a href="https://www.github.com/breedy231">Github</a>. 
-                </p>
+                <StyledHeader>Brendan Reed</StyledHeader>
+                <StyledMainText>
+                     I'm a software engineer. I create delightful user experiences designed to help people engage with their data. 
+                </StyledMainText>
+                <StyledSubText>
+                    Senior software engineer at <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at <a href="https://www.gocatalant.com">Catalant</a>, <a href="https://www.carbonite.com">Carbonite</a>, and <a href="https://www.zipari.com">Zipari</a>.  
+                </StyledSubText>
+                <MiniRow>
+                    <MiniCols>
+                        <MiniColHeader>Located in</MiniColHeader>
+                        <p>Boston, MA</p>
+                    </MiniCols>
+                    <MiniCols>
+                        <MiniColHeader>Get in touch</MiniColHeader>
+                        <a href="mailto:bren.reed@protonmail.com">bren.reed@protonmail.com</a>
+                    </MiniCols>
+                </MiniRow> 
             </StyledTextDiv>
-            
-            
         </StyledContentDiv>
       </Layout>
   ) 
