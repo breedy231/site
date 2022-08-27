@@ -28,7 +28,6 @@ const StyledContentDiv = styled.div`
 
 const StyledTextDiv = styled.div(props => ({
     'max-width': props.small ? '300px' : '700px',
-    'margin-left': props.small ? '200px' : undefined,
 }));
 
 const StyledMainText = styled.p(props => ({
@@ -40,28 +39,28 @@ const StyledMainText = styled.p(props => ({
     'color': '#FFFFFF',
 }));
 
-const StyledSubText = styled.p`
-    font-family: 'Poppins Regular';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 32px;
-    line-height: 39px;
+const StyledSubText = styled.p(props => ({
+    'font-family': 'Poppins Regular',
+    'font-style': 'normal',
+    'font-weight': '400',
+    'font-size': props.small ? '16px' : '32px',
+    'line-height': props.small ? '19px' : '39px',
 
-    color: #FFFFFF;
+    'color': '#FFFFFF',
 
-    & > a {
-        text-decoration-color: #DA300F;
+    '& > a': {
+        'text-decoration-color': '#DA300F',
+    },
+
+    '& > a:visited': {
+        'color': '#FFFFFF',
+    },
+
+    '& > a:link': {
+        'color': '#FFFFFF',
     }
 
-    & > a:visited {
-        color: #FFFFFF;
-    }
-
-    & > a:link {
-        color: #FFFFFF;
-    }
-
-`;
+}));
 
 const MiniCols = styled.div`
     display: flex;
@@ -103,9 +102,7 @@ export default function New() {
       }}>
         {matches => (
             <Fragment>
-              {matches.small && (
-              <p>I am small!</p>
-          )}
+              {matches.small && <p>I am small!</p>}
               {matches.medium && <p>I am medium!</p>}
               {(matches.large || matches.small) && (
               
@@ -116,7 +113,7 @@ export default function New() {
                 <StyledMainText small={matches.small}>
                      I'm a software engineer. I create delightful user experiences designed to help people engage with their data. 
                 </StyledMainText>
-                <StyledSubText>
+                <StyledSubText small={matches.small}>
                     Senior software engineer at <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at <a href="https://www.gocatalant.com">Catalant</a>, <a href="https://www.carbonite.com">Carbonite</a>, and <a href="https://www.zipari.com">Zipari</a>.  
                 </StyledSubText>
                 <MiniRow>
