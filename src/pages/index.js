@@ -9,7 +9,7 @@ const StyledHeader = styled.p(props => ({
     'font-family': 'Poppins Bold',
     'font-style': 'normal',
     'font-weight': 700,
-    'font-size': props.small ? '20px' : '40px',
+    'font-size': props.small ? '35px' : '40px',
     'line-height': '48px',
     color: '#DA300F',
 }));
@@ -34,8 +34,8 @@ const StyledMainText = styled.p(props => ({
     'font-family': 'Poppins Regular',
     'font-style': 'normal',
     'font-weight': 700,
-    'font-size': props.small ? '20px' : '40px',
-    'line-height': props.small ? '24px' : '48px',
+    'font-size': props.small ? '30px' : '40px',
+    'line-height': props.small ? '35px' : '48px',
     'color': '#FFFFFF',
 }));
 
@@ -43,8 +43,8 @@ const StyledSubText = styled.p(props => ({
     'font-family': 'Poppins Regular',
     'font-style': 'normal',
     'font-weight': '400',
-    'font-size': props.small ? '16px' : '32px',
-    'line-height': props.small ? '19px' : '39px',
+    'font-size': props.small ? '20px' : '32px',
+    'line-height': props.small ? '22px' : '39px',
 
     'color': '#FFFFFF',
 
@@ -62,27 +62,27 @@ const StyledSubText = styled.p(props => ({
 
 }));
 
-const MiniCols = styled.div`
-    display: flex;
-    flex-direction: column;
+const MiniCols = styled.div(props => ({
+    'display': 'flex',
+    'flex-direction': 'column',
 
-    & > p {
-        font-size: 20px;
-        color: #FFFFFF;
-        margin-right: 150px;
-        margin-bottom: -15px;
+    '& > p': {
+        'font-size': '20px',
+        'color': '#FFFFFF',
+        'margin-right': '150px',
+        'margin-bottom': '-15px',
+    },
+
+    '& > a': {
+        'font-size': '20px',
+        'color': '#FFFFFF',
+        'margin-right': '150px',
+        'margin-top': '18px',
+
+        'text-decoration': 'underline',
+        'text-decoration-color': '#DA300F',
     }
-
-    & > a {
-        font-size: 20px;
-        color: #FFFFFF;
-        margin-right: 150px;
-        margin-top: 18px;
-
-        text-decoration: underline;
-        text-decoration-color: #DA300F;
-    }
-`;
+}));
 
 const MiniColHeader = styled.p`
     font-family: 'Poppins Bold';
@@ -102,9 +102,7 @@ export default function New() {
       }}>
         {matches => (
             <Fragment>
-              {matches.small && <p>I am small!</p>}
-              {matches.medium && <p>I am medium!</p>}
-              {(matches.large || matches.small) && (
+              {matches && (
               
               <Layout>
         <StyledContentDiv>
@@ -116,16 +114,39 @@ export default function New() {
                 <StyledSubText small={matches.small}>
                     Senior software engineer at <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at <a href="https://www.gocatalant.com">Catalant</a>, <a href="https://www.carbonite.com">Carbonite</a>, and <a href="https://www.zipari.com">Zipari</a>.  
                 </StyledSubText>
-                <MiniRow>
-                    <MiniCols>
-                        <MiniColHeader>Located in</MiniColHeader>
-                        <p>Boston, MA</p>
-                    </MiniCols>
-                    <MiniCols>
-                        <MiniColHeader>Get in touch</MiniColHeader>
-                        <a href="mailto:bren.reed@protonmail.com">bren.reed@protonmail.com</a>
-                    </MiniCols>
-                </MiniRow> 
+
+                {
+                    matches.large && (
+                        <MiniRow>
+                            <MiniCols>
+                                <MiniColHeader>Located in</MiniColHeader>
+                                <p>Boston, MA</p>
+                            </MiniCols>
+                            <MiniCols>
+                                <MiniColHeader>Get in touch</MiniColHeader>
+                                <a href="mailto:bren.reed@protonmail.com">bren.reed@protonmail.com</a>
+                            </MiniCols>
+                        </MiniRow> 
+                    )
+                }
+                {
+                    matches.small && (
+                        <div>
+                            <MiniRow>
+                                <MiniCols>
+                                    <MiniColHeader>Located in</MiniColHeader>
+                                    <p>Boston, MA</p>
+                                </MiniCols>
+                            </MiniRow> 
+                            <MiniRow>
+                                <MiniCols>
+                                    <MiniColHeader>Get in touch</MiniColHeader>
+                                    <a href="mailto:bren.reed@protonmail.com">bren.reed@protonmail.com</a>
+                                </MiniCols>
+                            </MiniRow>
+                        </div>
+                    )
+                }
             </StyledTextDiv>
         </StyledContentDiv>
       </Layout>
