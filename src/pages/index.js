@@ -116,7 +116,7 @@ export default function New() {
                 </StyledSubText>
 
                 {
-                    matches.large && (
+                    matches.large ? (
                         <MiniRow>
                             <MiniCols>
                                 <MiniColHeader>Located in</MiniColHeader>
@@ -127,10 +127,7 @@ export default function New() {
                                 <a href="mailto:bren.reed@protonmail.com">bren.reed@protonmail.com</a>
                             </MiniCols>
                         </MiniRow> 
-                    )
-                }
-                {
-                    matches.small && (
+                    ) : (
                         <div>
                             <MiniRow>
                                 <MiniCols>
