@@ -3,119 +3,124 @@ import styled from "styled-components"
 
 import Layout from "../components/layout"
 
-
 const StyledHeader = styled.p`
-    font-family: 'Poppins Bold' ;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 48px;
-    color: #DA300F;
+  font-family: "Poppins Bold";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 48px;
+  color: #da300f;
 `
 
 const StyledContentDiv = styled.div`
-    display: flex;
-    justify-content: center;
-    font-size: 50px;
-    
-    & > span {
-        margin-top: 100px;
-    }
-    flex-direction: column;
-    align-items: center;
-`;
+  display: flex;
+  justify-content: center;
+  font-size: 50px;
+
+  & > span {
+    margin-top: 100px;
+  }
+  flex-direction: column;
+  align-items: center;
+`
 
 const StyledTextDiv = styled.div`
-    max-width: 700px;
-`;
+  max-width: 700px;
+`
 
 const StyledMainText = styled.p`
-    font-family: 'Poppins Regular';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 48px;
-    color: #FFFFFF;
+  font-family: "Poppins Regular";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 48px;
+  color: #ffffff;
 `
 
 const StyledSubText = styled.p`
-    font-family: 'Poppins Regular';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 32px;
-    line-height: 39px;
+  font-family: "Poppins Regular";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 39px;
 
-    color: #FFFFFF;
+  color: #ffffff;
 
-    & > a {
-        text-decoration-color: #DA300F;
-    }
+  & > a {
+    text-decoration-color: #da300f;
+  }
 
-    & > a:visited {
-        color: #FFFFFF;
-    }
+  & > a:visited {
+    color: #ffffff;
+  }
 
-    & > a:link {
-        color: #FFFFFF;
-    }
-
-`;
+  & > a:link {
+    color: #ffffff;
+  }
+`
 
 const MiniCols = styled.div`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    & > p {
-        font-size: 20px;
-        color: #FFFFFF;
-        margin-right: 150px;
-        margin-bottom: -15px;
-    }
+  & > p {
+    font-size: 20px;
+    color: #ffffff;
+    margin-right: 150px;
+    margin-bottom: -15px;
+  }
 
-    & > a {
-        font-size: 20px;
-        color: #FFFFFF;
-        margin-right: 150px;
-        margin-top: 18px;
+  & > a {
+    font-size: 20px;
+    color: #ffffff;
+    margin-right: 150px;
+    margin-top: 18px;
 
-        text-decoration: underline;
-        text-decoration-color: #DA300F;
-    }
-`;
+    text-decoration: underline;
+    text-decoration-color: #da300f;
+  }
+`
 
 const MiniColHeader = styled.p`
-    font-family: 'Poppins Bold';
-`;
+  font-family: "Poppins Bold";
+`
 
 const MiniRow = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
+  display: flex;
+  flex-direction: row;
+`
 
 export default function New() {
   return (
-      <Layout>
-        <StyledContentDiv>
-            <StyledTextDiv>
-                <StyledHeader>Brendan Reed</StyledHeader>
-                <StyledMainText>
-                     I'm a software engineer. I create delightful user experiences designed to help people engage with their data. 
-                </StyledMainText>
-                <StyledSubText>
-                    Senior software engineer at <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at <a href="https://www.gocatalant.com">Catalant</a>, <a href="https://www.carbonite.com">Carbonite</a>, and <a href="https://www.zipari.com">Zipari</a>.  
-                </StyledSubText>
-                <MiniRow>
-                    <MiniCols>
-                        <MiniColHeader>Located in</MiniColHeader>
-                        <p>Boston, MA</p>
-                    </MiniCols>
-                    <MiniCols>
-                        <MiniColHeader>Get in touch</MiniColHeader>
-                        <a href="mailto:bren.reed@protonmail.com">bren.reed@protonmail.com</a>
-                    </MiniCols>
-                </MiniRow> 
-            </StyledTextDiv>
-        </StyledContentDiv>
-      </Layout>
-  ) 
+    <Layout>
+      <StyledContentDiv>
+        <StyledTextDiv>
+          <StyledHeader>Brendan Reed</StyledHeader>
+          <StyledMainText>
+            I'm a software engineer. I create delightful user experiences
+            designed to help people engage with their data.
+          </StyledMainText>
+          <StyledSubText>
+            Senior software engineer at{" "}
+            <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at{" "}
+            <a href="https://www.gocatalant.com">Catalant</a>,{" "}
+            <a href="https://www.carbonite.com">Carbonite</a>, and{" "}
+            <a href="https://www.zipari.com">Zipari</a>.
+          </StyledSubText>
+          <MiniRow>
+            <MiniCols>
+              <MiniColHeader>Located in</MiniColHeader>
+              <p>Boston, MA</p>
+            </MiniCols>
+            <MiniCols>
+              <MiniColHeader>Get in touch</MiniColHeader>
+              <a href="mailto:bren.reed@protonmail.com">
+                bren.reed@protonmail.com
+              </a>
+            </MiniCols>
+          </MiniRow>
+        </StyledTextDiv>
+      </StyledContentDiv>
+    </Layout>
+  )
 }
