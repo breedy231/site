@@ -1,67 +1,101 @@
 import React, { Fragment } from "react"
-import Media from 'react-media';
+import Media from "react-media"
 import styled from "styled-components"
 import Layout from "../components/layout"
 
-const StyledHeader = styled.p(props => ({
-    'font-family': 'Poppins Bold',
-    'font-style': 'normal',
-    'font-weight': 700,
-    'font-size': props.small ? '35px' : '40px',
-    'line-height': '48px',
-    color: '#DA300F',
-}));
+const LargeHeader = styled.p`
+  font-family: "Poppins Bold";
+  font-style: "normal";
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 48px;
+  color: #da300f;
+`
+
+const SmallHeader = styled.p`
+  font-family: "Poppins Bold";
+  font-style: "normal";
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 48px;
+  color: #da300f;
+`
 
 const StyledContentDiv = styled.div`
-    display: flex;
-    justify-content: center;
-    font-size: 50px;
-    
-    & > span {
-        margin-top: 100px;
-    }
-    flex-direction: column;
-    align-items: center;
-`;
+  display: flex;
+  justify-content: center;
+  font-size: 50px;
 
-const StyledTextDiv = styled.div(props => ({
-    'max-width': props.small ? '300px' : '700px',
-}));
+  & > span {
+    margin-top: 100px;
+  }
+  flex-direction: column;
+  align-items: center;
+`
 
-const StyledMainText = styled.p(props => ({
-    'font-family': 'Poppins Regular',
-    'font-style': 'normal',
-    'font-weight': 700,
-    'font-size': props.small ? '30px' : '40px',
-    'line-height': props.small ? '35px' : '48px',
-    'color': '#FFFFFF',
-}));
+const LargeTextDiv = styled.div`
+  max-width: 700px;
+`
+
+const SmallTextDiv = styled.div`
+  max-width: 300px;
+`
+
+const LargeMainText = styled.p`
+  font-family: "Poppins Regular";
+  font-style: "normal";
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 48px;
+  color: #ffffff;
+`
+
+const SmallMainText = styled.p`
+  font-family: "Poppins Regular";
+  font-style: "normal";
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 35px;
+  color: #ffffff;
+`
 
 export default function NotFound() {
   return (
-    <Media queries={{
+    <Media
+      queries={{
         small: "(max-width: 599px)",
         medium: "(min-width: 600px) and (max-width: 1199px)",
-        large: "(min-width: 1200px)"
-      }}>
-        {matches => (
-            <Fragment>
-              {matches && (
-              
-              <Layout>
-        <StyledContentDiv>
-            <StyledTextDiv small={matches.small}>
-                <StyledHeader small={matches.small}>404 Not Found</StyledHeader>
-                <StyledMainText small={matches.small}>
-                     Uh-oh, we couldn't find what you were looking for.  
-                </StyledMainText>
-            </StyledTextDiv>
-        </StyledContentDiv>
-      </Layout>
+        large: "(min-width: 1200px)",
+      }}
+    >
+      {matches => (
+        <Fragment>
+          {matches.small && !matches.large && (
+            <Layout>
+              <StyledContentDiv>
+                <SmallTextDiv>
+                  <SmallHeader>404 Not Found</SmallHeader>
+                  <SmallMainText>
+                    Uh-oh, we couldn't find what you were looking for.
+                  </SmallMainText>
+                </SmallTextDiv>
+              </StyledContentDiv>
+            </Layout>
+          )}{" "}
+          {matches.large && !matches.small && (
+            <Layout>
+              <StyledContentDiv>
+                <LargeTextDiv>
+                  <LargeHeader>404 Not Found</LargeHeader>
+                  <LargeMainText>
+                    Uh-oh, we couldn't find what you were looking for.
+                  </LargeMainText>
+                </LargeTextDiv>
+              </StyledContentDiv>
+            </Layout>
           )}
-    </Fragment>
-          )}
-     
+        </Fragment>
+      )}
     </Media>
-  ) 
+  )
 }
