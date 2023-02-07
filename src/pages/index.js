@@ -113,6 +113,20 @@ const MiniRow = styled.div`
   flex-direction: row;
 `
 
+const SEO = ({ children }) => (
+  <>
+    {children}
+  </>
+)
+
+export const Head = () => (
+  <SEO>
+    <title>Hello World</title>
+    <html lang="en" />
+  </SEO>
+)
+
+
 export default function New() {
   return (
     <Media
