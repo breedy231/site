@@ -59,6 +59,15 @@ const SmallMainText = styled.p`
   color: #ffffff;
 `
 
+const SEO = ({ children }) => <>{children}</>
+
+export const Head = () => (
+  <SEO>
+    <title>Hello World</title>
+    <html lang="en" />
+  </SEO>
+)
+
 export default function NotFound() {
   return (
     <Media
