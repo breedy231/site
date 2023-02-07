@@ -59,11 +59,7 @@ const SmallMainText = styled.p`
   color: #ffffff;
 `
 
-const SEO = ({ children }) => (
-  <>
-    {children}
-  </>
-)
+const SEO = ({ children }) => <>{children}</>
 
 export const Head = () => (
   <SEO>
