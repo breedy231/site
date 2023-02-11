@@ -7,15 +7,29 @@ import {
   TextDiv,
   MainText,
 } from "../components/textElements"
+import { useStaticQuery, graphql } from "gatsby"
 
 const Seo = ({ children }) => <>{children}</>
 
-export const Head = () => (
-  <Seo>
-    <title>Hello World</title>
-    <html lang="en" />
-  </Seo>
-)
+export const Head = () => {
+  const data = useStaticQuery(graphql`
+  {
+    site {
+      id
+      siteMetadata {
+        title
+      }
+    }
+  }
+`)
+
+  return (
+    <Seo>
+      <title>{data.site.siteMetadata.title}</title>
+      <html lang="en" />
+    </Seo>
+  )
+} 
 
 export default function NotFound() {
   return (
