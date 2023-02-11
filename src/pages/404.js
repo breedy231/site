@@ -42,7 +42,19 @@ export default function NotFound() {
     >
       {matches => (
         <Fragment>
-          {matches && (
+          {matches.small && !(matches.large || matches.medium) && (
+            <Layout>
+              <StyledContentDiv>
+                <TextDiv small={matches.small}>
+                  <Header small={matches.small}>404 Not Found</Header>
+                  <MainText small={matches.small}>
+                    Uh-oh, we couldn't find what you were looking for.
+                  </MainText>
+                </TextDiv>
+              </StyledContentDiv>
+            </Layout>
+          )}
+          {(matches.large || matches.medium)  && !matches.small && (
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>

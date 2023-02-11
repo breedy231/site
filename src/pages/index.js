@@ -97,7 +97,43 @@ export default function New() {
     >
       {matches => (
         <Fragment>
-          {matches && (
+          {matches.small && !(matches.large || matches.medium) && (
+            <Layout>
+              <StyledContentDiv>
+                <TextDiv small={matches.small}>
+                  <Header small={matches.small}>Brendan Reed</Header>
+                  <MainText small={matches.small}>
+                    I'm a software engineer. I create delightful user
+                    experiences designed to help people engage with their data.
+                  </MainText>
+                  <StyledSubText small={matches.small}>
+                    Senior software engineer at{" "}
+                    <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at{" "}
+                    <a href="https://www.gocatalant.com">Catalant</a>,{" "}
+                    <a href="https://www.carbonite.com">Carbonite</a>, and{" "}
+                    <a href="https://www.zipari.com">Zipari</a>.
+                  </StyledSubText>
+                  <div>
+                    <MiniRow>
+                      <MiniCols>
+                        <MiniColHeader>Located in</MiniColHeader>
+                        <p>Chicago, IL</p>
+                      </MiniCols>
+                    </MiniRow>
+                    <MiniRow>
+                      <MiniCols>
+                        <MiniColHeader>Get in touch</MiniColHeader>
+                        <a href="mailto:bren.reed@protonmail.com">
+                          bren.reed@protonmail.com
+                        </a>
+                      </MiniCols>
+                    </MiniRow>
+                  </div>
+                </TextDiv>
+              </StyledContentDiv>
+            </Layout>
+          )}
+          {(matches.large || matches.medium)  && !matches.small && (
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
@@ -116,7 +152,7 @@ export default function New() {
                   <MiniRow>
                     <MiniCols>
                       <MiniColHeader>Located in</MiniColHeader>
-                      <p>Boston, MA</p>
+                      <p>Chicago, IL</p>
                     </MiniCols>
                     <MiniCols>
                       <MiniColHeader>Get in touch</MiniColHeader>

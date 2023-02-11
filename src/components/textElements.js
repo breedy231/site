@@ -30,6 +30,6 @@ export const MainText = styled.div(props => ({
   "font-style": "normal",
   "font-weight": "700",
   "font-size": props.small ? "30px" : "40px",
-  "line-height": "35px",
+  "line-height": props.small ? "35px" : "48px",
   color: "#ffffff",
 }))
