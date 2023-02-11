@@ -2,16 +2,9 @@ import React from "react"
 import "./layout.sass"
 import { useStaticQuery, graphql } from "gatsby"
 
-const SEO = ({ children }) => <>{children}</>
+const Seo = ({ children }) => <>{children}</>
 
-export const Head = () => (
-  <SEO>
-    <title>Hello World</title>
-    <html lang="en" />
-  </SEO>
-)
-
-export default function Layout({ children }) {
+export const Head = () => {
   const data = useStaticQuery(graphql`
     {
       site {
@@ -24,9 +17,13 @@ export default function Layout({ children }) {
   `)
 
   return (
-    <div style={{ margin: `0 auto`, padding: `0 1rem` }}>
+    <Seo>
       <title>{data.site.siteMetadata.title}</title>
-      {children}
-    </div>
+      <html lang="en" />
+    </Seo>
   )
+}
+
+export default function Layout({ children }) {
+  return <div style={{ margin: `0 auto`, padding: `0 1rem` }}>{children}</div>
 }
