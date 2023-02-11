@@ -3,7 +3,12 @@ import Media from "react-media"
 import styled from "styled-components"
 
 import Layout from "../components/layout"
-import { Header, StyledContentDiv, TextDiv, MainText} from '../components/textElements';
+import {
+  Header,
+  StyledContentDiv,
+  TextDiv,
+  MainText,
+} from "../components/textElements"
 
 const StyledSubText = styled.p(props => ({
   "font-family": "Poppins Regular",
