@@ -68,15 +68,15 @@ const Seo = ({ children }) => <>{children}</>
 
 export const Head = () => {
   const data = useStaticQuery(graphql`
-  {
-    site {
-      id
-      siteMetadata {
-        title
+    {
+      site {
+        id
+        siteMetadata {
+          title
+        }
       }
     }
-  }
-`)
+  `)
 
   return (
     <Seo>
@@ -84,7 +84,7 @@ export const Head = () => {
       <html lang="en" />
     </Seo>
   )
-} 
+}
 
 export default function New() {
   return (
@@ -133,7 +133,7 @@ export default function New() {
               </StyledContentDiv>
             </Layout>
           )}
-          {(matches.large || matches.medium)  && !matches.small && (
+          {(matches.large || matches.medium) && !matches.small && (
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
