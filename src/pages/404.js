@@ -1,71 +1,15 @@
 import React, { Fragment } from "react"
 import Media from "react-media"
-import styled from "styled-components"
 import Layout from "../components/layout"
+import {Header, StyledContentDiv, TextDiv, MainText} from "../components/textElements";
 
-const LargeHeader = styled.p`
-  font-family: "Poppins Bold";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 48px;
-  color: #da300f;
-`
-
-const SmallHeader = styled.p`
-  font-family: "Poppins Bold";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 35px;
-  line-height: 48px;
-  color: #da300f;
-`
-
-const StyledContentDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  font-size: 50px;
-
-  & > span {
-    margin-top: 100px;
-  }
-  flex-direction: column;
-  align-items: center;
-`
-
-const LargeTextDiv = styled.div`
-  max-width: 700px;
-`
-
-const SmallTextDiv = styled.div`
-  max-width: 300px;
-`
-
-const LargeMainText = styled.p`
-  font-family: "Poppins Regular";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 48px;
-  color: #ffffff;
-`
-
-const SmallMainText = styled.p`
-  font-family: "Poppins Regular";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 35px;
-  color: #ffffff;
-`
-
-const SEO = ({ children }) => <>{children}</>
+const Seo = ({ children }) => <>{children}</>
 
 export const Head = () => (
-  <SEO>
+  <Seo>
     <title>Hello World</title>
     <html lang="en" />
-  </SEO>
+  </Seo>
 )
 
 export default function NotFound() {
@@ -79,30 +23,20 @@ export default function NotFound() {
     >
       {matches => (
         <Fragment>
-          {matches.small && !matches.large && (
-            <Layout>
-              <StyledContentDiv>
-                <SmallTextDiv>
-                  <SmallHeader>404 Not Found</SmallHeader>
-                  <SmallMainText>
-                    Uh-oh, we couldn't find what you were looking for.
-                  </SmallMainText>
-                </SmallTextDiv>
-              </StyledContentDiv>
-            </Layout>
-          )}{" "}
-          {matches.large && !matches.small && (
-            <Layout>
-              <StyledContentDiv>
-                <LargeTextDiv>
-                  <LargeHeader>404 Not Found</LargeHeader>
-                  <LargeMainText>
-                    Uh-oh, we couldn't find what you were looking for.
-                  </LargeMainText>
-                </LargeTextDiv>
-              </StyledContentDiv>
-            </Layout>
-          )}
+          {
+            matches && (
+              <Layout>
+                <StyledContentDiv>
+                  <TextDiv small={matches.small}>
+                    <Header small={matches.small}>404 Not Found</Header>
+                    <MainText small={matches.small}>
+                      Uh-oh, we couldn't find what you were looking for.
+                    </MainText>
+                  </TextDiv>
+                </StyledContentDiv>
+              </Layout>
+            )
+          }
         </Fragment>
       )}
     </Media>

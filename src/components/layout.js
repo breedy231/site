@@ -2,13 +2,13 @@ import React from "react"
 import "./layout.sass"
 import { useStaticQuery, graphql } from "gatsby"
 
-const SEO = ({ children }) => <>{children}</>
+const Seo = ({ children }) => <>{children}</>
 
 export const Head = () => (
-  <SEO>
+  <Seo>
     <title>Hello World</title>
     <html lang="en" />
-  </SEO>
+  </Seo>
 )
 
 export default function Layout({ children }) {
