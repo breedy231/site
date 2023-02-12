@@ -1,3 +1,3 @@
-export default function handler(req, res) {
-    res.status(200).json({ hello: `world` })
-  }
+export default function API (req, res) {
+  res.json({ hello: "world" })
+}
