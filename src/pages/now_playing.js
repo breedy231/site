@@ -77,11 +77,11 @@ export default function NotFound() {
     
     const data = useStaticQuery(graphql`
     {
-        allFile(filter: {name: {}}) {
+        allFile(filter: {name: {eq: "plexThumbnail"}}) {
             edges {
               node {
                 childImageSharp {
-                    gatsbyImageData(width: 600, layout: FIXED)
+                    gatsbyImageData(width: 600)
                 }
               }
             }
@@ -104,11 +104,17 @@ export default function NotFound() {
               <StyledContentDiv>
                 <SmallTextDiv>
                   <SmallHeader>Now Playing</SmallHeader>
-                  <GatsbyImage
-                        image={
-                            data.allFile.edges[0].node.childImageSharp.gatsbyImageData
-                        }
-                    />
+
+                  {
+                    data.allFile.edges.length > 0 ?? (
+                        <GatsbyImage
+                            image={
+                                data.allFile.edges[0].node.childImageSharp.gatsbyImageData
+                            }
+                        />
+                    )
+                  }
+                  
                 </SmallTextDiv>
               </StyledContentDiv>
             </Layout>
@@ -118,11 +124,15 @@ export default function NotFound() {
               <StyledContentDiv>
                 <LargeTextDiv>
                   <LargeHeader>Now Playing</LargeHeader>
-                  <GatsbyImage
-                        image={
-                            data.allFile.edges[0].node.childImageSharp.gatsbyImageData
-                        }
-                    />
+                  {
+                    data.allFile.edges.length > 0 ?? (
+                        <GatsbyImage
+                            image={
+                                data.allFile.edges[0].node.childImageSharp.gatsbyImageData
+                            }
+                        />
+                    )
+                  }
                 </LargeTextDiv>
               </StyledContentDiv>
             </Layout>
