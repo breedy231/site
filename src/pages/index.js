@@ -1,64 +1,15 @@
 import React, { Fragment } from "react"
 import Media from "react-media"
 import styled from "styled-components"
+import { useStaticQuery, graphql } from "gatsby"
 
 import Layout from "../components/layout"
-
-const LargeHeader = styled.p`
-  font-family: "Poppins Bold";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 48px;
-  color: #da300f;
-`
-
-const SmallHeader = styled.p`
-  font-family: "Poppins Bold";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 35px;
-  line-height: 48px;
-  color: #da300f;
-`
-
-const StyledContentDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  font-size: 50px;
-
-  & > span {
-    margin-top: 100px;
-  }
-  flex-direction: column;
-  align-items: center;
-`
-
-const LargeTextDiv = styled.div`
-  max-width: 700px;
-`
-
-const SmallTextDiv = styled.div`
-  max-width: 300px;
-`
-
-const LargeMainText = styled.p`
-  font-family: "Poppins Regular";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 48px;
-  color: #ffffff;
-`
-
-const SmallMainText = styled.p`
-  font-family: "Poppins Regular";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 35px;
-  color: #ffffff;
-`
+import {
+  Header,
+  StyledContentDiv,
+  TextDiv,
+  MainText,
+} from "../components/textElements"
 
 const StyledSubText = styled.p(props => ({
   "font-family": "Poppins Regular",
@@ -113,14 +64,27 @@ const MiniRow = styled.div`
   flex-direction: row;
 `
 
-const SEO = ({ children }) => <>{children}</>
+const Seo = ({ children }) => <>{children}</>
 
-export const Head = () => (
-  <SEO>
-    <title>Hello World</title>
-    <html lang="en" />
-  </SEO>
-)
+export const Head = () => {
+  const data = useStaticQuery(graphql`
+    {
+      site {
+        id
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `)
+
+  return (
+    <Seo>
+      <title>{data.site.siteMetadata.title}</title>
+      <html lang="en" />
+    </Seo>
+  )
+}
 
 export default function New() {
   return (
@@ -133,15 +97,15 @@ export default function New() {
     >
       {matches => (
         <Fragment>
-          {matches.small && !matches.large && (
+          {matches.small && !(matches.large || matches.medium) && (
             <Layout>
               <StyledContentDiv>
-                <SmallTextDiv>
-                  <SmallHeader>Brendan Reed</SmallHeader>
-                  <SmallMainText>
+                <TextDiv small={matches.small}>
+                  <Header small={matches.small}>Brendan Reed</Header>
+                  <MainText small={matches.small}>
                     I'm a software engineer. I create delightful user
                     experiences designed to help people engage with their data.
-                  </SmallMainText>
+                  </MainText>
                   <StyledSubText small={matches.small}>
                     Senior software engineer at{" "}
                     <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at{" "}
@@ -153,7 +117,7 @@ export default function New() {
                     <MiniRow>
                       <MiniCols>
                         <MiniColHeader>Located in</MiniColHeader>
-                        <p>Boston, MA</p>
+                        <p>Chicago, IL</p>
                       </MiniCols>
                     </MiniRow>
                     <MiniRow>
@@ -165,19 +129,19 @@ export default function New() {
                       </MiniCols>
                     </MiniRow>
                   </div>
-                </SmallTextDiv>
+                </TextDiv>
               </StyledContentDiv>
             </Layout>
           )}
-          {matches.large && !matches.small && (
+          {(matches.large || matches.medium) && !matches.small && (
             <Layout>
               <StyledContentDiv>
-                <LargeTextDiv>
-                  <LargeHeader>Brendan Reed</LargeHeader>
-                  <LargeMainText>
+                <TextDiv small={matches.small}>
+                  <Header small={matches.small}>Brendan Reed</Header>
+                  <MainText small={matches.small}>
                     I'm a software engineer. I create delightful user
                     experiences designed to help people engage with their data.
-                  </LargeMainText>
+                  </MainText>
                   <StyledSubText small={matches.small}>
                     Senior software engineer at{" "}
                     <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at{" "}
@@ -188,7 +152,7 @@ export default function New() {
                   <MiniRow>
                     <MiniCols>
                       <MiniColHeader>Located in</MiniColHeader>
-                      <p>Boston, MA</p>
+                      <p>Chicago, IL</p>
                     </MiniCols>
                     <MiniCols>
                       <MiniColHeader>Get in touch</MiniColHeader>
@@ -197,7 +161,7 @@ export default function New() {
                       </a>
                     </MiniCols>
                   </MiniRow>
-                </LargeTextDiv>
+                </TextDiv>
               </StyledContentDiv>
             </Layout>
           )}

@@ -1,4 +1,7 @@
 import axios from 'axios';
+const isUrlSafe = (char) => {
+  return /[a-zA-Z0-9\-_~.]+/.test(char)
+}
 
 const urlEncodeBytes = (buf) => {
     let encoded = ''
