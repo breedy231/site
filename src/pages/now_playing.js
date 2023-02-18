@@ -43,40 +43,13 @@ const SmallTextDiv = styled.div`
   max-width: 300px;
 `
 
-const LargeMainText = styled.p`
-  font-family: "Poppins Regular";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 48px;
-  color: #ffffff;
-`
-
-const SmallMainText = styled.p`
-  font-family: "Poppins Regular";
-  font-style: "normal";
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 35px;
-  color: #ffffff;
-`
-
-const SmallMainText = styled.p`
-  font-family: "Poppins Regular";
-  font-style: "normal";
-  font-weight: -1;
-  font-size: 30px;
-  line-height: 35px;
-  color: #ffffff;
-`
-
-const SEO = ({ children }) => <>{children}</>
+// const SEO = ({ children }) => <>{children}</>
 
 export const Head = () => (
-  <SEO>
+  <>
     <title>Hello World</title>
     <html lang="en" />
-  </SEO>
+  </>
 )
 
 export default function NotFound() {
