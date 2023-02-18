@@ -37,6 +37,8 @@
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
+    "eslint": "^8.34.0",
+    "eslint-plugin-react": "^7.32.2",
     "husky": ">=6",
     "lint-staged": ">=10",
     "prettier": "2.1.2"
@@ -46,6 +48,7 @@
     "url": "https://github.com/breedy231/site"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,md}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json,md}": "prettier --write",
+    "*.js": "eslint"
   }
 }

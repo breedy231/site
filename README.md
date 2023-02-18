@@ -4,10 +4,11 @@ This is my personal website, brought to you by Gatsby. I'm developing it on a Ra
 
 # Notable Tools
 
-* Built using Gatsby 5 / React 18 / Node 18.
-* Hosted via Netlify.
-* Requests made via Axios. 
-* Prettier for linting. 
+- Built using Gatsby 5 / React 18 / Node 18.
+- Hosted via Netlify.
+- Requests made via Axios.
+- Prettier for linting.
+    * `yarn prettier --write .`
 
 # Codespace support
 
