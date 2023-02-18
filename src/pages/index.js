@@ -33,7 +33,7 @@ const StyledSubText = styled.p(props => ({
   },
 }))
 
-const MiniCols = styled.div(props => ({
+const MiniCols = styled.div(() => ({
   display: "flex",
   "flex-direction": "column",
 
@@ -64,8 +64,6 @@ const MiniRow = styled.div`
   flex-direction: row;
 `
 
-const Seo = ({ children }) => <>{children}</>
-
 export const Head = () => {
   const data = useStaticQuery(graphql`
     {
@@ -79,12 +77,15 @@ export const Head = () => {
   `)
 
   return (
-    <Seo>
+    <>
       <title>{data.site.siteMetadata.title}</title>
       <html lang="en" />
-    </Seo>
+    </>
   )
 }
+
+const mainText =
+  "I'm a software engineer. I create delightful user experiences designed to help people engage with their data."
 
 export default function New() {
   return (
@@ -102,10 +103,7 @@ export default function New() {
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
                   <Header small={matches.small}>Brendan Reed</Header>
-                  <MainText small={matches.small}>
-                    I'm a software engineer. I create delightful user
-                    experiences designed to help people engage with their data.
-                  </MainText>
+                  <MainText small={matches.small}>{mainText}</MainText>
                   <StyledSubText small={matches.small}>
                     Senior software engineer at{" "}
                     <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at{" "}
@@ -138,10 +136,7 @@ export default function New() {
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
                   <Header small={matches.small}>Brendan Reed</Header>
-                  <MainText small={matches.small}>
-                    I'm a software engineer. I create delightful user
-                    experiences designed to help people engage with their data.
-                  </MainText>
+                  <MainText small={matches.small}>{mainText}</MainText>
                   <StyledSubText small={matches.small}>
                     Senior software engineer at{" "}
                     <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at{" "}

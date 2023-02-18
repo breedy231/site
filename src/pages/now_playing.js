@@ -43,8 +43,6 @@ const SmallTextDiv = styled.div`
   max-width: 300px;
 `
 
-// const SEO = ({ children }) => <>{children}</>
-
 export const Head = () => (
   <>
     <title>Hello World</title>
