@@ -2,9 +2,8 @@ import React, { Fragment } from "react"
 import Media from "react-media"
 import styled from "styled-components"
 import Layout from "../components/layout"
-import { GatsbyImage } from "gatsby-plugin-image";
+import { GatsbyImage } from "gatsby-plugin-image"
 import { useStaticQuery, graphql } from "gatsby"
-
 
 const LargeHeader = styled.p`
   font-family: "Poppins Bold";
@@ -62,6 +61,15 @@ const SmallMainText = styled.p`
   color: #ffffff;
 `
 
+const SmallMainText = styled.p`
+  font-family: "Poppins Regular";
+  font-style: "normal";
+  font-weight: -1;
+  font-size: 30px;
+  line-height: 35px;
+  color: #ffffff;
+`
+
 const SEO = ({ children }) => <>{children}</>
 
 export const Head = () => (
@@ -71,21 +79,18 @@ export const Head = () => (
   </SEO>
 )
 
-
-
 export default function NotFound() {
-    
-    const data = useStaticQuery(graphql`
+  const data = useStaticQuery(graphql`
     {
-        allFile(filter: {name: {eq: "plexThumbnail"}}) {
-            edges {
-              node {
-                childImageSharp {
-                    gatsbyImageData(width: 600)
-                }
-              }
+      allFile(filter: { name: { eq: "plexThumbnail" } }) {
+        edges {
+          node {
+            childImageSharp {
+              gatsbyImageData(width: 600)
             }
           }
+        }
+      }
     }
   `)
 
@@ -105,16 +110,14 @@ export default function NotFound() {
                 <SmallTextDiv>
                   <SmallHeader>Now Playing</SmallHeader>
 
-                  {
-                    data.allFile.edges.length > 0 ?? (
-                        <GatsbyImage
-                            image={
-                                data.allFile.edges[0].node.childImageSharp.gatsbyImageData
-                            }
-                        />
-                    )
-                  }
-                  
+                  {data.allFile.edges.length > 0 ?? (
+                    <GatsbyImage
+                      image={
+                        data.allFile.edges[0].node.childImageSharp
+                          .gatsbyImageData
+                      }
+                    />
+                  )}
                 </SmallTextDiv>
               </StyledContentDiv>
             </Layout>
@@ -124,15 +127,14 @@ export default function NotFound() {
               <StyledContentDiv>
                 <LargeTextDiv>
                   <LargeHeader>Now Playing</LargeHeader>
-                  {
-                    data.allFile.edges.length > 0 ?? (
-                        <GatsbyImage
-                            image={
-                                data.allFile.edges[0].node.childImageSharp.gatsbyImageData
-                            }
-                        />
-                    )
-                  }
+                  {data.allFile.edges.length > 0 ?? (
+                    <GatsbyImage
+                      image={
+                        data.allFile.edges[0].node.childImageSharp
+                          .gatsbyImageData
+                      }
+                    />
+                  )}
                 </LargeTextDiv>
               </StyledContentDiv>
             </Layout>

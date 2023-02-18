@@ -48,6 +48,7 @@
     "url": "https://github.com/breedy231/site"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,md}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json,md}": "prettier --write",
+    "*.js": "eslint"
   }
 }
