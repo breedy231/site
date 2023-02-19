@@ -18,10 +18,8 @@ const urlDecodeBytes = encoded => {
 exports.sourceNodes = () => {
   if (process.env.INCOMING_HOOK_BODY) {
     // Source plex thumbnail from Netlify build hook
-    console.log('incoming hook body',  process.env.INCOMING_HOOK_BODY)
     const thumbnailBufferEncoded =
-      process.env.INCOMING_HOOK_BODY["thumbnailBufferEncoded"]
-    console.log('thumbnailBufferEncoded', thumbnailBufferEncoded)
+      process.env.INCOMING_HOOK_BODY.split('=')[1]
 
     const thumbnailBuffer = urlDecodeBytes(thumbnailBufferEncoded)
     createFileNodeFromBuffer({
