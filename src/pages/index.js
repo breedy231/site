@@ -1,6 +1,5 @@
 import React, { Fragment } from "react"
 import Media from "react-media"
-import styled from "styled-components"
 import { useStaticQuery, graphql } from "gatsby"
 
 import Layout from "../components/layout"
@@ -9,60 +8,11 @@ import {
   StyledContentDiv,
   TextDiv,
   MainText,
+  StyledSubText,
+  MiniColHeader,
+  MiniCols,
+  MiniRow,
 } from "../components/textElements"
-
-const StyledSubText = styled.p(props => ({
-  "font-family": "Poppins Regular",
-  "font-style": "normal",
-  "font-weight": "400",
-  "font-size": props.small ? "20px" : "32px",
-  "line-height": props.small ? "22px" : "39px",
-
-  color: "#FFFFFF",
-
-  "& > a": {
-    "text-decoration-color": "#DA300F",
-  },
-
-  "& > a:visited": {
-    color: "#FFFFFF",
-  },
-
-  "& > a:link": {
-    color: "#FFFFFF",
-  },
-}))
-
-const MiniCols = styled.div(() => ({
-  display: "flex",
-  "flex-direction": "column",
-
-  "& > p": {
-    "font-size": "20px",
-    color: "#FFFFFF",
-    "margin-right": "150px",
-    "margin-bottom": "-15px",
-  },
-
-  "& > a": {
-    "font-size": "20px",
-    color: "#FFFFFF",
-    "margin-right": "150px",
-    "margin-top": "18px",
-
-    "text-decoration": "underline",
-    "text-decoration-color": "#DA300F",
-  },
-}))
-
-const MiniColHeader = styled.p`
-  font-family: "Poppins Bold";
-`
-
-const MiniRow = styled.div`
-  display: flex;
-  flex-direction: row;
-`
 
 export const Head = () => {
   const data = useStaticQuery(graphql`
