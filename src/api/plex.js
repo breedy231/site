@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         try {
           const result = await axios
             .post(
-              "https://api.netlify.com/build_hooks/63e946b0744a8f42bee25c24",
+              `https://api.netlify.com/build_hooks/${process.env.MAIN_BUILD_HOOK_ID}`,
               payload,
               {
                 headers: {
