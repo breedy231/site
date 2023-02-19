@@ -111,6 +111,14 @@ export default function New() {
                     <a href="https://www.carbonite.com">Carbonite</a>, and{" "}
                     <a href="https://www.zipari.com">Zipari</a>.
                   </StyledSubText>
+                  <StyledSubText small={matches.small}>
+                    You can find me on{" "}
+                    <a href="https://www.github.com/breedy231">Github</a> and{" "}
+                    <a href="https://www.linkedin.com/in/brendanreed2/">
+                      LinkedIn
+                    </a>
+                    .
+                  </StyledSubText>
                   <div>
                     <MiniRow>
                       <MiniCols>
@@ -143,6 +151,14 @@ export default function New() {
                     <a href="https://www.gocatalant.com">Catalant</a>,{" "}
                     <a href="https://www.carbonite.com">Carbonite</a>, and{" "}
                     <a href="https://www.zipari.com">Zipari</a>.
+                  </StyledSubText>
+                  <StyledSubText small={matches.small}>
+                    You can find me on{" "}
+                    <a href="https://www.github.com/breedy231">Github</a> and{" "}
+                    <a href="https://www.linkedin.com/in/brendanreed2/">
+                      LinkedIn
+                    </a>
+                    .
                   </StyledSubText>
                   <MiniRow>
                     <MiniCols>
