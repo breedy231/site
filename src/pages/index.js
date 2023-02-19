@@ -86,6 +86,11 @@ export const Head = () => {
 
 const mainText =
   "I'm a software engineer. I create delightful user experiences designed to help people engage with their data."
+const headerText = "Brendan Reed"
+const locatedIn = "Located in"
+const location = "Chicago, IL"
+const getInTouch = "Get in touch"
+const email = "bren.reed@protonmail.com"
 
 export default function New() {
   return (
@@ -102,7 +107,7 @@ export default function New() {
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
-                  <Header small={matches.small}>Brendan Reed</Header>
+                  <Header small={matches.small}>{headerText}</Header>
                   <MainText small={matches.small}>{mainText}</MainText>
                   <StyledSubText small={matches.small}>
                     Senior software engineer at{" "}
@@ -111,19 +116,25 @@ export default function New() {
                     <a href="https://www.carbonite.com">Carbonite</a>, and{" "}
                     <a href="https://www.zipari.com">Zipari</a>.
                   </StyledSubText>
+                  <StyledSubText small={matches.small}>
+                    You can find me on{" "}
+                    <a href="https://www.github.com/breedy231">Github</a> and{" "}
+                    <a href="https://www.linkedin.com/in/brendanreed2/">
+                      LinkedIn
+                    </a>
+                    .
+                  </StyledSubText>
                   <div>
                     <MiniRow>
                       <MiniCols>
-                        <MiniColHeader>Located in</MiniColHeader>
-                        <p>Chicago, IL</p>
+                        <MiniColHeader>{locatedIn}</MiniColHeader>
+                        <p>{location}</p>
                       </MiniCols>
                     </MiniRow>
                     <MiniRow>
                       <MiniCols>
-                        <MiniColHeader>Get in touch</MiniColHeader>
-                        <a href="mailto:bren.reed@protonmail.com">
-                          bren.reed@protonmail.com
-                        </a>
+                        <MiniColHeader>{getInTouch}</MiniColHeader>
+                        <a href="mailto:bren.reed@protonmail.com">{email}</a>
                       </MiniCols>
                     </MiniRow>
                   </div>
@@ -135,7 +146,7 @@ export default function New() {
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
-                  <Header small={matches.small}>Brendan Reed</Header>
+                  <Header small={matches.small}>{headerText}</Header>
                   <MainText small={matches.small}>{mainText}</MainText>
                   <StyledSubText small={matches.small}>
                     Senior software engineer at{" "}
@@ -144,16 +155,22 @@ export default function New() {
                     <a href="https://www.carbonite.com">Carbonite</a>, and{" "}
                     <a href="https://www.zipari.com">Zipari</a>.
                   </StyledSubText>
+                  <StyledSubText small={matches.small}>
+                    You can find me on{" "}
+                    <a href="https://www.github.com/breedy231">Github</a> and{" "}
+                    <a href="https://www.linkedin.com/in/brendanreed2/">
+                      LinkedIn
+                    </a>
+                    .
+                  </StyledSubText>
                   <MiniRow>
                     <MiniCols>
-                      <MiniColHeader>Located in</MiniColHeader>
-                      <p>Chicago, IL</p>
+                      <MiniColHeader>{locatedIn}</MiniColHeader>
+                      <p>{location}</p>
                     </MiniCols>
                     <MiniCols>
-                      <MiniColHeader>Get in touch</MiniColHeader>
-                      <a href="mailto:bren.reed@protonmail.com">
-                        bren.reed@protonmail.com
-                      </a>
+                      <MiniColHeader>{getInTouch}</MiniColHeader>
+                      <a href="mailto:bren.reed@protonmail.com">{email}</a>
                     </MiniCols>
                   </MiniRow>
                 </TextDiv>
