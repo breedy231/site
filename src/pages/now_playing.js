@@ -5,6 +5,30 @@ import Layout from "../components/layout"
 import { GatsbyImage } from "gatsby-plugin-image"
 import { useStaticQuery, graphql } from "gatsby"
 
+import { TextDiv } from "../components/textElements"
+
+const StyledSubText = styled.p(props => ({
+  "font-family": "Poppins Regular",
+  "font-style": "normal",
+  "font-weight": "400",
+  "font-size": props.small ? "20px" : "32px",
+  "line-height": props.small ? "22px" : "39px",
+
+  color: "#FFFFFF",
+
+  "& > a": {
+    "text-decoration-color": "#DA300F",
+  },
+
+  "& > a:visited": {
+    color: "#FFFFFF",
+  },
+
+  "& > a:link": {
+    color: "#FFFFFF",
+  },
+}))
+
 const LargeHeader = styled.p`
   font-family: "Poppins Bold";
   font-style: "normal";
@@ -65,8 +89,6 @@ export default function NotFound() {
     }
   `)
 
-  console.log(data.allFile.edges.length > 0);
-
   return (
     <Media
       queries={{
@@ -83,6 +105,12 @@ export default function NotFound() {
                 <SmallTextDiv>
                   <SmallHeader>Now Playing</SmallHeader>
 
+                  <TextDiv small={matches.small}>
+                    <StyledSubText small={matches.small}>
+                      The latest from my Plex Server
+                    </StyledSubText>
+                  </TextDiv>
+
                   {data.allFile.edges.length > 0 ? (
                     <GatsbyImage
                       image={
@@ -90,7 +118,9 @@ export default function NotFound() {
                           .gatsbyImageData
                       }
                     />
-                  ) : <p>No image to display</p>}
+                  ) : (
+                    <p>No image to display</p>
+                  )}
                 </SmallTextDiv>
               </StyledContentDiv>
             </Layout>
@@ -100,6 +130,11 @@ export default function NotFound() {
               <StyledContentDiv>
                 <LargeTextDiv>
                   <LargeHeader>Now Playing</LargeHeader>
+                  <TextDiv small={matches.small}>
+                    <StyledSubText small={matches.small}>
+                      The latest from my Plex Server
+                    </StyledSubText>
+                  </TextDiv>
                   {data.allFile.edges.length > 0 ? (
                     <GatsbyImage
                       image={
@@ -107,7 +142,9 @@ export default function NotFound() {
                           .gatsbyImageData
                       }
                     />
-                  ) : <p>No image to display</p>}
+                  ) : (
+                    <p>No image to display</p>
+                  )}
                 </LargeTextDiv>
               </StyledContentDiv>
             </Layout>
