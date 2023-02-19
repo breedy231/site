@@ -19,28 +19,40 @@ const urlEncodeBytes = buf => {
   return encoded
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method == "POST") {
     const eventType = JSON.parse(req.body.payload)["event"]
 
     if (eventType == "media.play") {
+      console.log('in play event')
       if (req.files.length > 0) {
         // Save thumbnail buffer file & event metadata markdown file
         const thumbnailBuffer = req.files[0].buffer
         const encoded = urlEncodeBytes(thumbnailBuffer)
 
+        const payload = {
+          thumbnailBufferEncoded: encoded
+        }
+
         // Send POST request to build hook
-        axios.post(
-          "https://api.netlify.com/build_hooks/63e946b0744a8f42bee25c24",
-          {
-            thumbnailBufferEncoded: encoded,
-          },{
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
+        try {
+          const result = await axios.post(
+            "https://api.netlify.com/build_hooks/63e946b0744a8f42bee25c24",
+            payload,
+            {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
             }
-          }
-          
-        )
+          ).then((res) => {
+            console.log(res)
+            return res
+          })
+          res.json(result)
+        } catch (error) {
+          console.log(error)
+          res.status(500).send(error)
+        }
       }
     }
   }
