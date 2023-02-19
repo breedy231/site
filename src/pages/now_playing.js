@@ -57,7 +57,7 @@ export default function NotFound() {
         edges {
           node {
             childImageSharp {
-              gatsbyImageData(width: 600)
+              gatsbyImageData
             }
           }
         }
