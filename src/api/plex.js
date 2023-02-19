@@ -34,7 +34,12 @@ export default function handler(req, res) {
           "https://api.netlify.com/build_hooks/63e946b0744a8f42bee25c24",
           {
             thumbnailBufferEncoded: encoded,
+          },{
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
           }
+          
         )
       }
     }
