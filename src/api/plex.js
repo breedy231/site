@@ -28,10 +28,12 @@ export default async function handler(req, res) {
       if (req.files.length > 0) {
         // Save thumbnail buffer file & event metadata markdown file
         const thumbnailBuffer = req.files[0].buffer
-        const encoded = urlEncodeBytes(thumbnailBuffer)
+
+        // const encoded = urlEncodeBytes(thumbnailBuffer)
+        console.log(thumbnailBuffer.toString('base64'))
 
         const payload = {
-          thumbnailBufferEncoded: encoded
+          thumbnailBufferEncoded: thumbnailBuffer.toString('base64')
         }
 
         // Send POST request to build hook
@@ -45,12 +47,10 @@ export default async function handler(req, res) {
               }
             }
           ).then((res) => {
-            console.log(res)
             return res
           })
           res.json(result)
         } catch (error) {
-          console.log(error)
           res.status(500).send(error)
         }
       }

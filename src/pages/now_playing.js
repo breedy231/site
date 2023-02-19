@@ -65,6 +65,8 @@ export default function NotFound() {
     }
   `)
 
+  console.log(data.allFile.edges.length > 0);
+
   return (
     <Media
       queries={{
@@ -81,14 +83,14 @@ export default function NotFound() {
                 <SmallTextDiv>
                   <SmallHeader>Now Playing</SmallHeader>
 
-                  {data.allFile.edges.length > 0 ?? (
+                  {data.allFile.edges.length > 0 ? (
                     <GatsbyImage
                       image={
                         data.allFile.edges[0].node.childImageSharp
                           .gatsbyImageData
                       }
                     />
-                  )}
+                  ) : <p>No image to display</p>}
                 </SmallTextDiv>
               </StyledContentDiv>
             </Layout>
@@ -98,14 +100,14 @@ export default function NotFound() {
               <StyledContentDiv>
                 <LargeTextDiv>
                   <LargeHeader>Now Playing</LargeHeader>
-                  {data.allFile.edges.length > 0 ?? (
+                  {data.allFile.edges.length > 0 ? (
                     <GatsbyImage
                       image={
                         data.allFile.edges[0].node.childImageSharp
                           .gatsbyImageData
                       }
                     />
-                  )}
+                  ) : <p>No image to display</p>}
                 </LargeTextDiv>
               </StyledContentDiv>
             </Layout>
