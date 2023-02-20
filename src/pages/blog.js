@@ -3,18 +3,23 @@ import Layout from '../components/layout'
 import { graphql } from "gatsby"
 
 export const query = graphql`
-  query {
-    allFile(filter: {extension: {eq: "mdx"}}) {
+query {
+    allMdx(sort: { frontmatter: { datePublished: DESC } }) {
       nodes {
-        name
-      }
-    },
-    site {
         id,
-        siteMetadata {
-                title
-              }
+        frontmatter {
+          datePublished(formatString: "MMMM D, YYYY"),
+          name
+        }
+        excerpt
       }
+  },
+  site {
+    id,
+    siteMetadata {
+            title
+          }
+  }
   }`
 
 
@@ -33,10 +38,12 @@ const BlogPage = ({data}) => {
     <Layout pageTitle="My Blog Posts">
       <p>My cool posts will go in here</p>
       {
-        data.allFile.nodes.map(node => (
-          <li key={node.name}>
-            {node.name}
-          </li>
+        data.allMdx.nodes.map((node) => (
+          <article key={node.id}>
+            <h2>{node.frontmatter.name}</h2>
+            <p>Posted: {node.frontmatter.datePublished}</p>
+            <p>{node.excerpt}</p>
+          </article>
         ))
       }
     </Layout>
