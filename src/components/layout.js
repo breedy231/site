@@ -1,6 +1,6 @@
 import React from "react"
 import "./layout.sass"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 
 const Seo = ({ children }) => <>{children}</>
 
@@ -24,6 +24,20 @@ export const Head = () => {
   )
 }
 
+// TODO add link styling
 export default function Layout({ children }) {
-  return <div style={{ margin: `0 auto`, padding: `0 1rem` }}>{children}</div>
+  return <div style={{ margin: `0 auto`, padding: `0 1rem` }}>
+    
+    <div>
+      <Link to='/'>
+        About
+      </Link>
+      <Link to='/now_playing'>
+        Now Playing
+      </Link>
+
+    </div>
+    {children}
+    
+    </div>
 }
