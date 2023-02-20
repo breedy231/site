@@ -11,15 +11,21 @@ module.exports = {
     `gatsby-plugin-netlify`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-image`,
+    "gatsby-plugin-mdx",
     `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        // The unique name for each instance
         name: `images`,
-        // Path to the directory
         path: `${__dirname}/src/images/`,
       },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: `blog`,
+        path: `${__dirname}/blog`,
+      }
     },
     {
       resolve: `gatsby-plugin-manifest`,
