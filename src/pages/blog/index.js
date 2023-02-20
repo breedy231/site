@@ -1,6 +1,9 @@
 import * as React from 'react'
 import Layout from '../../components/layout'
 import { Link, graphql } from "gatsby"
+import styled from 'styled-components'
+import { container, divider } from './index.module.css'
+
 
 export const query = graphql`
 query {
@@ -34,23 +37,64 @@ export const Head = ({ data }) => {
     )
   }
 
+const StyledBlogDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 700px;
+  margin: auto;
+`
+const StyledBlogPost = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`
+
+const StyledBlogHeader = styled.h2`
+  color: #FFFFFF;
+  size: 40px;
+  margin-bottom: 0px;
+
+  & :visited {
+    text-decoration-color: #DA300F;
+    color: #FFFFFF;
+  }
+`
+
+const StyledPostedParagraph = styled.p`
+  margin-top: 0px;
+  color: #FFFFFF;
+`;
+
 const BlogPage = ({data}) => {
   return (
     <Layout pageTitle="My Blog Posts">
-      <p>My cool posts will go in here</p>
-      {
-        data.allMdx.nodes.map((node) => (
-          <article key={node.id}>
-            <h2>
-              <Link to={`/blog/${node.frontmatter.slug}`}>
-                {node.frontmatter.name}
-              </Link>
-            </h2>
-            <p>Posted: {node.frontmatter.datePublished}</p>
-            <p>{node.excerpt}</p>
-          </article>
-        ))
-      }
+
+
+          <StyledBlogDiv>
+            {
+            data.allMdx.nodes.map((node) => (
+              <StyledBlogPost key={node.id}>
+                <article>
+                  <StyledBlogHeader>
+                    <Link className={container} to={`/blog/${node.frontmatter.slug}`}>
+                      {node.frontmatter.name}
+                    </Link>
+                  </StyledBlogHeader>
+                  <StyledPostedParagraph>Posted: {node.frontmatter.datePublished}</StyledPostedParagraph>
+                  <StyledPostedParagraph>{node.excerpt}</StyledPostedParagraph>
+                </article>
+                <p className={divider}>
+                  {"/////"}
+                </p>
+              </StyledBlogPost>
+              
+            ))
+          }
+          </StyledBlogDiv>
+          
+      
+      
     </Layout>
   )
 }

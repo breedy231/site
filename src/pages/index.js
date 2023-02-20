@@ -4,7 +4,6 @@ import { useStaticQuery, graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import {
-  Header,
   StyledContentDiv,
   TextDiv,
   MainText,
@@ -36,7 +35,6 @@ export const Head = () => {
 
 const mainText =
   "I'm a software engineer. I create delightful user experiences designed to help people engage with their data."
-const headerText = "Brendan Reed"
 const locatedIn = "Located in"
 const location = "Chicago, IL"
 const getInTouch = "Get in touch"
@@ -57,7 +55,7 @@ export default function New() {
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
-                  <Header small={matches.small}>{headerText}</Header>
+                  {/* <Header small={matches.small}>{headerText}</Header> */}
                   <MainText small={matches.small}>{mainText}</MainText>
                   <StyledSubText small={matches.small}>
                     Senior software engineer at{" "}
@@ -96,7 +94,7 @@ export default function New() {
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
-                  <Header small={matches.small}>{headerText}</Header>
+                  {/* <Header small={matches.small}>{headerText}</Header> */}
                   <MainText small={matches.small}>{mainText}</MainText>
                   <StyledSubText small={matches.small}>
                     Senior software engineer at{" "}
