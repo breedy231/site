@@ -35,6 +35,9 @@ export default function Layout({ children }) {
       <Link to='/now_playing'>
         Now Playing
       </Link>
+      <Link to='/blog'>
+        Blog
+      </Link>
 
     </div>
     {children}
