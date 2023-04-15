@@ -18,7 +18,7 @@ export const Head = () => (
   </>
 )
 
-export default function NotFound() {
+export default function Projects() {
   const data = useStaticQuery(graphql`
     {
       allFile(filter: { name: { eq: "plexThumbnail" } }) {
@@ -47,7 +47,7 @@ export default function NotFound() {
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
-                  <Header small={matches.small}>Now Playing</Header>
+                  <Header small={matches.small}>Projects</Header>
                   <StyledSubText small={matches.small}>
                     The latest from my Plex Server
                   </StyledSubText>
@@ -68,7 +68,7 @@ export default function NotFound() {
             <Layout>
               <StyledContentDiv>
                 <TextDiv small={matches.small}>
-                  <Header small={matches.small}>Now Playing</Header>
+                  <Header small={matches.small}>Projects</Header>
                   <StyledSubText small={matches.small}>
                     The latest from my Plex Server
                   </StyledSubText>
