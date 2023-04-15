@@ -26,7 +26,9 @@ export default async function handler(req, res) {
             .then(res => {
               return res
             })
-          res.status(200).json({message: 'triggered site build', data: result.data})
+          res
+            .status(200)
+            .json({ message: "triggered site build", data: result.data })
         } catch (error) {
           res.status(500).send(error)
         }
