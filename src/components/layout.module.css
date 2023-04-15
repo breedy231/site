@@ -1,0 +1,76 @@
+@import "../css/typography.css";
+
+.container {
+    font-family: "Poppins Regular";
+    display: flex;
+    flex-direction: row;
+    font-size: 45px;
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+.smallContainer {
+  font-family: "Poppins Regular";
+  display: flex;
+  flex-direction: column;
+  font-size: 35px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.container:visited {
+  color: #ffffff;
+}
+
+.rightTab {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.smallRightTab {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0px;
+}
+.nav-link-item {
+  padding-right: 1rem;
+}
+.small-nav-link-item {
+  padding-right: 0.5rem;
+}
+.nav-link-text {
+  color: #ffffff;
+  text-decoration: none;
+}
+.small-nav-link-header {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 35px;
+  align-self: center;
+}
+.small-nav-link-text {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 20px;
+  align-self: center;
+}
+.nav-link-text:visited {
+  color: #ffffff;
+}
+.nav-link-text:link {
+  color: #ffffff;
+}
+
+.divider {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: #DA300F;
+}
