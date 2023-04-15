@@ -1,0 +1,33 @@
+---
+name: "Using Webhooks with Netlify and Gatsby"
+datePublished: "2023-03-10"
+author: "Brendan Reed"
+slug: "netlify-gatsby-webhooks"
+---
+
+I'm a pop-culture junkie, and I run a Plex server that has everything I could ever want to watch on it. To get even more functionality out of it, I also bought a Plex Pass; it's a set of premium features for Plex such as live TV and webhooks for media events like playing a movie or listening to a song. For this post, I wanted to get my feet wet with webhooks and integrate the metadata from those events on this website. 
+
+The motivation for this was inspired by other portfolio sites, like [this one](TODO), where the most recently played album is dynamically displayed with artwork, artist, and album title. This site is using webhooks provided by last.fm, but we can get all of the same metadata we'll need from the webhooks provided by Plex. 
+
+At a high level, a webhook is a callback to a HTTP endpoint, where some metadata is POST'ed in response to an event on a server. In the case of Plex, an endpoint can be configured on a server where events like `media.play` are POST'ed as they happen. For my plan, I want to rebuild my site whenever I get a webhook from Plex that something has been played. 
+
+We can listen for these webhooks using Gatsby's serverless functions. With serverless functions, we can get most of the benefits of running server-side code without the hassle of setting up new infrastructure. In this case, we want to setup a serverless function to listen for POST requests to an endpoint on our site, and if they're of the correct media event (where we're guaranteed to get an image), we should trigger a site update. 
+
+One wrinkle with this plan is how my website is setup. It's built using Gatsby, where static site generation is the whole point; we want to have all of the necessary media for the site at build time rather than making users wait for image fetching on that first render of the page. So, when we get this webhook from a `media.play` event, we need to trigger a rebuild of the site using the metadata from the webhook. Since this site is hosted using Netlify, we can take advantage of build hooks. 
+
+Build hooks are another type of webhook; on Netlify, they're used to trigger rebuilds of a site based on some event happening, usually when a Continuous Integration pipeline completes successfully. This is what happens today on PRs for this site, where I have Netlify integrated with Github and a build is triggered for every commit to a pull request. 
+
+Netlify's build hooks allow a user to pass in a custom payload in the request. This is how we can accomplish our initial goal of getting a dynamic image from Plex onto our static site at build time. So with all of that context laid out, here's a high-level list of steps we'll need to take to get this working: 
+
+* configure our Plex server to send webhooks to a URL on our site corresponding to the serverless function
+* setup a serverless function on our Gatsby site to consume Plex webhooks
+    * only for POST requests that are of the proper event type
+    * encode metadata necessary for site template in payload
+    * trigger Netlify build
+* modify our Gatsby build process in `gatsby-node.js` to add a new image file to our site's GraphQL instance from the incoming Netfliy build hook, where the payload is an environment variable
+* setup a template to dynamically display the image if it's found in our site's GraphQL data, or a fallback if not
+
+This is just a high-level overview, and I hope to dig further into the above in subsequent blog posts. For the first one we're going to tackle the first two bullet points: exploring the webhooks provided by Plex, and setting up a serverless function on the site to process these webhooks as they come in. 
+
+
+
