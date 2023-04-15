@@ -117,8 +117,8 @@ export default function Layout({ children }) {
                         <p className={divider}>{"//"}</p>
                       </li>
                       <li className={navLinkItem}>
-                        <Link className={navLinkText} to="/now_playing">
-                          Now Playing
+                        <Link className={navLinkText} to="/projects">
+                          Projects
                         </Link>
                       </li>
                     </ul>
