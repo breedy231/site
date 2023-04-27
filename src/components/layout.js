@@ -8,7 +8,6 @@ import {
   smallRightTab,
   navLinks,
   navLinkItem,
-  navLinkText,
   smallNavLinkText,
   divider,
   smallNavLinkItem,
@@ -92,16 +91,16 @@ export default function Layout({ children }) {
             </div>
           )}
           {(matches.large || matches.medium) && !matches.small && (
-            <div style={{ margin: `0 auto`, padding: `0 1rem` }}>
+            <div className="my-0 mx-auto py-0 px-4">
               <div className={container}>
-                <Link className={navLinkText} to="/">
+                <Link className="text-slate-50 no-underline" to="/">
                   Brendan Reed
                 </Link>
                 <div className={rightTab}>
                   <nav>
                     <ul className={navLinks}>
                       <li className={navLinkItem}>
-                        <Link className={navLinkText} to="/">
+                        <Link className="text-slate-50 no-underline" to="/">
                           About
                         </Link>
                       </li>
@@ -109,7 +108,7 @@ export default function Layout({ children }) {
                         <p className={divider}>{"//"}</p>
                       </li>
                       <li className={navLinkItem}>
-                        <Link className={navLinkText} to="/blog">
+                        <Link className="text-slate-50 no-underline" to="/blog">
                           Blog
                         </Link>
                       </li>
@@ -117,7 +116,10 @@ export default function Layout({ children }) {
                         <p className={divider}>{"//"}</p>
                       </li>
                       <li className={navLinkItem}>
-                        <Link className={navLinkText} to="/now_playing">
+                        <Link
+                          className="text-slate-50 no-underline"
+                          to="/now_playing"
+                        >
                           Now Playing
                         </Link>
                       </li>

@@ -4,12 +4,7 @@ import Layout from "../components/layout"
 import { GatsbyImage } from "gatsby-plugin-image"
 import { useStaticQuery, graphql } from "gatsby"
 
-import {
-  TextDiv,
-  Header,
-  StyledContentDiv,
-  StyledSubText,
-} from "../components/textElements"
+import { TextDiv, Header, StyledSubText } from "../components/textElements"
 
 export const Head = () => (
   <>
@@ -45,7 +40,7 @@ export default function NotFound() {
         <Fragment>
           {matches.small && !matches.large && (
             <Layout>
-              <StyledContentDiv>
+              <div className="text-5x flex flex-col items-center justify-center">
                 <TextDiv small={matches.small}>
                   <Header small={matches.small}>Now Playing</Header>
                   <StyledSubText small={matches.small}>
@@ -61,12 +56,12 @@ export default function NotFound() {
                 ) : (
                   <p>No image to display</p>
                 )}
-              </StyledContentDiv>
+              </div>
             </Layout>
           )}{" "}
           {matches.large && !matches.small && (
             <Layout>
-              <StyledContentDiv>
+              <div className="text-5x flex flex-col items-center justify-center">
                 <TextDiv small={matches.small}>
                   <Header small={matches.small}>Now Playing</Header>
                   <StyledSubText small={matches.small}>
@@ -82,7 +77,7 @@ export default function NotFound() {
                 ) : (
                   <p>No image to display</p>
                 )}
-              </StyledContentDiv>
+              </div>
             </Layout>
           )}
         </Fragment>
