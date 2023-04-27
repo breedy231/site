@@ -1,7 +1,6 @@
 import React, { Fragment } from "react"
 import Media from "react-media"
 import Layout from "../components/layout"
-import { Header, TextDiv, MainText } from "../components/textElements"
 import { useStaticQuery, graphql } from "gatsby"
 
 export const Head = () => {
@@ -35,28 +34,20 @@ export default function NotFound() {
         large: "(min-width: 1200px)",
       }}
     >
-      {matches => (
+      {() => (
         <Fragment>
-          {matches.small && !(matches.large || matches.medium) && (
-            <Layout>
-              <div className="text-5x flex flex-col items-center justify-center">
-                <TextDiv small={matches.small}>
-                  <Header small={matches.small}>404 Not Found</Header>
-                  <MainText small={matches.small}>{errorText}</MainText>
-                </TextDiv>
+          <Layout>
+            <div className="text-5x flex flex-col items-center justify-center">
+              <div className="mt-14 text-3xl text-white md:text-4xl">
+                <p className="text-4xl font-bold text-red-600 md:text-5xl">
+                  404 Not Found
+                </p>
+                <div className="mt-14 text-3xl text-white md:text-4xl">
+                  {errorText}
+                </div>
               </div>
-            </Layout>
-          )}
-          {(matches.large || matches.medium) && !matches.small && (
-            <Layout>
-              <div className="text-5x flex flex-col items-center justify-center">
-                <TextDiv small={matches.small}>
-                  <Header small={matches.small}>404 Not Found</Header>
-                  <MainText small={matches.small}>{errorText}</MainText>
-                </TextDiv>
-              </div>
-            </Layout>
-          )}
+            </div>
+          </Layout>
         </Fragment>
       )}
     </Media>
