@@ -8,7 +8,7 @@ This is my personal website, brought to you by Gatsby. I'm developing it on a Ra
 - Hosted via Netlify.
 - Requests made via Axios.
 - Prettier for linting.
-    * `yarn prettier --write .`
+  - `yarn prettier --write .`
 
 # Codespace support
 

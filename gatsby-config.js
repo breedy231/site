@@ -5,7 +5,7 @@ module.exports = {
     author: `@breedy231`,
   },
   plugins: [
-    'gatsby-plugin-postcss',
+    "gatsby-plugin-postcss",
     `gatsby-transformer-remark`,
     `gatsby-plugin-styled-components`,
     `gatsby-plugin-sass`,
@@ -26,7 +26,7 @@ module.exports = {
       options: {
         name: `blog`,
         path: `${__dirname}/blog`,
-      }
+      },
     },
     {
       resolve: `gatsby-plugin-manifest`,

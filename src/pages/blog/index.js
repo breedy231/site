@@ -1,41 +1,39 @@
-import * as React from 'react'
-import Layout from '../../components/layout'
+import * as React from "react"
+import Layout from "../../components/layout"
 import { Link, graphql } from "gatsby"
-import styled from 'styled-components'
-import { container, divider } from './index.module.css'
-
+import styled from "styled-components"
+import { container, divider } from "./index.module.css"
 
 export const query = graphql`
-query {
+  query {
     allMdx(sort: { frontmatter: { datePublished: DESC } }) {
       nodes {
-        id,
+        id
         frontmatter {
-          datePublished(formatString: "MMMM D, YYYY"),
+          datePublished(formatString: "MMMM D, YYYY")
           name
           slug
         }
         excerpt
       }
-  },
-  site {
-    id,
-    siteMetadata {
-            title
-          }
+    }
+    site {
+      id
+      siteMetadata {
+        title
+      }
+    }
   }
-  }`
-
+`
 
 export const Head = ({ data }) => {
-  
-    return (
-      <>
-        <title>{data.site.siteMetadata.title}</title>
-        <html lang="en" />
-      </>
-    )
-  }
+  return (
+    <>
+      <title>{data.site.siteMetadata.title}</title>
+      <html lang="en" />
+    </>
+  )
+}
 
 const StyledBlogDiv = styled.div`
   display: flex;
@@ -51,50 +49,45 @@ const StyledBlogPost = styled.div`
 `
 
 const StyledBlogHeader = styled.h2`
-  color: #FFFFFF;
+  color: #ffffff;
   size: 40px;
   margin-bottom: 0px;
 
   & :visited {
-    text-decoration-color: #DA300F;
-    color: #FFFFFF;
+    text-decoration-color: #da300f;
+    color: #ffffff;
   }
 `
 
 const StyledPostedParagraph = styled.p`
   margin-top: 0px;
-  color: #FFFFFF;
-`;
+  color: #ffffff;
+`
 
-const BlogPage = ({data}) => {
+const BlogPage = ({ data }) => {
   return (
     <Layout pageTitle="My Blog Posts">
-
-
-          <StyledBlogDiv>
-            {
-            data.allMdx.nodes.map((node) => (
-              <StyledBlogPost key={node.id}>
-                <article>
-                  <StyledBlogHeader>
-                    <Link className={container} to={`/blog/${node.frontmatter.slug}`}>
-                      {node.frontmatter.name}
-                    </Link>
-                  </StyledBlogHeader>
-                  <StyledPostedParagraph>Posted: {node.frontmatter.datePublished}</StyledPostedParagraph>
-                  <StyledPostedParagraph>{node.excerpt}</StyledPostedParagraph>
-                </article>
-                <p className={divider}>
-                  {"/////"}
-                </p>
-              </StyledBlogPost>
-              
-            ))
-          }
-          </StyledBlogDiv>
-          
-      
-      
+      <StyledBlogDiv>
+        {data.allMdx.nodes.map(node => (
+          <StyledBlogPost key={node.id}>
+            <article>
+              <StyledBlogHeader>
+                <Link
+                  className={container}
+                  to={`/blog/${node.frontmatter.slug}`}
+                >
+                  {node.frontmatter.name}
+                </Link>
+              </StyledBlogHeader>
+              <StyledPostedParagraph>
+                Posted: {node.frontmatter.datePublished}
+              </StyledPostedParagraph>
+              <StyledPostedParagraph>{node.excerpt}</StyledPostedParagraph>
+            </article>
+            <p className={divider}>{"/////"}</p>
+          </StyledBlogPost>
+        ))}
+      </StyledBlogDiv>
     </Layout>
   )
 }
