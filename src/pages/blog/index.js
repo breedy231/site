@@ -1,7 +1,6 @@
 import * as React from "react"
 import Layout from "../../components/layout"
 import { Link, graphql } from "gatsby"
-import styled from "styled-components"
 import { container, divider } from "./index.module.css"
 
 export const query = graphql`
@@ -35,59 +34,30 @@ export const Head = ({ data }) => {
   )
 }
 
-const StyledBlogDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  max-width: 700px;
-  margin: auto;
-`
-const StyledBlogPost = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
-
-const StyledBlogHeader = styled.h2`
-  color: #ffffff;
-  size: 40px;
-  margin-bottom: 0px;
-
-  & :visited {
-    text-decoration-color: #da300f;
-    color: #ffffff;
-  }
-`
-
-const StyledPostedParagraph = styled.p`
-  margin-top: 0px;
-  color: #ffffff;
-`
-
 const BlogPage = ({ data }) => {
   return (
     <Layout pageTitle="My Blog Posts">
-      <StyledBlogDiv>
+      <div className="flex flex-col items-start max-w-3xl m-auto">
         {data.allMdx.nodes.map(node => (
-          <StyledBlogPost key={node.id}>
+          <div className="flex flex-col w-full" key={node.id}>
             <article>
-              <StyledBlogHeader>
+              <h2 className="text-white text-4xl">
                 <Link
                   className={container}
                   to={`/blog/${node.frontmatter.slug}`}
                 >
                   {node.frontmatter.name}
                 </Link>
-              </StyledBlogHeader>
-              <StyledPostedParagraph>
+              </h2>
+              <p className="mt-0 text-white">
                 Posted: {node.frontmatter.datePublished}
-              </StyledPostedParagraph>
-              <StyledPostedParagraph>{node.excerpt}</StyledPostedParagraph>
+              </p>
+              <p className="mt-0 text-white">{node.excerpt}</p>
             </article>
             <p className={divider}>{"/////"}</p>
-          </StyledBlogPost>
+          </div>
         ))}
-      </StyledBlogDiv>
+      </div>
     </Layout>
   )
 }
