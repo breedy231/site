@@ -1,7 +1,7 @@
 import * as React from "react"
 import Layout from "../../components/layout"
 import { Link, graphql } from "gatsby"
-import { container, divider } from "./index.module.css"
+import { divider } from "./index.module.css"
 
 export const query = graphql`
   query {
@@ -25,34 +25,35 @@ export const query = graphql`
   }
 `
 
+// eslint-disable-next-line react/prop-types
 export const Head = ({ data }) => {
   return (
     <>
+      {/* eslint-disable-next-line react/prop-types */}
       <title>{data.site.siteMetadata.title}</title>
       <html lang="en" />
     </>
   )
 }
 
+// eslint-disable-next-line react/prop-types
 const BlogPage = ({ data }) => {
   return (
     <Layout pageTitle="My Blog Posts">
-      <div className="flex flex-col items-start max-w-3xl m-auto">
+      <div className="m-auto flex max-w-3xl flex-col items-start">
+        {/* eslint-disable-next-line react/prop-types */}
         {data.allMdx.nodes.map(node => (
-          <div className="flex flex-col w-full" key={node.id}>
+          <div className="mt-20 flex w-full flex-col" key={node.id}>
             <article>
-              <h2 className="text-white text-4xl">
-                <Link
-                  className={container}
-                  to={`/blog/${node.frontmatter.slug}`}
-                >
+              <h2 className="text-3xl font-bold text-white underline decoration-red-700 underline-offset-4">
+                <Link to={`/blog/${node.frontmatter.slug}`}>
                   {node.frontmatter.name}
                 </Link>
               </h2>
-              <p className="mt-0 text-white">
+              <p className="mt-0 mt-3 text-white">
                 Posted: {node.frontmatter.datePublished}
               </p>
-              <p className="mt-0 text-white">{node.excerpt}</p>
+              <p className="mt-0 mt-3 text-white">{node.excerpt}</p>
             </article>
             <p className={divider}>{"/////"}</p>
           </div>

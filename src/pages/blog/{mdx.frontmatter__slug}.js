@@ -1,8 +1,6 @@
 import * as React from "react"
 import Layout from "../../components/layout"
 import { Link, graphql } from "gatsby"
-import styled from "styled-components"
-import { backtick, header } from "./{mdx.frontmatter__slug}.module.css"
 
 export const query = graphql`
   query ($id: String) {
@@ -14,48 +12,37 @@ export const query = graphql`
     }
   }
 `
-
+// eslint-disable-next-line react/prop-types
 export const Head = ({ data }) => {
   return (
     <>
+      {/* eslint-disable-next-line react/prop-types */}
       <title>{data.mdx.frontmatter.name}</title>
       <html lang="en" />
     </>
   )
 }
 
-const StyledBlogHeader = styled.h2`
-  font-size: 40px;
-  margin-bottom: 0px;
-`
-
-const StyledPostedParagraph = styled.p`
-  margin-top: 0px;
-`
-
-const PostDiv = styled.div`
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  max-width: 700px;
-  margin: auto;
-`
+// eslint-disable-next-line react/prop-types
 const BlogPage = ({ data, children }) => {
   return (
     <Layout>
-      <PostDiv>
-        <StyledBlogHeader className={header}>
+      <div className="mx-auto mb-5 max-w-4xl list-disc space-y-6 text-white visited:decoration-red-500">
+        <h1 className="mt-10 text-4xl font-bold">
+          {/* eslint-disable-next-line react/prop-types */}
           {data.mdx.frontmatter.name}
-        </StyledBlogHeader>
-        <StyledPostedParagraph>
+        </h1>
+        <p className="mt-3">
+          {/* eslint-disable-next-line react/prop-types */}
           {data.mdx.frontmatter.datePublished}
-        </StyledPostedParagraph>
-        {children}
-        <Link className={backtick} to="/blog">
-          {"<- Back to blog"}
-        </Link>
-      </PostDiv>
+        </p>
+        <article className="prose text-white lg:prose-lg prose-a:text-red-500 prose-a:decoration-red-500 prose-code:text-white">
+          {children}
+        </article>
+        <div className="mb-20 underline decoration-red-500 underline-offset-4">
+          <Link to="/blog">{"<- Back to blog"}</Link>
+        </div>
+      </div>
     </Layout>
   )
 }
