@@ -9,18 +9,6 @@ export const Header = styled.p(props => ({
   color: "#da300f",
 }))
 
-export const StyledContentDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  font-size: 50px;
-
-  & > span {
-    margin-top: 100px;
-  }
-  flex-direction: column;
-  align-items: center;
-`
-
 export const TextDiv = styled.div(props => ({
   "max-width": props.small ? "300px" : "700px",
 }))

@@ -1,19 +1,9 @@
 @import "../../css/typography.css";
 
-.container {
-    font-family: "Poppins Regular";
-    display: flex;
-    flex-direction: row;
-    font-size: 45px;
-    color: #ffffff;
-    margin-bottom: 0px;
-    text-decoration-color: #DA300F;
-  }
-
-  .divider {
-    margin-top: 0px;
-    margin-bottom: 0px;
-    color: #DA300F;
-    align-self: center;
-    font-size: 30px;
-  }
+.divider {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: #da300f;
+  align-self: center;
+  font-size: 30px;
+}

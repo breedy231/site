@@ -1,13 +1,13 @@
 @import "../css/typography.css";
 
 .container {
-    font-family: "Poppins Regular";
-    display: flex;
-    flex-direction: row;
-    font-size: 45px;
-    color: #ffffff;
-    text-decoration: none;
-  }
+  font-family: "Poppins Regular";
+  display: flex;
+  flex-direction: row;
+  font-size: 45px;
+  color: #ffffff;
+  text-decoration: none;
+}
 
 .smallContainer {
   font-family: "Poppins Regular";
@@ -23,9 +23,9 @@
 }
 
 .rightTab {
-    margin-left: auto;
-    display: flex;
-    flex-direction: row;
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
 }
 
 .smallRightTab {
@@ -72,5 +72,5 @@
 .divider {
   margin-top: 0px;
   margin-bottom: 0px;
-  color: #DA300F;
+  color: #da300f;
 }

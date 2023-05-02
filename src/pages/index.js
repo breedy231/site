@@ -3,15 +3,6 @@ import Media from "react-media"
 import { useStaticQuery, graphql } from "gatsby"
 
 import Layout from "../components/layout"
-import {
-  StyledContentDiv,
-  TextDiv,
-  MainText,
-  StyledSubText,
-  MiniColHeader,
-  MiniCols,
-  MiniRow,
-} from "../components/textElements"
 
 export const Head = () => {
   const data = useStaticQuery(graphql`
@@ -49,82 +40,84 @@ export default function New() {
         large: "(min-width: 1200px)",
       }}
     >
-      {matches => (
+      {() => (
         <Fragment>
-          {matches.small && !(matches.large || matches.medium) && (
-            <Layout>
-              <StyledContentDiv>
-                <TextDiv small={matches.small}>
-                  {/* <Header small={matches.small}>{headerText}</Header> */}
-                  <MainText small={matches.small}>{mainText}</MainText>
-                  <StyledSubText small={matches.small}>
-                    Senior software engineer at{" "}
-                    <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at{" "}
-                    <a href="https://www.gocatalant.com">Catalant</a>,{" "}
-                    <a href="https://www.carbonite.com">Carbonite</a>, and{" "}
-                    <a href="https://www.zipari.com">Zipari</a>.
-                  </StyledSubText>
-                  <StyledSubText small={matches.small}>
-                    You can find me on{" "}
-                    <a href="https://www.github.com/breedy231">Github</a> and{" "}
-                    <a href="https://www.linkedin.com/in/brendanreed2/">
-                      LinkedIn
-                    </a>
-                    .
-                  </StyledSubText>
-                  <div>
-                    <MiniRow>
-                      <MiniCols>
-                        <MiniColHeader>{locatedIn}</MiniColHeader>
-                        <p>{location}</p>
-                      </MiniCols>
-                    </MiniRow>
-                    <MiniRow>
-                      <MiniCols>
-                        <MiniColHeader>{getInTouch}</MiniColHeader>
-                        <a href="mailto:bren.reed@protonmail.com">{email}</a>
-                      </MiniCols>
-                    </MiniRow>
+          <Layout>
+            <div className="text-5x flex flex-col items-center justify-center">
+              <div className="max-w-xs md:max-w-3xl">
+                <div className="mt-14 text-3xl text-white md:text-4xl">
+                  {mainText}
+                </div>
+                <p className="mt-10 text-lg text-white md:text-4xl">
+                  Senior software engineer at{" "}
+                  <a
+                    className="underline decoration-red-700"
+                    href="https://www.klaviyo.com"
+                  >
+                    Klaviyo
+                  </a>
+                  . Previously at{" "}
+                  <a
+                    className="underline decoration-red-700"
+                    href="https://www.gocatalant.com"
+                  >
+                    Catalant
+                  </a>
+                  ,{" "}
+                  <a
+                    className="underline decoration-red-700"
+                    href="https://www.carbonite.com"
+                  >
+                    Carbonite
+                  </a>
+                  , and{" "}
+                  <a
+                    className="underline decoration-red-700"
+                    href="https://www.zipari.com"
+                  >
+                    Zipari
+                  </a>
+                  .
+                </p>
+                <p className="mt-10 text-lg text-white md:text-4xl">
+                  You can find me on{" "}
+                  <a
+                    className="underline decoration-red-700"
+                    href="https://www.github.com/breedy231"
+                  >
+                    Github
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    className="underline decoration-red-700"
+                    href="https://www.linkedin.com/in/brendanreed2/"
+                  >
+                    LinkedIn
+                  </a>
+                  .
+                </p>
+                <div className="mt-5 flex flex-row">
+                  <div className="flex flex-col">
+                    <p className="mr-36 text-xl font-bold text-white">
+                      {locatedIn}
+                    </p>
+                    <p className="text-xl text-white">{location}</p>
                   </div>
-                </TextDiv>
-              </StyledContentDiv>
-            </Layout>
-          )}
-          {(matches.large || matches.medium) && !matches.small && (
-            <Layout>
-              <StyledContentDiv>
-                <TextDiv small={matches.small}>
-                  {/* <Header small={matches.small}>{headerText}</Header> */}
-                  <MainText small={matches.small}>{mainText}</MainText>
-                  <StyledSubText small={matches.small}>
-                    Senior software engineer at{" "}
-                    <a href="https://www.klaviyo.com">Klaviyo</a>. Previously at{" "}
-                    <a href="https://www.gocatalant.com">Catalant</a>,{" "}
-                    <a href="https://www.carbonite.com">Carbonite</a>, and{" "}
-                    <a href="https://www.zipari.com">Zipari</a>.
-                  </StyledSubText>
-                  <StyledSubText small={matches.small}>
-                    You can find me on{" "}
-                    <a href="https://www.github.com/breedy231">Github</a> and{" "}
-                    <a href="https://www.linkedin.com/in/brendanreed2/">
-                      LinkedIn
+                  <div>
+                    <p className="mr-36 text-xl font-bold text-white">
+                      {getInTouch}
+                    </p>
+                    <a
+                      className="mr-36 text-xl text-white underline decoration-red-700"
+                      href="mailto:bren.reed@protonmail.com"
+                    >
+                      {email}
                     </a>
-                    .
-                  </StyledSubText>
-                  <MiniRow>
-                    <MiniCols>
-                      <MiniColHeader>{locatedIn}</MiniColHeader>
-                      <p>{location}</p>
-                    </MiniCols>
-                    <MiniCols>
-                      <MiniColHeader>{getInTouch}</MiniColHeader>
-                      <a href="mailto:bren.reed@protonmail.com">{email}</a>
-                    </MiniCols>
-                  </MiniRow>
-                </TextDiv>
-              </StyledContentDiv>
-            </Layout>
-          )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Layout>
         </Fragment>
       )}
     </Media>
