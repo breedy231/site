@@ -21,7 +21,7 @@ export default async function handler(req, res) {
                 headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
                 },
-              }
+              },
             )
             .then(res => {
               return res
