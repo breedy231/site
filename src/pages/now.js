@@ -1,23 +1,18 @@
-// src/pages/now.js
 import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 
 // Media Section Components
 const MediaSection = ({ title, error, loading, children }) => (
-  <div style={{ marginBottom: "40px" }}>
-    <h2
-      style={{ marginBottom: "20px", fontSize: "1.5rem", fontWeight: "bold" }}
-    >
-      {title}
-    </h2>
+  <div className="h-full">
+    <h2 className="mb-4 text-xl">{title}</h2>
     {loading ? (
-      <div>Loading {title.toLowerCase()}...</div>
+      <div className="text-gray-300">Loading {title.toLowerCase()}...</div>
     ) : error ? (
-      <div style={{ color: "red" }}>
+      <div className="text-red-500">
         Error loading {title.toLowerCase()}: {error}
       </div>
     ) : (
-      children
+      <div className="h-[calc(100%-2rem)] overflow-auto">{children}</div>
     )}
   </div>
 )
@@ -31,18 +26,11 @@ MediaSection.propTypes = {
 
 // Book Components
 const BookDisplay = ({ book, type }) => (
-  <div
-    style={{
-      border: "1px solid #eee",
-      padding: "15px",
-      borderRadius: "4px",
-      marginBottom: "10px",
-    }}
-  >
-    <strong>{book.title}</strong>
-    <div>by {book.author}</div>
+  <div className="mb-3 rounded border border-gray-600 p-3">
+    <div className="font-medium text-gray-300">{book.title}</div>
+    <div className="text-sm text-gray-400">by {book.author}</div>
     {type === "read" && book.dateRead && (
-      <div style={{ color: "#666", fontSize: "0.9em", marginTop: "5px" }}>
+      <div className="mt-1 text-xs text-gray-500">
         Finished: {new Date(book.dateRead).toLocaleDateString()}
       </div>
     )}
@@ -60,27 +48,20 @@ BookDisplay.propTypes = {
 
 // Watch History Components
 const WatchDisplay = ({ item, type }) => (
-  <div
-    style={{
-      border: "1px solid #eee",
-      padding: "15px",
-      borderRadius: "4px",
-      marginBottom: "10px",
-    }}
-  >
+  <div className="mb-3 rounded border border-gray-600 p-3">
     {type === "tv" ? (
       <>
-        <strong>{item.show.title}</strong>
-        <div>
+        <div className="font-medium text-gray-300">{item.show.title}</div>
+        <div className="text-sm text-gray-400">
           S{item.episode.season}E{item.episode.number} - {item.episode.title}
         </div>
       </>
     ) : (
-      <strong>
+      <div className="font-medium text-gray-300">
         {item.movie.title} ({item.movie.year})
-      </strong>
+      </div>
     )}
-    <div style={{ color: "#666", fontSize: "0.9em", marginTop: "5px" }}>
+    <div className="mt-1 text-xs text-gray-500">
       Watched: {new Date(item.watched_at).toLocaleDateString()}
     </div>
   </div>
@@ -107,50 +88,28 @@ WatchDisplay.propTypes = {
 
 // Music Components
 const TrackDisplay = ({ track, type }) => (
-  <div
-    style={{
-      border: "1px solid #eee",
-      padding: "15px",
-      borderRadius: "4px",
-      marginBottom: "10px",
-      backgroundColor: track.isNowPlaying ? "#f8f8f8" : "white",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "flex-start",
-      }}
-    >
+  <div className="mb-3 rounded border border-gray-600 p-3">
+    <div className="flex items-start justify-between">
       <div>
-        <strong>{track.name}</strong>
-        <div>by {track.artist}</div>
-        {track.album && <div style={{ color: "#666" }}>{track.album}</div>}
+        <div className="font-medium text-gray-300">{track.name}</div>
+        <div className="text-sm text-gray-400">by {track.artist}</div>
+        {track.album && (
+          <div className="text-sm text-gray-500">{track.album}</div>
+        )}
       </div>
-      <div style={{ textAlign: "right" }}>
+      <div className="text-right">
         {type === "recent" &&
           (track.isNowPlaying ? (
-            <span
-              style={{
-                backgroundColor: "#10B981",
-                color: "white",
-                padding: "4px 8px",
-                borderRadius: "9999px",
-                fontSize: "0.75rem",
-              }}
-            >
+            <span className="rounded-full bg-emerald-600 px-2 py-1 text-xs text-white">
               Now Playing
             </span>
           ) : (
-            <span style={{ color: "#666", fontSize: "0.9em" }}>
+            <span className="text-sm text-gray-500">
               {track.timestamp ? formatTimestamp(track.timestamp) : ""}
             </span>
           ))}
         {type === "top" && (
-          <span style={{ color: "#666", fontSize: "0.9em" }}>
-            {track.playcount} plays
-          </span>
+          <span className="text-sm text-gray-500">{track.playcount} plays</span>
         )}
       </div>
     </div>
@@ -204,18 +163,12 @@ const NowPage = () => {
         },
       })
         .then(res => res.json())
-        .then(data => {
-          console.log("Watch data received:", data)
-          setWatchData(data)
-        })
-        .catch(err => {
-          console.error("Watch data error:", err)
-          setWatchError(err.message)
-        })
+        .then(data => setWatchData(data))
+        .catch(err => setWatchError(err.message))
         .finally(() => setWatchLoading(false))
     } else {
       setWatchError(
-        "No authentication token found. Please connect your Trakt account.",
+        "No authentication token found. Please connect your Trakt account."
       )
       setWatchLoading(false)
     }
@@ -236,96 +189,89 @@ const NowPage = () => {
   }, [])
 
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
-      <h1
-        style={{
-          fontSize: "2rem",
-          fontWeight: "bold",
-          marginBottom: "40px",
-          textAlign: "center",
-        }}
-      >
-        {"What I'm Up To Now"}
-      </h1>
+    <div>
+      <div className="min-h-screen p-6 font-sans text-white">
+        <h1 className="mb-6 text-4xl font-normal">{"What I'm Up To Now"}</h1>
 
-      <MediaSection title="Reading" error={bookError} loading={bookLoading}>
-        {bookData && (
-          <>
-            {bookData.currentlyReading && (
-              <div style={{ marginBottom: "20px" }}>
-                <h3 style={{ marginBottom: "10px", fontSize: "1.1rem" }}>
-                  Currently Reading
-                </h3>
-                <BookDisplay book={bookData.currentlyReading} type="current" />
-              </div>
-            )}
-            <div>
-              <h3 style={{ marginBottom: "10px", fontSize: "1.1rem" }}>
-                Recently Read
-              </h3>
-              {bookData.recentlyRead.map((book, index) => (
-                <BookDisplay key={index} book={book} type="read" />
-              ))}
-            </div>
-          </>
-        )}
-      </MediaSection>
+        <div className="grid h-[calc(100vh-8rem)] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded border border-gray-600 p-4">
+            <MediaSection
+              title="Reading"
+              error={bookError}
+              loading={bookLoading}
+            >
+              {bookData && (
+                <>
+                  {bookData.currentlyReading && (
+                    <div className="mb-4">
+                      <h3 className="mb-2 text-lg">Currently Reading</h3>
+                      <BookDisplay
+                        book={bookData.currentlyReading}
+                        type="current"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="mb-2 text-lg">Recently Read</h3>
+                    {bookData.recentlyRead.map((book, index) => (
+                      <BookDisplay key={index} book={book} type="read" />
+                    ))}
+                  </div>
+                </>
+              )}
+            </MediaSection>
+          </div>
 
-      <MediaSection title="Watching" error={watchError} loading={watchLoading}>
-        {watchData && (
-          <>
-            <div style={{ marginBottom: "20px" }}>
-              <h3 style={{ marginBottom: "10px", fontSize: "1.1rem" }}>
-                TV Shows
-              </h3>
-              {watchData?.tv?.map((item, index) => (
-                <WatchDisplay key={index} item={item} type="tv" />
-              ))}
-            </div>
-            <div>
-              <h3 style={{ marginBottom: "10px", fontSize: "1.1rem" }}>
-                Movies
-              </h3>
-              {watchData?.movies?.map((item, index) => (
-                <WatchDisplay key={index} item={item} type="movies" />
-              ))}
-            </div>
-          </>
-        )}
-      </MediaSection>
+          <div className="rounded border border-gray-600 p-4">
+            <MediaSection
+              title="Watching"
+              error={watchError}
+              loading={watchLoading}
+            >
+              {watchData && (
+                <>
+                  <div className="mb-4">
+                    <h3 className="mb-2 text-lg">TV Shows</h3>
+                    {watchData?.tv?.map((item, index) => (
+                      <WatchDisplay key={index} item={item} type="tv" />
+                    ))}
+                  </div>
+                  <div>
+                    <h3 className="mb-2 text-lg">Movies</h3>
+                    {watchData?.movies?.map((item, index) => (
+                      <WatchDisplay key={index} item={item} type="movies" />
+                    ))}
+                  </div>
+                </>
+              )}
+            </MediaSection>
+          </div>
 
-      <MediaSection title="Listening" error={musicError} loading={musicLoading}>
-        {musicData && (
-          <>
-            <div style={{ marginBottom: "20px" }}>
-              <h3 style={{ marginBottom: "10px", fontSize: "1.1rem" }}>
-                Recent Tracks
-              </h3>
-              {musicData.recentTracks.map((track, index) => (
-                <TrackDisplay key={index} track={track} type="recent" />
-              ))}
-            </div>
-            <div>
-              <h3 style={{ marginBottom: "10px", fontSize: "1.1rem" }}>
-                Top Tracks This Week
-              </h3>
-              {musicData.topTracks.map((track, index) => (
-                <TrackDisplay key={index} track={track} type="top" />
-              ))}
-            </div>
-          </>
-        )}
-      </MediaSection>
-
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: "40px",
-          color: "#666",
-          fontSize: "0.9rem",
-        }}
-      >
-        Last updated: {new Date().toLocaleString()}
+          <div className="rounded border border-gray-600 p-4">
+            <MediaSection
+              title="Listening"
+              error={musicError}
+              loading={musicLoading}
+            >
+              {musicData && (
+                <>
+                  <div className="mb-4">
+                    <h3 className="mb-2 text-lg">Recent Tracks</h3>
+                    {musicData.recentTracks.map((track, index) => (
+                      <TrackDisplay key={index} track={track} type="recent" />
+                    ))}
+                  </div>
+                  <div>
+                    <h3 className="mb-2 text-lg">Top Tracks This Week</h3>
+                    {musicData.topTracks.map((track, index) => (
+                      <TrackDisplay key={index} track={track} type="top" />
+                    ))}
+                  </div>
+                </>
+              )}
+            </MediaSection>
+          </div>
+        </div>
       </div>
     </div>
   )
