@@ -45,7 +45,7 @@ export const refreshAccessToken = async () => {
     localStorage.setItem("trakt_refresh_token", data.refresh_token)
     localStorage.setItem(
       "trakt_token_expiry",
-      new Date(Date.now() + data.expires_in * 1000).toISOString()
+      new Date(Date.now() + data.expires_in * 1000).toISOString(),
     )
 
     return data.access_token

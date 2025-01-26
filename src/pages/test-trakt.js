@@ -58,7 +58,7 @@ HistorySection.propTypes = {
         title: PropTypes.string,
         year: PropTypes.number,
       }),
-    })
+    }),
   ).isRequired,
   type: PropTypes.oneOf(["tv", "movies"]).isRequired,
 }
