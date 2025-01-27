@@ -1,13 +1,40 @@
-// src/api/refresh-token.js
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" })
+export const handler = async event => {
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+      body: JSON.stringify({ message: "Method not allowed" }),
+    }
   }
 
-  const { refresh_token } = req.body
+  let refresh_token
+  try {
+    const body = JSON.parse(event.body)
+    refresh_token = body.refresh_token
+  } catch (error) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ message: "Invalid request body" }),
+    }
+  }
 
   if (!refresh_token) {
-    return res.status(400).json({ message: "Refresh token is required" })
+    return {
+      statusCode: 400,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ message: "Refresh token is required" }),
+    }
   }
 
   try {
@@ -26,14 +53,36 @@ export default async function handler(req, res) {
       }),
     })
 
+    const data = await response.json()
+
     if (!response.ok) {
-      throw new Error("Failed to refresh token")
+      return {
+        statusCode: response.status,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify(data),
+      }
     }
 
-    const data = await response.json()
-    return res.status(200).json(data)
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(data),
+    }
   } catch (error) {
     console.error("Error refreshing token:", error)
-    return res.status(500).json({ message: "Failed to refresh token" })
+    return {
+      statusCode: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ message: "Failed to refresh token" }),
+    }
   }
 }

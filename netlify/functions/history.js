@@ -1,13 +1,27 @@
-// src/api/history.js
-export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Method not allowed" })
+export const handler = async event => {
+  if (event.httpMethod !== "GET") {
+    return {
+      statusCode: 405,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Authorization",
+      },
+      body: JSON.stringify({ message: "Method not allowed" }),
+    }
   }
 
-  const token = req.headers.authorization?.split("Bearer ")[1]
+  const token = event.headers.authorization?.split("Bearer ")[1]
 
   if (!token) {
-    return res.status(401).json({ message: "No token provided" })
+    return {
+      statusCode: 401,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ message: "No token provided" }),
+    }
   }
 
   const TMDB_API_KEY = process.env.GATSBY_TMDB_API_KEY
@@ -23,7 +37,7 @@ export default async function handler(req, res) {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`
       )
       if (!response.ok) return null
 
@@ -44,22 +58,31 @@ export default async function handler(req, res) {
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
         {
           headers,
-        },
+        }
       ),
       fetch(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
         {
           headers,
-        },
+        }
       ),
     ])
 
     if (!episodesRes.ok || !moviesRes.ok) {
-      throw new Error(
-        `Failed to fetch history: ${
-          !episodesRes.ok ? await episodesRes.text() : await moviesRes.text()
-        }`,
-      )
+      const errorText = !episodesRes.ok
+        ? await episodesRes.text()
+        : await moviesRes.text()
+
+      return {
+        statusCode: !episodesRes.ok ? episodesRes.status : moviesRes.status,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          message: `Failed to fetch history: ${errorText}`,
+        }),
+      }
     }
 
     const [episodes, movies] = await Promise.all([
@@ -75,10 +98,10 @@ export default async function handler(req, res) {
       // Fetch images for shows and movies
       const [showImages, movieImages] = await Promise.all([
         Promise.all(
-          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb)),
+          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb))
         ),
         Promise.all(
-          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb)),
+          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb))
         ),
       ])
 
@@ -94,14 +117,28 @@ export default async function handler(req, res) {
       }))
     }
 
-    return res.status(200).json({
-      tv: enhancedEpisodes,
-      movies: enhancedMovies,
-    })
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        tv: enhancedEpisodes,
+        movies: enhancedMovies,
+      }),
+    }
   } catch (error) {
     console.error("Error fetching history:", error)
-    return res.status(500).json({
-      message: error.message || "Internal server error",
-    })
+    return {
+      statusCode: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        message: error.message || "Internal server error",
+      }),
+    }
   }
 }

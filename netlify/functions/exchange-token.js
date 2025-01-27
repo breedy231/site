@@ -1,12 +1,40 @@
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" })
+export const handler = async event => {
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+      body: JSON.stringify({ message: "Method not allowed" }),
+    }
   }
 
-  const { code } = req.body
+  let code
+  try {
+    const body = JSON.parse(event.body)
+    code = body.code
+  } catch (error) {
+    return {
+      statusCode: 400,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ message: "Invalid request body" }),
+    }
+  }
 
   if (!code) {
-    return res.status(400).json({ message: "Authorization code is required" })
+    return {
+      statusCode: 400,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ message: "Authorization code is required" }),
+    }
   }
 
   try {
@@ -16,7 +44,7 @@ export default async function handler(req, res) {
     formData.append("client_secret", process.env.GATSBY_TRAKT_CLIENT_SECRET)
     formData.append(
       "redirect_uri",
-      `${process.env.GATSBY_SITE_URL || "http://localhost:8000"}/callback`,
+      `${process.env.GATSBY_SITE_URL || "http://localhost:8000"}/callback`
     )
     formData.append("grant_type", "authorization_code")
 
@@ -33,12 +61,33 @@ export default async function handler(req, res) {
     const data = await response.json()
 
     if (!response.ok) {
-      return res.status(response.status).json(data)
+      return {
+        statusCode: response.status,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify(data),
+      }
     }
 
-    return res.status(200).json(data)
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(data),
+    }
   } catch (error) {
     console.error("Token exchange error:", error)
-    return res.status(500).json({ message: "Internal server error" })
+    return {
+      statusCode: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ message: "Internal server error" }),
+    }
   }
 }
