@@ -5,7 +5,7 @@
 	"version": "1.0.0",
 	"license": "0BSD",
 	"scripts": {
-		"prebuild": "mkdir -p functions && cp -r src/api/* functions/",
+		"prebuild": "mkdir -p netlify/functions && cp -r src/api/* netlify/functions/",
 		"build": "gatsby build",
 		"develop": "gatsby develop",
 		"format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
