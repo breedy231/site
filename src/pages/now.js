@@ -18,7 +18,7 @@ export const Head = () => {
 
 const getApiUrl = endpoint => {
   const isDevelopment = process.env.NODE_ENV === "development"
-  return isDevelopment ? `/api/${endpoint}` : `/.netlify/functions/${endpoint}`
+  return isDevelopment ? `/api/${endpoint}` : `/netlify/functions/${endpoint}`
 }
 
 // Media Section Components
