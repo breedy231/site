@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react"
 import { navigate } from "gatsby"
 
+const getApiUrl = endpoint => {
+  //   // Check if we're in the browser
+  //   if (typeof window === "undefined") {
+  //     return ""
+  //   }
+  const isDevelopment = process.env.NODE_ENV === "development"
+  return isDevelopment ? `/api/${endpoint}` : `/.netlify/functions/${endpoint}`
+}
+
 const CallbackPage = () => {
   const [status, setStatus] = useState("Processing...")
 
@@ -50,7 +59,7 @@ const CallbackPage = () => {
           },
         })
 
-        const response = await fetch("/api/exchange-token", {
+        const response = await fetch(getApiUrl("exchange-token"), {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -67,7 +76,7 @@ const CallbackPage = () => {
 
         if (!response.ok) {
           setStatus(
-            `Token exchange failed: ${response.status} - ${responseText}`,
+            `Token exchange failed: ${response.status} - ${responseText}`
           )
           return
         }
@@ -88,7 +97,7 @@ const CallbackPage = () => {
           localStorage.setItem("trakt_refresh_token", data.refresh_token)
           localStorage.setItem(
             "trakt_token_expiry",
-            new Date(Date.now() + data.expires_in * 1000).toISOString(),
+            new Date(Date.now() + data.expires_in * 1000).toISOString()
           )
 
           setStatus("Successfully authenticated!")
