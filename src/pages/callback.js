@@ -76,7 +76,7 @@ const CallbackPage = () => {
 
         if (!response.ok) {
           setStatus(
-            `Token exchange failed: ${response.status} - ${responseText}`
+            `Token exchange failed: ${response.status} - ${responseText}`,
           )
           return
         }
@@ -97,7 +97,7 @@ const CallbackPage = () => {
           localStorage.setItem("trakt_refresh_token", data.refresh_token)
           localStorage.setItem(
             "trakt_token_expiry",
-            new Date(Date.now() + data.expires_in * 1000).toISOString()
+            new Date(Date.now() + data.expires_in * 1000).toISOString(),
           )
 
           setStatus("Successfully authenticated!")
