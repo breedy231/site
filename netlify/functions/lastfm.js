@@ -1,7 +1,9 @@
-// src/api/lastfm.js
-export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Method not allowed" })
+export const handler = async event => {
+  if (event.httpMethod !== "GET") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ message: "Method not allowed" }),
+    }
   }
 
   const USERNAME = "breedy231"
@@ -10,10 +12,10 @@ export default async function handler(req, res) {
   try {
     const [recentTracksRes, topTracksRes] = await Promise.all([
       fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=5`,
+        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=5`
       ),
       fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=3&period=7day`,
+        `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=3&period=7day`
       ),
     ])
 
@@ -46,9 +48,26 @@ export default async function handler(req, res) {
       })),
     }
 
-    return res.status(200).json(response)
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(response),
+    }
   } catch (error) {
     console.error("Error fetching Last.fm data:", error)
-    return res.status(500).json({ message: "Failed to fetch Last.fm data" })
+    return {
+      statusCode: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        message: "Failed to fetch Last.fm data",
+        error: error.message,
+      }),
+    }
   }
 }
