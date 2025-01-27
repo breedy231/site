@@ -20,10 +20,21 @@ export default async function handler(req, res) {
     formData.append("code", code)
     formData.append("client_id", process.env.GATSBY_TRAKT_CLIENT_ID)
     formData.append("client_secret", process.env.GATSBY_TRAKT_CLIENT_SECRET)
-    formData.append(
-      "redirect_uri",
-      `${process.env.GATSBY_SITE_URL || "http://localhost:8000"}/callback`,
-    )
+    // Log all possible URLs for debugging
+    console.log("Environment URLs:", {
+      DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
+      GATSBY_SITE_URL: process.env.GATSBY_SITE_URL,
+      URL: process.env.URL,
+    })
+
+    // Use the deploy preview URL if available
+    const redirectUri =
+      process.env.DEPLOY_PRIME_URL ||
+      process.env.GATSBY_SITE_URL ||
+      "http://localhost:8000"
+    console.log("Using redirect URI:", `${redirectUri}/callback`)
+
+    formData.append("redirect_uri", `${redirectUri}/callback`)
     formData.append("grant_type", "authorization_code")
 
     console.log("Trakt API request:", {
