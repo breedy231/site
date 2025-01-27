@@ -44,7 +44,7 @@ export const handler = async event => {
     formData.append("client_secret", process.env.GATSBY_TRAKT_CLIENT_SECRET)
     formData.append(
       "redirect_uri",
-      `${process.env.GATSBY_SITE_URL || "http://localhost:8000"}/callback`
+      `${process.env.GATSBY_SITE_URL || "http://localhost:8000"}/callback`,
     )
     formData.append("grant_type", "authorization_code")
 
