@@ -1,7 +1,7 @@
 [build]
   command = "gatsby build"
   publish = "public"
-  functions = "functions"
+  functions = "netlify/functions"
 
 [dev]
   targetPort = 8000

@@ -1,9 +1,11 @@
-// src/api/goodreads.js
 import { XMLParser } from "fast-xml-parser"
 
-export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Method not allowed" })
+export const handler = async event => {
+  if (event.httpMethod !== "GET") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ message: "Method not allowed" }),
+    }
   }
 
   const GOODREADS_USER_ID = "21084560"
@@ -63,9 +65,19 @@ export default async function handler(req, res) {
       })),
     }
 
-    return res.status(200).json(response)
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(response),
+    }
   } catch (error) {
     console.error("Error fetching Goodreads data:", error)
-    return res.status(500).json({ message: "Failed to fetch Goodreads data" })
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: "Failed to fetch Goodreads data" }),
+    }
   }
 }
