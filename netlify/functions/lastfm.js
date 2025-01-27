@@ -1,7 +1,13 @@
+import fetch from "node-fetch"
+
 export const handler = async event => {
   if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify({ message: "Method not allowed" }),
     }
   }
@@ -12,10 +18,10 @@ export const handler = async event => {
   try {
     const [recentTracksRes, topTracksRes] = await Promise.all([
       fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=5`,
+        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=5`
       ),
       fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=3&period=7day`,
+        `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=3&period=7day`
       ),
     ])
 

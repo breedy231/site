@@ -1,9 +1,14 @@
+import fetch from "node-fetch"
 import { XMLParser } from "fast-xml-parser"
 
 export const handler = async event => {
   if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify({ message: "Method not allowed" }),
     }
   }
@@ -15,10 +20,10 @@ export const handler = async event => {
     // Fetch both currently-reading and read shelves
     const [currentlyReadingRes, readRes] = await Promise.all([
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`,
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
       ),
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`,
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`
       ),
     ])
 
@@ -26,6 +31,10 @@ export const handler = async event => {
       currentlyReadingRes.text(),
       readRes.text(),
     ])
+
+    if (!currentlyReadingRes.ok || !readRes.ok) {
+      throw new Error("Failed to fetch from Goodreads RSS")
+    }
 
     // Parse XML to JSON
     const currentlyReading = parser.parse(currentlyReadingXml)
@@ -77,7 +86,14 @@ export const handler = async event => {
     console.error("Error fetching Goodreads data:", error)
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Failed to fetch Goodreads data" }),
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        message: "Failed to fetch Goodreads data",
+        error: error.message,
+      }),
     }
   }
 }
