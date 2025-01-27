@@ -1,7 +1,7 @@
 // src/api/goodreads.js
 import { XMLParser } from "fast-xml-parser"
 
-export default async function handler(req, res) {
+const handler = async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Method not allowed" })
   }
@@ -13,10 +13,10 @@ export default async function handler(req, res) {
     // Fetch both currently-reading and read shelves
     const [currentlyReadingRes, readRes] = await Promise.all([
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`,
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
       ),
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`,
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`
       ),
     ])
 
@@ -69,3 +69,5 @@ export default async function handler(req, res) {
     return res.status(500).json({ message: "Failed to fetch Goodreads data" })
   }
 }
+
+export default handler
