@@ -8,13 +8,12 @@ export default async function handler(req, res) {
   const API_KEY = process.env.GATSBY_LASTFM_API_KEY
 
   try {
-    // Fetch recent tracks and top tracks concurrently
     const [recentTracksRes, topTracksRes] = await Promise.all([
       fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=5`,
+        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=5`
       ),
       fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=3&period=7day`,
+        `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=3&period=7day`
       ),
     ])
 
@@ -34,6 +33,7 @@ export default async function handler(req, res) {
         artist: track.artist["#text"],
         album: track.album["#text"],
         url: track.url,
+        image: track.image?.[2]?.["#text"] || null, // Get medium-sized image
         isNowPlaying: track["@attr"]?.nowplaying === "true",
         timestamp: track.date?.uts ? parseInt(track.date.uts) * 1000 : null,
       })),
@@ -42,6 +42,7 @@ export default async function handler(req, res) {
         artist: track.artist.name,
         playcount: parseInt(track.playcount),
         url: track.url,
+        image: track.image?.[2]?.["#text"] || null, // Get medium-sized image
       })),
     }
 
