@@ -16,6 +16,11 @@ export const Head = () => {
   )
 }
 
+const getApiUrl = endpoint => {
+  const isDevelopment = process.env.NODE_ENV === "development"
+  return isDevelopment ? `/api/${endpoint}` : `/.netlify/functions/${endpoint}`
+}
+
 // Media Section Components
 const MediaSection = ({ title, error, loading, children }) => (
   <div className="h-full">
@@ -57,7 +62,7 @@ const NowPage = () => {
     // Fetch watch history
     const token = localStorage.getItem("trakt_token")
     if (token) {
-      fetch("/api/history", {
+      fetch(getApiUrl("history"), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,20 +73,20 @@ const NowPage = () => {
         .finally(() => setWatchLoading(false))
     } else {
       setWatchError(
-        "No authentication token found. Please connect your Trakt account.",
+        "No authentication token found. Please connect your Trakt account."
       )
       setWatchLoading(false)
     }
 
     // Fetch book data
-    fetch("/api/goodreads")
+    fetch(getApiUrl("goodreads"))
       .then(res => res.json())
       .then(data => setBookData(data))
       .catch(err => setBookError(err.message))
       .finally(() => setBookLoading(false))
 
     // Fetch music data
-    fetch("/api/lastfm")
+    fetch(getApiUrl("lastfm"))
       .then(res => res.json())
       .then(data => setMusicData(data))
       .catch(err => setMusicError(err.message))

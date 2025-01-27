@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "license": "0BSD",
   "scripts": {
+    "prebuild": "mkdir -p functions && cp -r src/api/* functions/",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
@@ -51,6 +52,7 @@
     "gatsby-plugin-postcss": "^6.7.0",
     "husky": ">=6",
     "lint-staged": ">=10",
+    "netlify-cli": "^18.0.2",
     "postcss": "^8.4.21",
     "prettier": "^2.8.8",
     "tailwindcss": "^3.2.7"
