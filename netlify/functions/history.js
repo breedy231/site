@@ -91,7 +91,7 @@ export const handler = async event => {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
       )
       if (!response.ok) return null
 
@@ -111,12 +111,12 @@ export const handler = async event => {
       makeAuthorizedRequest(
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
         token,
-        headers
+        headers,
       ),
       makeAuthorizedRequest(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
         token,
-        headers
+        headers,
       ),
     ])
 
@@ -128,10 +128,10 @@ export const handler = async event => {
       // Fetch images for shows and movies
       const [showImages, movieImages] = await Promise.all([
         Promise.all(
-          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb))
+          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb)),
         ),
         Promise.all(
-          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb))
+          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb)),
         ),
       ])
 
