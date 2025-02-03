@@ -1,0 +1,13 @@
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[build]
+  command = "gatsby build"
+  publish = "public"
+  functions = "netlify/functions"
+
+[dev]
+  targetPort = 8000
+  port = 8888

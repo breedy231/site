@@ -79,8 +79,8 @@ export default function Layout({ children }) {
                         <p className={divider}>{"//"}</p>
                       </li>
                       <li className={smallNavLinkItem}>
-                        <Link className={smallNavLinkText} to="/now_playing">
-                          Now Playing
+                        <Link className={smallNavLinkText} to="/now">
+                          Now
                         </Link>
                       </li>
                     </ul>
@@ -116,11 +116,8 @@ export default function Layout({ children }) {
                         <p className={divider}>{"//"}</p>
                       </li>
                       <li className={navLinkItem}>
-                        <Link
-                          className="text-slate-50 no-underline"
-                          to="/now_playing"
-                        >
-                          Now Playing
+                        <Link className="text-slate-50 no-underline" to="/now">
+                          Now
                         </Link>
                       </li>
                     </ul>
