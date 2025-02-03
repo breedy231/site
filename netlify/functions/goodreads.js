@@ -1,7 +1,7 @@
-import fetch from "node-fetch"
-import { XMLParser } from "fast-xml-parser"
+const fetch = require("node-fetch")
+const { XMLParser } = require("fast-xml-parser")
 
-export const handler = async event => {
+exports.handler = async event => {
   if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
@@ -20,10 +20,10 @@ export const handler = async event => {
     // Fetch both currently-reading and read shelves
     const [currentlyReadingRes, readRes] = await Promise.all([
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`,
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
       ),
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`,
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`
       ),
     ])
 
