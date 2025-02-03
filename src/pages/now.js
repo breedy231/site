@@ -62,11 +62,15 @@ const NowPage = () => {
   const [musicError, setMusicError] = useState(null)
   const [musicLoading, setMusicLoading] = useState(true)
 
+  const handleTraktLogin = () => {
+    const authUrl = `https://trakt.tv/oauth/authorize?response_type=code&client_id=${process.env.GATSBY_TRAKT_CLIENT_ID}&redirect_uri=http://localhost:8000/callback/trakt`
+    window.location.href = authUrl
+  }
+
   useEffect(() => {
     if (typeof window === "undefined") return
 
-    // Fetch watch history
-    const token = localStorage.getItem("trakt_token")
+    const token = process.env.GATSBY_TRAKT_ACCESS_TOKEN
     if (token) {
       fetch(getApiUrl("history"), {
         headers: {
@@ -79,7 +83,7 @@ const NowPage = () => {
         .finally(() => setWatchLoading(false))
     } else {
       setWatchError(
-        "No authentication token found. Please connect your Trakt account.",
+        "No authentication token found. Please connect your Trakt account."
       )
       setWatchLoading(false)
     }
@@ -156,6 +160,15 @@ const NowPage = () => {
                 </>
               )}
             </MediaSection>
+            {process.env.NODE_ENV === "development" &&
+              !process.env.GATSBY_TRAKT_ACCESS_TOKEN && (
+                <button
+                  onClick={handleTraktLogin}
+                  className="mb-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                >
+                  Connect Trakt (Development)
+                </button>
+              )}
           </div>
 
           <div className="rounded border border-gray-600 p-4">
