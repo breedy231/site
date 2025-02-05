@@ -8,6 +8,7 @@
 		"prebuild": "mkdir -p netlify/functions && cp -r src/api/* netlify/functions/",
 		"build": "gatsby build",
 		"develop": "gatsby develop",
+		"develop-https": "gatsby develop --https --cert-file ./certificates/localhost.crt --key-file ./certificates/localhost.key --host 0.0.0.0",
 		"format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
 		"start": "npm run develop",
 		"serve": "gatsby serve",

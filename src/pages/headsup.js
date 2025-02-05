@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import Layout from "../components/layout"
 import { categories } from "../data/headsupCategories"
@@ -6,32 +6,24 @@ import { Helmet } from "react-helmet"
 import "../styles/global.css"
 
 const HeadsUpGame = () => {
-  const [gameState, setGameState] = useState("category") // category, ready, playing, finished
+  const [gameState, setGameState] = useState("category")
   const [currentCategory, setCurrentCategory] = useState(null)
   const [currentWord, setCurrentWord] = useState("")
   const [score, setScore] = useState({ correct: 0, incorrect: 0 })
   const [timeLeft, setTimeLeft] = useState(60)
   const [words, setWords] = useState([])
-  const [orientationPermission, setOrientationPermission] = useState("unknown")
   const [debugInfo, setDebugInfo] = useState("")
-  const [needsPermission, setNeedsPermission] = useState(false)
+  const [showDebug, setShowDebug] = useState(true)
+  const [hasOrientationPermission, setHasOrientationPermission] =
+    useState(false)
 
-  // Function to check if device orientation permission is needed
-  const checkOrientationPermission = () => {
-    if (
-      typeof window !== "undefined" &&
-      typeof DeviceOrientationEvent !== "undefined"
-    ) {
-      if (typeof DeviceOrientationEvent.requestPermission === "function") {
-        setNeedsPermission(true)
-        setDebugInfo("Permission needed for iOS device")
-        return true
-      }
-    }
-    return false
-  }
+  // Touch and tilt handling
+  const touchStartX = useRef(null)
+  const touchStartY = useRef(null)
+  const lastActionTime = useRef(0)
+  const ACTION_COOLDOWN = 500 // ms between actions
 
-  // Function to request device orientation permission
+  // Request iOS permission for device orientation
   const requestOrientationPermission = async () => {
     if (
       typeof window !== "undefined" &&
@@ -40,14 +32,16 @@ const HeadsUpGame = () => {
       if (typeof DeviceOrientationEvent.requestPermission === "function") {
         try {
           const permission = await DeviceOrientationEvent.requestPermission()
-          setOrientationPermission(permission)
           if (permission === "granted") {
-            window.addEventListener("deviceorientation", handleOrientation)
-            setDebugInfo("Permission granted, orientation listener added")
-            setNeedsPermission(false)
+            setHasOrientationPermission(true)
+            window.addEventListener(
+              "deviceorientation",
+              handleOrientation,
+              true
+            )
+            setDebugInfo("Tilt controls enabled")
           } else {
-            setDebugInfo("Permission denied: " + permission)
-            setNeedsPermission(true)
+            setDebugInfo("Tilt permission denied - using swipe controls")
           }
         } catch (error) {
           setDebugInfo("Error requesting permission: " + error.message)
@@ -58,40 +52,79 @@ const HeadsUpGame = () => {
           )
         }
       } else {
-        // For non-iOS devices
-        window.addEventListener("deviceorientation", handleOrientation)
-        setOrientationPermission("not-required")
-        setDebugInfo("Permission not required, orientation listener added")
-        setNeedsPermission(false)
+        // For non-iOS devices, no permission needed
+        setHasOrientationPermission(true)
+        window.addEventListener("deviceorientation", handleOrientation, true)
+        setDebugInfo("Tilt controls enabled (non-iOS)")
       }
-    } else {
-      setDebugInfo("DeviceOrientation not supported")
-      setNeedsPermission(false)
     }
   }
 
+  // Initialize orientation detection
   useEffect(() => {
-    if (!checkOrientationPermission()) {
-      requestOrientationPermission()
-    }
+    requestOrientationPermission()
     return () => {
       if (typeof window !== "undefined") {
-        window.removeEventListener("deviceorientation", handleOrientation)
+        window.removeEventListener("deviceorientation", handleOrientation, true)
       }
     }
   }, [])
 
-  const handleOrientation = event => {
-    if (gameState === "playing") {
-      const gamma = event.gamma // Rotation around front-to-back axis (-90 to 90)
-      setDebugInfo(`Gamma: ${gamma?.toFixed(2)}`)
+  const handleTouchStart = e => {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+  }
 
-      if (gamma > 45) {
-        // Phone tilted right (correct)
-        handleCorrect()
-      } else if (gamma < -45) {
-        // Phone tilted left (pass/incorrect)
-        handleIncorrect()
+  const handleTouchEnd = e => {
+    if (!touchStartX.current || !touchStartY.current || gameState !== "playing")
+      return
+
+    const now = Date.now()
+    if (now - lastActionTime.current < ACTION_COOLDOWN) return
+
+    const touchEndX = e.changedTouches[0].clientX
+    const touchEndY = e.changedTouches[0].clientY
+
+    const deltaX = touchEndX - touchStartX.current
+    const deltaY = touchEndY - touchStartY.current
+
+    // Only trigger if the swipe is mostly horizontal
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      lastActionTime.current = now
+      if (deltaX > 0) {
+        handleCorrect("swipe right")
+      } else {
+        handleIncorrect("swipe left")
+      }
+    }
+
+    touchStartX.current = null
+    touchStartY.current = null
+  }
+
+  // Tilt handling with improved detection
+  const handleOrientation = event => {
+    if (gameState !== "playing") return
+
+    const now = Date.now()
+    if (now - lastActionTime.current < ACTION_COOLDOWN) return
+
+    const gamma = event.gamma // Left-right tilt
+    const beta = event.beta // Front-back tilt
+
+    // Update debug info
+    setDebugInfo(`Beta: ${beta?.toFixed(1)}°, Gamma: ${gamma?.toFixed(1)}°`)
+
+    // Only process tilt when phone is roughly vertical (in forehead position)
+    if (Math.abs(beta) > 45 && Math.abs(beta) < 135) {
+      if (Math.abs(gamma) > 30) {
+        // Reduced threshold for easier detection
+        lastActionTime.current = now
+        if (gamma > 0) {
+          handleCorrect("tilt right")
+        } else {
+          handleIncorrect("tilt left")
+        }
       }
     }
   }
@@ -103,10 +136,8 @@ const HeadsUpGame = () => {
   }
 
   const beginCountdown = () => {
-    // Request permission again when starting the game if needed
-    if (orientationPermission !== "granted" && needsPermission) {
+    if (!hasOrientationPermission) {
       requestOrientationPermission()
-      return
     }
     setGameState("playing")
     setTimeLeft(60)
@@ -123,13 +154,15 @@ const HeadsUpGame = () => {
     }
   }
 
-  const handleCorrect = () => {
+  const handleCorrect = method => {
     setScore(prev => ({ ...prev, correct: prev.correct + 1 }))
+    setDebugInfo(`Correct! (${method})`)
     nextWord()
   }
 
-  const handleIncorrect = () => {
+  const handleIncorrect = method => {
     setScore(prev => ({ ...prev, incorrect: prev.incorrect + 1 }))
+    setDebugInfo(`Pass! (${method})`)
     nextWord()
   }
 
@@ -157,10 +190,14 @@ const HeadsUpGame = () => {
   useEffect(() => {
     const handleKeyPress = event => {
       if (gameState === "playing") {
+        const now = Date.now()
+        if (now - lastActionTime.current < ACTION_COOLDOWN) return
+
+        lastActionTime.current = now
         if (event.key === "ArrowRight") {
-          handleCorrect()
+          handleCorrect("keyboard right")
         } else if (event.key === "ArrowLeft") {
-          handleIncorrect()
+          handleIncorrect("keyboard left")
         }
       }
     }
@@ -170,38 +207,6 @@ const HeadsUpGame = () => {
       return () => window.removeEventListener("keydown", handleKeyPress)
     }
   }, [gameState])
-
-  // Permission Request Banner Component
-  const PermissionBanner = () => (
-    <div className="mb-4 border-l-4 border-yellow-500 bg-yellow-100 p-4">
-      <div className="flex">
-        <div className="flex-shrink-0">
-          <svg
-            className="h-5 w-5 text-yellow-500"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
-        <div className="ml-3">
-          <p className="text-sm text-yellow-700">
-            This game requires motion sensor access to work properly.
-          </p>
-          <button
-            onClick={requestOrientationPermission}
-            className="mt-2 rounded-md bg-yellow-500 px-4 py-2 text-white transition-colors hover:bg-yellow-600"
-          >
-            Enable Motion Sensors
-          </button>
-        </div>
-      </div>
-    </div>
-  )
 
   return (
     <Layout>
@@ -213,32 +218,51 @@ const HeadsUpGame = () => {
         />
         <meta
           name="description"
-          content="Play Heads Up! - a fun word guessing game. Tilt your device to play!"
+          content="Play Heads Up! - a fun word guessing game. Tilt or swipe to play!"
         />
         <meta name="theme-color" content="#3B82F6" />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-100 p-4">
+      <div
+        className="min-h-screen bg-gray-100 p-4"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="mx-auto max-w-md">
           <h1 className="mb-8 text-center text-4xl font-bold">Heads Up!</h1>
 
-          {/* Debug info - only show in development */}
-          {process.env.NODE_ENV === "development" && (
-            <div className="mb-4 text-center text-xs text-gray-500">
-              Permission: {orientationPermission}
-              <br />
-              {debugInfo}
-            </div>
-          )}
+          {/* Debug Toggle Button */}
+          <button
+            onClick={() => setShowDebug(prev => !prev)}
+            className="fixed top-4 right-4 rounded-full bg-gray-200 p-2 text-xs"
+          >
+            {showDebug ? "Hide Debug" : "Show Debug"}
+          </button>
 
-          {/* Permission Banner */}
-          {needsPermission && <PermissionBanner />}
+          {/* Debug Info */}
+          <div
+            className={`mb-4 text-center text-xs text-gray-500 ${
+              showDebug ? "" : "hidden"
+            }`}
+          >
+            Tilt Controls: {hasOrientationPermission ? "Enabled" : "Disabled"}
+            <br />
+            {debugInfo}
+          </div>
 
           {gameState === "category" && (
             <div className="space-y-4">
               <h2 className="mb-4 text-center text-2xl font-bold">
                 Choose a Category
               </h2>
+              {!hasOrientationPermission && (
+                <button
+                  onClick={requestOrientationPermission}
+                  className="mb-4 w-full rounded-lg bg-yellow-500 p-3 text-white hover:bg-yellow-600"
+                >
+                  Enable Tilt Controls (Optional)
+                </button>
+              )}
               <div className="grid gap-4">
                 {Object.keys(categories).map(category => (
                   <button
@@ -261,9 +285,13 @@ const HeadsUpGame = () => {
                   1. Hold your phone up to your forehead
                 </p>
                 <p className="mb-4 text-gray-600">
-                  2. Tilt right for correct ✅
+                  2. {hasOrientationPermission ? "Tilt or swipe" : "Swipe"}{" "}
+                  right for correct ✅
                 </p>
-                <p className="mb-4 text-gray-600">3. Tilt left for pass ❌</p>
+                <p className="mb-4 text-gray-600">
+                  3. {hasOrientationPermission ? "Tilt or swipe" : "Swipe"} left
+                  for pass ❌
+                </p>
                 <p className="text-sm text-gray-600">
                   (On desktop: use left/right arrow keys)
                 </p>
