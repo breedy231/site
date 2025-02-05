@@ -37,7 +37,7 @@ const HeadsUpGame = () => {
             window.addEventListener(
               "deviceorientation",
               handleOrientation,
-              true
+              true,
             )
             setDebugInfo("Tilt controls enabled")
           } else {
