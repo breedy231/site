@@ -12,26 +12,70 @@ const HeadsUpGame = () => {
   const [score, setScore] = useState({ correct: 0, incorrect: 0 })
   const [timeLeft, setTimeLeft] = useState(60)
   const [words, setWords] = useState([])
+  const [orientationPermission, setOrientationPermission] = useState("unknown")
+  const [debugInfo, setDebugInfo] = useState("")
+  const [needsPermission, setNeedsPermission] = useState(false)
+
+  // Function to check if device orientation permission is needed
+  const checkOrientationPermission = () => {
+    if (
+      typeof window !== "undefined" &&
+      typeof DeviceOrientationEvent !== "undefined"
+    ) {
+      if (typeof DeviceOrientationEvent.requestPermission === "function") {
+        setNeedsPermission(true)
+        setDebugInfo("Permission needed for iOS device")
+        return true
+      }
+    }
+    return false
+  }
+
+  // Function to request device orientation permission
+  const requestOrientationPermission = async () => {
+    if (
+      typeof window !== "undefined" &&
+      typeof DeviceOrientationEvent !== "undefined"
+    ) {
+      if (typeof DeviceOrientationEvent.requestPermission === "function") {
+        try {
+          const permission = await DeviceOrientationEvent.requestPermission()
+          setOrientationPermission(permission)
+          if (permission === "granted") {
+            window.addEventListener("deviceorientation", handleOrientation)
+            setDebugInfo("Permission granted, orientation listener added")
+            setNeedsPermission(false)
+          } else {
+            setDebugInfo("Permission denied: " + permission)
+            setNeedsPermission(true)
+          }
+        } catch (error) {
+          setDebugInfo("Error requesting permission: " + error.message)
+          setNeedsPermission(true)
+          console.error(
+            "Error requesting device orientation permission:",
+            error
+          )
+        }
+      } else {
+        // For non-iOS devices
+        window.addEventListener("deviceorientation", handleOrientation)
+        setOrientationPermission("not-required")
+        setDebugInfo("Permission not required, orientation listener added")
+        setNeedsPermission(false)
+      }
+    } else {
+      setDebugInfo("DeviceOrientation not supported")
+      setNeedsPermission(false)
+    }
+  }
 
   useEffect(() => {
-    // Request permission for device orientation on iOS
-    if (typeof window !== "undefined") {
-      if (
-        typeof DeviceOrientationEvent !== "undefined" &&
-        typeof DeviceOrientationEvent.requestPermission === "function"
-      ) {
-        DeviceOrientationEvent.requestPermission()
-          .then(response => {
-            if (response === "granted") {
-              window.addEventListener("deviceorientation", handleOrientation)
-            }
-          })
-          .catch(console.error)
-      } else {
-        window.addEventListener("deviceorientation", handleOrientation)
-      }
-
-      return () => {
+    if (!checkOrientationPermission()) {
+      requestOrientationPermission()
+    }
+    return () => {
+      if (typeof window !== "undefined") {
         window.removeEventListener("deviceorientation", handleOrientation)
       }
     }
@@ -40,6 +84,8 @@ const HeadsUpGame = () => {
   const handleOrientation = event => {
     if (gameState === "playing") {
       const gamma = event.gamma // Rotation around front-to-back axis (-90 to 90)
+      setDebugInfo(`Gamma: ${gamma?.toFixed(2)}`)
+
       if (gamma > 45) {
         // Phone tilted right (correct)
         handleCorrect()
@@ -57,6 +103,11 @@ const HeadsUpGame = () => {
   }
 
   const beginCountdown = () => {
+    // Request permission again when starting the game if needed
+    if (orientationPermission !== "granted" && needsPermission) {
+      requestOrientationPermission()
+      return
+    }
     setGameState("playing")
     setTimeLeft(60)
     nextWord()
@@ -120,6 +171,38 @@ const HeadsUpGame = () => {
     }
   }, [gameState])
 
+  // Permission Request Banner Component
+  const PermissionBanner = () => (
+    <div className="mb-4 border-l-4 border-yellow-500 bg-yellow-100 p-4">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <svg
+            className="h-5 w-5 text-yellow-500"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+        <div className="ml-3">
+          <p className="text-sm text-yellow-700">
+            This game requires motion sensor access to work properly.
+          </p>
+          <button
+            onClick={requestOrientationPermission}
+            className="mt-2 rounded-md bg-yellow-500 px-4 py-2 text-white transition-colors hover:bg-yellow-600"
+          >
+            Enable Motion Sensors
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <Layout>
       <Helmet>
@@ -138,6 +221,18 @@ const HeadsUpGame = () => {
       <div className="min-h-screen bg-gray-100 p-4">
         <div className="mx-auto max-w-md">
           <h1 className="mb-8 text-center text-4xl font-bold">Heads Up!</h1>
+
+          {/* Debug info - only show in development */}
+          {process.env.NODE_ENV === "development" && (
+            <div className="mb-4 text-center text-xs text-gray-500">
+              Permission: {orientationPermission}
+              <br />
+              {debugInfo}
+            </div>
+          )}
+
+          {/* Permission Banner */}
+          {needsPermission && <PermissionBanner />}
 
           {gameState === "category" && (
             <div className="space-y-4">
