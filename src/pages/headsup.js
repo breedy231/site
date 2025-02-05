@@ -54,7 +54,7 @@ const HeadsUpGame = () => {
           setNeedsPermission(true)
           console.error(
             "Error requesting device orientation permission:",
-            error
+            error,
           )
         }
       } else {
