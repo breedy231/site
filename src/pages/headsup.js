@@ -69,7 +69,7 @@ const HeadsUpGame = () => {
       } else {
         // No permission API needed (non-iOS or older versions)
         setDebugInfo(
-          "No permission API needed, enabling tilt controls directly"
+          "No permission API needed, enabling tilt controls directly",
         )
         setMotionDebug(prev => ({ ...prev, permissionState: "granted" }))
         setHasOrientationPermission(true)
@@ -223,8 +223,8 @@ const HeadsUpGame = () => {
       // Debug orientation values
       console.log(
         `Raw values - Beta: ${beta.toFixed(1)}°, Gamma: ${gamma.toFixed(
-          1
-        )}°, Orientation: ${orientation}°`
+          1,
+        )}°, Orientation: ${orientation}°`,
       )
 
       // Determine device orientation
@@ -250,7 +250,7 @@ const HeadsUpGame = () => {
 
       if (!isVertical) {
         setDebugInfo(
-          `Adjust phone position | Vertical: ${verticalAngle.toFixed(1)}°`
+          `Adjust phone position | Vertical: ${verticalAngle.toFixed(1)}°`,
         )
         return
       }
@@ -258,8 +258,8 @@ const HeadsUpGame = () => {
       // Log the processed angles
       console.log(
         `Processed - Tilt: ${tiltAngle.toFixed(
-          1
-        )}°, Vertical: ${verticalAngle.toFixed(1)}°`
+          1,
+        )}°, Vertical: ${verticalAngle.toFixed(1)}°`,
       )
 
       if (isPortrait) {
@@ -299,7 +299,7 @@ const HeadsUpGame = () => {
           }
         } else {
           setDebugInfo(
-            `Ready | Landscape tilt: ${tiltDiff.toFixed(1)}° from neutral`
+            `Ready | Landscape tilt: ${tiltDiff.toFixed(1)}° from neutral`,
           )
         }
       }
@@ -342,7 +342,7 @@ const HeadsUpGame = () => {
       const randomIndex = Math.floor(Math.random() * initialWords.length)
       const firstWord = initialWords[randomIndex]
       const remainingWords = initialWords.filter(
-        (_, index) => index !== randomIndex
+        (_, index) => index !== randomIndex,
       )
 
       // Set up initial game state
@@ -379,7 +379,7 @@ const HeadsUpGame = () => {
       const remainingWords = words.filter((_, index) => index !== randomIndex)
 
       console.log(
-        `Setting next word: ${nextWord} (${remainingWords.length} words remaining)`
+        `Setting next word: ${nextWord} (${remainingWords.length} words remaining)`,
       )
 
       // Update state
@@ -394,7 +394,7 @@ const HeadsUpGame = () => {
   const handleCorrect = method => {
     if (!gameStateRef.current || gameStateRef.current !== "playing") {
       console.log(
-        `Ignoring correct action - invalid game state: ${gameStateRef.current}`
+        `Ignoring correct action - invalid game state: ${gameStateRef.current}`,
       )
       return
     }
@@ -423,7 +423,7 @@ const HeadsUpGame = () => {
   const handleIncorrect = method => {
     if (!gameStateRef.current || gameStateRef.current !== "playing") {
       console.log(
-        `Ignoring incorrect action - invalid game state: ${gameStateRef.current}`
+        `Ignoring incorrect action - invalid game state: ${gameStateRef.current}`,
       )
       return
     }
