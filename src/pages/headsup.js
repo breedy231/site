@@ -155,11 +155,11 @@ const HeadsUpGame = () => {
   }, [gameState])
 
   // Constants with adjusted thresholds and timing
-  const ACTION_COOLDOWN = 800; // Increased cooldown to prevent double-counting
-  const TILT_THRESHOLD = 30;   // Base threshold for portrait mode
-  const VERTICAL_TOLERANCE = 60; // Vertical tolerance
-  const LANDSCAPE_NEUTRAL = 90; // Neutral position in landscape
-  const LANDSCAPE_THRESHOLD = 25; // Threshold for landscape mode
+  const ACTION_COOLDOWN = 800 // Increased cooldown to prevent double-counting
+  const TILT_THRESHOLD = 30 // Base threshold for portrait mode
+  const VERTICAL_TOLERANCE = 60 // Vertical tolerance
+  const LANDSCAPE_NEUTRAL = 90 // Neutral position in landscape
+  const LANDSCAPE_THRESHOLD = 25 // Threshold for landscape mode
 
   // Update useEffect for game timer
   // Update useEffect for game timer and state management
@@ -310,7 +310,6 @@ const HeadsUpGame = () => {
     }
   }
 
-
   const startGame = category => {
     console.log(`Starting game with category: ${category}`)
     // Make a deep copy of the category words
@@ -352,14 +351,14 @@ const HeadsUpGame = () => {
       setScore({ correct: 0, incorrect: 0 })
       setWordResults([])
       setTimeLeft(60)
-      
+
       // Wait for state updates to complete
       await new Promise(resolve => {
         setCurrentWord(firstWord)
         setWords(remainingWords)
         setTimeout(resolve, 50)
       })
-      
+
       setGameState("playing")
 
       console.log(`Game started with ${remainingWords.length + 1} words`)
@@ -370,35 +369,37 @@ const HeadsUpGame = () => {
   }
 
   const nextWord = () => {
-    return new Promise((resolve) => {
-      console.log(`nextWord called - current game state: ${gameStateRef.current}`)
+    return new Promise(resolve => {
+      console.log(
+        `nextWord called - current game state: ${gameStateRef.current}`,
+      )
       if (gameStateRef.current !== "playing") {
         console.log("nextWord called but not in playing state")
         resolve()
         return
       }
-    
+
       // Guard against empty word list
       if (!words || words.length === 0) {
         console.log("No more words available")
         resolve()
         return // Don't end game here, let the timer handle it
       }
-    
+
       try {
         // Get next word
         const randomIndex = Math.floor(Math.random() * words.length)
         const nextWord = words[randomIndex]
         const remainingWords = words.filter((_, index) => index !== randomIndex)
-    
+
         console.log(
-          `Setting next word: ${nextWord} (${remainingWords.length} words remaining)`
+          `Setting next word: ${nextWord} (${remainingWords.length} words remaining)`,
         )
-    
+
         // Update state
         setCurrentWord(nextWord)
         setWords(remainingWords)
-        
+
         // Give React a chance to update the state
         setTimeout(resolve, 50)
       } catch (error) {
@@ -410,71 +411,73 @@ const HeadsUpGame = () => {
   }
 
   // Add new refs for current state tracking
-  const currentWordRef = useRef("");
-  const wordsRef = useRef([]);
+  const currentWordRef = useRef("")
+  const wordsRef = useRef([])
 
   // Update refs whenever state changes
   useEffect(() => {
-    currentWordRef.current = currentWord;
-  }, [currentWord]);
+    currentWordRef.current = currentWord
+  }, [currentWord])
 
   useEffect(() => {
-    wordsRef.current = words;
-  }, [words]);
+    wordsRef.current = words
+  }, [words])
 
   const getNextWord = () => {
-    const currentWords = wordsRef.current;
-    if (!currentWords || currentWords.length === 0) return null;
-    
-    const randomIndex = Math.floor(Math.random() * currentWords.length);
-    const nextWord = currentWords[randomIndex];
-    const remainingWords = currentWords.filter((_, index) => index !== randomIndex);
-    
-    return { nextWord, remainingWords };
+    const currentWords = wordsRef.current
+    if (!currentWords || currentWords.length === 0) return null
+
+    const randomIndex = Math.floor(Math.random() * currentWords.length)
+    const nextWord = currentWords[randomIndex]
+    const remainingWords = currentWords.filter(
+      (_, index) => index !== randomIndex,
+    )
+
+    return { nextWord, remainingWords }
   }
 
   const handleCorrect = method => {
-    if (!gameStateRef.current || gameStateRef.current !== "playing") return;
-    
-    const wordToStore = currentWordRef.current;
-    const next = getNextWord();
-    
+    if (!gameStateRef.current || gameStateRef.current !== "playing") return
+
+    const wordToStore = currentWordRef.current
+    const next = getNextWord()
+
     if (!next) {
-      endGame();
-      return;
+      endGame()
+      return
     }
-    
+
     // Update all states synchronously
-    setScore(prev => ({ ...prev, correct: prev.correct + 1 }));
-    setWordResults(prev => [...prev, { word: wordToStore, correct: true }]);
-    setWords(next.remainingWords);
-    setCurrentWord(next.nextWord);
-    setDebugInfo(`Correct! ${wordToStore}`);
+    setScore(prev => ({ ...prev, correct: prev.correct + 1 }))
+    setWordResults(prev => [...prev, { word: wordToStore, correct: true }])
+    setWords(next.remainingWords)
+    setCurrentWord(next.nextWord)
+    setDebugInfo(`Correct! ${wordToStore}`)
   }
 
   const handleIncorrect = method => {
-    if (!gameStateRef.current || gameStateRef.current !== "playing") return;
-    
-    const wordToStore = currentWordRef.current;
-    const next = getNextWord();
-    
+    if (!gameStateRef.current || gameStateRef.current !== "playing") return
+
+    const wordToStore = currentWordRef.current
+    const next = getNextWord()
+
     if (!next) {
-      endGame();
-      return;
+      endGame()
+      return
     }
-    
+
     // Update all states synchronously
-    setScore(prev => ({ ...prev, incorrect: prev.incorrect + 1 }));
-    setWordResults(prev => [...prev, { word: wordToStore, correct: false }]);
-    setWords(next.remainingWords);
-    setCurrentWord(next.nextWord);
-    setDebugInfo(`Pass! ${wordToStore}`);
+    setScore(prev => ({ ...prev, incorrect: prev.incorrect + 1 }))
+    setWordResults(prev => [...prev, { word: wordToStore, correct: false }])
+    setWords(next.remainingWords)
+    setCurrentWord(next.nextWord)
+    setDebugInfo(`Pass! ${wordToStore}`)
   }
 
   const endGame = () => {
     console.log("Ending game - final scores:", score)
     console.log("Final word results:", wordResults)
-    
+
     // Cleanup motion listener before ending
     if (typeof window !== "undefined") {
       window.removeEventListener("deviceorientation", handleOrientation, true)
@@ -657,66 +660,76 @@ const HeadsUpGame = () => {
             </div>
           )}
 
-{gameState === "finished" && (
-  <div className="space-y-6 text-center">
-    <h2 className="mb-4 text-3xl font-bold">Game Over!</h2>
-    <div className="rounded-lg bg-white p-6 shadow-lg">
-      <div className="space-y-2 text-xl">
-        <p className="text-green-600">Correct: {score.correct}</p>
-        <p className="text-red-600">Incorrect: {score.incorrect}</p>
-        <p className="mt-4 text-2xl font-bold">
-          Total Score: {score.correct - score.incorrect}
-        </p>
-      </div>
-    </div>
-    
-    {/* Word Results */}
-    <div className="rounded-lg bg-white p-6 shadow-lg">
-      <h3 className="mb-4 text-xl font-bold">Word Summary</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <h4 className="mb-2 font-bold text-green-600">Correct ✅</h4>
-          <ul className="text-left">
-            {wordResults
-              .filter(result => result.correct)
-              .map((result, index) => (
-                <li key={`correct-${index}`} className="text-green-600">
-                  {result.word}
-                </li>
-              ))}
-          </ul>
-        </div>
-        <div>
-          <h4 className="mb-2 font-bold text-red-600">Incorrect ❌</h4>
-          <ul className="text-left">
-            {wordResults
-              .filter(result => !result.correct)
-              .map((result, index) => (
-                <li key={`incorrect-${index}`} className="text-red-600">
-                  {result.word}
-                </li>
-              ))}
-          </ul>
-        </div>
-      </div>
-    </div>
+          {gameState === "finished" && (
+            <div className="space-y-6 text-center">
+              <h2 className="mb-4 text-3xl font-bold">Game Over!</h2>
+              <div className="rounded-lg bg-white p-6 shadow-lg">
+                <div className="space-y-2 text-xl">
+                  <p className="text-green-600">Correct: {score.correct}</p>
+                  <p className="text-red-600">Incorrect: {score.incorrect}</p>
+                  <p className="mt-4 text-2xl font-bold">
+                    Total Score: {score.correct - score.incorrect}
+                  </p>
+                </div>
+              </div>
 
-    <div className="space-y-4">
-      <button
-        onClick={() => startGame(currentCategory)}
-        className="w-full rounded-lg bg-blue-500 p-4 text-xl text-white shadow transition-colors hover:bg-blue-600"
-      >
-        Play Same Category
-      </button>
-      <button
-        onClick={() => setGameState("category")}
-        className="w-full rounded-lg bg-green-500 p-4 text-xl text-white shadow transition-colors hover:bg-green-600"
-      >
-        Choose New Category
-      </button>
-    </div>
-  </div>
-)}
+              {/* Word Results */}
+              <div className="rounded-lg bg-white p-6 shadow-lg">
+                <h3 className="mb-4 text-xl font-bold">Word Summary</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="mb-2 font-bold text-green-600">
+                      Correct ✅
+                    </h4>
+                    <ul className="text-left">
+                      {wordResults
+                        .filter(result => result.correct)
+                        .map((result, index) => (
+                          <li
+                            key={`correct-${index}`}
+                            className="text-green-600"
+                          >
+                            {result.word}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="mb-2 font-bold text-red-600">
+                      Incorrect ❌
+                    </h4>
+                    <ul className="text-left">
+                      {wordResults
+                        .filter(result => !result.correct)
+                        .map((result, index) => (
+                          <li
+                            key={`incorrect-${index}`}
+                            className="text-red-600"
+                          >
+                            {result.word}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <button
+                  onClick={() => startGame(currentCategory)}
+                  className="w-full rounded-lg bg-blue-500 p-4 text-xl text-white shadow transition-colors hover:bg-blue-600"
+                >
+                  Play Same Category
+                </button>
+                <button
+                  onClick={() => setGameState("category")}
+                  className="w-full rounded-lg bg-green-500 p-4 text-xl text-white shadow transition-colors hover:bg-green-600"
+                >
+                  Choose New Category
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </Layout>
