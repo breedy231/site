@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import Layout from "../components/layout"
 import { categories } from "../data/headsupCategories"
 import { Helmet } from "react-helmet"
+import soundManager from "../components/SoundManager"
 import "../styles/global.css"
 
 const HeadsUpGame = () => {
@@ -15,6 +16,7 @@ const HeadsUpGame = () => {
   const [wordResults, setWordResults] = useState([])
   const [debugInfo, setDebugInfo] = useState("")
   const [showDebug, setShowDebug] = useState(true)
+  const [isMuted, setIsMuted] = useState(soundManager.isMuted())
   const [hasOrientationPermission, setHasOrientationPermission] =
     useState(false)
 
@@ -70,7 +72,7 @@ const HeadsUpGame = () => {
       } else {
         // No permission API needed (non-iOS or older versions)
         setDebugInfo(
-          "No permission API needed, enabling tilt controls directly",
+          "No permission API needed, enabling tilt controls directly"
         )
         setMotionDebug(prev => ({ ...prev, permissionState: "granted" }))
         setHasOrientationPermission(true)
@@ -224,8 +226,8 @@ const HeadsUpGame = () => {
       // Debug orientation values
       console.log(
         `Raw values - Beta: ${beta.toFixed(1)}°, Gamma: ${gamma.toFixed(
-          1,
-        )}°, Orientation: ${orientation}°`,
+          1
+        )}°, Orientation: ${orientation}°`
       )
 
       // Determine device orientation
@@ -251,7 +253,7 @@ const HeadsUpGame = () => {
 
       if (!isVertical) {
         setDebugInfo(
-          `Adjust phone position | Vertical: ${verticalAngle.toFixed(1)}°`,
+          `Adjust phone position | Vertical: ${verticalAngle.toFixed(1)}°`
         )
         return
       }
@@ -259,8 +261,8 @@ const HeadsUpGame = () => {
       // Log the processed angles
       console.log(
         `Processed - Tilt: ${tiltAngle.toFixed(
-          1,
-        )}°, Vertical: ${verticalAngle.toFixed(1)}°`,
+          1
+        )}°, Vertical: ${verticalAngle.toFixed(1)}°`
       )
 
       if (isPortrait) {
@@ -300,7 +302,7 @@ const HeadsUpGame = () => {
           }
         } else {
           setDebugInfo(
-            `Ready | Landscape tilt: ${tiltDiff.toFixed(1)}° from neutral`,
+            `Ready | Landscape tilt: ${tiltDiff.toFixed(1)}° from neutral`
           )
         }
       }
@@ -325,6 +327,10 @@ const HeadsUpGame = () => {
     console.log("Beginning countdown")
     setDebugInfo("Starting game...")
 
+    // Load and play start sound
+    await soundManager.loadSounds()
+    soundManager.play("start")
+
     try {
       if (!hasOrientationPermission) {
         setDebugInfo("Requesting permission before start...")
@@ -344,7 +350,7 @@ const HeadsUpGame = () => {
       const randomIndex = Math.floor(Math.random() * initialWords.length)
       const firstWord = initialWords[randomIndex]
       const remainingWords = initialWords.filter(
-        (_, index) => index !== randomIndex,
+        (_, index) => index !== randomIndex
       )
 
       // Set up initial game state
@@ -368,48 +374,6 @@ const HeadsUpGame = () => {
     }
   }
 
-  const nextWord = () => {
-    return new Promise(resolve => {
-      console.log(
-        `nextWord called - current game state: ${gameStateRef.current}`,
-      )
-      if (gameStateRef.current !== "playing") {
-        console.log("nextWord called but not in playing state")
-        resolve()
-        return
-      }
-
-      // Guard against empty word list
-      if (!words || words.length === 0) {
-        console.log("No more words available")
-        resolve()
-        return // Don't end game here, let the timer handle it
-      }
-
-      try {
-        // Get next word
-        const randomIndex = Math.floor(Math.random() * words.length)
-        const nextWord = words[randomIndex]
-        const remainingWords = words.filter((_, index) => index !== randomIndex)
-
-        console.log(
-          `Setting next word: ${nextWord} (${remainingWords.length} words remaining)`,
-        )
-
-        // Update state
-        setCurrentWord(nextWord)
-        setWords(remainingWords)
-
-        // Give React a chance to update the state
-        setTimeout(resolve, 50)
-      } catch (error) {
-        console.error("Error in nextWord:", error)
-        setDebugInfo(`Error getting next word: ${error.message}`)
-        resolve()
-      }
-    })
-  }
-
   // Add new refs for current state tracking
   const currentWordRef = useRef("")
   const wordsRef = useRef([])
@@ -430,17 +394,20 @@ const HeadsUpGame = () => {
     const randomIndex = Math.floor(Math.random() * currentWords.length)
     const nextWord = currentWords[randomIndex]
     const remainingWords = currentWords.filter(
-      (_, index) => index !== randomIndex,
+      (_, index) => index !== randomIndex
     )
 
     return { nextWord, remainingWords }
   }
 
   const handleCorrect = method => {
+    console.log(`Correct answer (${method})`)
     if (!gameStateRef.current || gameStateRef.current !== "playing") return
 
     const wordToStore = currentWordRef.current
     const next = getNextWord()
+
+    soundManager.play("correct")
 
     if (!next) {
       endGame()
@@ -456,10 +423,13 @@ const HeadsUpGame = () => {
   }
 
   const handleIncorrect = method => {
+    console.log(`Incorrect answer (${method})`)
     if (!gameStateRef.current || gameStateRef.current !== "playing") return
 
     const wordToStore = currentWordRef.current
     const next = getNextWord()
+
+    soundManager.play("wrong")
 
     if (!next) {
       endGame()
@@ -478,6 +448,8 @@ const HeadsUpGame = () => {
     console.log("Ending game - final scores:", score)
     console.log("Final word results:", wordResults)
 
+    soundManager.play("gameOver")
+
     // Cleanup motion listener before ending
     if (typeof window !== "undefined") {
       window.removeEventListener("deviceorientation", handleOrientation, true)
@@ -490,6 +462,10 @@ const HeadsUpGame = () => {
     if (gameState === "playing" && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft(prev => {
+          // Play warning sound at 10 seconds
+          if (prev === 10) {
+            soundManager.play("timerWarning")
+          }
           if (prev <= 1) {
             endGame()
             return 0
@@ -547,12 +523,23 @@ const HeadsUpGame = () => {
           <h1 className="mb-8 text-center text-4xl font-bold">Heads Up!</h1>
 
           {/* Debug Toggle Button */}
-          <button
-            onClick={() => setShowDebug(prev => !prev)}
-            className="fixed top-4 right-4 rounded-full bg-gray-200 p-2 text-xs"
-          >
-            {showDebug ? "Hide Debug" : "Show Debug"}
-          </button>
+          <div className="fixed top-4 right-4 flex gap-2">
+            <button
+              onClick={() => {
+                const newMuted = soundManager.toggleMute()
+                setIsMuted(newMuted)
+              }}
+              className="rounded-full bg-gray-200 p-2 text-xs"
+            >
+              {isMuted ? "🔇" : "🔊"}
+            </button>
+            <button
+              onClick={() => setShowDebug(prev => !prev)}
+              className="rounded-full bg-gray-200 p-2 text-xs"
+            >
+              {showDebug ? "Hide Debug" : "Show Debug"}
+            </button>
+          </div>
 
           {/* Debug Info */}
           <div
