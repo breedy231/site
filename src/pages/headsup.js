@@ -20,12 +20,9 @@ const HeadsUpGame = () => {
   const [hasOrientationPermission, setHasOrientationPermission] =
     useState(false)
 
-  // Add gameStateRef at the top with other refs
-  const touchStartX = useRef(null)
-  const touchStartY = useRef(null)
+  // Add refs for state tracking
   const lastActionTime = useRef(0)
   const gameStateRef = useRef("category")
-  // const ACTION_COOLDOWN = 500 // ms between actions
 
   // State for detailed debugging
   const [motionDebug, setMotionDebug] = useState({
@@ -119,36 +116,27 @@ const HeadsUpGame = () => {
   }, [hasOrientationPermission])
 
   const handleTouchStart = e => {
-    touchStartX.current = e.touches[0].clientX
-    touchStartY.current = e.touches[0].clientY
-  }
-
-  const handleTouchEnd = e => {
-    if (!touchStartX.current || !touchStartY.current || gameState !== "playing")
-      return
+    if (gameState !== "playing") return
 
     const now = Date.now()
     if (now - lastActionTime.current < ACTION_COOLDOWN) return
 
-    const touchEndX = e.changedTouches[0].clientX
-    const touchEndY = e.changedTouches[0].clientY
+    const touch = e.touches[0]
+    const screenWidth = window.innerWidth
+    const tapX = touch.clientX
 
-    const deltaX = touchEndX - touchStartX.current
-    const deltaY = touchEndY - touchStartY.current
+    lastActionTime.current = now
 
-    // Only trigger if the swipe is mostly horizontal
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      lastActionTime.current = now
-      if (deltaX > 0) {
-        handleCorrect("swipe right")
-      } else {
-        handleIncorrect("swipe left")
-      }
+    // Right half of screen is correct, left half is incorrect
+    if (tapX > screenWidth / 2) {
+      handleCorrect("tap right")
+    } else {
+      handleIncorrect("tap left")
     }
-
-    touchStartX.current = null
-    touchStartY.current = null
   }
+
+  // Remove handleTouchEnd since we're using instant taps
+  const handleTouchEnd = () => {}
 
   // Add effect to keep gameStateRef in sync
   useEffect(() => {
@@ -591,12 +579,12 @@ const HeadsUpGame = () => {
                   1. Hold your phone up to your forehead
                 </p>
                 <p className="mb-4 text-gray-600">
-                  2. {hasOrientationPermission ? "Tilt or swipe" : "Swipe"}{" "}
-                  right for correct ✅
+                  2. {hasOrientationPermission ? "Tilt or tap" : "Tap"} the
+                  right side for correct ✅
                 </p>
                 <p className="mb-4 text-gray-600">
-                  3. {hasOrientationPermission ? "Tilt or swipe" : "Swipe"} left
-                  for pass ❌
+                  3. {hasOrientationPermission ? "Tilt or tap" : "Tap"} the left
+                  side for pass ❌
                 </p>
                 <p className="text-sm text-gray-600">
                   (On desktop: use left/right arrow keys)
@@ -621,20 +609,27 @@ const HeadsUpGame = () => {
                   Remaining Words: {words.length}
                 </div>
               </div>
-              <motion.div
-                key={currentWord}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="rounded-lg bg-white p-8 text-4xl font-bold shadow-lg"
-                style={{
-                  minHeight: "200px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {currentWord}
-              </motion.div>
+              <div className="relative">
+                {/* Tap zone indicators */}
+                <div className="absolute inset-0 flex">
+                  <div className="w-1/2 border-r border-gray-200 bg-red-50/20"></div>
+                  <div className="w-1/2 bg-green-50/20"></div>
+                </div>
+                <motion.div
+                  key={currentWord}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="relative rounded-lg bg-white p-8 text-4xl font-bold shadow-lg"
+                  style={{
+                    minHeight: "200px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {currentWord}
+                </motion.div>
+              </div>
               <div className="mt-4 flex justify-between text-xl">
                 <div className="text-green-600">✅ {score.correct}</div>
                 <div className="text-red-600">❌ {score.incorrect}</div>
