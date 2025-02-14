@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Motion Controls Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .debug-panel {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .tilt-meter {
+            width: 100%;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            position: relative;
+            margin: 10px 0;
+        }
+        .tilt-indicator {
+            width: 4px;
+            height: 100%;
+            background: blue;
+            position: absolute;
+            border-radius: 2px;
+            transition: left 0.1s;
+        }
+        .intensity-bar {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            position: relative;
+            margin: 10px 0;
+        }
+        .intensity-fill {
+            height: 100%;
+            background: #4CAF50;
+            border-radius: 5px;
+            transition: width 0.1s;
+        }
+        .zone-indicator {
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        .test-area {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .log {
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Motion Controls Test</h1>
+        
+        <div class="debug-panel">
+            <h2>Debug Panel</h2>
+            <div>
+                <strong>Device Type:</strong> <span id="deviceType">Unknown</span>
+            </div>
+            <div>
+                <strong>Permission Status:</strong> <span id="permissionStatus">Unknown</span>
+            </div>
+            <div>
+                <strong>Orientation Lock:</strong> <span id="orientationLock">Unlocked</span>
+            </div>
+            
+            <h3>Tilt Meter</h3>
+            <div class="tilt-meter">
+                <div class="tilt-indicator" id="tiltIndicator"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span>-45°</span>
+                <span>0°</span>
+                <span>45°</span>
+            </div>
+            
+            <h3>Motion Intensity</h3>
+            <div class="intensity-bar">
+                <div class="intensity-fill" id="intensityFill"></div>
+            </div>
+            
+            <div>
+                <strong>Current Zone: </strong>
+                <div class="zone-indicator" id="zoneIndicator">NEUTRAL</div>
+            </div>
+            
+            <div>
+                <strong>Last Motion: </strong>
+                <span id="lastMotion">None</span>
+            </div>
+        </div>
+
+        <div class="test-area">
+            <button id="requestPermission">Request Motion Permission</button>
+            <button id="toggleOrientation">Toggle Orientation Lock</button>
+            <button id="clearLog">Clear Log</button>
+            <div class="log" id="eventLog"></div>
+        </div>
+    </div>
+
+    <script>
+        // Motion detection constants (matching headsup.js)
+        const MOTION_ZONES = {
+            NEUTRAL: { min: -15, max: 15 },
+            WARNING: { min: -25, max: 25 },
+            ACTION: { threshold: 25 }
+        };
+        
+        const MOTION_SETTINGS = {
+            COOLDOWN: 500,
+            INTENSITY_THRESHOLD: 15,
+            SMOOTHING_FACTOR: 0.3,
+        };
+
+        // State management
+        const state = {
+            prevTiltAngles: [0, 0, 0],
+            smoothedIntensity: 0,
+            lastActionTime: 0,
+            orientationLocked: false
+        };
+
+        // DOM elements
+        const elements = {
+            deviceType: document.getElementById('deviceType'),
+            permissionStatus: document.getElementById('permissionStatus'),
+            orientationLock: document.getElementById('orientationLock'),
+            tiltIndicator: document.getElementById('tiltIndicator'),
+            intensityFill: document.getElementById('intensityFill'),
+            zoneIndicator: document.getElementById('zoneIndicator'),
+            lastMotion: document.getElementById('lastMotion'),
+            eventLog: document.getElementById('eventLog')
+        };
+
+        // Helper functions
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            elements.eventLog.innerHTML = `[${timestamp}] ${message}<br>${elements.eventLog.innerHTML}`;
+        }
+
+        function calculateMovingAverage(newValue) {
+            state.prevTiltAngles = [...state.prevTiltAngles.slice(1), newValue];
+            return state.prevTiltAngles.reduce((a, b) => a + b, 0) / state.prevTiltAngles.length;
+        }
+
+        function updateMotionIntensity(newIntensity) {
+            state.smoothedIntensity = 
+                MOTION_SETTINGS.SMOOTHING_FACTOR * newIntensity + 
+                (1 - MOTION_SETTINGS.SMOOTHING_FACTOR) * state.smoothedIntensity;
+            return state.smoothedIntensity;
+        }
+
+        function getMotionZone(angle) {
+            const absAngle = Math.abs(angle);
+            if (absAngle <= MOTION_ZONES.NEUTRAL.max) return "neutral";
+            if (absAngle <= MOTION_ZONES.WARNING.max) return "warning";
+            return "action";
+        }
+
+        // Event handlers
+        async function requestOrientationPermission() {
+            try {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                elements.deviceType.textContent = isIOS ? "iOS" : "non-iOS";
+                
+                if (typeof DeviceOrientationEvent.requestPermission === "function") {
+                    const permission = await DeviceOrientationEvent.requestPermission();
+                    elements.permissionStatus.textContent = permission;
+                    log(`Permission response: ${permission}`);
+                    
+                    if (permission === "granted") {
+                        window.addEventListener("deviceorientation", handleOrientation, true);
+                        log("Motion listener activated");
+                    }
+                } else {
+                    elements.permissionStatus.textContent = "granted (no permission needed)";
+                    window.addEventListener("deviceorientation", handleOrientation, true);
+                    log("Motion listener activated (no permission needed)");
+                }
+            } catch (error) {
+                log(`Permission error: ${error.message}`);
+                elements.permissionStatus.textContent = "error";
+            }
+        }
+
+        async function toggleOrientation() {
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    if (!state.orientationLocked) {
+                        await screen.orientation.lock('landscape');
+                        state.orientationLocked = true;
+                        elements.orientationLock.textContent = "Locked";
+                        log("Screen locked to landscape");
+                    } else {
+                        await screen.orientation.unlock();
+                        state.orientationLocked = false;
+                        elements.orientationLock.textContent = "Unlocked";
+                        log("Screen orientation unlocked");
+                    }
+                } else {
+                    log("Screen orientation locking not supported");
+                }
+            } catch (error) {
+                log(`Orientation error: ${error.message}`);
+            }
+        }
+
+        function handleOrientation(event) {
+            const now = Date.now();
+            if (now - state.lastActionTime < MOTION_SETTINGS.COOLDOWN) return;
+
+            try {
+                const beta = event.beta || 0;
+                const gamma = event.gamma || 0;
+
+                // Normalize beta to be between -180 and 180
+                let rawTiltAngle = (beta < 0 ? beta + 180 : beta) - 90;
+                const tiltAngle = calculateMovingAverage(rawTiltAngle);
+                
+                // Calculate motion intensity
+                const intensity = updateMotionIntensity(Math.abs(tiltAngle - state.prevTiltAngles[1]));
+                
+                // Update UI
+                const zone = getMotionZone(tiltAngle);
+                elements.tiltIndicator.style.left = `${Math.min(Math.max((tiltAngle + 45) * (100/90), 0), 100)}%`;
+                elements.intensityFill.style.width = `${Math.min(intensity * 2, 100)}%`;
+                
+                elements.zoneIndicator.textContent = zone.toUpperCase();
+                elements.zoneIndicator.style.background = 
+                    zone === "action" ? "#ff4444" :
+                    zone === "warning" ? "#ffaa00" : "#4CAF50";
+                
+                // Validate phone position
+                if (Math.abs(gamma) > 75) {
+                    log(`Phone position warning: gamma=${gamma.toFixed(1)}°`);
+                    return;
+                }
+
+                // Check for valid motion
+                if (zone === "action" && intensity > MOTION_SETTINGS.INTENSITY_THRESHOLD) {
+                    state.lastActionTime = now;
+                    
+                    if (tiltAngle < -MOTION_ZONES.ACTION.threshold) {
+                        elements.lastMotion.textContent = "DOWN";
+                        log(`Motion detected: DOWN (${tiltAngle.toFixed(1)}°)`);
+                    } else if (tiltAngle > MOTION_ZONES.ACTION.threshold) {
+                        elements.lastMotion.textContent = "UP";
+                        log(`Motion detected: UP (${tiltAngle.toFixed(1)}°)`);
+                    }
+                }
+
+                // Log detailed motion data periodically
+                if (now % 1000 < 100) {  // Log roughly every second
+                    log(`Tilt: ${tiltAngle.toFixed(1)}° | Intensity: ${intensity.toFixed(1)} | Zone: ${zone}`);
+                }
+            } catch (error) {
+                log(`Orientation error: ${error.message}`);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('requestPermission').addEventListener('click', requestOrientationPermission);
+        document.getElementById('toggleOrientation').addEventListener('click', toggleOrientation);
+        document.getElementById('clearLog').addEventListener('click', () => {
+            elements.eventLog.innerHTML = '';
+        });
+
+        // Initial setup
+        log("Test page loaded. Request permission to begin testing.");
+    </script>
+</body>
+</html>
