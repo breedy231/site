@@ -69,7 +69,7 @@ const HeadsUpGame = () => {
       } else {
         // No permission API needed (non-iOS or older versions)
         setDebugInfo(
-          "No permission API needed, enabling tilt controls directly",
+          "No permission API needed, enabling tilt controls directly"
         )
         setMotionDebug(prev => ({ ...prev, permissionState: "granted" }))
         setHasOrientationPermission(true)
@@ -127,11 +127,11 @@ const HeadsUpGame = () => {
 
     lastActionTime.current = now
 
-    // Right half of screen is correct, left half is incorrect
-    if (tapX > screenWidth / 2) {
-      handleCorrect("tap right")
+    // Left half of screen is correct, right half is incorrect
+    if (tapX < screenWidth / 2) {
+      handleCorrect("tap left")
     } else {
-      handleIncorrect("tap left")
+      handleIncorrect("tap right")
     }
   }
 
@@ -172,6 +172,10 @@ const HeadsUpGame = () => {
       timer = setInterval(() => {
         if (isActive) {
           setTimeLeft(prev => {
+            // Only play ticking sound in final 10 seconds
+            if (prev <= 11 && prev > 1) {
+              soundManager.play("timerWarning")
+            }
             if (prev <= 1) {
               console.log("Timer reached 0 - ending game")
               endGame()
@@ -214,8 +218,8 @@ const HeadsUpGame = () => {
       // Debug orientation values
       console.log(
         `Raw values - Beta: ${beta.toFixed(1)}°, Gamma: ${gamma.toFixed(
-          1,
-        )}°, Orientation: ${orientation}°`,
+          1
+        )}°, Orientation: ${orientation}°`
       )
 
       // Determine device orientation
@@ -241,7 +245,7 @@ const HeadsUpGame = () => {
 
       if (!isVertical) {
         setDebugInfo(
-          `Adjust phone position | Vertical: ${verticalAngle.toFixed(1)}°`,
+          `Adjust phone position | Vertical: ${verticalAngle.toFixed(1)}°`
         )
         return
       }
@@ -249,8 +253,8 @@ const HeadsUpGame = () => {
       // Log the processed angles
       console.log(
         `Processed - Tilt: ${tiltAngle.toFixed(
-          1,
-        )}°, Vertical: ${verticalAngle.toFixed(1)}°`,
+          1
+        )}°, Vertical: ${verticalAngle.toFixed(1)}°`
       )
 
       if (isPortrait) {
@@ -258,13 +262,13 @@ const HeadsUpGame = () => {
         if (Math.abs(tiltAngle) > TILT_THRESHOLD) {
           lastActionTime.current = now
 
-          if (tiltAngle > TILT_THRESHOLD) {
-            console.log("Portrait RIGHT tilt detected - Correct")
-            handleCorrect("tilt right")
+          if (tiltAngle < -TILT_THRESHOLD) {
+            console.log("Portrait LEFT tilt detected - Correct")
+            handleCorrect("tilt left")
             setDebugInfo("Correct ✅")
-          } else if (tiltAngle < -TILT_THRESHOLD) {
-            console.log("Portrait LEFT tilt detected - Pass")
-            handleIncorrect("tilt left")
+          } else if (tiltAngle > TILT_THRESHOLD) {
+            console.log("Portrait RIGHT tilt detected - Pass")
+            handleIncorrect("tilt right")
             setDebugInfo("Pass ❌")
           }
         } else {
@@ -277,20 +281,20 @@ const HeadsUpGame = () => {
         if (Math.abs(tiltDiff) > LANDSCAPE_THRESHOLD) {
           lastActionTime.current = now
 
-          if (tiltDiff < -LANDSCAPE_THRESHOLD) {
-            // Tilted down from neutral (correct)
-            console.log("Landscape DOWN tilt detected - Correct")
-            handleCorrect("tilt down")
+          if (tiltDiff > LANDSCAPE_THRESHOLD) {
+            // Tilted up from neutral (correct)
+            console.log("Landscape UP tilt detected - Correct")
+            handleCorrect("tilt up")
             setDebugInfo("Correct ✅")
-          } else if (tiltDiff > LANDSCAPE_THRESHOLD) {
-            // Tilted up from neutral (pass)
-            console.log("Landscape UP tilt detected - Pass")
-            handleIncorrect("tilt up")
+          } else if (tiltDiff < -LANDSCAPE_THRESHOLD) {
+            // Tilted down from neutral (pass)
+            console.log("Landscape DOWN tilt detected - Pass")
+            handleIncorrect("tilt down")
             setDebugInfo("Pass ❌")
           }
         } else {
           setDebugInfo(
-            `Ready | Landscape tilt: ${tiltDiff.toFixed(1)}° from neutral`,
+            `Ready | Landscape tilt: ${tiltDiff.toFixed(1)}° from neutral`
           )
         }
       }
@@ -315,9 +319,8 @@ const HeadsUpGame = () => {
     console.log("Beginning countdown")
     setDebugInfo("Starting game...")
 
-    // Load and play start sound
+    // Load sounds
     await soundManager.loadSounds()
-    soundManager.play("start")
 
     try {
       if (!hasOrientationPermission) {
@@ -338,13 +341,31 @@ const HeadsUpGame = () => {
       const randomIndex = Math.floor(Math.random() * initialWords.length)
       const firstWord = initialWords[randomIndex]
       const remainingWords = initialWords.filter(
-        (_, index) => index !== randomIndex,
+        (_, index) => index !== randomIndex
       )
 
       // Set up initial game state
       setScore({ correct: 0, incorrect: 0 })
       setWordResults([])
       setTimeLeft(60)
+
+      // Set up countdown state
+      setGameState("countdown")
+      setDebugInfo("3...")
+      soundManager.play("timerWarning")
+
+      // 3-2-1 countdown
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setDebugInfo("2...")
+      soundManager.play("timerWarning")
+
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setDebugInfo("1...")
+      soundManager.play("timerWarning")
+
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setDebugInfo("GO!")
+      soundManager.play("start") // Play start sound for "GO!"
 
       // Wait for state updates to complete
       await new Promise(resolve => {
@@ -354,7 +375,6 @@ const HeadsUpGame = () => {
       })
 
       setGameState("playing")
-
       console.log(`Game started with ${remainingWords.length + 1} words`)
     } catch (error) {
       console.error("Error starting game:", error)
@@ -382,7 +402,7 @@ const HeadsUpGame = () => {
     const randomIndex = Math.floor(Math.random() * currentWords.length)
     const nextWord = currentWords[randomIndex]
     const remainingWords = currentWords.filter(
-      (_, index) => index !== randomIndex,
+      (_, index) => index !== randomIndex
     )
 
     return { nextWord, remainingWords }
@@ -445,26 +465,6 @@ const HeadsUpGame = () => {
     setGameState("finished")
   }
 
-  useEffect(() => {
-    let timer
-    if (gameState === "playing" && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft(prev => {
-          // Play warning sound at 10 seconds
-          if (prev === 10) {
-            soundManager.play("timerWarning")
-          }
-          if (prev <= 1) {
-            endGame()
-            return 0
-          }
-          return prev - 1
-        })
-      }, 1000)
-    }
-    return () => clearInterval(timer)
-  }, [gameState, timeLeft])
-
   // Add keyboard controls for desktop testing
   useEffect(() => {
     const handleKeyPress = event => {
@@ -473,10 +473,10 @@ const HeadsUpGame = () => {
         if (now - lastActionTime.current < ACTION_COOLDOWN) return
 
         lastActionTime.current = now
-        if (event.key === "ArrowRight") {
-          handleCorrect("keyboard right")
-        } else if (event.key === "ArrowLeft") {
-          handleIncorrect("keyboard left")
+        if (event.key === "ArrowLeft") {
+          handleCorrect("keyboard left")
+        } else if (event.key === "ArrowRight") {
+          handleIncorrect("keyboard right")
         }
       }
     }
@@ -571,31 +571,49 @@ const HeadsUpGame = () => {
             </div>
           )}
 
-          {gameState === "ready" && (
+          {(gameState === "ready" || gameState === "countdown") && (
             <div className="space-y-6 text-center">
               <h2 className="text-2xl font-bold">Get Ready!</h2>
-              <div className="rounded-lg bg-white p-6 shadow-lg">
-                <p className="mb-4 text-gray-600">
-                  1. Hold your phone up to your forehead
-                </p>
-                <p className="mb-4 text-gray-600">
-                  2. {hasOrientationPermission ? "Tilt or tap" : "Tap"} the
-                  right side for correct ✅
-                </p>
-                <p className="mb-4 text-gray-600">
-                  3. {hasOrientationPermission ? "Tilt or tap" : "Tap"} the left
-                  side for pass ❌
-                </p>
-                <p className="text-sm text-gray-600">
-                  (On desktop: use left/right arrow keys)
-                </p>
+              <div>
+                {gameState === "countdown" ? (
+                  <div className="flex h-48 items-center justify-center">
+                    <motion.div
+                      key={debugInfo}
+                      initial={{ scale: 2, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      className="text-6xl font-bold text-blue-600"
+                    >
+                      {debugInfo}
+                    </motion.div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="rounded-lg bg-white p-6 shadow-lg">
+                      <p className="mb-4 text-gray-600">
+                        1. Hold your phone up to your forehead
+                      </p>
+                      <p className="mb-4 text-gray-600">
+                        2. {hasOrientationPermission ? "Tilt or tap" : "Tap"}{" "}
+                        the left side for correct ✅
+                      </p>
+                      <p className="mb-4 text-gray-600">
+                        3. {hasOrientationPermission ? "Tilt or tap" : "Tap"}{" "}
+                        the right side for pass ❌
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        (On desktop: use left/right arrow keys)
+                      </p>
+                    </div>
+                    <button
+                      onClick={beginCountdown}
+                      className="mt-6 w-full transform rounded-lg bg-green-500 p-4 text-xl text-white shadow transition-colors hover:scale-105 hover:bg-green-600"
+                    >
+                      Start Game
+                    </button>
+                  </>
+                )}
               </div>
-              <button
-                onClick={beginCountdown}
-                className="w-full transform rounded-lg bg-green-500 p-4 text-xl text-white shadow transition-colors hover:scale-105 hover:bg-green-600"
-              >
-                Start Game
-              </button>
             </div>
           )}
 
@@ -612,8 +630,8 @@ const HeadsUpGame = () => {
               <div className="relative">
                 {/* Tap zone indicators */}
                 <div className="absolute inset-0 flex">
-                  <div className="w-1/2 border-r border-gray-200 bg-red-50/20"></div>
-                  <div className="w-1/2 bg-green-50/20"></div>
+                  <div className="w-1/2 border-r border-gray-200 bg-green-50/20"></div>
+                  <div className="w-1/2 bg-red-50/20"></div>
                 </div>
                 <motion.div
                   key={currentWord}
