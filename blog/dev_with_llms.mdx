@@ -1,0 +1,39 @@
+---
+name: "Developing with LLMs in 2025"
+datePublished: "2025-02-24"
+author: "Brendan Reed"
+slug: "developing-with-llms-2025"
+---
+
+import { Link } from "gatsby"
+
+## Welcome back
+
+Hello again! It only took me a year to get back into writing, but 2024 was pretty busy. Between some big launches at Klaviyo (shoutout to Portfolio & the other analytics features my team got off the ground!) and some big life changes, I've been a little hectic. But now that we're well into a new year, I figured it was time to get back into local development work on the site. I had also wanted to leverage the new LLM tools that had been introduced over the last year and see how I could use them in my workflow. 
+
+There are obviously a lot of pros and cons to using LLMs for creative work; my main drive to check them out was an annoyance at getting stuck during side projects. Now there's a lot to be said about getting stuck and working through it, whether that's diving into documentation, writing more tests, or consulting help from others. But realistically, I only have a small window of time to work on side projects when I'm not working full-time or enjoying my hobbies. If I could offload some of the nitty-gritty debugging work to the LLM while I iterated on the general idea for the project, I figured that would be a win. 
+
+A clear example of this comes directly from the previously posted blog entry. I had wanted a space to show activity from my Plex server on the site, functioning as a "Now Playing" page. The issues I had run into included dealing with Gatsby's server-side-rendering setup, Plex authentication, and trying to use serverless functions. Eventually, life happened, and I abandoned the whole setup for over a year! So it was time to dust off the cobwebs and get down to business. 
+
+## Project 1: A <Link to="/now">/now</Link> page
+This is the first of two projects I recently worked on: an updated <Link to="/now">/now</Link> page. To develop it, I used Claude's chat feature with Sonnet 3.5, with a pro subscription. I knew I wanted the original plan to stay in place of showing media that was played on my Plex server, but I wanted to add more data as well. I decided to go with a different approach: tying in book data from [Goodreads](https://www.goodreads.com), music data from [Last.fm](https://www.last.fm), and TV/movie data from [Trakt](https://trakt.tv). I'm pretty good about keeping all of these up to date, and with the exception of Goodreads they have APIs available (note: Trakt has its API locked behind a subscription). 
+
+![Now page showing current media activity](/blog-images/now-page.png)
+
+With the plan in mind, I went to chat with Claude. I had given it the general scope, what the existing site is running, and some guidance to stick with the existing style. This led to a lot of back and forth within the chat UI, oftentimes running into rate limits and the reality of the LLM's context window. It resulted in a lot of start-and-stop development, but after around a week we got to a working page. Currently, if you go to <Link to="/now">/now</Link>, three serverless functions will fire off in Netlify to grab the latest data for the page, and those will render as the API requests finish. Realistically, if I hadn't used the LLM to do this, I would have gotten frustrated and abandoned the project again for several months. Instead, I got it done within 2 weeks, and it gave me the itch to continue on more side projects. 
+
+## Project 2: A <Link to="/headsup">game</Link>
+The second project involved creating a game, something which I haven't done since some college courses. My partner and I like the mobile game "<Link to="/headsup">Heads Up</Link>", which sees one player holding their phone up with a hidden word that the other player is trying to get them to guess. It's a fun way to pass the time, but we often run through all of the available words in the app, and we wanted some other customizations too. I also wanted to try some more automated LLM tools, since I was getting tired of the back and forth in the Claude chat UI. 
+
+Here, I started by utilizing `goose`, which is an agent tool developed by folks from Block. This worked really well to start; I gave a general plan for the project, and it went off to the races by implementing the code directly on my machine. This was already a huge boost from the previous approach of the Claude chat UI, and greatly sped up development time on the project. The second tool was `Cline`, which features a VS Code extension. The secret sauce of this tool is its Plan/Act functionality, which sees the LLM develop a plan in one tab for how to go about executing, and then by switching to the act tab it'll actually implement the task. It also goes into self-testing the given task, which helped catch easy errors in a local development setup. By using Cline, I was able to get a fully-functioning game implemented, with sound effects, customizable categories, and score tracking! 
+
+![Heads Up game showing category selection](/blog-images/headsup-game.png)
+
+## Wrapping up
+
+I was a skeptic for a bit, but using LLM tools (especially agents) has successfully scratched my itch to start up more side projects. I'm already using them in smaller ones (such as automatic time tracking in [Toggl](https://toggl.com) or trip planning for our next vacation) and am thinking of the next big project to enhance the site. There are definitely pros and cons, but I am a convert to the integrated LLM in IDE setup that Cline provides via its VS Code extension. It's simple, works with my existing IDE, and I don't have to worry about yet another subscription (looking at you, Cursor and Windsurf). I hope to share more here as I get cracking — and I'd love to discuss more with others!
+
+## Resources
+* [Why I Use Cline for AI Engineering](https://addyo.substack.com/p/why-i-use-cline-for-ai-engineering)
+* [Goose - Block's AI Agent Tool](https://block.github.io/goose/)
+* [Automating My Now Page](https://akashgoswami.dev/posts/automating-my-now-page/)

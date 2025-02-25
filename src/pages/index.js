@@ -49,7 +49,7 @@ export default function New() {
                   {mainText}
                 </div>
                 <p className="mt-10 text-lg text-white md:text-4xl">
-                  Senior software engineer at{" "}
+                  Lead software engineer at{" "}
                   <a
                     className="underline decoration-red-700"
                     href="https://www.klaviyo.com"
