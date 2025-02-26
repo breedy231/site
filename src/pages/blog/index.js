@@ -45,15 +45,17 @@ const BlogPage = ({ data }) => {
         {data.allMdx.nodes.map(node => (
           <div className="mt-20 flex w-full flex-col" key={node.id}>
             <article>
-              <h2 className="text-3xl font-bold text-white underline decoration-red-700 underline-offset-4">
+              <h2 className="text-3xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 dark:text-white">
                 <Link to={`/blog/${node.frontmatter.slug}`}>
                   {node.frontmatter.name}
                 </Link>
               </h2>
-              <p className="mt-0 mt-3 text-white">
+              <p className="mt-0 mt-3 text-gray-900 dark:text-white">
                 Posted: {node.frontmatter.datePublished}
               </p>
-              <p className="mt-0 mt-3 text-white">{node.excerpt}</p>
+              <p className="mt-0 mt-3 text-gray-900 dark:text-white">
+                {node.excerpt}
+              </p>
             </article>
             <p className={divider}>{"/////"}</p>
           </div>

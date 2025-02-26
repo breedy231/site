@@ -503,12 +503,14 @@ const HeadsUpGame = () => {
       </Helmet>
 
       <div
-        className="min-h-screen bg-gray-100 p-4"
+        className="min-h-screen bg-gray-100 p-4 dark:bg-gray-800"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
         <div className="mx-auto max-w-md">
-          <h1 className="mb-8 text-center text-4xl font-bold">Heads Up!</h1>
+          <h1 className="mb-8 text-center text-4xl font-bold text-gray-900 dark:text-white">
+            Heads Up!
+          </h1>
 
           {/* Debug Toggle Button */}
           <div className="fixed top-4 right-4 flex gap-2">
@@ -517,13 +519,13 @@ const HeadsUpGame = () => {
                 const newMuted = soundManager.toggleMute()
                 setIsMuted(newMuted)
               }}
-              className="rounded-full bg-gray-200 p-2 text-xs"
+              className="rounded-full bg-gray-200 p-2 text-xs dark:bg-gray-600 dark:text-gray-200"
             >
               {isMuted ? "🔇" : "🔊"}
             </button>
             <button
               onClick={() => setShowDebug(prev => !prev)}
-              className="rounded-full bg-gray-200 p-2 text-xs"
+              className="rounded-full bg-gray-200 p-2 text-xs dark:bg-gray-600 dark:text-gray-200"
             >
               {showDebug ? "Hide Debug" : "Show Debug"}
             </button>
@@ -531,7 +533,7 @@ const HeadsUpGame = () => {
 
           {/* Debug Info */}
           <div
-            className={`mb-4 text-center text-xs text-gray-500 ${
+            className={`mb-4 text-center text-xs text-gray-500 dark:text-gray-400 ${
               showDebug ? "" : "hidden"
             }`}
           >
@@ -546,7 +548,7 @@ const HeadsUpGame = () => {
 
           {gameState === "category" && (
             <div className="space-y-4">
-              <h2 className="mb-4 text-center text-2xl font-bold">
+              <h2 className="mb-4 text-center text-2xl font-bold text-gray-900 dark:text-white">
                 Choose a Category
               </h2>
               {!hasOrientationPermission && (
@@ -573,7 +575,9 @@ const HeadsUpGame = () => {
 
           {(gameState === "ready" || gameState === "countdown") && (
             <div className="space-y-6 text-center">
-              <h2 className="text-2xl font-bold">Get Ready!</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Get Ready!
+              </h2>
               <div>
                 {gameState === "countdown" ? (
                   <div className="flex h-48 items-center justify-center">
@@ -589,19 +593,19 @@ const HeadsUpGame = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="rounded-lg bg-white p-6 shadow-lg">
-                      <p className="mb-4 text-gray-600">
+                    <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
+                      <p className="mb-4 text-gray-600 dark:text-gray-300">
                         1. Hold your phone up to your forehead
                       </p>
-                      <p className="mb-4 text-gray-600">
+                      <p className="mb-4 text-gray-600 dark:text-gray-300">
                         2. {hasOrientationPermission ? "Tilt or tap" : "Tap"}{" "}
                         the left side for correct ✅
                       </p>
-                      <p className="mb-4 text-gray-600">
+                      <p className="mb-4 text-gray-600 dark:text-gray-300">
                         3. {hasOrientationPermission ? "Tilt or tap" : "Tap"}{" "}
                         the right side for pass ❌
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
                         (On desktop: use left/right arrow keys)
                       </p>
                     </div>
@@ -623,7 +627,7 @@ const HeadsUpGame = () => {
                 <div className="text-4xl font-bold text-blue-600">
                   {timeLeft}s
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   Remaining Words: {words.length}
                 </div>
               </div>
@@ -637,7 +641,7 @@ const HeadsUpGame = () => {
                   key={currentWord}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="relative rounded-lg bg-white p-8 text-4xl font-bold shadow-lg"
+                  className="relative rounded-lg bg-white p-8 text-4xl font-bold text-gray-900 shadow-lg dark:bg-gray-700 dark:text-white"
                   style={{
                     minHeight: "200px",
                     display: "flex",
@@ -662,9 +666,11 @@ const HeadsUpGame = () => {
 
           {gameState === "finished" && (
             <div className="space-y-6 text-center">
-              <h2 className="mb-4 text-3xl font-bold">Game Over!</h2>
-              <div className="rounded-lg bg-white p-6 shadow-lg">
-                <div className="space-y-2 text-xl">
+              <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">
+                Game Over!
+              </h2>
+              <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
+                <div className="space-y-2 text-xl dark:text-gray-200">
                   <p className="text-green-600">Correct: {score.correct}</p>
                   <p className="text-red-600">Incorrect: {score.incorrect}</p>
                   <p className="mt-4 text-2xl font-bold">
@@ -674,8 +680,10 @@ const HeadsUpGame = () => {
               </div>
 
               {/* Word Results */}
-              <div className="rounded-lg bg-white p-6 shadow-lg">
-                <h3 className="mb-4 text-xl font-bold">Word Summary</h3>
+              <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-700">
+                <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+                  Word Summary
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <h4 className="mb-2 font-bold text-green-600">

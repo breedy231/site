@@ -1,6 +1,7 @@
 import React, { Fragment } from "react"
 import Media from "react-media"
 import "./layout.sass"
+import ThemeToggle from "./ThemeToggle"
 import {
   container,
   smallContainer,
@@ -60,6 +61,7 @@ export default function Layout({ children }) {
                   Brendan Reed
                 </Link>
                 <div className={smallRightTab}>
+                  <ThemeToggle className="mr-2 self-center" />
                   <nav>
                     <ul className={navLinks}>
                       <li className={smallNavLinkItem}>
@@ -93,14 +95,21 @@ export default function Layout({ children }) {
           {(matches.large || matches.medium) && !matches.small && (
             <div className="my-0 mx-auto py-0 px-4">
               <div className={container}>
-                <Link className="text-slate-50 no-underline" to="/">
+                <Link
+                  className="text-gray-900 no-underline dark:text-white"
+                  to="/"
+                >
                   Brendan Reed
                 </Link>
                 <div className={rightTab}>
+                  <ThemeToggle className="mr-4 self-center" />
                   <nav>
                     <ul className={navLinks}>
                       <li className={navLinkItem}>
-                        <Link className="text-slate-50 no-underline" to="/">
+                        <Link
+                          className="text-gray-900 no-underline dark:text-white"
+                          to="/"
+                        >
                           About
                         </Link>
                       </li>
@@ -108,7 +117,10 @@ export default function Layout({ children }) {
                         <p className={divider}>{"//"}</p>
                       </li>
                       <li className={navLinkItem}>
-                        <Link className="text-slate-50 no-underline" to="/blog">
+                        <Link
+                          className="text-gray-900 no-underline dark:text-white"
+                          to="/blog"
+                        >
                           Blog
                         </Link>
                       </li>
@@ -116,7 +128,10 @@ export default function Layout({ children }) {
                         <p className={divider}>{"//"}</p>
                       </li>
                       <li className={navLinkItem}>
-                        <Link className="text-slate-50 no-underline" to="/now">
+                        <Link
+                          className="text-gray-900 no-underline dark:text-white"
+                          to="/now"
+                        >
                           Now
                         </Link>
                       </li>

@@ -45,51 +45,51 @@ export default function New() {
           <Layout>
             <div className="text-5x flex flex-col items-center justify-center">
               <div className="max-w-xs md:max-w-3xl">
-                <div className="mt-14 text-3xl text-white md:text-4xl">
+                <div className="mt-14 text-3xl text-gray-900 dark:text-white md:text-4xl">
                   {mainText}
                 </div>
-                <p className="mt-10 text-lg text-white md:text-4xl">
+                <p className="mt-10 text-lg text-gray-900 dark:text-white md:text-4xl">
                   Lead software engineer at{" "}
                   <a
-                    className="underline decoration-red-700"
+                    className="text-gray-900 underline decoration-red-700 dark:text-white"
                     href="https://www.klaviyo.com"
                   >
                     Klaviyo
                   </a>
                   . Previously at{" "}
                   <a
-                    className="underline decoration-red-700"
+                    className="text-gray-900 underline decoration-red-700 dark:text-white"
                     href="https://www.gocatalant.com"
                   >
                     Catalant
                   </a>
                   ,{" "}
                   <a
-                    className="underline decoration-red-700"
+                    className="text-gray-900 underline decoration-red-700 dark:text-white"
                     href="https://www.carbonite.com"
                   >
                     Carbonite
                   </a>
                   , and{" "}
                   <a
-                    className="underline decoration-red-700"
+                    className="text-gray-900 underline decoration-red-700 dark:text-white"
                     href="https://www.zipari.com"
                   >
                     Zipari
                   </a>
                   .
                 </p>
-                <p className="mt-10 text-lg text-white md:text-4xl">
+                <p className="mt-10 text-lg text-gray-900 dark:text-white md:text-4xl">
                   You can find me on{" "}
                   <a
-                    className="underline decoration-red-700"
+                    className="text-gray-900 underline decoration-red-700 dark:text-white"
                     href="https://www.github.com/breedy231"
                   >
                     Github
                   </a>{" "}
                   and{" "}
                   <a
-                    className="underline decoration-red-700"
+                    className="text-gray-900 underline decoration-red-700 dark:text-white"
                     href="https://www.linkedin.com/in/brendanreed2/"
                   >
                     LinkedIn
@@ -98,17 +98,19 @@ export default function New() {
                 </p>
                 <div className="mt-5 flex flex-row">
                   <div className="flex flex-col">
-                    <p className="mr-36 text-xl font-bold text-white">
+                    <p className="mr-36 text-xl font-bold text-gray-900 dark:text-white">
                       {locatedIn}
                     </p>
-                    <p className="text-xl text-white">{location}</p>
+                    <p className="text-xl text-gray-900 dark:text-white">
+                      {location}
+                    </p>
                   </div>
                   <div>
-                    <p className="mr-36 text-xl font-bold text-white">
+                    <p className="mr-36 text-xl font-bold text-gray-900 dark:text-white">
                       {getInTouch}
                     </p>
                     <a
-                      className="mr-36 text-xl text-white underline decoration-red-700"
+                      className="mr-36 text-xl text-gray-900 underline decoration-red-700 dark:text-white"
                       href="mailto:bren.reed@protonmail.com"
                     >
                       {email}

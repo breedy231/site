@@ -30,7 +30,9 @@ const MediaSection = ({ title, error, loading, children }) => (
   <div className="h-full">
     <h2 className="mb-4 text-xl">{title}</h2>
     {loading ? (
-      <div className="text-gray-300">Loading {title.toLowerCase()}...</div>
+      <div className="text-gray-500 dark:text-gray-300">
+        Loading {title.toLowerCase()}...
+      </div>
     ) : error ? (
       <div className="text-red-500">
         Error loading {title.toLowerCase()}: {error}
@@ -105,11 +107,11 @@ const NowPage = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen p-6 font-sans text-white">
+      <div className="min-h-screen p-6 font-sans text-gray-900 dark:text-white">
         <h1 className="mb-6 text-4xl font-normal">{"What I'm Up To Now"}</h1>
 
         <div className="grid h-[calc(100vh-8rem)] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded border border-gray-600 p-4">
+          <div className="rounded border border-gray-300 p-4 dark:border-gray-600">
             <MediaSection
               title="Reading"
               error={bookError}
@@ -137,7 +139,7 @@ const NowPage = () => {
             </MediaSection>
           </div>
 
-          <div className="rounded border border-gray-600 p-4">
+          <div className="rounded border border-gray-300 p-4 dark:border-gray-600">
             <MediaSection
               title="Watching"
               error={watchError}
@@ -171,7 +173,7 @@ const NowPage = () => {
               )}
           </div>
 
-          <div className="rounded border border-gray-600 p-4">
+          <div className="rounded border border-gray-300 p-4 dark:border-gray-600">
             <MediaSection
               title="Listening"
               error={musicError}

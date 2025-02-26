@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: row;
   font-size: 45px;
-  color: #ffffff;
+  @apply text-gray-900 dark:text-white;
   text-decoration: none;
 }
 
@@ -14,12 +14,12 @@
   display: flex;
   flex-direction: column;
   font-size: 35px;
-  color: #ffffff;
+  @apply text-gray-900 dark:text-white;
   text-decoration: none;
 }
 
 .container:visited {
-  color: #ffffff;
+  @apply text-gray-900 dark:text-white;
 }
 
 .rightTab {
@@ -47,26 +47,26 @@
   padding-right: 0.5rem;
 }
 .nav-link-text {
-  color: #ffffff;
+  @apply text-gray-900 dark:text-white;
   text-decoration: none;
 }
 .small-nav-link-header {
-  color: #ffffff;
+  @apply text-gray-900 dark:text-white;
   text-decoration: none;
   font-size: 35px;
   align-self: center;
 }
 .small-nav-link-text {
-  color: #ffffff;
+  @apply text-gray-900 dark:text-white;
   text-decoration: none;
   font-size: 20px;
   align-self: center;
 }
 .nav-link-text:visited {
-  color: #ffffff;
+  @apply text-gray-900 dark:text-white;
 }
 .nav-link-text:link {
-  color: #ffffff;
+  @apply text-gray-900 dark:text-white;
 }
 
 .divider {
