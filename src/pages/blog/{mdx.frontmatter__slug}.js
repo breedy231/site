@@ -27,7 +27,7 @@ export const Head = ({ data }) => {
 const BlogPage = ({ data, children }) => {
   return (
     <Layout>
-      <div className="mx-auto mb-5 max-w-4xl list-disc space-y-6 text-white visited:decoration-red-500">
+      <div className="mx-auto mb-5 max-w-4xl list-disc space-y-6 text-gray-900 visited:decoration-red-500 dark:text-white">
         <h1 className="mt-10 text-4xl font-bold">
           {/* eslint-disable-next-line react/prop-types */}
           {data.mdx.frontmatter.name}
@@ -36,7 +36,7 @@ const BlogPage = ({ data, children }) => {
           {/* eslint-disable-next-line react/prop-types */}
           {data.mdx.frontmatter.datePublished}
         </p>
-        <article className="prose text-white lg:prose-lg prose-headings:text-white prose-a:text-red-500 prose-a:decoration-red-500 prose-code:text-white">
+        <article className="prose text-gray-900 lg:prose-lg prose-headings:text-gray-900 prose-a:text-red-500 prose-a:decoration-red-500 prose-code:text-gray-900 dark:text-white dark:prose-headings:text-white dark:prose-code:text-white">
           {children}
         </article>
         <div className="mb-20 underline decoration-red-500 underline-offset-4">

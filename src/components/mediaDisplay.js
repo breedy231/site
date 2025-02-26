@@ -25,7 +25,7 @@ MediaImage.propTypes = {
 }
 
 const BookDisplay = ({ book, type }) => (
-  <div className="mb-3 rounded border border-gray-600 p-3">
+  <div className="mb-3 rounded border border-gray-300 p-3 dark:border-gray-600">
     <div className="flex gap-4">
       {book.imageUrl && (
         <MediaImage
@@ -35,10 +35,14 @@ const BookDisplay = ({ book, type }) => (
         />
       )}
       <div className="flex-grow">
-        <div className="font-medium text-gray-300">{book.title}</div>
-        <div className="text-sm text-gray-400">by {book.author}</div>
+        <div className="font-medium text-gray-700 dark:text-gray-300">
+          {book.title}
+        </div>
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          by {book.author}
+        </div>
         {type === "read" && book.dateRead && (
-          <div className="mt-1 text-xs text-gray-500">
+          <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             Finished: {new Date(book.dateRead).toLocaleDateString()}
           </div>
         )}
@@ -60,7 +64,7 @@ BookDisplay.propTypes = {
 }
 
 const WatchDisplay = ({ item, type }) => (
-  <div className="mb-3 rounded border border-gray-600 p-3">
+  <div className="mb-3 rounded border border-gray-300 p-3 dark:border-gray-600">
     <div className="flex gap-4">
       {item.image && (
         <MediaImage
@@ -76,18 +80,20 @@ const WatchDisplay = ({ item, type }) => (
       <div className="flex-grow">
         {type === "tv" ? (
           <>
-            <div className="font-medium text-gray-300">{item.show.title}</div>
-            <div className="text-sm text-gray-400">
+            <div className="font-medium text-gray-700 dark:text-gray-300">
+              {item.show.title}
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
               S{item.episode.season}E{item.episode.number} -{" "}
               {item.episode.title}
             </div>
           </>
         ) : (
-          <div className="font-medium text-gray-300">
+          <div className="font-medium text-gray-700 dark:text-gray-300">
             {item.movie.title} ({item.movie.year})
           </div>
         )}
-        <div className="mt-1 text-xs text-gray-500">
+        <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
           Watched: {new Date(item.watched_at).toLocaleDateString()}
         </div>
       </div>
@@ -122,7 +128,7 @@ WatchDisplay.propTypes = {
 }
 
 const TrackDisplay = ({ track, type }) => (
-  <div className="mb-3 rounded border border-gray-600 p-3">
+  <div className="mb-3 rounded border border-gray-300 p-3 dark:border-gray-600">
     <div className="flex gap-4">
       {track.image && (
         <MediaImage
@@ -134,10 +140,16 @@ const TrackDisplay = ({ track, type }) => (
       <div className="flex-grow">
         <div className="flex items-start justify-between">
           <div>
-            <div className="font-medium text-gray-300">{track.name}</div>
-            <div className="text-sm text-gray-400">by {track.artist}</div>
+            <div className="font-medium text-gray-700 dark:text-gray-300">
+              {track.name}
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              by {track.artist}
+            </div>
             {track.album && (
-              <div className="text-sm text-gray-500">{track.album}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {track.album}
+              </div>
             )}
           </div>
           <div className="text-right">
@@ -147,12 +159,12 @@ const TrackDisplay = ({ track, type }) => (
                   Now Playing
                 </span>
               ) : (
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
                   {track.timestamp ? formatTimestamp(track.timestamp) : ""}
                 </span>
               ))}
             {type === "top" && (
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 {track.playcount} plays
               </span>
             )}
