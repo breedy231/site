@@ -49,6 +49,17 @@ class SoundManager {
     }
   }
 
+  stop(soundName) {
+    if (!this.sounds[soundName]) return
+
+    try {
+      this.sounds[soundName].pause()
+      this.sounds[soundName].currentTime = 0
+    } catch (error) {
+      console.warn(`Error stopping sound: ${soundName}`, error)
+    }
+  }
+
   toggleMute() {
     this.muted = !this.muted
     // Save preference to localStorage
