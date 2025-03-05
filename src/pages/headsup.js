@@ -365,6 +365,7 @@ const HeadsUpGame = () => {
 
       await new Promise(resolve => setTimeout(resolve, 1000))
       setDebugInfo("GO!")
+      soundManager.stop("timerWarning") // Stop the ticking sound
       soundManager.play("start") // Play start sound for "GO!"
 
       // Wait for state updates to complete
@@ -456,6 +457,7 @@ const HeadsUpGame = () => {
     console.log("Ending game - final scores:", score)
     console.log("Final word results:", wordResults)
 
+    soundManager.stop("timerWarning") // Stop the ticking sound
     soundManager.play("gameOver")
 
     // Cleanup motion listener before ending
@@ -622,7 +624,7 @@ const HeadsUpGame = () => {
           )}
 
           {gameState === "playing" && (
-            <div className="space-y-4 text-center">
+            <div className="flex min-h-[50vh] flex-col justify-center space-y-4 text-center">
               <div className="flex items-center justify-between">
                 <div className="text-4xl font-bold text-blue-600">
                   {timeLeft}s
@@ -631,7 +633,7 @@ const HeadsUpGame = () => {
                   Remaining Words: {words.length}
                 </div>
               </div>
-              <div className="relative">
+              <div className="relative flex-1">
                 {/* Tap zone indicators */}
                 <div className="absolute inset-0 flex">
                   <div className="w-1/2 border-r border-gray-200 bg-green-50/20"></div>
@@ -641,13 +643,7 @@ const HeadsUpGame = () => {
                   key={currentWord}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="relative rounded-lg bg-white p-8 text-4xl font-bold text-gray-900 shadow-lg dark:bg-gray-700 dark:text-white"
-                  style={{
-                    minHeight: "200px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                  className="relative flex h-full min-h-[200px] items-center justify-center rounded-lg bg-white p-8 text-4xl font-bold text-gray-900 shadow-lg dark:bg-gray-700 dark:text-white landscape:min-h-[40vh] landscape:p-4 landscape:text-3xl"
                 >
                   {currentWord}
                 </motion.div>
