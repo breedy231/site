@@ -14,23 +14,22 @@ const HeadsUpGame = () => {
   const [timeLeft, setTimeLeft] = useState(60)
   const [words, setWords] = useState([])
   const [wordResults, setWordResults] = useState([])
-  const [debugInfo, setDebugInfo] = useState("")
-  const [showDebug, setShowDebug] = useState(true)
+  const [showDebug, setShowDebug] = useState(false)
   const [isMuted, setIsMuted] = useState(soundManager.isMuted())
-  const [hasOrientationPermission, setHasOrientationPermission] =
-    useState(false)
-
-  // Add refs for state tracking
-  const lastActionTime = useRef(0)
-  const gameStateRef = useRef("category")
-
-  // State for detailed debugging
-  const [motionDebug, setMotionDebug] = useState({
+  const [hasOrientationPermission, setHasOrientationPermission] = useState(false)
+  
+  // Consolidated debug state
+  const [debugState, setDebugState] = useState({
+    info: "",
     deviceType: "unknown",
     hasMotionEvents: false,
     permissionState: "unknown",
     lastMotionTime: null,
   })
+
+  // State tracking refs
+  const lastActionTime = useRef(0)
+  const gameStateRef = useRef("category")
 
   // Request iOS permission for device orientation
   const requestOrientationPermission = async () => {
@@ -40,45 +39,47 @@ const HeadsUpGame = () => {
     const isIOS =
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
     const deviceType = isIOS ? "iOS" : "non-iOS"
+    const isSecureContext = window.location.protocol === "https:" || window.location.hostname === "localhost"
 
-    setMotionDebug(prev => ({
+    setDebugState(prev => ({
       ...prev,
       deviceType,
       hasMotionEvents: "DeviceOrientationEvent" in window,
+      info: `Device: ${deviceType}, Secure: ${isSecureContext}`
     }))
 
-    setDebugInfo(`Device: ${deviceType}, Requesting permissions...`)
-
     try {
-      // Check if we have the permission API (iOS 13+)
-      if (typeof DeviceOrientationEvent.requestPermission === "function") {
-        setDebugInfo("Permission API available, requesting...")
+      // Check if we have the permission API (iOS 13+) and are in a secure context
+      if (typeof DeviceOrientationEvent.requestPermission === "function" && isSecureContext) {
+        setDebugState(prev => ({ ...prev, info: "Permission API available, requesting..." }))
 
         const permission = await DeviceOrientationEvent.requestPermission()
         console.log("Permission response:", permission)
 
-        setMotionDebug(prev => ({ ...prev, permissionState: permission }))
+        setDebugState(prev => ({ ...prev, permissionState: permission }))
         setHasOrientationPermission(permission === "granted")
 
         if (permission === "granted") {
-          setDebugInfo("Permission granted, enabling tilt controls")
+          setDebugState(prev => ({ ...prev, info: "Permission granted, enabling tilt controls" }))
           window.addEventListener("deviceorientation", handleOrientation, true)
         } else {
-          setDebugInfo(`Permission denied: ${permission}`)
+          setDebugState(prev => ({ ...prev, info: `Permission denied: ${permission}` }))
         }
       } else {
-        // No permission API needed (non-iOS or older versions)
-        setDebugInfo(
-          "No permission API needed, enabling tilt controls directly",
-        )
-        setMotionDebug(prev => ({ ...prev, permissionState: "granted" }))
-        setHasOrientationPermission(true)
-        window.addEventListener("deviceorientation", handleOrientation, true)
+        // Fallback for non-secure contexts or older browsers
+        if (!isSecureContext && isIOS) {
+          setDebugState(prev => ({ ...prev, info: "HTTPS required for iOS motion controls, using tap only", permissionState: "https-required" }))
+          setHasOrientationPermission(false)
+        } else {
+          setDebugState(prev => ({ ...prev, info: "Enabling tilt controls (no permission needed)", permissionState: "granted" }))
+          setHasOrientationPermission(true)
+          window.addEventListener("deviceorientation", handleOrientation, true)
+        }
       }
     } catch (error) {
       console.error("Permission error:", error)
-      setDebugInfo(`Permission error: ${error.message}`)
-      setMotionDebug(prev => ({ ...prev, permissionState: "error" }))
+      setDebugState(prev => ({ ...prev, info: `Permission error: ${error.message} - Using tap controls only` }))
+      setDebugState(prev => ({ ...prev, permissionState: "error" }))
       setHasOrientationPermission(false)
     }
 
@@ -101,11 +102,11 @@ const HeadsUpGame = () => {
     if (hasOrientationPermission) {
       console.log("Adding orientation listener due to permission granted")
       window.addEventListener("deviceorientation", handleOrientation, true)
-      setDebugInfo("Motion listener activated")
+      setDebugState(prev => ({ ...prev, info: "Motion listener activated" }))
     } else {
       console.log("Removing orientation listener due to no permission")
       window.removeEventListener("deviceorientation", handleOrientation, true)
-      setDebugInfo("Motion listener deactivated")
+      setDebugState(prev => ({ ...prev, info: "Motion listener deactivated" }))
     }
 
     return () => {
@@ -119,7 +120,7 @@ const HeadsUpGame = () => {
     if (gameState !== "playing") return
 
     const now = Date.now()
-    if (now - lastActionTime.current < ACTION_COOLDOWN) return
+    if (now - lastActionTime.current < GAME_CONFIG.ACTION_COOLDOWN) return
 
     const touch = e.touches[0]
     const screenWidth = window.innerWidth
@@ -144,12 +145,24 @@ const HeadsUpGame = () => {
     console.log("Game state updated:", gameState)
   }, [gameState])
 
-  // Constants with adjusted thresholds and timing
-  const ACTION_COOLDOWN = 800 // Increased cooldown to prevent double-counting
-  const TILT_THRESHOLD = 30 // Base threshold for portrait mode
-  const VERTICAL_TOLERANCE = 60 // Vertical tolerance
-  const LANDSCAPE_NEUTRAL = 90 // Neutral position in landscape
-  const LANDSCAPE_THRESHOLD = 25 // Threshold for landscape mode
+  // Game constants
+  const GAME_CONFIG = {
+    ACTION_COOLDOWN: 800,
+    GAME_DURATION: 60,
+    COUNTDOWN_STEP: 1000,
+    TIMER_WARNING_THRESHOLD: 11,
+    PORTRAIT: {
+      TILT_THRESHOLD: 30,
+      VERTICAL_MIN: 45,
+      VERTICAL_MAX: 135
+    },
+    LANDSCAPE: {
+      THRESHOLD: 25,
+      VERTICAL_TOLERANCE: 60,
+      // Dynamic neutral calculation instead of fixed 90°
+      NEUTRAL_TOLERANCE: 15
+    }
+  }
 
   // Update useEffect for game timer
   // Update useEffect for game timer and state management
@@ -173,7 +186,7 @@ const HeadsUpGame = () => {
         if (isActive) {
           setTimeLeft(prev => {
             // Only play ticking sound in final 10 seconds
-            if (prev <= 11 && prev > 1) {
+            if (prev <= GAME_CONFIG.TIMER_WARNING_THRESHOLD && prev > 1) {
               soundManager.play("timerWarning")
             }
             if (prev <= 1) {
@@ -196,111 +209,97 @@ const HeadsUpGame = () => {
     return cleanup
   }, [gameState, timeLeft, hasOrientationPermission])
 
-  // Updated tilt handling with improved landscape detection
+  // Improved orientation handling with better landscape detection
   const handleOrientation = event => {
-    // Early exit if not playing
-    if (gameStateRef.current !== "playing") {
-      return
-    }
+    if (gameStateRef.current !== "playing") return
 
-    // Cooldown check
     const now = Date.now()
-    if (now - lastActionTime.current < ACTION_COOLDOWN) {
-      return
-    }
+    if (now - lastActionTime.current < GAME_CONFIG.ACTION_COOLDOWN) return
 
     try {
-      // Get orientation values
-      const gamma = event.gamma || 0 // Left-right tilt (-90 to 90)
-      const beta = event.beta || 0 // Front-back tilt (-180 to 180)
+      const { gamma = 0, beta = 0 } = event
       const orientation = window.orientation || 0
-
-      // Debug orientation values
-      console.log(
-        `Raw values - Beta: ${beta.toFixed(1)}°, Gamma: ${gamma.toFixed(
-          1,
-        )}°, Orientation: ${orientation}°`,
-      )
-
-      // Determine device orientation
       const isPortrait = orientation === 0 || orientation === 180
 
-      // Calculate angles based on orientation
-      let tiltAngle, verticalAngle
+      console.log(`Raw - Beta: ${beta.toFixed(1)}°, Gamma: ${gamma.toFixed(1)}°, Orientation: ${orientation}°`)
 
       if (isPortrait) {
-        // Portrait mode
-        tiltAngle = gamma // Left-right tilt
-        verticalAngle = beta // Front-back tilt
+        handlePortraitMode(gamma, beta, now)
       } else {
-        // Landscape mode - normalize beta to 0-180 range for easier calculations
-        tiltAngle = beta < 0 ? beta + 180 : beta // Normalize beta to 0-180
-        verticalAngle = gamma // Gamma becomes the vertical alignment
-      }
-
-      // Check if phone is in roughly vertical position
-      const isVertical = isPortrait
-        ? verticalAngle > 45 && verticalAngle < 135 // Portrait: tilted back
-        : Math.abs(verticalAngle) < VERTICAL_TOLERANCE // Landscape: roughly vertical
-
-      if (!isVertical) {
-        setDebugInfo(
-          `Adjust phone position | Vertical: ${verticalAngle.toFixed(1)}°`,
-        )
-        return
-      }
-
-      // Log the processed angles
-      console.log(
-        `Processed - Tilt: ${tiltAngle.toFixed(
-          1,
-        )}°, Vertical: ${verticalAngle.toFixed(1)}°`,
-      )
-
-      if (isPortrait) {
-        // Portrait mode logic
-        if (Math.abs(tiltAngle) > TILT_THRESHOLD) {
-          lastActionTime.current = now
-
-          if (tiltAngle < -TILT_THRESHOLD) {
-            console.log("Portrait LEFT tilt detected - Correct")
-            handleCorrect("tilt left")
-            setDebugInfo("Correct ✅")
-          } else if (tiltAngle > TILT_THRESHOLD) {
-            console.log("Portrait RIGHT tilt detected - Pass")
-            handleIncorrect("tilt right")
-            setDebugInfo("Pass ❌")
-          }
-        } else {
-          setDebugInfo(`Ready | Portrait tilt: ${tiltAngle.toFixed(1)}°`)
-        }
-      } else {
-        // Landscape mode logic with normalized angles
-        const tiltDiff = tiltAngle - LANDSCAPE_NEUTRAL
-
-        if (Math.abs(tiltDiff) > LANDSCAPE_THRESHOLD) {
-          lastActionTime.current = now
-
-          if (tiltDiff > LANDSCAPE_THRESHOLD) {
-            // Tilted up from neutral (correct)
-            console.log("Landscape UP tilt detected - Correct")
-            handleCorrect("tilt up")
-            setDebugInfo("Correct ✅")
-          } else if (tiltDiff < -LANDSCAPE_THRESHOLD) {
-            // Tilted down from neutral (pass)
-            console.log("Landscape DOWN tilt detected - Pass")
-            handleIncorrect("tilt down")
-            setDebugInfo("Pass ❌")
-          }
-        } else {
-          setDebugInfo(
-            `Ready | Landscape tilt: ${tiltDiff.toFixed(1)}° from neutral`,
-          )
-        }
+        handleLandscapeMode(gamma, beta, orientation, now)
       }
     } catch (error) {
       console.error("Orientation error:", error)
-      setDebugInfo(`Error: ${error.message}`)
+      setDebugState(prev => ({ ...prev, info: `Error: ${error.message}` }))
+    }
+  }
+
+  const handlePortraitMode = (gamma, beta, now) => {
+    // Check vertical position
+    if (beta < GAME_CONFIG.PORTRAIT.VERTICAL_MIN || beta > GAME_CONFIG.PORTRAIT.VERTICAL_MAX) {
+      setDebugState(prev => ({ ...prev, info: `Adjust phone position | Vertical: ${beta.toFixed(1)}°` }))
+      return
+    }
+
+    if (Math.abs(gamma) > GAME_CONFIG.PORTRAIT.TILT_THRESHOLD) {
+      lastActionTime.current = now
+      
+      if (gamma < -GAME_CONFIG.PORTRAIT.TILT_THRESHOLD) {
+        console.log("Portrait LEFT tilt detected - Correct")
+        handleCorrect("tilt left")
+        setDebugState(prev => ({ ...prev, info: "Correct ✅" }))
+      } else {
+        console.log("Portrait RIGHT tilt detected - Pass")
+        handleIncorrect("tilt right")
+        setDebugState(prev => ({ ...prev, info: "Pass ❌" }))
+      }
+    } else {
+      setDebugState(prev => ({ ...prev, info: `Ready | Portrait tilt: ${gamma.toFixed(1)}°` }))
+    }
+  }
+
+  const handleLandscapeMode = (gamma, beta, orientation, now) => {
+    // Improved landscape logic: use beta for up/down motion
+    // Account for different landscape orientations
+    const isLandscapeLeft = orientation === -90 || orientation === 270
+    const isLandscapeRight = orientation === 90
+    
+    // Check if device is roughly vertical (not lying flat)
+    if (Math.abs(gamma) > GAME_CONFIG.LANDSCAPE.VERTICAL_TOLERANCE) {
+      setDebugState(prev => ({ ...prev, info: `Hold phone more upright | Gamma: ${gamma.toFixed(1)}°` }))
+      return
+    }
+
+    // Use beta for up/down detection in landscape
+    // Normalize beta to handle different orientations
+    let normalizedBeta = beta
+    if (isLandscapeLeft) {
+      // In left landscape, beta values are inverted for natural up/down motion
+      normalizedBeta = -beta
+    }
+    
+    // Calculate deviation from neutral (around 0° when upright in landscape)
+    const neutralBeta = 0
+    const tiltFromNeutral = normalizedBeta - neutralBeta
+
+    console.log(`Landscape - Beta: ${beta.toFixed(1)}°, Normalized: ${normalizedBeta.toFixed(1)}°, Tilt: ${tiltFromNeutral.toFixed(1)}°`)
+
+    if (Math.abs(tiltFromNeutral) > GAME_CONFIG.LANDSCAPE.THRESHOLD) {
+      lastActionTime.current = now
+
+      if (tiltFromNeutral > GAME_CONFIG.LANDSCAPE.THRESHOLD) {
+        // Tilted up (correct)
+        console.log("Landscape UP tilt detected - Correct")
+        handleCorrect("tilt up")
+        setDebugState(prev => ({ ...prev, info: "Correct ✅" }))
+      } else {
+        // Tilted down (pass)
+        console.log("Landscape DOWN tilt detected - Pass")
+        handleIncorrect("tilt down")
+        setDebugState(prev => ({ ...prev, info: "Pass ❌" }))
+      }
+    } else {
+      setDebugState(prev => ({ ...prev, info: `Ready | Landscape tilt: ${tiltFromNeutral.toFixed(1)}°` }))
     }
   }
 
@@ -317,14 +316,14 @@ const HeadsUpGame = () => {
 
   const beginCountdown = async () => {
     console.log("Beginning countdown")
-    setDebugInfo("Starting game...")
+    setDebugState(prev => ({ ...prev, info: "Starting game..." }))
 
     // Load sounds
     await soundManager.loadSounds()
 
     try {
       if (!hasOrientationPermission) {
-        setDebugInfo("Requesting permission before start...")
+        setDebugState(prev => ({ ...prev, info: "Requesting permission before start..." }))
         await requestOrientationPermission()
       }
 
@@ -347,24 +346,24 @@ const HeadsUpGame = () => {
       // Set up initial game state
       setScore({ correct: 0, incorrect: 0 })
       setWordResults([])
-      setTimeLeft(60)
+      setTimeLeft(GAME_CONFIG.GAME_DURATION)
 
       // Set up countdown state
       setGameState("countdown")
-      setDebugInfo("3...")
+      setDebugState(prev => ({ ...prev, info: "3..." }))
       soundManager.play("timerWarning")
 
       // 3-2-1 countdown
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setDebugInfo("2...")
+      await new Promise(resolve => setTimeout(resolve, GAME_CONFIG.COUNTDOWN_STEP))
+      setDebugState(prev => ({ ...prev, info: "2..." }))
       soundManager.play("timerWarning")
 
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setDebugInfo("1...")
+      await new Promise(resolve => setTimeout(resolve, GAME_CONFIG.COUNTDOWN_STEP))
+      setDebugState(prev => ({ ...prev, info: "1..." }))
       soundManager.play("timerWarning")
 
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setDebugInfo("GO!")
+      await new Promise(resolve => setTimeout(resolve, GAME_CONFIG.COUNTDOWN_STEP))
+      setDebugState(prev => ({ ...prev, info: "GO!" }))
       soundManager.stop("timerWarning") // Stop the ticking sound
       soundManager.play("start") // Play start sound for "GO!"
 
@@ -379,7 +378,7 @@ const HeadsUpGame = () => {
       console.log(`Game started with ${remainingWords.length + 1} words`)
     } catch (error) {
       console.error("Error starting game:", error)
-      setDebugInfo(`Error: ${error.message}`)
+      setDebugState(prev => ({ ...prev, info: `Error: ${error.message}` }))
     }
   }
 
@@ -409,14 +408,14 @@ const HeadsUpGame = () => {
     return { nextWord, remainingWords }
   }
 
-  const handleCorrect = method => {
-    console.log(`Correct answer (${method})`)
+  const processAnswer = (isCorrect, method) => {
+    console.log(`${isCorrect ? 'Correct' : 'Incorrect'} answer (${method})`)
     if (!gameStateRef.current || gameStateRef.current !== "playing") return
 
     const wordToStore = currentWordRef.current
     const next = getNextWord()
 
-    soundManager.play("correct")
+    soundManager.play(isCorrect ? "correct" : "wrong")
 
     if (!next) {
       endGame()
@@ -424,34 +423,21 @@ const HeadsUpGame = () => {
     }
 
     // Update all states synchronously
-    setScore(prev => ({ ...prev, correct: prev.correct + 1 }))
-    setWordResults(prev => [...prev, { word: wordToStore, correct: true }])
+    setScore(prev => isCorrect 
+      ? { ...prev, correct: prev.correct + 1 }
+      : { ...prev, incorrect: prev.incorrect + 1 }
+    )
+    setWordResults(prev => [...prev, { word: wordToStore, correct: isCorrect }])
     setWords(next.remainingWords)
     setCurrentWord(next.nextWord)
-    setDebugInfo(`Correct! ${wordToStore}`)
+    setDebugState(prev => ({ 
+      ...prev, 
+      info: `${isCorrect ? 'Correct' : 'Pass'}! ${wordToStore}` 
+    }))
   }
 
-  const handleIncorrect = method => {
-    console.log(`Incorrect answer (${method})`)
-    if (!gameStateRef.current || gameStateRef.current !== "playing") return
-
-    const wordToStore = currentWordRef.current
-    const next = getNextWord()
-
-    soundManager.play("wrong")
-
-    if (!next) {
-      endGame()
-      return
-    }
-
-    // Update all states synchronously
-    setScore(prev => ({ ...prev, incorrect: prev.incorrect + 1 }))
-    setWordResults(prev => [...prev, { word: wordToStore, correct: false }])
-    setWords(next.remainingWords)
-    setCurrentWord(next.nextWord)
-    setDebugInfo(`Pass! ${wordToStore}`)
-  }
+  const handleCorrect = method => processAnswer(true, method)
+  const handleIncorrect = method => processAnswer(false, method)
 
   const endGame = () => {
     console.log("Ending game - final scores:", score)
@@ -472,7 +458,7 @@ const HeadsUpGame = () => {
     const handleKeyPress = event => {
       if (gameState === "playing") {
         const now = Date.now()
-        if (now - lastActionTime.current < ACTION_COOLDOWN) return
+        if (now - lastActionTime.current < GAME_CONFIG.ACTION_COOLDOWN) return
 
         lastActionTime.current = now
         if (event.key === "ArrowLeft") {
@@ -539,13 +525,13 @@ const HeadsUpGame = () => {
               showDebug ? "" : "hidden"
             }`}
           >
-            <div>Device Type: {motionDebug.deviceType}</div>
+            <div>Device Type: {debugState.deviceType}</div>
             <div>
-              Has Motion Events: {motionDebug.hasMotionEvents ? "Yes" : "No"}
+              Has Motion Events: {debugState.hasMotionEvents ? "Yes" : "No"}
             </div>
-            <div>Permission State: {motionDebug.permissionState}</div>
-            <div>Last Motion: {motionDebug.lastMotionTime || "None"}</div>
-            <div className="mt-2">{debugInfo}</div>
+            <div>Permission State: {debugState.permissionState}</div>
+            <div>Last Motion: {debugState.lastMotionTime || "None"}</div>
+            <div className="mt-2">{debugState.info}</div>
           </div>
 
           {gameState === "category" && (
@@ -554,12 +540,23 @@ const HeadsUpGame = () => {
                 Choose a Category
               </h2>
               {!hasOrientationPermission && (
-                <button
-                  onClick={requestOrientationPermission}
-                  className="mb-4 w-full rounded-lg bg-yellow-500 p-3 text-white hover:bg-yellow-600"
-                >
-                  Enable Tilt Controls (Optional)
-                </button>
+                <div className="mb-4">
+                  {debugState.permissionState === "https-required" ? (
+                    <div className="rounded-lg bg-orange-100 p-3 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                      <p className="text-sm">
+                        <strong>Note:</strong> Tilt controls require HTTPS on iOS devices.
+                        The game will work with tap controls only.
+                      </p>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={requestOrientationPermission}
+                      className="w-full rounded-lg bg-yellow-500 p-3 text-white hover:bg-yellow-600"
+                    >
+                      Enable Tilt Controls (Optional)
+                    </button>
+                  )}
+                </div>
               )}
               <div className="grid gap-4">
                 {Object.keys(categories).map(category => (
@@ -584,13 +581,13 @@ const HeadsUpGame = () => {
                 {gameState === "countdown" ? (
                   <div className="flex h-48 items-center justify-center">
                     <motion.div
-                      key={debugInfo}
+                      key={debugState.info}
                       initial={{ scale: 2, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0, opacity: 0 }}
                       className="text-6xl font-bold text-blue-600"
                     >
-                      {debugInfo}
+                      {debugState.info}
                     </motion.div>
                   </div>
                 ) : (

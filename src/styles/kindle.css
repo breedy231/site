@@ -1,0 +1,39 @@
+/* Kindle Touch 4th Generation Optimized Styles */
+/* Resolution: 800x600, 16-level grayscale */
+
+.kindle-dashboard {
+  background-color: white;
+  color: black;
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Georgia, serif; /* Readable serif font for e-ink */
+}
+
+.kindle-container {
+  text-align: center;
+  width: 90%;
+}
+
+.kindle-title {
+  font-size: 40px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.kindle-date {
+  font-size: 32px;
+  line-height: 1.5;
+  border: 2px solid black;
+  padding: 20px;
+  background-color: white;
+}
+
+/* High-contrast styles for e-ink readability */
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
