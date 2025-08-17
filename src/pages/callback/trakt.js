@@ -28,7 +28,11 @@ const TraktCallback = () => {
         }
 
         console.log("Sending token exchange request...") // Debug log
-        const response = await fetch("/api/trakt-token", {
+        const apiUrl =
+          process.env.NODE_ENV === "development"
+            ? "/api/trakt-token"
+            : "/.netlify/functions/trakt-token"
+        const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
