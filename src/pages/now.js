@@ -128,12 +128,12 @@ const NowPage = () => {
     const redirectUri = isDevelopment
       ? "http://localhost:8000/callback/trakt"
       : isDeployPreview
-      ? "https://brendanreed.netlify.app/callback/trakt"
+      ? "https://brendantreed.com/callback/trakt"
       : `${currentHost}/callback/trakt`
 
     if (isDeployPreview) {
       alert(
-        "OAuth testing on deploy previews will redirect to the main site for authentication. You'll need to test the final result on https://brendanreed.netlify.app/?admin"
+        "OAuth testing on deploy previews will redirect to the main site for authentication. You'll need to test the final result on https://brendantreed.com/?admin"
       )
     }
 

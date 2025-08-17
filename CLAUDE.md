@@ -95,7 +95,7 @@ const handleOAuth = () => {
   const redirectUri = isDevelopment
     ? "http://localhost:8000/callback/oauth"
     : isDeployPreview
-    ? "https://main-site.netlify.app/callback/oauth" // Fallback to main site
+    ? "https://brendantreed.com/callback/oauth" // Fallback to main site
     : `${currentHost}/callback/oauth`
 }
 ```
@@ -104,4 +104,4 @@ const handleOAuth = () => {
 
 - **Local development**: Works with localhost redirect URI
 - **Deploy previews**: Automatically redirects to main site
-- **Production**: Test on `https://main-site.netlify.app/?admin`
+- **Production**: Test on `https://brendantreed.com/?admin`

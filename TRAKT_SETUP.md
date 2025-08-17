@@ -35,7 +35,7 @@ When Trakt tokens expire, you'll be notified via:
 
 ### Production Testing
 
-- Add `?admin` to any URL: `https://brendanreed.netlify.app/now/?admin`
+- Add `?admin` to any URL: `https://brendantreed.com/now/?admin`
 - Shows admin panel and detailed errors when tokens expire
 
 ### Localhost
@@ -47,6 +47,7 @@ When Trakt tokens expire, you'll be notified via:
 To receive email alerts when tokens expire:
 
 1. **Enable Netlify Forms notifications:**
+
    - Go to your Netlify dashboard
    - Navigate to Site Settings > Forms
    - Set up email notifications for the form named `trakt-token-alert`
@@ -79,14 +80,14 @@ To receive email alerts when tokens expire:
 
 ```bash
 # Visit without admin privileges
-curl https://brendanreed.netlify.app/now/
+curl https://brendantreed.com/now/
 ```
 
 ### Test Admin Experience:
 
 ```bash
 # Visit with admin privileges
-curl https://brendanreed.netlify.app/now/?admin
+curl https://brendantreed.com/now/?admin
 ```
 
 This setup ensures your personal site maintains a professional appearance for visitors while giving you full control and visibility into the system status.
