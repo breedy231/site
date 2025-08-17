@@ -156,21 +156,31 @@ const NowPage = () => {
         .finally(() => setWatchLoading(false))
     } else {
       setWatchError(
-        "No authentication token found. Please connect your Trakt account.",
+        "No authentication token found. Please connect your Trakt account."
       )
       setWatchLoading(false)
     }
 
     // Fetch book data
     fetch(getApiUrl("goodreads"))
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`)
+        }
+        return res.json()
+      })
       .then(data => setBookData(data))
       .catch(err => setBookError(err.message))
       .finally(() => setBookLoading(false))
 
     // Fetch music data
     fetch(getApiUrl("lastfm"))
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`)
+        }
+        return res.json()
+      })
       .then(data => setMusicData(data))
       .catch(err => setMusicError(err.message))
       .finally(() => setMusicLoading(false))
@@ -213,7 +223,7 @@ const NowPage = () => {
               error={bookError}
               loading={bookLoading}
             >
-              {bookData && (
+              {bookData && bookData.recentlyRead && (
                 <>
                   {bookData.currentlyReading && (
                     <div className="mb-4">
@@ -276,7 +286,7 @@ const NowPage = () => {
               error={musicError}
               loading={musicLoading}
             >
-              {musicData && (
+              {musicData && musicData.recentTracks && musicData.topTracks && (
                 <>
                   <div className="mb-4">
                     <h3 className="mb-2 text-lg">Recent Tracks</h3>
