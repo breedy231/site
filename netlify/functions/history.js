@@ -41,6 +41,13 @@ async function makeAuthorizedRequest(url, token, headers) {
           Authorization: `Bearer ${currentToken}`,
         },
       })
+
+      // If still failing after refresh, the refresh token is likely invalid
+      if (response.status === 401) {
+        throw new Error(
+          "Token refresh failed: Both access and refresh tokens are invalid"
+        )
+      }
     } catch (error) {
       throw new Error("Token refresh failed: " + error.message)
     }
@@ -75,7 +82,10 @@ export const handler = async event => {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-      body: JSON.stringify({ message: "No token provided" }),
+      body: JSON.stringify({
+        message: "No token provided",
+        authRequired: true,
+      }),
     }
   }
 
@@ -91,7 +101,7 @@ export const handler = async event => {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`
       )
       if (!response.ok) return null
 
@@ -111,12 +121,12 @@ export const handler = async event => {
       makeAuthorizedRequest(
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
         token,
-        headers,
+        headers
       ),
       makeAuthorizedRequest(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
         token,
-        headers,
+        headers
       ),
     ])
 
@@ -128,10 +138,10 @@ export const handler = async event => {
       // Fetch images for shows and movies
       const [showImages, movieImages] = await Promise.all([
         Promise.all(
-          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb)),
+          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb))
         ),
         Promise.all(
-          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb)),
+          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb))
         ),
       ])
 
@@ -160,14 +170,24 @@ export const handler = async event => {
     }
   } catch (error) {
     console.error("Error fetching history:", error)
+
+    // Check if it's an authentication error
+    const isAuthError =
+      error.message.includes("Token refresh failed") ||
+      error.message.includes("Failed to refresh token") ||
+      error.message.includes("HTTP error! status: 401")
+
     return {
-      statusCode: error.message.includes("Token refresh failed") ? 401 : 500,
+      statusCode: isAuthError ? 401 : 500,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
-        message: error.message || "Internal server error",
+        message: isAuthError
+          ? "Trakt access token has expired. Please re-authenticate."
+          : error.message || "Internal server error",
+        authRequired: isAuthError,
       }),
     }
   }

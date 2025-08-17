@@ -5,18 +5,28 @@ import { navigate } from "gatsby"
 const TraktCallback = () => {
   const [status, setStatus] = useState("Processing...")
   const [error, setError] = useState(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     const handleCallback = async () => {
-      const params = new URLSearchParams(window.location.search)
-      const code = params.get("code")
-
-      if (!code) {
-        setStatus("Error: No authorization code received")
-        return
-      }
-
       try {
+        console.log("Callback page loaded, checking for code...")
+        const params = new URLSearchParams(window.location.search)
+        const code = params.get("code")
+        console.log("Authorization code found:", code ? "yes" : "no")
+
+        if (!code) {
+          setStatus("Error: No authorization code received")
+          setError("No code parameter found in URL")
+          return
+        }
+
         console.log("Sending token exchange request...") // Debug log
         const response = await fetch("/api/trakt-token", {
           method: "POST",
@@ -28,11 +38,13 @@ const TraktCallback = () => {
         })
 
         console.log("Response status:", response.status) // Debug log
+        console.log("Response headers:", Object.fromEntries(response.headers)) // Debug log
 
         const contentType = response.headers.get("content-type")
         let data
         if (contentType && contentType.includes("application/json")) {
           data = await response.json()
+          console.log("Response data:", data) // Debug log
         } else {
           const text = await response.text()
           console.error("Unexpected response type:", contentType, text)
@@ -62,8 +74,23 @@ You can now restart your Gatsby development server.`)
       }
     }
 
-    handleCallback()
-  }, [])
+    handleCallback().catch(error => {
+      console.error("Unhandled error in callback:", error)
+      setError(error.message)
+      setStatus("Unexpected error occurred")
+    })
+  }, [mounted])
+
+  if (!mounted) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="max-w-xl rounded-lg bg-white p-6 shadow-md">
+          <h1 className="mb-4 text-2xl font-bold">Loading...</h1>
+          <p>Initializing Trakt authentication...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (error) {
     return (
@@ -74,6 +101,14 @@ You can now restart your Gatsby development server.`)
           </h1>
           <div className="rounded border border-red-200 bg-red-50 p-4">
             {error}
+          </div>
+          <div className="mt-4">
+            <button
+              onClick={() => (window.location.href = "/now")}
+              className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            >
+              Return to Now Page
+            </button>
           </div>
         </div>
       </div>

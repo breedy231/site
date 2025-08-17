@@ -19,7 +19,9 @@ exports.handler = async function (event) {
         code,
         client_id: process.env.TRAKT_CLIENT_ID,
         client_secret: process.env.TRAKT_CLIENT_SECRET,
-        redirect_uri: process.env.TRAKT_REDIRECT_URI,
+        redirect_uri:
+          process.env.TRAKT_REDIRECT_URI ||
+          "https://brendanreed.netlify.app/callback/trakt",
         grant_type: "authorization_code",
       }),
     })

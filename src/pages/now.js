@@ -26,7 +26,7 @@ const getApiUrl = endpoint => {
 }
 
 // Media Section Components
-const MediaSection = ({ title, error, loading, children }) => (
+const MediaSection = ({ title, error, loading, children, onReauth }) => (
   <div className="h-full">
     <h2 className="mb-4 text-xl">{title}</h2>
     {loading ? (
@@ -35,7 +35,17 @@ const MediaSection = ({ title, error, loading, children }) => (
       </div>
     ) : error ? (
       <div className="text-red-500">
-        Error loading {title.toLowerCase()}: {error}
+        <div className="mb-2">
+          Error loading {title.toLowerCase()}: {error}
+        </div>
+        {error.includes("expired") || error.includes("authentication") ? (
+          <button
+            onClick={onReauth}
+            className="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
+          >
+            Re-authenticate with Trakt
+          </button>
+        ) : null}
       </div>
     ) : (
       <div className="h-[calc(100%-2rem)] overflow-auto">{children}</div>
@@ -48,6 +58,7 @@ MediaSection.propTypes = {
   error: PropTypes.string,
   loading: PropTypes.bool,
   children: PropTypes.node,
+  onReauth: PropTypes.func,
 }
 
 // Main Page Component
@@ -65,7 +76,14 @@ const NowPage = () => {
   const [musicLoading, setMusicLoading] = useState(true)
 
   const handleTraktLogin = () => {
-    const authUrl = `https://trakt.tv/oauth/authorize?response_type=code&client_id=${process.env.GATSBY_TRAKT_CLIENT_ID}&redirect_uri=http://localhost:8000/callback/trakt`
+    const isDevelopment = process.env.NODE_ENV === "development"
+    const redirectUri = isDevelopment
+      ? "http://localhost:8000/callback/trakt"
+      : "https://brendanreed.netlify.app/callback/trakt"
+
+    const authUrl = `https://trakt.tv/oauth/authorize?response_type=code&client_id=${
+      process.env.GATSBY_TRAKT_CLIENT_ID
+    }&redirect_uri=${encodeURIComponent(redirectUri)}`
     window.location.href = authUrl
   }
 
@@ -79,13 +97,23 @@ const NowPage = () => {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) {
+            return res.json().then(errorData => {
+              throw new Error(errorData.message || `HTTP ${res.status}`)
+            })
+          }
+          return res.json()
+        })
         .then(data => setWatchData(data))
-        .catch(err => setWatchError(err.message))
+        .catch(err => {
+          console.error("Trakt API error:", err)
+          setWatchError(err.message)
+        })
         .finally(() => setWatchLoading(false))
     } else {
       setWatchError(
-        "No authentication token found. Please connect your Trakt account.",
+        "No authentication token found. Please connect your Trakt account."
       )
       setWatchLoading(false)
     }
@@ -144,6 +172,7 @@ const NowPage = () => {
               title="Watching"
               error={watchError}
               loading={watchLoading}
+              onReauth={handleTraktLogin}
             >
               {watchData && (
                 <>
