@@ -66,3 +66,42 @@ Always check data structure before mapping:
 ```
 
 This prevents "Cannot read properties of undefined" errors when APIs fail.
+
+## OAuth Integration (Trakt)
+
+### Redirect URI Configuration
+
+OAuth providers require exact redirect URI matches. Common issues:
+
+- **Deploy previews**: URLs like `deploy-preview-X--site.netlify.app` aren't in OAuth app whitelist
+- **Development vs Production**: Different URIs for localhost vs production
+
+### Debugging OAuth Errors
+
+**"Redirect URI malformed or doesn't match":**
+
+1. Check if current hostname matches configured OAuth redirect URIs
+2. For deploy previews, redirect to main site for OAuth testing
+3. Verify OAuth app configuration includes all needed URIs
+
+### Implementation Pattern
+
+```javascript
+const handleOAuth = () => {
+  const isDevelopment = process.env.NODE_ENV === "development"
+  const currentHost = window.location.origin
+  const isDeployPreview = currentHost.includes("deploy-preview")
+
+  const redirectUri = isDevelopment
+    ? "http://localhost:8000/callback/oauth"
+    : isDeployPreview
+    ? "https://main-site.netlify.app/callback/oauth" // Fallback to main site
+    : `${currentHost}/callback/oauth`
+}
+```
+
+### Testing OAuth
+
+- **Local development**: Works with localhost redirect URI
+- **Deploy previews**: Automatically redirects to main site
+- **Production**: Test on `https://main-site.netlify.app/?admin`
