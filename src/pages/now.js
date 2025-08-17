@@ -120,9 +120,22 @@ const NowPage = () => {
 
   const handleTraktLogin = () => {
     const isDevelopment = process.env.NODE_ENV === "development"
+    const currentHost =
+      typeof window !== "undefined" ? window.location.origin : ""
+    const isDeployPreview = currentHost.includes("deploy-preview")
+
+    // Deploy previews need to redirect to main site for OAuth
     const redirectUri = isDevelopment
       ? "http://localhost:8000/callback/trakt"
-      : "https://brendanreed.netlify.app/callback/trakt"
+      : isDeployPreview
+      ? "https://brendanreed.netlify.app/callback/trakt"
+      : `${currentHost}/callback/trakt`
+
+    if (isDeployPreview) {
+      alert(
+        "OAuth testing on deploy previews will redirect to the main site for authentication. You'll need to test the final result on https://brendanreed.netlify.app/?admin"
+      )
+    }
 
     const authUrl = `https://trakt.tv/oauth/authorize?response_type=code&client_id=${
       process.env.GATSBY_TRAKT_CLIENT_ID
