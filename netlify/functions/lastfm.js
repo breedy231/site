@@ -1,15 +1,7 @@
-const fetch = require("node-fetch")
-
-exports.handler = async event => {
-  if (event.httpMethod !== "GET") {
-    return {
-      statusCode: 405,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ message: "Method not allowed" }),
-    }
+// src/api/lastfm.js
+const handler = async function handler(req, res) {
+  if (req.method !== "GET") {
+    return res.status(405).json({ message: "Method not allowed" })
   }
 
   const USERNAME = "breedy231"
@@ -18,10 +10,10 @@ exports.handler = async event => {
   try {
     const [recentTracksRes, topTracksRes] = await Promise.all([
       fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=5`,
+        `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=5`
       ),
       fetch(
-        `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=3&period=7day`,
+        `https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=3&period=7day`
       ),
     ])
 
@@ -54,26 +46,11 @@ exports.handler = async event => {
       })),
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(response),
-    }
+    return res.status(200).json(response)
   } catch (error) {
     console.error("Error fetching Last.fm data:", error)
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        message: "Failed to fetch Last.fm data",
-        error: error.message,
-      }),
-    }
+    return res.status(500).json({ message: "Failed to fetch Last.fm data" })
   }
 }
+
+export default handler

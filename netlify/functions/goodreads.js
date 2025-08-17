@@ -1,16 +1,9 @@
-const fetch = require("node-fetch")
-const { XMLParser } = require("fast-xml-parser")
+// src/api/goodreads.js
+import { XMLParser } from "fast-xml-parser"
 
-exports.handler = async event => {
-  if (event.httpMethod !== "GET") {
-    return {
-      statusCode: 405,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ message: "Method not allowed" }),
-    }
+const handler = async function handler(req, res) {
+  if (req.method !== "GET") {
+    return res.status(405).json({ message: "Method not allowed" })
   }
 
   const GOODREADS_USER_ID = "21084560"
@@ -20,10 +13,10 @@ exports.handler = async event => {
     // Fetch both currently-reading and read shelves
     const [currentlyReadingRes, readRes] = await Promise.all([
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`,
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
       ),
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`,
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`
       ),
     ])
 
@@ -31,10 +24,6 @@ exports.handler = async event => {
       currentlyReadingRes.text(),
       readRes.text(),
     ])
-
-    if (!currentlyReadingRes.ok || !readRes.ok) {
-      throw new Error("Failed to fetch from Goodreads RSS")
-    }
 
     // Parse XML to JSON
     const currentlyReading = parser.parse(currentlyReadingXml)
@@ -74,26 +63,11 @@ exports.handler = async event => {
       })),
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(response),
-    }
+    return res.status(200).json(response)
   } catch (error) {
     console.error("Error fetching Goodreads data:", error)
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        message: "Failed to fetch Goodreads data",
-        error: error.message,
-      }),
-    }
+    return res.status(500).json({ message: "Failed to fetch Goodreads data" })
   }
 }
+
+export default handler
