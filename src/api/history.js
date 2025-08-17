@@ -1,4 +1,21 @@
 // src/api/history.js
+
+// Helper function to send notification when tokens need attention
+async function notifyAdminOfTokenIssue(error) {
+  // Only send notifications in production to avoid spam during development
+  if (process.env.NODE_ENV === "development") {
+    console.log("Would notify admin:", error)
+    return
+  }
+
+  try {
+    // Simple console log for now - could be enhanced with actual email/webhook
+    console.error("ADMIN ALERT: Trakt token issue:", error)
+  } catch (err) {
+    console.error("Notification error:", err)
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Method not allowed" })
@@ -59,6 +76,7 @@ export default async function handler(req, res) {
 
     // Check for authentication errors
     if (episodesRes.status === 401 || moviesRes.status === 401) {
+      await notifyAdminOfTokenIssue("Trakt access token has expired")
       return res.status(401).json({
         message: "Trakt access token has expired. Please re-authenticate.",
         authRequired: true,

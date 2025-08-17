@@ -1,3 +1,31 @@
+// Helper function to send notification when tokens need attention
+async function notifyAdminOfTokenIssue(error) {
+  // Only send notifications in production to avoid spam during development
+  if (process.env.NODE_ENV === "development") {
+    console.log("Would notify admin:", error)
+    return
+  }
+
+  try {
+    // Option 1: Send email via Netlify Forms (simple, built-in)
+    const formData = new FormData()
+    formData.append("form-name", "trakt-token-alert")
+    formData.append("error", error)
+    formData.append("timestamp", new Date().toISOString())
+    formData.append("site", process.env.URL || "brendanreed.netlify.app")
+
+    await fetch(`${process.env.URL || "https://brendanreed.netlify.app"}/`, {
+      method: "POST",
+      body: formData,
+    }).catch(() => {
+      // Fail silently - notification is best effort
+      console.error("Failed to send admin notification")
+    })
+  } catch (error) {
+    console.error("Notification error:", error)
+  }
+}
+
 // Helper function to refresh token if needed
 async function refreshAccessToken() {
   const response = await fetch("https://api.trakt.tv/oauth/token", {
@@ -176,6 +204,11 @@ export const handler = async event => {
       error.message.includes("Token refresh failed") ||
       error.message.includes("Failed to refresh token") ||
       error.message.includes("HTTP error! status: 401")
+
+    // Notify admin of token issues
+    if (isAuthError) {
+      await notifyAdminOfTokenIssue(error.message)
+    }
 
     return {
       statusCode: isAuthError ? 401 : 500,
