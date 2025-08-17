@@ -13,10 +13,10 @@ const handler = async function handler(req, res) {
     // Fetch both currently-reading and read shelves
     const [currentlyReadingRes, readRes] = await Promise.all([
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`,
       ),
       fetch(
-        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`
+        `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read&sort=date_read&order=d`,
       ),
     ])
 

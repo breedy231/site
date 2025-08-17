@@ -64,13 +64,13 @@ export default async function handler(req, res) {
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
         {
           headers,
-        }
+        },
       ),
       fetch(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
         {
           headers,
-        }
+        },
       ),
     ])
 
