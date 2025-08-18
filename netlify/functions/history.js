@@ -1,87 +1,48 @@
-// Helper function to refresh token if needed
-async function refreshAccessToken() {
-  const response = await fetch("https://api.trakt.tv/oauth/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      refresh_token: process.env.GATSBY_TRAKT_REFRESH_TOKEN,
-      client_id: process.env.GATSBY_TRAKT_CLIENT_ID,
-      client_secret: process.env.GATSBY_TRAKT_CLIENT_SECRET,
-      grant_type: "refresh_token",
-    }),
-  })
+// netlify/functions/history.js
 
-  if (!response.ok) {
-    throw new Error("Failed to refresh token")
+// Helper function to send notification when tokens need attention
+async function notifyAdminOfTokenIssue(error) {
+  // Only send notifications in production to avoid spam during development
+  if (process.env.NODE_ENV === "development") {
+    console.log("Would notify admin:", error)
+    return
   }
 
-  const data = await response.json()
-  return data.access_token
+  try {
+    // Simple console log for now - could be enhanced with actual email/webhook
+    console.error("ADMIN ALERT: Trakt token issue:", error)
+  } catch (err) {
+    console.error("Notification error:", err)
+  }
 }
 
-// Helper function to make API requests with automatic token refresh
-async function makeAuthorizedRequest(url, token, headers) {
-  let currentToken = token
-  let response = await fetch(url, {
-    headers: {
-      ...headers,
-      Authorization: `Bearer ${currentToken}`,
-    },
-  })
-
-  // If token is expired, refresh and retry
-  if (response.status === 401) {
-    try {
-      currentToken = await refreshAccessToken()
-      response = await fetch(url, {
-        headers: {
-          ...headers,
-          Authorization: `Bearer ${currentToken}`,
-        },
-      })
-    } catch (error) {
-      throw new Error("Token refresh failed: " + error.message)
-    }
+export default async function handler(req) {
+  if (req.method !== "GET") {
+    return new Response(JSON.stringify({ message: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    })
   }
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`)
-  }
-
-  return response.json()
-}
-
-export const handler = async event => {
-  if (event.httpMethod !== "GET") {
-    return {
-      statusCode: 405,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Authorization",
-      },
-      body: JSON.stringify({ message: "Method not allowed" }),
-    }
-  }
-
-  const token = event.headers.authorization?.split("Bearer ")[1]
+  const token = req.headers.get("authorization")?.split("Bearer ")[1]
 
   if (!token) {
-    return {
-      statusCode: 401,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+    return new Response(
+      JSON.stringify({
+        message: "No token provided",
+        authRequired: true,
+      }),
+      {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
       },
-      body: JSON.stringify({ message: "No token provided" }),
-    }
+    )
   }
 
   const TMDB_API_KEY = process.env.GATSBY_TMDB_API_KEY
   const headers = {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
     "trakt-api-version": "2",
     "trakt-api-key": process.env.GATSBY_TRAKT_CLIENT_ID,
   }
@@ -106,18 +67,47 @@ export const handler = async event => {
   }
 
   try {
-    // Fetch episodes and movies history with auto token refresh
-    const [episodes, movies] = await Promise.all([
-      makeAuthorizedRequest(
+    // Fetch episodes and movies history
+    const [episodesRes, moviesRes] = await Promise.all([
+      fetch(
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
-        token,
-        headers,
+        {
+          headers,
+        },
       ),
-      makeAuthorizedRequest(
+      fetch(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
-        token,
-        headers,
+        {
+          headers,
+        },
       ),
+    ])
+
+    // Check for authentication errors
+    if (episodesRes.status === 401 || moviesRes.status === 401) {
+      await notifyAdminOfTokenIssue("Trakt access token has expired")
+      return new Response(
+        JSON.stringify({
+          message: "Trakt access token has expired. Please re-authenticate.",
+          authRequired: true,
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        },
+      )
+    }
+
+    if (!episodesRes.ok || !moviesRes.ok) {
+      const errorText = !episodesRes.ok
+        ? await episodesRes.text()
+        : await moviesRes.text()
+      throw new Error(`Failed to fetch history: ${errorText}`)
+    }
+
+    const [episodes, movies] = await Promise.all([
+      episodesRes.json(),
+      moviesRes.json(),
     ])
 
     // Fetch TMDB images if we have a TMDB API key
@@ -147,28 +137,26 @@ export const handler = async event => {
       }))
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
+    return new Response(
+      JSON.stringify({
         tv: enhancedEpisodes,
         movies: enhancedMovies,
       }),
-    }
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      },
+    )
   } catch (error) {
     console.error("Error fetching history:", error)
-    return {
-      statusCode: error.message.includes("Token refresh failed") ? 401 : 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
+    return new Response(
+      JSON.stringify({
         message: error.message || "Internal server error",
       }),
-    }
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    )
   }
 }

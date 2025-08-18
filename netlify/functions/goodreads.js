@@ -1,16 +1,12 @@
-const fetch = require("node-fetch")
-const { XMLParser } = require("fast-xml-parser")
+// netlify/functions/goodreads.js
+import { XMLParser } from "fast-xml-parser"
 
-exports.handler = async event => {
-  if (event.httpMethod !== "GET") {
-    return {
-      statusCode: 405,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ message: "Method not allowed" }),
-    }
+export default async function handler(req) {
+  if (req.method !== "GET") {
+    return new Response(JSON.stringify({ message: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    })
   }
 
   const GOODREADS_USER_ID = "21084560"
@@ -31,10 +27,6 @@ exports.handler = async event => {
       currentlyReadingRes.text(),
       readRes.text(),
     ])
-
-    if (!currentlyReadingRes.ok || !readRes.ok) {
-      throw new Error("Failed to fetch from Goodreads RSS")
-    }
 
     // Parse XML to JSON
     const currentlyReading = parser.parse(currentlyReadingXml)
@@ -74,26 +66,18 @@ exports.handler = async event => {
       })),
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(response),
-    }
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    })
   } catch (error) {
     console.error("Error fetching Goodreads data:", error)
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+    return new Response(
+      JSON.stringify({ message: "Failed to fetch Goodreads data" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
       },
-      body: JSON.stringify({
-        message: "Failed to fetch Goodreads data",
-        error: error.message,
-      }),
-    }
+    )
   }
 }

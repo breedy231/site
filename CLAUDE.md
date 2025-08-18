@@ -1,71 +1,144 @@
-# CLAUDE.md
+# Claude Code Project Notes
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Build System
 
-## Development Commands
+- The `public/` directory contains build output and is gitignored
+- Source files should be edited in `static/` directory, not `public/`
+- Files in `static/` get copied to `public/` during the build process
 
-**Build and Development:**
+## File Structure
 
-- `gatsby develop` - Start development server (default port 8000)
-- `gatsby develop --https --cert-file ./certificates/localhost.crt --key-file ./certificates/localhost.key --host 0.0.0.0` - HTTPS development with custom certificates
-- `gatsby build` - Build for production
-- `gatsby serve` - Serve production build locally
-- `gatsby clean` - Clean cache and public directories
+- **Source files**: `static/` directory (tracked in git)
+- **Build output**: `public/` directory (gitignored)
 
-**Code Quality:**
+When fixing files for deployment, always edit the source files in `static/`, not the generated files in `public/`.
 
-- `prettier --write "**/*.{js,jsx,ts,tsx,json,md}"` - Format all files
-- `eslint` - Lint JavaScript files (configured via lint-staged)
+## Netlify Functions
 
-**Testing:**
+### Function Format
 
-- Tests are not currently configured (placeholder in package.json suggests adding unit testing)
+- Use modern ES module syntax: `export default async function handler(req) {}`
+- Return `new Response(JSON.stringify(data), { status, headers })` instead of `res.status().json()`
+- Access request headers with `req.headers.get("header-name")`
+- Use `process.env.VARIABLE_NAME` for environment variables
 
-## Architecture Overview
+### Common Issues
 
-**Framework & Hosting:**
+- **502 errors**: Usually caused by incorrect function syntax or missing dependencies
+- **Deployment differences**: Functions may work locally but fail in production due to:
+  - Wrong module syntax (CommonJS vs ES modules)
+  - Missing environment variables
+  - Dependency issues
 
-- Gatsby 5 static site generator with React 18
-- Hosted on Netlify with serverless functions
-- Tailwind CSS + styled-components for styling
-- MDX for blog content
+### Debugging Steps for 502 Errors
 
-**Key Directory Structure:**
+1. Check function syntax matches modern Netlify format
+2. Verify environment variables are set in Netlify dashboard
+3. Check function logs in Netlify dashboard
+4. Test function signature: `export default async function(req) {}`
 
-- `src/pages/` - Route-based pages (index.js, headsup.js, now.js, blog/)
-- `src/components/` - Reusable React components (Layout, ThemeToggle, SoundManager)
-- `src/api/` - Serverless functions (copied to netlify/functions during build)
-- `blog/` - MDX blog posts with frontmatter-based routing
-- `src/context/` - React context providers (ThemeContext)
+## Frontend Error Handling
 
-**Notable Features:**
+### API Call Patterns
 
-- **Heads Up Game** (`src/pages/headsup.js`) - Interactive word game with device motion detection
-- **Now Page** (`src/pages/now.js`) - Personal dashboard displaying media consumption via external APIs
-- **API Integration** - Trakt.tv, Last.fm, and Goodreads APIs for media tracking
-- **Dark Mode** - Theme switching via React context
-- **Sound System** - Audio management for the Heads Up game
+When fetching from Netlify functions, always:
 
-**API Architecture:**
+```javascript
+fetch(apiUrl)
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`)
+    }
+    return res.json()
+  })
+  .then(data => setData(data))
+  .catch(err => setError(err.message))
+```
 
-- Development: APIs accessible at `/api/*`
-- Production: Netlify functions at `/.netlify/functions/*`
-- External integrations: Trakt (movies/TV), Last.fm (music), Goodreads (books)
+### Defensive Rendering
 
-**Data Flow:**
+Always check data structure before mapping:
 
-- Gatsby's GraphQL layer processes MDX blog posts and static assets
-- Client-side API calls to serverless functions for dynamic data
-- State management via React hooks and context
+```javascript
+{data && data.requiredProperty && (
+  data.requiredProperty.map(item => ...)
+)}
+```
 
-**Styling Approach:**
+This prevents "Cannot read properties of undefined" errors when APIs fail.
 
-- Tailwind CSS for utility-first styling
-- Styled-components for component-level styles
-- SASS support available
-- Responsive design with react-media breakpoints
+## OAuth Integration (Trakt)
 
-**Authentication:**
+### Redirect URI Configuration
 
-- OAuth flows implemented for Trakt.tv integration
-- Token management for API access
+OAuth providers require exact redirect URI matches. Common issues:
+
+- **Deploy previews**: URLs like `deploy-preview-X--site.netlify.app` aren't in OAuth app whitelist
+- **Development vs Production**: Different URIs for localhost vs production
+
+### Debugging OAuth Errors
+
+**"Redirect URI malformed or doesn't match":**
+
+1. Check if current hostname matches configured OAuth redirect URIs
+2. For deploy previews, redirect to main site for OAuth testing
+3. Verify OAuth app configuration includes all needed URIs
+
+### Implementation Pattern
+
+```javascript
+const handleOAuth = () => {
+  const isDevelopment = process.env.NODE_ENV === "development"
+  const currentHost = window.location.origin
+  const isDeployPreview = currentHost.includes("deploy-preview")
+
+  const redirectUri = isDevelopment
+    ? "http://localhost:8000/callback/oauth"
+    : isDeployPreview
+      ? "https://brendantreed.com/callback/oauth" // Fallback to main site
+      : `${currentHost}/callback/oauth`
+}
+```
+
+### Testing OAuth
+
+- **Local development**: Works with localhost redirect URI
+- **Deploy previews**: Automatically redirects to main site
+- **Production**: Test on `https://brendantreed.com/?admin`
+
+## OAuth Token Management Workflow
+
+### Complete OAuth Testing Process
+
+1. **Trigger OAuth flow** (click re-auth button on Now page)
+2. **Complete authorization** on Trakt.tv
+3. **Copy new tokens** from callback page
+4. **Update environment variables** in Netlify Dashboard
+5. **Trigger deployment** (or wait for auto-deploy)
+6. **Verify integration** works (401 errors should be resolved)
+
+### Key Implementation Details
+
+- **Frontend OAuth**: Uses dynamic redirect URI based on current hostname
+- **Backend token exchange**: Matches redirect URI from request headers
+- **Admin detection**: `?admin` parameter or development environment
+- **Token display**: Production shows tokens for manual environment variable updates
+- **Graceful fallbacks**: Public users see helpful messages, not technical errors
+
+### Environment Variables Required
+
+```
+GATSBY_TRAKT_CLIENT_ID=your_client_id
+GATSBY_TRAKT_CLIENT_SECRET=your_client_secret
+GATSBY_TRAKT_ACCESS_TOKEN=your_access_token
+GATSBY_TRAKT_REFRESH_TOKEN=your_refresh_token
+```
+
+### Post-OAuth Deployment Testing
+
+After updating tokens and deploying:
+
+1. Visit `/now` page (without `?admin`)
+2. Verify "Reading" and "Listening" sections load
+3. Verify "Watching" section shows data (not fallback message)
+4. Check browser console for any remaining API errors

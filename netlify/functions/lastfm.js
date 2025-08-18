@@ -1,15 +1,10 @@
-const fetch = require("node-fetch")
-
-exports.handler = async event => {
-  if (event.httpMethod !== "GET") {
-    return {
-      statusCode: 405,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ message: "Method not allowed" }),
-    }
+// netlify/functions/lastfm.js
+export default async function handler(req) {
+  if (req.method !== "GET") {
+    return new Response(JSON.stringify({ message: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    })
   }
 
   const USERNAME = "breedy231"
@@ -54,26 +49,18 @@ exports.handler = async event => {
       })),
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(response),
-    }
+    return new Response(JSON.stringify(response), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    })
   } catch (error) {
     console.error("Error fetching Last.fm data:", error)
-    return {
-      statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+    return new Response(
+      JSON.stringify({ message: "Failed to fetch Last.fm data" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
       },
-      body: JSON.stringify({
-        message: "Failed to fetch Last.fm data",
-        error: error.message,
-      }),
-    }
+    )
   }
 }

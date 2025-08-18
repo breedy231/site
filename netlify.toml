@@ -1,6 +1,21 @@
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
+  from = "/api/history"
+  to = "/.netlify/functions/history"
+  status = 200
+
+[[redirects]]
+  from = "/api/trakt-token"
+  to = "/.netlify/functions/trakt-token"
+  status = 200
+
+[[redirects]]
+  from = "/api/goodreads"
+  to = "/.netlify/functions/goodreads"
+  status = 200
+
+[[redirects]]
+  from = "/api/lastfm"
+  to = "/.netlify/functions/lastfm"
   status = 200
 
 [build]
