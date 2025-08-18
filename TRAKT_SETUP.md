@@ -47,7 +47,6 @@ When Trakt tokens expire, you'll be notified via:
 To receive email alerts when tokens expire:
 
 1. **Enable Netlify Forms notifications:**
-
    - Go to your Netlify dashboard
    - Navigate to Site Settings > Forms
    - Set up email notifications for the form named `trakt-token-alert`
