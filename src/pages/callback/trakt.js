@@ -1,6 +1,5 @@
 // src/pages/callback/trakt.js
 import React, { useEffect, useState } from "react"
-import { navigate } from "gatsby"
 
 const TraktCallback = () => {
   const [status, setStatus] = useState("Processing...")
@@ -59,7 +58,7 @@ const TraktCallback = () => {
           throw new Error(data.error || "Failed to exchange code for token")
         }
 
-        // Display tokens (in development only)
+        // Display tokens for admin users
         if (process.env.NODE_ENV === "development") {
           setStatus(`
 Authentication successful! Add these to your .env.development file:
@@ -69,7 +68,23 @@ GATSBY_TRAKT_REFRESH_TOKEN=${data.refresh_token}
 
 You can now restart your Gatsby development server.`)
         } else {
-          navigate("/now")
+          // In production, show tokens to admin for manual environment variable update
+          setStatus(`
+Authentication successful! 
+
+⚠️  ADMIN ACTION REQUIRED ⚠️
+
+Add these environment variables to your Netlify site settings:
+
+GATSBY_TRAKT_ACCESS_TOKEN=${data.access_token}
+GATSBY_TRAKT_REFRESH_TOKEN=${data.refresh_token}
+
+Steps:
+1. Go to Netlify Dashboard → Site Settings → Environment Variables
+2. Update the above variables with these new values
+3. Trigger a new deployment
+
+After updating environment variables, the "Now" page will show your Trakt data.`)
         }
       } catch (error) {
         console.error("Error during OAuth callback:", error)
