@@ -105,3 +105,40 @@ const handleOAuth = () => {
 - **Local development**: Works with localhost redirect URI
 - **Deploy previews**: Automatically redirects to main site
 - **Production**: Test on `https://brendantreed.com/?admin`
+
+## OAuth Token Management Workflow
+
+### Complete OAuth Testing Process
+
+1. **Trigger OAuth flow** (click re-auth button on Now page)
+2. **Complete authorization** on Trakt.tv
+3. **Copy new tokens** from callback page
+4. **Update environment variables** in Netlify Dashboard
+5. **Trigger deployment** (or wait for auto-deploy)
+6. **Verify integration** works (401 errors should be resolved)
+
+### Key Implementation Details
+
+- **Frontend OAuth**: Uses dynamic redirect URI based on current hostname
+- **Backend token exchange**: Matches redirect URI from request headers
+- **Admin detection**: `?admin` parameter or development environment
+- **Token display**: Production shows tokens for manual environment variable updates
+- **Graceful fallbacks**: Public users see helpful messages, not technical errors
+
+### Environment Variables Required
+
+```
+GATSBY_TRAKT_CLIENT_ID=your_client_id
+GATSBY_TRAKT_CLIENT_SECRET=your_client_secret
+GATSBY_TRAKT_ACCESS_TOKEN=your_access_token
+GATSBY_TRAKT_REFRESH_TOKEN=your_refresh_token
+```
+
+### Post-OAuth Deployment Testing
+
+After updating tokens and deploying:
+
+1. Visit `/now` page (without `?admin`)
+2. Verify "Reading" and "Listening" sections load
+3. Verify "Watching" section shows data (not fallback message)
+4. Check browser console for any remaining API errors
