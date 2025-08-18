@@ -40,11 +40,17 @@ export default async function handler(req) {
     }
 
     console.log("Exchanging code for token...", code.substring(0, 10) + "...") // Debug log
+    console.log("Environment NODE_ENV:", process.env.NODE_ENV) // Debug log
+
+    // Get the current host from the request headers
+    const host = req.headers.get("host")
+    const protocol = req.headers.get("x-forwarded-proto") || "https"
+    const currentOrigin = `${protocol}://${host}`
 
     const redirectUri =
       process.env.NODE_ENV === "development"
         ? "http://localhost:8000/callback/trakt"
-        : "https://brendantreed.com/callback/trakt"
+        : `${currentOrigin}/callback/trakt`
 
     console.log("Using redirect URI:", redirectUri) // Debug log
     console.log(

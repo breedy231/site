@@ -124,16 +124,17 @@ const NowPage = () => {
       typeof window !== "undefined" ? window.location.origin : ""
     const isDeployPreview = currentHost.includes("deploy-preview")
 
-    // Deploy previews need to redirect to main site for OAuth
+    // Always use current host for OAuth - this keeps the flow on the same deployment
     const redirectUri = isDevelopment
       ? "http://localhost:8000/callback/trakt"
-      : isDeployPreview
-      ? "https://brendantreed.com/callback/trakt"
       : `${currentHost}/callback/trakt`
 
     if (isDeployPreview) {
       alert(
-        "OAuth testing on deploy previews will redirect to the main site for authentication. You'll need to test the final result on https://brendantreed.com/?admin"
+        "OAuth testing on deploy previews requires adding this URL to your Trakt app's redirect URI whitelist temporarily:\n\n" +
+          redirectUri +
+          "\n\n" +
+          "Or test on the main site: https://brendantreed.com/?admin"
       )
     }
 
