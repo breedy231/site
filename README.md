@@ -2,13 +2,29 @@
 
 This is my personal website, brought to you by Gatsby. I'm developing it on a Raspberry Pi 4.
 
-# Notable Tools
+## Quick Start
+
+```bash
+npm install
+npm run develop
+```
+
+For detailed setup instructions, see **[DEVELOPMENT_SETUP.md](DEVELOPMENT_SETUP.md)**.
+
+## Notable Tools
 
 - Built using Gatsby 5 / React 18 / Node 18.
 - Hosted via Netlify.
 - Requests made via Axios.
-- Prettier for linting.
-  - `yarn prettier --write .`
+- Prettier + ESLint with pre-commit hooks.
+- Automatic token refresh for API integrations.
+
+## Documentation
+
+- **[DEVELOPMENT_SETUP.md](DEVELOPMENT_SETUP.md)** - Complete development environment setup
+- **[CLAUDE.md](CLAUDE.md)** - Project architecture and implementation details
+- **[TRAKT_SETUP.md](TRAKT_SETUP.md)** - OAuth integration and admin features
+- **[AUTOMATED_ALERTS_SETUP.md](AUTOMATED_ALERTS_SETUP.md)** - Alert system configuration
 
 # OAuth Integration Testing
 

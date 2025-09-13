@@ -188,6 +188,106 @@ Update GATSBY_TRAKT_REFRESH_TOKEN to: [new_refresh_token]
 
 **Automated Alerts:** See `AUTOMATED_ALERTS_SETUP.md` for configuring email/Slack notifications when tokens are auto-refreshed.
 
+## Code Formatting & Pre-commit Hooks
+
+### Prettier Configuration
+
+The project uses Prettier for consistent code formatting across local development and CI:
+
+**Configuration file:** `.prettierrc`
+
+```json
+{
+  "arrowParens": "avoid",
+  "semi": false,
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
+```
+
+**Key settings:**
+
+- **Arrow parens:** Avoid parentheses around single arrow function parameters
+- **Semicolons:** Disabled (uses ASI - Automatic Semicolon Insertion)
+- **Tailwind plugin:** Automatically sorts CSS classes for consistency
+
+### Pre-commit Hooks
+
+The project uses Husky + lint-staged to ensure code quality before commits:
+
+**Setup:** Automatically installed via `npm install` → `husky install`
+
+**lint-staged configuration:**
+
+```json
+{
+  "*.{js,jsx,ts,tsx,json,md}": ["prettier --write"],
+  "*.{js,jsx,ts,tsx}": ["eslint --fix"]
+}
+```
+
+**What happens on commit:**
+
+1. **Prettier formats** all JS/TS/JSON/Markdown files
+2. **ESLint fixes** automatically fixable linting issues
+3. **Files are staged** automatically (lint-staged handles git add)
+4. **Commit proceeds** with properly formatted code
+
+### CI/GitHub Actions Consistency
+
+**Problem solved:** Previously, local commits and GitHub Actions used different formatting configurations, causing push/pull conflicts.
+
+**Solution:** Synchronized configurations ensure identical formatting:
+
+**Local (lint-staged):** `*.{js,jsx,ts,tsx,json,md}`
+**CI (GitHub Actions):** `*.{js,jsx,ts,tsx,json,md}`
+**Result:** No formatting differences between local and CI
+
+### Prettier Ignore
+
+Files excluded from formatting via `.prettierignore`:
+
+- `node_modules/` - Dependencies
+- `public/` - Build output
+- `.cache/` - Gatsby cache
+- `package-lock.json` - Lock file formatting
+- Generated/minified files
+
+### Troubleshooting
+
+**Pre-commit hooks not running:**
+
+1. Ensure Husky is installed: `npm run prepare`
+2. Check git hooks: `ls -la .git/hooks/`
+3. Verify lint-staged config in `package.json`
+
+**Formatting inconsistencies:**
+
+1. Run manually: `npm run format`
+2. Check Prettier config: `.prettierrc`
+3. Verify file patterns match between lint-staged and CI
+
+**ESLint errors blocking commits:**
+
+1. Check errors: `npx eslint src/`
+2. Auto-fix: `npx eslint src/ --fix`
+3. Update ESLint config if needed: `.eslintrc.js`
+
+### Commands
+
+```bash
+# Format all files manually
+npm run format
+
+# Check formatting without fixing
+npx prettier --check "**/*.{js,jsx,ts,tsx,json,md}"
+
+# Run ESLint with auto-fix
+npx eslint src/ --fix
+
+# Test pre-commit hooks
+npx lint-staged
+```
+
 ### Monitoring & Troubleshooting
 
 **Success indicators:**
