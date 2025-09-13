@@ -47,6 +47,7 @@ When Trakt tokens expire, you'll be notified via:
 To receive email alerts when tokens expire:
 
 1. **Enable Netlify Forms notifications:**
+
    - Go to your Netlify dashboard
    - Navigate to Site Settings > Forms
    - Set up email notifications for the form named `trakt-token-alert`
@@ -57,7 +58,20 @@ To receive email alerts when tokens expire:
 
 ## Token Refresh Workflow
 
-### When tokens expire:
+### Automatic Token Refresh (New!)
+
+The system now automatically refreshes expired tokens:
+
+1. **Token expires**: API returns 401 error
+2. **System detects**: Automatic refresh is triggered
+3. **New tokens obtained**: Using stored refresh token
+4. **Request retried**: Original API call succeeds with new token
+5. **Users see data**: No interruption in service
+6. **Admin notification**: New tokens logged for environment variable updates
+
+### Manual Token Refresh (Fallback)
+
+If automatic refresh fails, fallback to manual process:
 
 1. **External visitors**: See graceful "temporarily unavailable" message
 2. **You (admin)**: See prominent yellow admin notice at top of page
@@ -68,10 +82,18 @@ To receive email alerts when tokens expire:
 
 ## Files Modified
 
+### Core Integration
+
 - `src/pages/now.js` - Admin detection and UI changes
-- `netlify/functions/history.js` - Notification system
+- `netlify/functions/history.js` - Notification system + automatic token refresh
 - `src/api/history.js` - Local development notifications
 - `static/trakt-alert.html` - Netlify Forms setup
+
+### Automatic Token Refresh (Added)
+
+- `netlify/functions/refresh-token.js` - Token refresh endpoint
+- `src/utils/trakt-auth.js` - Frontend refresh token utility
+- `src/pages/callback/oauth.js` - OAuth callback handler
 
 ## Testing
 

@@ -23,6 +23,9 @@
   publish = "public"
   functions = "netlify/functions"
 
+[build.environment]
+  NODE_VERSION = "20.19.4"
+
 [dev]
   targetPort = 8000
   port = 8888

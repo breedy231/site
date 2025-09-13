@@ -1,4 +1,4 @@
-// netlify/functions/trakt-token.js
+// netlify/functions/refresh-token.js
 
 export default async function handler(req) {
   // Handle preflight request
@@ -26,12 +26,12 @@ export default async function handler(req) {
   try {
     // Parse JSON body for modern Netlify functions
     const body = await req.json()
-    const { code } = body
+    const { refresh_token } = body
 
-    if (!code) {
-      console.log("Missing authorization code in request:", body)
+    if (!refresh_token) {
+      console.log("Missing refresh token in request:", body)
       return new Response(
-        JSON.stringify({ message: "Missing authorization code" }),
+        JSON.stringify({ message: "Missing refresh token" }),
         {
           status: 400,
           headers: { "Content-Type": "application/json" },
@@ -39,7 +39,7 @@ export default async function handler(req) {
       )
     }
 
-    console.log("Exchanging code for token...", code.substring(0, 10) + "...") // Debug log
+    console.log("Refreshing Trakt token...") // Debug log
     console.log("Environment NODE_ENV:", process.env.NODE_ENV) // Debug log
 
     // Get the current host from the request headers
@@ -68,32 +68,32 @@ export default async function handler(req) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        code,
+        refresh_token,
         client_id: process.env.GATSBY_TRAKT_CLIENT_ID,
         client_secret: process.env.GATSBY_TRAKT_CLIENT_SECRET,
         redirect_uri: redirectUri,
-        grant_type: "authorization_code",
+        grant_type: "refresh_token",
       }),
     })
 
     const data = await response.json()
 
     if (!response.ok) {
-      console.error("Trakt API error:", response.status, data) // Debug log
+      console.error("Trakt token refresh error:", response.status, data) // Debug log
       throw new Error(
         data.error_description ||
           data.error ||
-          `HTTP ${response.status}: Failed to exchange token`
+          `HTTP ${response.status}: Failed to refresh token`
       )
     }
 
-    console.log("Token exchange successful") // Debug log
+    console.log("Token refresh successful") // Debug log
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     })
   } catch (error) {
-    console.error("Token exchange error:", error)
+    console.error("Token refresh error:", error)
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
