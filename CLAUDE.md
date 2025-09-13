@@ -288,6 +288,125 @@ npx eslint src/ --fix
 npx lint-staged
 ```
 
+## GitHub Actions CI Pipeline
+
+### Overview
+
+The project uses GitHub Actions for continuous integration, automatically formatting code and ensuring consistency across all commits.
+
+### Workflow Configuration
+
+**File:** `.github/workflows/main.yml`
+
+The workflow runs on:
+
+- All pull requests
+- Pushes to the `main` branch
+
+**Key features:**
+
+- Automatic code formatting with Prettier
+- Yarn package manager support
+- Git commit and push capabilities
+- Proper permissions and checkout handling
+
+### Critical Fixes Applied
+
+#### 1. Package Manager Consistency
+
+**Problem:** CI was failing because GitHub Actions used npm commands while the project uses yarn.
+
+**Before:**
+
+```yaml
+- name: Install dependencies
+  run: npm ci
+- name: Run Prettier
+  run: npm run format
+```
+
+**After:**
+
+```yaml
+- name: Setup Node.js
+  uses: actions/setup-node@v3
+  with:
+    node-version: "18"
+    cache: "yarn"
+- name: Install dependencies
+  run: yarn install --frozen-lockfile
+- name: Run Prettier
+  run: yarn format
+```
+
+#### 2. Git Permissions
+
+**Problem:** GitHub Actions couldn't commit and push changes due to insufficient permissions.
+
+**Solution:** Added proper permissions to the job:
+
+```yaml
+permissions:
+  contents: write
+  pull-requests: write
+```
+
+#### 3. Checkout Reference Handling
+
+**Problem:** Checkout wasn't properly handling different scenarios (PR vs direct push).
+
+**Solution:** Enhanced checkout step:
+
+```yaml
+- name: Checkout
+  uses: actions/checkout@v3
+  with:
+    # Handle both PRs and direct pushes
+    ref: ${{ github.head_ref || github.ref }}
+    # Fetch full history for proper git operations
+    fetch-depth: 0
+    # Use token with write permissions
+    token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### Workflow Steps
+
+1. **Checkout code** with proper permissions and reference handling
+2. **Setup Node.js 18** with yarn caching
+3. **Install dependencies** using yarn with frozen lockfile
+4. **Run Prettier** to format code
+5. **Check for changes** and set output flag
+6. **Commit and push** formatted code if changes detected
+
+### Benefits
+
+- **No more push/pull conflicts:** Local formatting now matches CI exactly
+- **Consistent code style:** All commits automatically formatted
+- **Zero configuration:** Works out of the box for all developers
+- **Efficient caching:** Yarn cache speeds up CI runs
+
+### Troubleshooting CI Issues
+
+**Build failing with package manager errors:**
+
+- Verify `yarn.lock` exists and is committed
+- Check that workflow uses `yarn` commands, not `npm`
+
+**Permission denied on git operations:**
+
+- Ensure `contents: write` permission is set
+- Verify `GITHUB_TOKEN` has proper scope
+
+**Checkout issues on PRs:**
+
+- Check `ref` parameter uses `${{ github.head_ref || github.ref }}`
+- Ensure `fetch-depth: 0` for full history
+
+**Formatting inconsistencies:**
+
+- Verify `.prettierrc` configuration matches local setup
+- Check file patterns match between CI and lint-staged
+
 ### Monitoring & Troubleshooting
 
 **Success indicators:**

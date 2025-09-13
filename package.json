@@ -65,6 +65,9 @@
 		"type": "git",
 		"url": "https://github.com/breedy231/site"
 	},
+	"engines": {
+		"node": "20.19.4"
+	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx,json,md}": [
 			"prettier --write"
