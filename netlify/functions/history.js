@@ -35,7 +35,7 @@ export default async function handler(req) {
       {
         status: 401,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   }
 
@@ -52,7 +52,7 @@ export default async function handler(req) {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`
       )
       if (!response.ok) return null
 
@@ -73,18 +73,129 @@ export default async function handler(req) {
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
         {
           headers,
-        },
+        }
       ),
       fetch(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
         {
           headers,
-        },
+        }
       ),
     ])
 
-    // Check for authentication errors
+    // Check for authentication errors - attempt automatic token refresh
     if (episodesRes.status === 401 || moviesRes.status === 401) {
+      console.log("Token expired, attempting automatic refresh...")
+
+      // Try to refresh the token automatically
+      const refreshToken = process.env.GATSBY_TRAKT_REFRESH_TOKEN
+      if (refreshToken) {
+        try {
+          const host = req.headers.get("host")
+          const protocol = req.headers.get("x-forwarded-proto") || "https"
+          const baseUrl = `${protocol}://${host}`
+
+          const refreshResponse = await fetch(
+            `${baseUrl}/.netlify/functions/refresh-token`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ refresh_token: refreshToken }),
+            }
+          )
+
+          if (refreshResponse.ok) {
+            const newTokenData = await refreshResponse.json()
+            console.log(
+              "Token refresh successful, retrying request with new token..."
+            )
+
+            // Retry the original requests with the new access token
+            const newHeaders = {
+              ...headers,
+              Authorization: `Bearer ${newTokenData.access_token}`,
+            }
+
+            const [retryEpisodesRes, retryMoviesRes] = await Promise.all([
+              fetch(
+                "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
+                { headers: newHeaders }
+              ),
+              fetch(
+                "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
+                { headers: newHeaders }
+              ),
+            ])
+
+            if (retryEpisodesRes.ok && retryMoviesRes.ok) {
+              console.log("Request successful with refreshed token")
+
+              // Log that environment variables need to be updated
+              console.log(
+                "SUCCESS: Auto-refresh worked! ADMIN ACTION REQUIRED:"
+              )
+              console.log(
+                `Update GATSBY_TRAKT_ACCESS_TOKEN to: ${newTokenData.access_token}`
+              )
+              console.log(
+                `Update GATSBY_TRAKT_REFRESH_TOKEN to: ${newTokenData.refresh_token}`
+              )
+
+              // Continue with the successful response
+              const [episodes, movies] = await Promise.all([
+                retryEpisodesRes.json(),
+                retryMoviesRes.json(),
+              ])
+
+              // Process the data as normal (skip to TMDB processing section)
+              let enhancedEpisodes = [...episodes]
+              let enhancedMovies = [...movies]
+
+              const TMDB_API_KEY = process.env.GATSBY_TMDB_API_KEY
+              if (TMDB_API_KEY) {
+                const [showImages, movieImages] = await Promise.all([
+                  Promise.all(
+                    episodes.map(episode =>
+                      getTMDBImage("tv", episode.show?.ids?.tmdb)
+                    )
+                  ),
+                  Promise.all(
+                    movies.map(movie =>
+                      getTMDBImage("movie", movie.movie?.ids?.tmdb)
+                    )
+                  ),
+                ])
+
+                enhancedEpisodes = episodes.map((episode, index) => ({
+                  ...episode,
+                  image: showImages[index],
+                }))
+
+                enhancedMovies = movies.map((movie, index) => ({
+                  ...movie,
+                  image: movieImages[index],
+                }))
+              }
+
+              return new Response(
+                JSON.stringify({
+                  tv: enhancedEpisodes,
+                  movies: enhancedMovies,
+                  _refreshed: true, // Flag to indicate token was refreshed
+                }),
+                {
+                  status: 200,
+                  headers: { "Content-Type": "application/json" },
+                }
+              )
+            }
+          }
+        } catch (refreshError) {
+          console.error("Automatic token refresh failed:", refreshError)
+        }
+      }
+
+      // If refresh failed or no refresh token, fall back to original behavior
       await notifyAdminOfTokenIssue("Trakt access token has expired")
       return new Response(
         JSON.stringify({
@@ -94,7 +205,7 @@ export default async function handler(req) {
         {
           status: 401,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       )
     }
 
@@ -118,10 +229,10 @@ export default async function handler(req) {
       // Fetch images for shows and movies
       const [showImages, movieImages] = await Promise.all([
         Promise.all(
-          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb)),
+          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb))
         ),
         Promise.all(
-          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb)),
+          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb))
         ),
       ])
 
@@ -145,7 +256,7 @@ export default async function handler(req) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   } catch (error) {
     console.error("Error fetching history:", error)
@@ -156,7 +267,7 @@ export default async function handler(req) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   }
 }
