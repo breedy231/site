@@ -95,8 +95,8 @@ const handleOAuth = () => {
   const redirectUri = isDevelopment
     ? "http://localhost:8000/callback/oauth"
     : isDeployPreview
-      ? "https://brendantreed.com/callback/oauth" // Fallback to main site
-      : `${currentHost}/callback/oauth`
+    ? "https://brendantreed.com/callback/oauth" // Fallback to main site
+    : `${currentHost}/callback/oauth`
 }
 ```
 
@@ -134,6 +134,72 @@ GATSBY_TRAKT_ACCESS_TOKEN=your_access_token
 GATSBY_TRAKT_REFRESH_TOKEN=your_refresh_token
 ```
 
+## Automatic Token Refresh System
+
+### How It Works
+
+The system now includes automatic token refresh functionality that makes the site self-healing:
+
+1. **Token Expiration Detection**: When API calls return 401 (token expired)
+2. **Automatic Refresh**: System automatically calls refresh-token endpoint
+3. **Retry Request**: Original request is retried with new token
+4. **Seamless Experience**: Users see data without interruption
+5. **Admin Notification**: New tokens are logged for environment variable updates
+
+### Key Benefits
+
+- ✅ **Zero downtime** - Users never see token expiration errors
+- ✅ **Self-healing** - No manual intervention required
+- ✅ **Admin visibility** - Clear logging when refresh occurs
+- ✅ **Graceful fallbacks** - Falls back to manual re-auth if refresh fails
+
+### Implementation Details
+
+**Files involved:**
+
+- `netlify/functions/refresh-token.js` - Handles token refresh requests
+- `netlify/functions/history.js` - Automatically attempts refresh on 401 errors
+- `src/utils/trakt-auth.js` - Frontend refresh token utility
+
+**Refresh Flow:**
+
+1. API request fails with 401
+2. System checks for `GATSBY_TRAKT_REFRESH_TOKEN`
+3. Calls refresh endpoint with refresh token
+4. Gets new access + refresh tokens
+5. Retries original request with new access token
+6. Logs new tokens for admin to update environment variables
+
+### Admin Action Required
+
+When automatic refresh succeeds, check Netlify function logs for:
+
+```
+SUCCESS: Auto-refresh worked! ADMIN ACTION REQUIRED:
+Update GATSBY_TRAKT_ACCESS_TOKEN to: [new_access_token]
+Update GATSBY_TRAKT_REFRESH_TOKEN to: [new_refresh_token]
+```
+
+**Update these in Netlify Dashboard:**
+
+1. Site Settings → Environment Variables
+2. Update both tokens with logged values
+3. Trigger new deployment to persist changes
+
+### Monitoring & Troubleshooting
+
+**Success indicators:**
+
+- Watching section loads normally after brief delay
+- No 401 errors in browser console
+- Function logs show "Token refresh successful"
+
+**Failure scenarios:**
+
+- If refresh token is also expired → Falls back to manual re-auth
+- If refresh endpoint fails → Shows admin re-auth controls
+- If network issues → Graceful error handling
+
 ### Post-OAuth Deployment Testing
 
 After updating tokens and deploying:
@@ -142,3 +208,4 @@ After updating tokens and deploying:
 2. Verify "Reading" and "Listening" sections load
 3. Verify "Watching" section shows data (not fallback message)
 4. Check browser console for any remaining API errors
+5. **New**: Verify automatic refresh works by checking function logs
