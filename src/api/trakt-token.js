@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     console.log("Using redirect URI:", redirectUri) // Debug log
     console.log(
       "Using client ID:",
-      process.env.GATSBY_TRAKT_CLIENT_ID?.substring(0, 10) + "...",
+      process.env.GATSBY_TRAKT_CLIENT_ID?.substring(0, 10) + "..."
     ) // Debug log
 
     const response = await fetch("https://api.trakt.tv/oauth/token", {
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
       throw new Error(
         data.error_description ||
           data.error ||
-          `HTTP ${response.status}: Failed to exchange token`,
+          `HTTP ${response.status}: Failed to exchange token`
       )
     }
 

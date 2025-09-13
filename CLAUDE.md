@@ -95,8 +95,8 @@ const handleOAuth = () => {
   const redirectUri = isDevelopment
     ? "http://localhost:8000/callback/oauth"
     : isDeployPreview
-      ? "https://brendantreed.com/callback/oauth" // Fallback to main site
-      : `${currentHost}/callback/oauth`
+    ? "https://brendantreed.com/callback/oauth" // Fallback to main site
+    : `${currentHost}/callback/oauth`
 }
 ```
 
