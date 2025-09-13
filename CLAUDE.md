@@ -186,6 +186,8 @@ Update GATSBY_TRAKT_REFRESH_TOKEN to: [new_refresh_token]
 2. Update both tokens with logged values
 3. Trigger new deployment to persist changes
 
+**Automated Alerts:** See `AUTOMATED_ALERTS_SETUP.md` for configuring email/Slack notifications when tokens are auto-refreshed.
+
 ### Monitoring & Troubleshooting
 
 **Success indicators:**

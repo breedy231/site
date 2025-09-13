@@ -1,7 +1,7 @@
 // netlify/functions/history.js
 
 // Helper function to send notification when tokens need attention
-async function notifyAdminOfTokenIssue(error) {
+async function notifyAdminOfTokenIssue(error, context = "token_expired") {
   // Only send notifications in production to avoid spam during development
   if (process.env.NODE_ENV === "development") {
     console.log("Would notify admin:", error)
@@ -9,11 +9,151 @@ async function notifyAdminOfTokenIssue(error) {
   }
 
   try {
-    // Simple console log for now - could be enhanced with actual email/webhook
     console.error("ADMIN ALERT: Trakt token issue:", error)
+
+    // Send notification via multiple channels
+    await Promise.allSettled([
+      // Method 1: Netlify Forms (built-in email notifications)
+      sendNetlifyFormAlert(error, context),
+
+      // Method 2: Webhook (if configured)
+      sendWebhookAlert(error, context),
+
+      // Method 3: Direct email (if configured)
+      sendEmailAlert(error, context),
+    ])
   } catch (err) {
     console.error("Notification error:", err)
   }
+}
+
+// Send alert via Netlify Forms (triggers email notifications)
+async function sendNetlifyFormAlert(error, context) {
+  if (!process.env.NETLIFY_URL) return
+
+  try {
+    const formData = new FormData()
+    formData.append("form-name", "trakt-token-alert")
+    formData.append("error", error)
+    formData.append("context", context)
+    formData.append("timestamp", new Date().toISOString())
+    formData.append("action_url", `${process.env.NETLIFY_URL}/now?admin`)
+
+    await fetch(`${process.env.NETLIFY_URL}/`, {
+      method: "POST",
+      body: formData,
+    })
+
+    console.log("Netlify form alert sent successfully")
+  } catch (err) {
+    console.error("Netlify form alert failed:", err)
+  }
+}
+
+// Send alert via webhook (Slack, Discord, etc.)
+async function sendWebhookAlert(error, context) {
+  const webhookUrl = process.env.ADMIN_ALERT_WEBHOOK_URL
+  if (!webhookUrl) return
+
+  try {
+    const message =
+      context === "token_refreshed"
+        ? `🔄 **Trakt Tokens Auto-Refreshed** 
+        
+📋 **Action Required:** Update environment variables in Netlify Dashboard
+🔗 **Link:** ${process.env.NETLIFY_URL}/now?admin
+📅 **Time:** ${new Date().toISOString()}
+
+⚡ The system successfully refreshed expired tokens, but manual environment variable updates are needed to persist the new tokens.`
+        : `🚨 **Trakt Token Issue**
+        
+❌ **Error:** ${error}
+🔗 **Fix:** ${process.env.NETLIFY_URL}/now?admin
+📅 **Time:** ${new Date().toISOString()}
+
+🛠️ Please re-authenticate or check token configuration.`
+
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: message,
+        username: "Trakt Monitor",
+        icon_emoji:
+          context === "token_refreshed"
+            ? ":arrows_counterclockwise:"
+            : ":warning:",
+      }),
+    })
+
+    console.log("Webhook alert sent successfully")
+  } catch (err) {
+    console.error("Webhook alert failed:", err)
+  }
+}
+
+// Send direct email alert (if email service configured)
+async function sendEmailAlert(error, context) {
+  const emailService = process.env.EMAIL_SERVICE_URL
+  const emailApiKey = process.env.EMAIL_API_KEY
+  const adminEmail = process.env.ADMIN_EMAIL
+
+  if (!emailService || !emailApiKey || !adminEmail) return
+
+  try {
+    const subject =
+      context === "token_refreshed"
+        ? "🔄 Trakt Tokens Auto-Refreshed - Action Required"
+        : "🚨 Trakt Token Issue - brendantreed.com"
+
+    const body =
+      context === "token_refreshed"
+        ? `The Trakt integration successfully auto-refreshed expired tokens.
+
+ACTION REQUIRED:
+1. Go to Netlify Dashboard → Site Settings → Environment Variables
+2. Update the tokens logged in the function logs
+3. Trigger a new deployment
+
+Check the admin panel: ${process.env.NETLIFY_URL}/now?admin
+
+This ensures the new tokens are persisted in your environment variables.`
+        : `Trakt token issue detected: ${error}
+
+Please visit the admin panel to re-authenticate:
+${process.env.NETLIFY_URL}/now?admin`
+
+    await fetch(emailService, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${emailApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: adminEmail,
+        subject: subject,
+        text: body,
+      }),
+    })
+
+    console.log("Email alert sent successfully")
+  } catch (err) {
+    console.error("Email alert failed:", err)
+  }
+}
+
+// Helper function to notify when auto-refresh succeeds
+async function notifyAdminOfSuccessfulRefresh(newTokenData) {
+  if (process.env.NODE_ENV === "development") {
+    console.log("Would notify admin of successful refresh")
+    return
+  }
+
+  const message = `Auto-refresh successful! Update environment variables:
+GATSBY_TRAKT_ACCESS_TOKEN=${newTokenData.access_token}
+GATSBY_TRAKT_REFRESH_TOKEN=${newTokenData.refresh_token}`
+
+  await notifyAdminOfTokenIssue(message, "token_refreshed")
 }
 
 export default async function handler(req) {
@@ -35,7 +175,7 @@ export default async function handler(req) {
       {
         status: 401,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   }
 
@@ -52,7 +192,7 @@ export default async function handler(req) {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`
       )
       if (!response.ok) return null
 
@@ -73,13 +213,13 @@ export default async function handler(req) {
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
         {
           headers,
-        },
+        }
       ),
       fetch(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
         {
           headers,
-        },
+        }
       ),
     ])
 
@@ -101,13 +241,13 @@ export default async function handler(req) {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ refresh_token: refreshToken }),
-            },
+            }
           )
 
           if (refreshResponse.ok) {
             const newTokenData = await refreshResponse.json()
             console.log(
-              "Token refresh successful, retrying request with new token...",
+              "Token refresh successful, retrying request with new token..."
             )
 
             // Retry the original requests with the new access token
@@ -119,11 +259,11 @@ export default async function handler(req) {
             const [retryEpisodesRes, retryMoviesRes] = await Promise.all([
               fetch(
                 "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
-                { headers: newHeaders },
+                { headers: newHeaders }
               ),
               fetch(
                 "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
-                { headers: newHeaders },
+                { headers: newHeaders }
               ),
             ])
 
@@ -132,14 +272,17 @@ export default async function handler(req) {
 
               // Log that environment variables need to be updated
               console.log(
-                "SUCCESS: Auto-refresh worked! ADMIN ACTION REQUIRED:",
+                "SUCCESS: Auto-refresh worked! ADMIN ACTION REQUIRED:"
               )
               console.log(
-                `Update GATSBY_TRAKT_ACCESS_TOKEN to: ${newTokenData.access_token}`,
+                `Update GATSBY_TRAKT_ACCESS_TOKEN to: ${newTokenData.access_token}`
               )
               console.log(
-                `Update GATSBY_TRAKT_REFRESH_TOKEN to: ${newTokenData.refresh_token}`,
+                `Update GATSBY_TRAKT_REFRESH_TOKEN to: ${newTokenData.refresh_token}`
               )
+
+              // Send automated alert about successful refresh
+              await notifyAdminOfSuccessfulRefresh(newTokenData)
 
               // Continue with the successful response
               const [episodes, movies] = await Promise.all([
@@ -156,13 +299,13 @@ export default async function handler(req) {
                 const [showImages, movieImages] = await Promise.all([
                   Promise.all(
                     episodes.map(episode =>
-                      getTMDBImage("tv", episode.show?.ids?.tmdb),
-                    ),
+                      getTMDBImage("tv", episode.show?.ids?.tmdb)
+                    )
                   ),
                   Promise.all(
                     movies.map(movie =>
-                      getTMDBImage("movie", movie.movie?.ids?.tmdb),
-                    ),
+                      getTMDBImage("movie", movie.movie?.ids?.tmdb)
+                    )
                   ),
                 ])
 
@@ -186,7 +329,7 @@ export default async function handler(req) {
                 {
                   status: 200,
                   headers: { "Content-Type": "application/json" },
-                },
+                }
               )
             }
           }
@@ -205,7 +348,7 @@ export default async function handler(req) {
         {
           status: 401,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       )
     }
 
@@ -229,10 +372,10 @@ export default async function handler(req) {
       // Fetch images for shows and movies
       const [showImages, movieImages] = await Promise.all([
         Promise.all(
-          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb)),
+          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb))
         ),
         Promise.all(
-          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb)),
+          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb))
         ),
       ])
 
@@ -256,7 +399,7 @@ export default async function handler(req) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   } catch (error) {
     console.error("Error fetching history:", error)
@@ -267,7 +410,7 @@ export default async function handler(req) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   }
 }
