@@ -175,7 +175,7 @@ export default async function handler(req) {
       {
         status: 401,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   }
 
@@ -192,7 +192,7 @@ export default async function handler(req) {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`
       )
       if (!response.ok) return null
 
@@ -213,13 +213,13 @@ export default async function handler(req) {
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
         {
           headers,
-        },
+        }
       ),
       fetch(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
         {
           headers,
-        },
+        }
       ),
     ])
 
@@ -241,13 +241,13 @@ export default async function handler(req) {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ refresh_token: refreshToken }),
-            },
+            }
           )
 
           if (refreshResponse.ok) {
             const newTokenData = await refreshResponse.json()
             console.log(
-              "Token refresh successful, retrying request with new token...",
+              "Token refresh successful, retrying request with new token..."
             )
 
             // Retry the original requests with the new access token
@@ -259,11 +259,11 @@ export default async function handler(req) {
             const [retryEpisodesRes, retryMoviesRes] = await Promise.all([
               fetch(
                 "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
-                { headers: newHeaders },
+                { headers: newHeaders }
               ),
               fetch(
                 "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
-                { headers: newHeaders },
+                { headers: newHeaders }
               ),
             ])
 
@@ -272,13 +272,13 @@ export default async function handler(req) {
 
               // Log that environment variables need to be updated
               console.log(
-                "SUCCESS: Auto-refresh worked! ADMIN ACTION REQUIRED:",
+                "SUCCESS: Auto-refresh worked! ADMIN ACTION REQUIRED:"
               )
               console.log(
-                `Update GATSBY_TRAKT_ACCESS_TOKEN to: ${newTokenData.access_token}`,
+                `Update GATSBY_TRAKT_ACCESS_TOKEN to: ${newTokenData.access_token}`
               )
               console.log(
-                `Update GATSBY_TRAKT_REFRESH_TOKEN to: ${newTokenData.refresh_token}`,
+                `Update GATSBY_TRAKT_REFRESH_TOKEN to: ${newTokenData.refresh_token}`
               )
 
               // Send automated alert about successful refresh
@@ -299,13 +299,13 @@ export default async function handler(req) {
                 const [showImages, movieImages] = await Promise.all([
                   Promise.all(
                     episodes.map(episode =>
-                      getTMDBImage("tv", episode.show?.ids?.tmdb),
-                    ),
+                      getTMDBImage("tv", episode.show?.ids?.tmdb)
+                    )
                   ),
                   Promise.all(
                     movies.map(movie =>
-                      getTMDBImage("movie", movie.movie?.ids?.tmdb),
-                    ),
+                      getTMDBImage("movie", movie.movie?.ids?.tmdb)
+                    )
                   ),
                 ])
 
@@ -329,7 +329,7 @@ export default async function handler(req) {
                 {
                   status: 200,
                   headers: { "Content-Type": "application/json" },
-                },
+                }
               )
             }
           }
@@ -348,7 +348,7 @@ export default async function handler(req) {
         {
           status: 401,
           headers: { "Content-Type": "application/json" },
-        },
+        }
       )
     }
 
@@ -372,10 +372,10 @@ export default async function handler(req) {
       // Fetch images for shows and movies
       const [showImages, movieImages] = await Promise.all([
         Promise.all(
-          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb)),
+          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb))
         ),
         Promise.all(
-          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb)),
+          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb))
         ),
       ])
 
@@ -399,7 +399,7 @@ export default async function handler(req) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   } catch (error) {
     console.error("Error fetching history:", error)
@@ -410,7 +410,7 @@ export default async function handler(req) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     )
   }
 }

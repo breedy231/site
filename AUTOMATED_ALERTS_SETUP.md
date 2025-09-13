@@ -12,10 +12,12 @@ The system supports multiple notification methods - choose one or multiple:
 ### Setup Steps:
 
 1. **Deploy the form** (already included in your site)
+
    - File: `static/trakt-token-alerts.html`
    - Netlify will auto-detect this form after deployment
 
 2. **Configure email notifications:**
+
    - Go to Netlify Dashboard → Site Settings → Forms
    - Find the "trakt-token-alert" form
    - Click "Settings" → "Form notifications"
@@ -34,6 +36,7 @@ The system supports multiple notification methods - choose one or multiple:
 ### Setup Steps:
 
 1. **Create webhook:**
+
    - **Slack:** Go to your workspace → Apps → Incoming Webhooks → Create
    - **Discord:** Server Settings → Integrations → Webhooks → New Webhook
 
@@ -57,6 +60,7 @@ The system supports multiple notification methods - choose one or multiple:
 ### Setup Steps:
 
 1. **Choose email service:**
+
    - SendGrid, Mailgun, AWS SES, etc.
    - Get API key and service endpoint
 
