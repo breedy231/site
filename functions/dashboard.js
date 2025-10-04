@@ -1,5 +1,5 @@
-const { DashboardEngine } = require("../dashboard-lib/dashboard-engine")
-const WeatherService = require("../dashboard-lib/weather-service")
+const { DashboardEngine } = require("./dashboard-lib/dashboard-engine")
+const WeatherService = require("./dashboard-lib/weather-service")
 const fs = require("fs")
 const path = require("path")
 
@@ -23,7 +23,7 @@ async function generateDashboard(layout = "weather", options = {}) {
     // Load layout configuration
     const layoutPath = path.join(
       __dirname,
-      "../dashboard-lib/layouts",
+      "./dashboard-lib/layouts",
       `${layout}.json`
     )
     let layoutConfig
@@ -35,7 +35,7 @@ async function generateDashboard(layout = "weather", options = {}) {
       console.warn(`Layout ${layout} not found, using default weather layout`)
       const defaultLayoutPath = path.join(
         __dirname,
-        "../dashboard-lib/layouts/weather.json"
+        "./dashboard-lib/layouts/weather.json"
       )
       const defaultLayoutData = fs.readFileSync(defaultLayoutPath, "utf8")
       layoutConfig = JSON.parse(defaultLayoutData)
