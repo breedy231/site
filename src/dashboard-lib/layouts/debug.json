@@ -54,11 +54,7 @@
         "showResolution": true,
         "borderColor": "#000000",
         "borderWidth": 2,
-        "customStats": [
-          "Grid: 6x4",
-          "Margins: 20px",
-          "Gap: 10px"
-        ]
+        "customStats": ["Grid: 6x4", "Margins: 20px", "Gap: 10px"]
       }
     }
   ]

@@ -47,10 +47,7 @@
         "showGenerated": true,
         "showTimezone": true,
         "showResolution": true,
-        "customStats": [
-          "E-ink optimized",
-          "Status: Dashboard Active"
-        ]
+        "customStats": ["E-ink optimized", "Status: Dashboard Active"]
       }
     }
   ]

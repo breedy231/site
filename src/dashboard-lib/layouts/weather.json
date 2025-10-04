@@ -75,10 +75,7 @@
         "showGenerated": true,
         "showTimezone": false,
         "showResolution": false,
-        "customStats": [
-          "Weather: Open-Meteo API",
-          "Format: Grayscale PNG"
-        ]
+        "customStats": ["Weather: Open-Meteo API", "Format: Grayscale PNG"]
       }
     }
   ]
