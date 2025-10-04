@@ -18,10 +18,15 @@
   to = "/.netlify/functions/lastfm"
   status = 200
 
+[[redirects]]
+  from = "/api/dashboard"
+  to = "/.netlify/functions/dashboard"
+  status = 200
+
 [build]
   command = "gatsby build"
   publish = "public"
-  functions = "netlify/functions"
+  functions = "functions"
 
 [build.environment]
   NODE_VERSION = "20.19.4"

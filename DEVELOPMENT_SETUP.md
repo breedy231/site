@@ -2,6 +2,29 @@
 
 This guide covers setting up the development environment for Brendan Reed's personal site.
 
+## Quick Reference: Avoid Common CI Failures ⚠️
+
+**Before every push, run:**
+
+```bash
+yarn build  # Test the full build locally
+```
+
+**Common CI failures and fixes:**
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `lockfile needs to be updated` | Added dependency without updating yarn.lock | `yarn install && git add yarn.lock` |
+| `Module parse failed` (native module) | Native module in `src/api/` | Move to `functions/` directory |
+| ESLint errors | Unused variables, semicolons | Remove unused vars, run `yarn format` |
+| Prettier formatting | Code doesn't match style | Pre-commit hooks should fix automatically |
+
+**Key rules:**
+
+- ✅ **Always commit yarn.lock** when adding dependencies
+- ✅ **Native modules go in `functions/`**, not `src/api/`
+- ✅ **No semicolons** in JavaScript (Prettier config)
+- ✅ **Remove unused variables** (ESLint requirement)
+
 ## Prerequisites
 
 - **Node.js** (v16 or higher)
@@ -116,16 +139,52 @@ ADMIN_EMAIL=your_email@domain.com
 
 ```
 ├── src/
-│   ├── api/           # Gatsby serverless functions (dev)
+│   ├── api/           # Gatsby serverless functions (Gatsby-compiled)
 │   ├── components/    # React components
 │   ├── context/       # React context providers
 │   ├── pages/         # Gatsby pages (routes)
 │   └── utils/         # Utility functions
-├── netlify/
-│   └── functions/     # Netlify serverless functions (production)
+├── functions/         # Netlify serverless functions (Netlify-bundled)
 ├── static/            # Static assets (copied to public/)
 ├── blog/              # MDX blog posts
 └── public/            # Build output (auto-generated)
+```
+
+### Important: Functions Directory Architecture
+
+**Two different function directories exist for different build systems:**
+
+#### `src/api/` - Gatsby-Compiled Functions
+
+- **Compiled by**: Gatsby's webpack during `gatsby build`
+- **Use for**: Simple functions without native dependencies
+- **Examples**: API wrappers, data transformations, OAuth handlers
+- **Limitations**: Cannot use native Node modules (canvas, sharp, sqlite3, etc.)
+- **Style Requirements**: Must follow Prettier/ESLint rules (no semicolons, etc.)
+
+#### `functions/` - Netlify-Bundled Functions
+
+- **Compiled by**: Netlify's esbuild (bypasses Gatsby)
+- **Use for**: Functions with native dependencies or heavy processing
+- **Examples**: Image generation (canvas), PDF processing, database operations
+- **Advantages**: Full Node.js environment, native module support
+- **Style Requirements**: Same Prettier/ESLint rules apply
+
+**When to use which:**
+
+```javascript
+// ✅ src/api/ - Simple API wrapper
+export default async function handler(req) {
+  const data = await fetch("external-api.com")
+  return new Response(JSON.stringify(data))
+}
+
+// ✅ functions/ - Native module usage
+const { createCanvas } = require("canvas")
+exports.handler = async event => {
+  const canvas = createCanvas(800, 600)
+  // ... image generation
+}
 ```
 
 ## Development Workflow
@@ -163,13 +222,20 @@ git push                        # ✅ Finally works
 # Test locally
 npm run develop
 
-# Test production build
+# Test production build (ALWAYS do this before pushing!)
 npm run build
 npm run serve
 
 # Test HTTPS (for OAuth)
 npm run develop-https
 ```
+
+**CRITICAL:** Always run `npm run build` locally before pushing to catch:
+
+- Gatsby compilation errors
+- Webpack bundling issues
+- Native module conflicts
+- Missing dependencies
 
 ## Build System
 
@@ -181,21 +247,46 @@ npm run develop-https
 - **Build output**: `public/` directory (gitignored)
 - **Build process**: Copies `static/` → `public/` + generates pages
 
-### Netlify Functions
+### Dependency Management
 
-**Development:** Files in `src/api/` are copied to `netlify/functions/`
-**Production:** Netlify serves `netlify/functions/` directly
+**When adding dependencies:**
 
-Both use modern ES module syntax:
+```bash
+# Add the dependency
+yarn add some-package
+
+# Update lockfile (REQUIRED for CI)
+git add yarn.lock package.json
+git commit -m "chore: add some-package dependency"
+```
+
+**NEVER commit without updating yarn.lock** or CI will fail with:
+
+```
+error Your lockfile needs to be updated, but yarn was run with `--frozen-lockfile`.
+```
+
+### Code Style Requirements
+
+**All code must follow these rules:**
 
 ```javascript
-export default async function handler(req) {
-  return new Response(JSON.stringify(data), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  })
+// ❌ WRONG - Will fail CI
+const foo = require("bar")
+function test(ctx, bounds) {
+  // unused parameters
+}
+
+// ✅ CORRECT
+const foo = require("bar") // No semicolon
+function test() {
+  // Remove unused parameters
+  // ...
 }
 ```
+
+**Pre-commit hooks automatically fix most issues**, but ESLint errors will block commits.
+Run `yarn format` before committing if you're unsure.
 
 ## API Integration
 
@@ -244,8 +335,34 @@ npm run develop
 **Dependency issues:**
 
 ```bash
-rm -rf node_modules package-lock.json
-npm install
+rm -rf node_modules yarn.lock
+yarn install
+git add yarn.lock  # Don't forget to commit the updated lockfile!
+```
+
+**Native module errors during build:**
+
+If you see webpack errors like:
+
+```
+Module parse failed: Unexpected character '' (1:0)
+You may need an appropriate loader to handle this file type
+```
+
+This means a native module is in the wrong directory:
+
+- **Move from**: `src/api/your-function.js`
+- **Move to**: `functions/your-function.js`
+- **Update imports**: Change `../module` to `./module` as needed
+- **Update netlify.toml**: Ensure `functions = "functions"` is set
+
+**Lockfile out of sync (CI failing):**
+
+```bash
+yarn install          # Updates yarn.lock
+git add yarn.lock
+git commit -m "chore: update yarn.lock"
+git push
 ```
 
 ### OAuth Issues
