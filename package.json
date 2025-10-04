@@ -5,7 +5,7 @@
 	"version": "1.0.0",
 	"license": "0BSD",
 	"scripts": {
-		"prebuild": "mkdir -p netlify/functions && cp -r src/api/* netlify/functions/",
+		"prebuild": "mkdir -p netlify/functions && cp -r src/api/* netlify/functions/ && mkdir -p netlify/dashboard-lib && cp -r src/dashboard-lib/* netlify/dashboard-lib/",
 		"build": "gatsby build",
 		"develop": "gatsby develop",
 		"develop-https": "gatsby develop --https --cert-file ./certificates/localhost.crt --key-file ./certificates/localhost.key --host 0.0.0.0",
