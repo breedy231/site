@@ -16,27 +16,18 @@ async function notifyAdminOfTokenIssue(error) {
   }
 }
 
-export default async function handler(req) {
+export default async function handler(req, res) {
   if (req.method !== "GET") {
-    return new Response(JSON.stringify({ message: "Method not allowed" }), {
-      status: 405,
-      headers: { "Content-Type": "application/json" },
-    })
+    return res.status(405).json({ message: "Method not allowed" })
   }
 
-  const token = req.headers.get("authorization")?.split("Bearer ")[1]
+  const token = req.headers.authorization?.split("Bearer ")[1]
 
   if (!token) {
-    return new Response(
-      JSON.stringify({
-        message: "No token provided",
-        authRequired: true,
-      }),
-      {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      }
-    )
+    return res.status(401).json({
+      message: "No token provided",
+      authRequired: true,
+    })
   }
 
   const TMDB_API_KEY = process.env.GATSBY_TMDB_API_KEY
@@ -86,16 +77,10 @@ export default async function handler(req) {
     // Check for authentication errors
     if (episodesRes.status === 401 || moviesRes.status === 401) {
       await notifyAdminOfTokenIssue("Trakt access token has expired")
-      return new Response(
-        JSON.stringify({
-          message: "Trakt access token has expired. Please re-authenticate.",
-          authRequired: true,
-        }),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      )
+      return res.status(401).json({
+        message: "Trakt access token has expired. Please re-authenticate.",
+        authRequired: true,
+      })
     }
 
     if (!episodesRes.ok || !moviesRes.ok) {
@@ -137,26 +122,14 @@ export default async function handler(req) {
       }))
     }
 
-    return new Response(
-      JSON.stringify({
-        tv: enhancedEpisodes,
-        movies: enhancedMovies,
-      }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
-    )
+    return res.status(200).json({
+      tv: enhancedEpisodes,
+      movies: enhancedMovies,
+    })
   } catch (error) {
     console.error("Error fetching history:", error)
-    return new Response(
-      JSON.stringify({
-        message: error.message || "Internal server error",
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    )
+    return res.status(500).json({
+      message: error.message || "Internal server error",
+    })
   }
 }

@@ -1,37 +1,31 @@
 // src/api/trakt-token.js
 import fetch from "node-fetch"
 
-export default async function handler(req) {
-  const headers = {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  }
+export default async function handler(req, res) {
+  // Add CORS headers for development
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
 
   // Handle preflight request
   if (req.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers })
+    res.status(200).end()
+    return
   }
 
   if (req.method !== "POST") {
-    return new Response(
-      JSON.stringify({ message: `Method ${req.method} not allowed` }),
-      { status: 405, headers }
-    )
+    res.status(405).json({ message: `Method ${req.method} not allowed` })
+    return
   }
 
   try {
-    // Parse the request body
-    const body = await req.json()
-    const { code } = body
+    // Gatsby already parses JSON bodies, so no need to parse req.body
+    const { code } = req.body
 
     if (!code) {
-      console.log("Missing authorization code in request:", body)
-      return new Response(
-        JSON.stringify({ message: "Missing authorization code" }),
-        { status: 400, headers }
-      )
+      console.log("Missing authorization code in request:", req.body)
+      res.status(400).json({ message: "Missing authorization code" })
+      return
     }
 
     console.log("Exchanging code for token...", code.substring(0, 10) + "...") // Debug log
@@ -73,12 +67,9 @@ export default async function handler(req) {
     }
 
     console.log("Token exchange successful") // Debug log
-    return new Response(JSON.stringify(data), { status: 200, headers })
+    res.status(200).json(data)
   } catch (error) {
     console.error("Token exchange error:", error)
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers,
-    })
+    res.status(500).json({ error: error.message })
   }
 }
