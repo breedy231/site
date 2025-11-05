@@ -1,12 +1,9 @@
-// netlify/functions/goodreads.js
+// src/api/goodreads.js
 import { XMLParser } from "fast-xml-parser"
 
-export default async function handler(req) {
+const handler = async function handler(req, res) {
   if (req.method !== "GET") {
-    return new Response(JSON.stringify({ message: "Method not allowed" }), {
-      status: 405,
-      headers: { "Content-Type": "application/json" },
-    })
+    return res.status(405).json({ message: "Method not allowed" })
   }
 
   const GOODREADS_USER_ID = "21084560"
@@ -66,18 +63,11 @@ export default async function handler(req) {
       })),
     }
 
-    return new Response(JSON.stringify(response), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    })
+    return res.status(200).json(response)
   } catch (error) {
     console.error("Error fetching Goodreads data:", error)
-    return new Response(
-      JSON.stringify({ message: "Failed to fetch Goodreads data" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    )
+    return res.status(500).json({ message: "Failed to fetch Goodreads data" })
   }
 }
+
+export default handler
