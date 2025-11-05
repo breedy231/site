@@ -67,63 +67,34 @@ Always check data structure before mapping:
 
 This prevents "Cannot read properties of undefined" errors when APIs fail.
 
-## OAuth Integration (Trakt)
+## OAuth Integration (Trakt) - Simplified
 
-### Redirect URI Configuration
+### Overview (Updated January 2025)
 
-OAuth providers require exact redirect URI matches. Common issues:
+The Trakt integration now uses a **simplified OAuth approach** using the free Trakt API:
 
-- **Deploy previews**: URLs like `deploy-preview-X--site.netlify.app` aren't in OAuth app whitelist
-- **Development vs Production**: Different URIs for localhost vs production
+- **No automatic token refresh** - Manual re-auth every ~3 months
+- **No complex notifications** - Simple admin error messages
+- **~200 lines of code** (previously ~500 lines)
+- **$0 cost** - No VIP subscription required
 
-### Debugging OAuth Errors
+See `TRAKT_SETUP.md` for complete setup instructions.
 
-**"Redirect URI malformed or doesn't match":**
+### Token Management
 
-1. Check if current hostname matches configured OAuth redirect URIs
-2. For deploy previews, redirect to main site for OAuth testing
-3. Verify OAuth app configuration includes all needed URIs
+**When tokens expire (~3 months):**
 
-### Implementation Pattern
+1. Visit `/now?admin`
+2. Click "Re-authenticate" button
+3. Authorize on Trakt.tv
+4. Copy new tokens from callback page
+5. Update environment variables in Netlify
+6. Trigger new deployment
 
-```javascript
-const handleOAuth = () => {
-  const isDevelopment = process.env.NODE_ENV === "development"
-  const currentHost = window.location.origin
-  const isDeployPreview = currentHost.includes("deploy-preview")
-
-  const redirectUri = isDevelopment
-    ? "http://localhost:8000/callback/oauth"
-    : isDeployPreview
-    ? "https://brendantreed.com/callback/oauth" // Fallback to main site
-    : `${currentHost}/callback/oauth`
-}
-```
-
-### Testing OAuth
-
-- **Local development**: Works with localhost redirect URI
-- **Deploy previews**: Automatically redirects to main site
-- **Production**: Test on `https://brendantreed.com/?admin`
-
-## OAuth Token Management Workflow
-
-### Complete OAuth Testing Process
-
-1. **Trigger OAuth flow** (click re-auth button on Now page)
-2. **Complete authorization** on Trakt.tv
-3. **Copy new tokens** from callback page
-4. **Update environment variables** in Netlify Dashboard
-5. **Trigger deployment** (or wait for auto-deploy)
-6. **Verify integration** works (401 errors should be resolved)
-
-### Key Implementation Details
-
-- **Frontend OAuth**: Uses dynamic redirect URI based on current hostname
-- **Backend token exchange**: Matches redirect URI from request headers
-- **Admin detection**: `?admin` parameter or development environment
-- **Token display**: Production shows tokens for manual environment variable updates
-- **Graceful fallbacks**: Public users see helpful messages, not technical errors
+**Admin detection:**
+- `?admin` query parameter
+- Development mode (`npm run develop`)
+- Localhost access
 
 ### Environment Variables Required
 
@@ -132,61 +103,31 @@ GATSBY_TRAKT_CLIENT_ID=your_client_id
 GATSBY_TRAKT_CLIENT_SECRET=your_client_secret
 GATSBY_TRAKT_ACCESS_TOKEN=your_access_token
 GATSBY_TRAKT_REFRESH_TOKEN=your_refresh_token
+GATSBY_TMDB_API_KEY=your_tmdb_key (optional, for poster images)
 ```
 
-## Automatic Token Refresh System
+### Implementation Pattern
 
-### How It Works
+```javascript
+const handleOAuth = () => {
+  const isDevelopment = process.env.NODE_ENV === "development"
+  const currentHost = window.location.origin
 
-The system now includes automatic token refresh functionality that makes the site self-healing:
+  const redirectUri = isDevelopment
+    ? "http://localhost:8000/callback/oauth"
+    : `${currentHost}/callback/oauth`
 
-1. **Token Expiration Detection**: When API calls return 401 (token expired)
-2. **Automatic Refresh**: System automatically calls refresh-token endpoint
-3. **Retry Request**: Original request is retried with new token
-4. **Seamless Experience**: Users see data without interruption
-5. **Admin Notification**: New tokens are logged for environment variable updates
-
-### Key Benefits
-
-- ✅ **Zero downtime** - Users never see token expiration errors
-- ✅ **Self-healing** - No manual intervention required
-- ✅ **Admin visibility** - Clear logging when refresh occurs
-- ✅ **Graceful fallbacks** - Falls back to manual re-auth if refresh fails
-
-### Implementation Details
-
-**Files involved:**
-
-- `netlify/functions/refresh-token.js` - Handles token refresh requests
-- `netlify/functions/history.js` - Automatically attempts refresh on 401 errors
-- `src/utils/trakt-auth.js` - Frontend refresh token utility
-
-**Refresh Flow:**
-
-1. API request fails with 401
-2. System checks for `GATSBY_TRAKT_REFRESH_TOKEN`
-3. Calls refresh endpoint with refresh token
-4. Gets new access + refresh tokens
-5. Retries original request with new access token
-6. Logs new tokens for admin to update environment variables
-
-### Admin Action Required
-
-When automatic refresh succeeds, check Netlify function logs for:
-
-```
-SUCCESS: Auto-refresh worked! ADMIN ACTION REQUIRED:
-Update GATSBY_TRAKT_ACCESS_TOKEN to: [new_access_token]
-Update GATSBY_TRAKT_REFRESH_TOKEN to: [new_refresh_token]
+  // Redirect to Trakt authorization
+  window.location.href = `https://trakt.tv/oauth/authorize?...`
+}
 ```
 
-**Update these in Netlify Dashboard:**
+### Files Involved
 
-1. Site Settings → Environment Variables
-2. Update both tokens with logged values
-3. Trigger new deployment to persist changes
-
-**Automated Alerts:** See `AUTOMATED_ALERTS_SETUP.md` for configuring email/Slack notifications when tokens are auto-refreshed.
+- `netlify/functions/history.js` - Fetches watch history
+- `netlify/functions/trakt-token.js` - OAuth token exchange
+- `src/pages/now.js` - Displays watch history
+- `src/pages/callback/oauth.js` - OAuth callback handler
 
 ## Code Formatting & Pre-commit Hooks
 
@@ -407,21 +348,7 @@ permissions:
 - Verify `.prettierrc` configuration matches local setup
 - Check file patterns match between CI and lint-staged
 
-### Monitoring & Troubleshooting
-
-**Success indicators:**
-
-- Watching section loads normally after brief delay
-- No 401 errors in browser console
-- Function logs show "Token refresh successful"
-
-**Failure scenarios:**
-
-- If refresh token is also expired → Falls back to manual re-auth
-- If refresh endpoint fails → Shows admin re-auth controls
-- If network issues → Graceful error handling
-
-### Post-OAuth Deployment Testing
+### Testing After Token Update
 
 After updating tokens and deploying:
 
@@ -429,4 +356,8 @@ After updating tokens and deploying:
 2. Verify "Reading" and "Listening" sections load
 3. Verify "Watching" section shows data (not fallback message)
 4. Check browser console for any remaining API errors
-5. **New**: Verify automatic refresh works by checking function logs
+
+**Troubleshooting:**
+- If you see "Token expired" - Visit `/now?admin` and re-authenticate
+- If images don't load - Check `GATSBY_TMDB_API_KEY` is set
+- If no data shows - Verify all environment variables are set correctly
