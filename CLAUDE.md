@@ -5,6 +5,9 @@
 - The `public/` directory contains build output and is gitignored
 - Source files should be edited in `static/` directory, not `public/`
 - Files in `static/` get copied to `public/` during the build process
+- **Build command**: Use `gatsby build` (NOT `yarn build` or `npm run build`) for building locally
+  - This matches the Netlify build configuration in `netlify.toml`
+  - Ensures consistency between local and CI/CD builds
 
 ## File Structure
 
