@@ -1,10 +1,7 @@
 // src/api/lastfm.js
-const handler = async function handler(req) {
+const handler = async function handler(req, res) {
   if (req.method !== "GET") {
-    return new Response(JSON.stringify({ message: "Method not allowed" }), {
-      status: 405,
-      headers: { "Content-Type": "application/json" },
-    })
+    return res.status(405).json({ message: "Method not allowed" })
   }
 
   const USERNAME = "breedy231"
@@ -49,19 +46,10 @@ const handler = async function handler(req) {
       })),
     }
 
-    return new Response(JSON.stringify(response), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    })
+    return res.status(200).json(response)
   } catch (error) {
     console.error("Error fetching Last.fm data:", error)
-    return new Response(
-      JSON.stringify({ message: "Failed to fetch Last.fm data" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    )
+    return res.status(500).json({ message: "Failed to fetch Last.fm data" })
   }
 }
 
