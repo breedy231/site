@@ -9,6 +9,63 @@
   - This matches the Netlify build configuration in `netlify.toml`
   - Ensures consistency between local and CI/CD builds
 
+## ⚠️ CRITICAL: Gatsby Version Constraint
+
+**DO NOT upgrade Gatsby beyond version 5.11.0 without migrating serverless functions**
+
+### Current Setup
+
+- **Gatsby version**: 5.11.0 (locked)
+- **Functions format**: Mixed (netlify/functions uses V2, src/api uses V1)
+- **Reason**: Gatsby 5.12.0+ auto-installs `gatsby-adapter-netlify` which ONLY works with modern Netlify Functions V2 API
+
+### The Problem
+
+Starting with Gatsby 5.12.0, Gatsby automatically:
+
+1. Installs `gatsby-adapter-netlify` during Netlify builds (no opt-out)
+2. Removes `gatsby-plugin-netlify`
+3. Requires ALL functions to use modern V2 API format (Request/Response objects)
+
+This is a **breaking change** that was not clearly documented and causes 502 errors if functions use the old Express-style format.
+
+### Directory Structure ⚠️
+
+```
+src/api/           - Source functions (Express-style: req, res)
+netlify/functions/ - Deployed functions (Modern V2: Request/Response)
+```
+
+**CRITICAL**: These directories use DIFFERENT API formats!
+
+- `netlify/functions/` = Modern V2 format (committed to git, works with Gatsby 5.11.0)
+- `src/api/` = Legacy Express-style format (kept for reference/local dev)
+
+### What NOT To Do
+
+- ❌ DO NOT run the prebuild script (`cp -r src/api/* netlify/functions/`)
+- ❌ DO NOT regenerate netlify/functions from src/api
+- ❌ DO NOT upgrade Gatsby to 5.12.0+ without migrating functions
+- ❌ DO NOT edit functions in both directories
+
+### Future Migration Path (When Ready)
+
+To upgrade to Gatsby 5.12.0+:
+
+1. Migrate ALL functions in `src/api/` to modern V2 format:
+   - Change `(req, res)` → `(req)`
+   - Replace `res.status().json()` → `new Response(JSON.stringify())`
+   - Replace `req.headers.property` → `req.headers.get("property")`
+   - Replace `req.body` → `await req.json()`
+2. Update prebuild script to copy correctly
+3. Test all functions thoroughly
+4. Then upgrade Gatsby to 5.12.0+
+
+### References
+
+- [Gatsby Issue #38542](https://github.com/gatsbyjs/gatsby/issues/38542) - Adapter breaking changes
+- [Netlify Functions V2 Migration Guide](https://developers.netlify.com/guides/migrating-to-the-modern-netlify-functions/)
+
 ## File Structure
 
 - **Source files**: `static/` directory (tracked in git)
