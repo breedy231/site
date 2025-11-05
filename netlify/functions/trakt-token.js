@@ -1,44 +1,65 @@
-// src/api/trakt-token.js
-import fetch from "node-fetch"
+// netlify/functions/trakt-token.js
 
-export default async function handler(req, res) {
-  // Add CORS headers for development
-  res.setHeader("Access-Control-Allow-Origin", "*")
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
-
+export default async function handler(req) {
   // Handle preflight request
   if (req.method === "OPTIONS") {
-    res.status(200).end()
-    return
+    return new Response(null, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    })
   }
 
   if (req.method !== "POST") {
-    res.status(405).json({ message: `Method ${req.method} not allowed` })
-    return
+    return new Response(
+      JSON.stringify({ message: `Method ${req.method} not allowed` }),
+      {
+        status: 405,
+        headers: { "Content-Type": "application/json" },
+      }
+    )
   }
 
   try {
-    // Gatsby already parses JSON bodies, so no need to parse req.body
-    const { code } = req.body
+    // Parse JSON body for modern Netlify functions
+    const body = await req.json()
+    const { code } = body
 
     if (!code) {
-      console.log("Missing authorization code in request:", req.body)
-      res.status(400).json({ message: "Missing authorization code" })
-      return
+      console.log("Missing authorization code in request:", body)
+      return new Response(
+        JSON.stringify({ message: "Missing authorization code" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      )
     }
 
     console.log("Exchanging code for token...", code.substring(0, 10) + "...") // Debug log
+    console.log("Environment NODE_ENV:", process.env.NODE_ENV) // Debug log
+
+    // Get the current host from the request headers
+    const host = req.headers.get("host")
+    const protocol = req.headers.get("x-forwarded-proto") || "https"
+    const currentOrigin = `${protocol}://${host}`
 
     const redirectUri =
       process.env.NODE_ENV === "development"
-        ? "http://localhost:8000/callback/trakt"
-        : "https://brendantreed.com/callback/trakt"
+        ? "http://localhost:8000/callback/oauth"
+        : `${currentOrigin}/callback/oauth`
 
     console.log("Using redirect URI:", redirectUri) // Debug log
     console.log(
       "Using client ID:",
       process.env.GATSBY_TRAKT_CLIENT_ID?.substring(0, 10) + "..."
+    ) // Debug log
+    console.log(
+      "Client secret exists:",
+      !!process.env.GATSBY_TRAKT_CLIENT_SECRET
     ) // Debug log
 
     const response = await fetch("https://api.trakt.tv/oauth/token", {
@@ -67,9 +88,15 @@ export default async function handler(req, res) {
     }
 
     console.log("Token exchange successful") // Debug log
-    res.status(200).json(data)
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    })
   } catch (error) {
     console.error("Token exchange error:", error)
-    res.status(500).json({ error: error.message })
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    })
   }
 }
