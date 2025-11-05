@@ -14,7 +14,7 @@
 		"serve": "gatsby serve",
 		"clean": "gatsby clean",
 		"test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-		"prepare": "husky install"
+		"prepare": "husky install || true"
 	},
 	"dependencies": {
 		"@mdx-js/react": "^2.3.0",
