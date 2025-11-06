@@ -9,6 +9,14 @@
   text-decoration: none;
 }
 
+/* Mobile fallback: ensure vertical layout on small screens even if JS hasn't loaded */
+@media (max-width: 599px) {
+  .container {
+    flex-direction: column;
+    font-size: 35px;
+  }
+}
+
 .smallContainer {
   font-family: "Poppins Regular";
   display: flex;
@@ -16,6 +24,14 @@
   font-size: 35px;
   @apply text-gray-900 dark:text-white;
   text-decoration: none;
+}
+
+/* Responsive fallback: ensure horizontal layout on larger screens */
+@media (min-width: 600px) {
+  .smallContainer {
+    flex-direction: row;
+    font-size: 45px;
+  }
 }
 
 .container:visited {

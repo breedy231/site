@@ -32,6 +32,8 @@ export const Head = ({ data }) => {
       {/* eslint-disable-next-line react/prop-types */}
       <title>{data.site.siteMetadata.title}</title>
       <html lang="en" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="theme-color" content="#032740" />
     </>
   )
 }

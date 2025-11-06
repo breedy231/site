@@ -10,12 +10,21 @@ export const ThemeProvider = ({ children }) => {
   // Check if we're in the browser and if there's a saved preference
   const [isDark, setIsDark] = useState(true)
 
-  // Initialize theme from localStorage on client-side
+  // Initialize theme from localStorage or system preference on client-side
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("theme")
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches
+
       if (savedTheme === "light") {
         setIsDark(false)
+      } else if (savedTheme === "dark") {
+        setIsDark(true)
+      } else {
+        // No saved preference - use system preference
+        setIsDark(prefersDark)
       }
     }
   }, [])
