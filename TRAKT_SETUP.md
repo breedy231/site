@@ -49,6 +49,7 @@ GATSBY_TMDB_API_KEY=your_tmdb_key
 ### 3. Get Access Tokens
 
 **Development:**
+
 1. Run `npm run develop`
 2. Visit `http://localhost:8000/now?admin`
 3. Click "Re-authenticate" if you see an error
@@ -57,6 +58,7 @@ GATSBY_TMDB_API_KEY=your_tmdb_key
 6. Add to `.env.development`
 
 **Production:**
+
 1. Visit `https://yourdomain.com/now?admin`
 2. Click "Re-authenticate"
 3. Authorize on Trakt.tv
@@ -74,10 +76,12 @@ GATSBY_TMDB_API_KEY=your_tmdb_key
 ## Files Involved
 
 ### Netlify Functions
+
 - `netlify/functions/history.js` - Fetches watch history from Trakt API
 - `netlify/functions/trakt-token.js` - OAuth token exchange
 
 ### Frontend
+
 - `src/pages/now.js` - Displays watch history
 - `src/pages/callback/oauth.js` - OAuth callback handler
 - `src/components/mediaDisplay.js` - Display components
@@ -85,13 +89,17 @@ GATSBY_TMDB_API_KEY=your_tmdb_key
 ## Testing
 
 ### Admin Access
+
 Access admin features via any of these methods:
+
 - `?admin` query parameter (e.g., `/now?admin`)
 - Development mode (`npm run develop`)
 - Localhost access
 
 ### Re-authentication
+
 When tokens expire (~3 months):
+
 1. Visit `/now?admin`
 2. See re-authenticate button in error message
 3. Click button → authorize → copy new tokens
@@ -101,37 +109,42 @@ When tokens expire (~3 months):
 ## Troubleshooting
 
 ### "Token expired" error
+
 - Visit `/now?admin`
 - Click "Re-authenticate"
 - Update environment variables with new tokens
 
 ### "No authentication token provided"
+
 - Check that `GATSBY_TRAKT_ACCESS_TOKEN` is set in environment variables
 - Verify environment variable starts with `GATSBY_` prefix (required for frontend)
 
 ### Redirect URI mismatch
+
 - Verify redirect URI in Trakt app settings matches exactly
 - Check for trailing slashes (should not have one)
 - Ensure protocol matches (http vs https)
 
 ### TMDB images not loading
+
 - TMDB API key is optional but recommended
 - Get free key at https://www.themoviedb.org/settings/api
 - Add as `GATSBY_TMDB_API_KEY`
 
 ## Cost Comparison
 
-| Setup | Annual Cost | Maintenance | Complexity |
-|-------|-------------|-------------|------------|
-| **Current (Simplified)** | $0 | Re-auth every 3 months | Low |
-| Previous (Auto-refresh) | $0 | Auto-refresh, manual env updates | High |
-| Trakt VIP RSS | $30-60 | Minimal | Very Low |
+| Setup                    | Annual Cost | Maintenance                      | Complexity |
+| ------------------------ | ----------- | -------------------------------- | ---------- |
+| **Current (Simplified)** | $0          | Re-auth every 3 months           | Low        |
+| Previous (Auto-refresh)  | $0          | Auto-refresh, manual env updates | High       |
+| Trakt VIP RSS            | $30-60      | Minimal                          | Very Low   |
 
 ## Migration Notes
 
 If upgrading from the previous complex setup:
 
 **Removed files:**
+
 - `netlify/functions/refresh-token.js`
 - `src/utils/trakt-auth.js`
 - `static/trakt-token-alerts.html`
@@ -139,12 +152,14 @@ If upgrading from the previous complex setup:
 - `src/pages/callback/trakt.js` (duplicate)
 
 **Removed features:**
+
 - Automatic token refresh
 - Admin email notifications
 - Webhook alerts
 - Complex admin banners
 
 **Environment variables no longer needed:**
+
 - `ADMIN_ALERT_WEBHOOK_URL`
 - `EMAIL_SERVICE_URL`
 - `EMAIL_API_KEY`

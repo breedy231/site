@@ -92,6 +92,7 @@ See `TRAKT_SETUP.md` for complete setup instructions.
 6. Trigger new deployment
 
 **Admin detection:**
+
 - `?admin` query parameter
 - Development mode (`npm run develop`)
 - Localhost access
@@ -358,6 +359,7 @@ After updating tokens and deploying:
 4. Check browser console for any remaining API errors
 
 **Troubleshooting:**
+
 - If you see "Token expired" - Visit `/now?admin` and re-authenticate
 - If images don't load - Check `GATSBY_TMDB_API_KEY` is set
 - If no data shows - Verify all environment variables are set correctly
