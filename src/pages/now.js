@@ -55,37 +55,26 @@ const MediaSection = ({ title, error, loading, children, onReauth }) => {
           Loading {title.toLowerCase()}...
         </div>
       ) : error ? (
-        <div className="text-red-500">
+        <div>
           {showAdminControls ? (
-            // Admin view: Show detailed error and re-auth button
-            <>
-              <div className="mb-2">
-                Error loading {title.toLowerCase()}: {error}
+            // Admin view: Show error and re-auth button
+            <div className="rounded border border-red-300 bg-red-50 p-3 dark:border-red-600 dark:bg-red-900/20">
+              <div className="mb-2 text-sm text-red-700 dark:text-red-300">
+                {error}
               </div>
-              {error.includes("expired") || error.includes("authentication") ? (
+              {onReauth && (
                 <button
                   onClick={onReauth}
                   className="rounded bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600"
                 >
-                  Re-authenticate with Trakt
+                  Re-authenticate
                 </button>
-              ) : null}
-            </>
-          ) : (
-            // Public view: Show helpful message or placeholder content
-            <div className="text-gray-500 dark:text-gray-300">
-              {title === "Watching" ? (
-                <div>
-                  <div className="mb-2">
-                    Currently watching updates temporarily unavailable
-                  </div>
-                  <div className="text-sm">
-                    Check back soon for the latest TV shows and movies!
-                  </div>
-                </div>
-              ) : (
-                <div>{title} data temporarily unavailable</div>
               )}
+            </div>
+          ) : (
+            // Public view: Simple message
+            <div className="text-gray-500 dark:text-gray-300">
+              {title} updates temporarily unavailable. Check back soon!
             </div>
           )}
         </div>
@@ -122,21 +111,10 @@ const NowPage = () => {
     const isDevelopment = process.env.NODE_ENV === "development"
     const currentHost =
       typeof window !== "undefined" ? window.location.origin : ""
-    const isDeployPreview = currentHost.includes("deploy-preview")
 
-    // Always use current host for OAuth - this keeps the flow on the same deployment
     const redirectUri = isDevelopment
       ? "http://localhost:8000/callback/oauth"
       : `${currentHost}/callback/oauth`
-
-    if (isDeployPreview) {
-      alert(
-        "OAuth testing on deploy previews requires adding this URL to your Trakt app's redirect URI whitelist temporarily:\n\n" +
-          redirectUri +
-          "\n\n" +
-          "Or test on the main site: https://brendantreed.com/?admin"
-      )
-    }
 
     const authUrl = `https://trakt.tv/oauth/authorize?response_type=code&client_id=${
       process.env.GATSBY_TRAKT_CLIENT_ID
@@ -205,31 +183,6 @@ const NowPage = () => {
       <div className="min-h-screen p-6 font-sans text-gray-900 dark:text-white">
         <h1 className="mb-6 text-4xl font-normal">{"What I'm Up To Now"}</h1>
 
-        {/* Admin Panel - Only visible to admin */}
-        {isAdmin() &&
-          (watchError?.includes("expired") ||
-            watchError?.includes("authentication")) && (
-            <div className="mb-6 rounded border border-yellow-300 bg-yellow-50 p-4 dark:border-yellow-600 dark:bg-yellow-900/20">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-medium text-yellow-800 dark:text-yellow-200">
-                    Admin Notice: Trakt Authentication Required
-                  </h3>
-                  <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                    The Trakt access tokens have expired. External visitors see
-                    a graceful fallback message.
-                  </p>
-                </div>
-                <button
-                  onClick={handleTraktLogin}
-                  className="rounded bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
-                >
-                  Re-authenticate Trakt
-                </button>
-              </div>
-            </div>
-          )}
-
         <div className="grid h-[calc(100vh-8rem)] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <div className="rounded border border-gray-300 p-4 dark:border-gray-600">
             <MediaSection
@@ -283,15 +236,6 @@ const NowPage = () => {
                 </>
               )}
             </MediaSection>
-            {process.env.NODE_ENV === "development" &&
-              !process.env.GATSBY_TRAKT_ACCESS_TOKEN && (
-                <button
-                  onClick={handleTraktLogin}
-                  className="mb-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                >
-                  Connect Trakt (Development)
-                </button>
-              )}
           </div>
 
           <div className="rounded border border-gray-300 p-4 dark:border-gray-600">
