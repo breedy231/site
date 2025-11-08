@@ -48,23 +48,26 @@ netlify/functions/ - Deployed functions (Modern V2: Request/Response)
 - ❌ DO NOT upgrade Gatsby to 5.12.0+ without migrating functions
 - ❌ DO NOT edit functions in both directories
 
-### Future Migration Path (When Ready)
+### Migration Plan
 
-To upgrade to Gatsby 5.12.0+:
+A comprehensive migration plan has been created to upgrade Gatsby and fully migrate to modern Netlify Functions V2:
 
-1. Migrate ALL functions in `src/api/` to modern V2 format:
-   - Change `(req, res)` → `(req)`
-   - Replace `res.status().json()` → `new Response(JSON.stringify())`
-   - Replace `req.headers.property` → `req.headers.get("property")`
-   - Replace `req.body` → `await req.json()`
-2. Update prebuild script to copy correctly
-3. Test all functions thoroughly
-4. Then upgrade Gatsby to 5.12.0+
+**📋 See: [`GATSBY_NETLIFY_MIGRATION_PLAN.md`](./GATSBY_NETLIFY_MIGRATION_PLAN.md)**
+
+The plan includes:
+- Detailed analysis of current state
+- Phase-by-phase migration strategy
+- Risk assessment and mitigation
+- Testing checklist
+- Rollback procedures
+
+**Key Finding**: All functions in `netlify/functions/` are ALREADY in V2 format! Migration primarily involves cleanup of legacy `src/api/` directory and Gatsby upgrade.
 
 ### References
 
 - [Gatsby Issue #38542](https://github.com/gatsbyjs/gatsby/issues/38542) - Adapter breaking changes
 - [Netlify Functions V2 Migration Guide](https://developers.netlify.com/guides/migrating-to-the-modern-netlify-functions/)
+- **[Migration Plan](./GATSBY_NETLIFY_MIGRATION_PLAN.md)** - Comprehensive upgrade strategy
 
 ## File Structure
 
