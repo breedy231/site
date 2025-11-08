@@ -9,44 +9,33 @@
   - This matches the Netlify build configuration in `netlify.toml`
   - Ensures consistency between local and CI/CD builds
 
-## ⚠️ CRITICAL: Gatsby Version Constraint
+## ✅ Serverless Functions - Modern V2 Format
 
-**DO NOT upgrade Gatsby beyond version 5.11.0 without migrating serverless functions**
+**All serverless functions are now using modern Netlify Functions V2 API format.**
 
 ### Current Setup
 
-- **Gatsby version**: 5.11.0 (locked)
-- **Functions format**: Mixed (netlify/functions uses V2, src/api uses V1)
-- **Reason**: Gatsby 5.12.0+ auto-installs `gatsby-adapter-netlify` which ONLY works with modern Netlify Functions V2 API
+- **Gatsby version**: 5.11.0 (ready to upgrade to 5.15.0)
+- **Functions location**: `netlify/functions/` (single source of truth)
+- **Functions format**: Modern V2 API (Request/Response objects)
+- **Status**: Ready for Gatsby 5.12.0+ and `gatsby-adapter-netlify`
 
-### The Problem
+### What Changed (Phase 1 Cleanup - Completed)
 
-Starting with Gatsby 5.12.0, Gatsby automatically:
+- ✅ Removed legacy `src/api/` directory (Express-style functions)
+- ✅ Removed dangerous prebuild script from package.json
+- ✅ Removed unused `node-fetch` dependency (V2 functions use native fetch)
+- ✅ Single source of truth: `netlify/functions/` with all functions in V2 format
 
-1. Installs `gatsby-adapter-netlify` during Netlify builds (no opt-out)
-2. Removes `gatsby-plugin-netlify`
-3. Requires ALL functions to use modern V2 API format (Request/Response objects)
+### Serverless Functions in Production
 
-This is a **breaking change** that was not clearly documented and causes 502 errors if functions use the old Express-style format.
+All functions in `netlify/functions/` use modern V2 format:
 
-### Directory Structure ⚠️
-
-```
-src/api/           - Source functions (Express-style: req, res)
-netlify/functions/ - Deployed functions (Modern V2: Request/Response)
-```
-
-**CRITICAL**: These directories use DIFFERENT API formats!
-
-- `netlify/functions/` = Modern V2 format (committed to git, works with Gatsby 5.11.0)
-- `src/api/` = Legacy Express-style format (kept for reference/local dev)
-
-### What NOT To Do
-
-- ❌ DO NOT run the prebuild script (`cp -r src/api/* netlify/functions/`)
-- ❌ DO NOT regenerate netlify/functions from src/api
-- ❌ DO NOT upgrade Gatsby to 5.12.0+ without migrating functions
-- ❌ DO NOT edit functions in both directories
+1. **history.js** - History tracking with automatic token refresh
+2. **goodreads.js** - Goodreads API integration
+3. **lastfm.js** - Last.fm API integration
+4. **trakt-token.js** - OAuth token exchange with dynamic redirect URI
+5. **refresh-token.js** - Automatic Trakt token refresh
 
 ### Migration Plan
 
