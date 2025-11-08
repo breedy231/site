@@ -55,6 +55,7 @@ A comprehensive migration plan has been created to upgrade Gatsby and fully migr
 **📋 See: [`GATSBY_NETLIFY_MIGRATION_PLAN.md`](./GATSBY_NETLIFY_MIGRATION_PLAN.md)**
 
 The plan includes:
+
 - Detailed analysis of current state
 - Phase-by-phase migration strategy
 - Risk assessment and mitigation
