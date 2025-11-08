@@ -76,24 +76,20 @@ This document outlines the migration strategy to upgrade Gatsby from 5.11.0 to 5
 #### Tasks:
 
 1. **Remove `src/api/` directory entirely**
-
    - All production functions are in `netlify/functions/`
    - `src/api/` contains outdated Express-style versions
    - No longer needed for development or production
 
 2. **Remove/update prebuild script in package.json**
-
    - Current: `"prebuild": "mkdir -p netlify/functions && cp -r src/api/* netlify/functions/"`
    - This script is dangerous (would overwrite V2 functions with V1 versions)
    - **Action**: Remove this script entirely
 
 3. **Remove unnecessary dependencies**
-
    - Remove `node-fetch` (not used in V2 functions)
    - Keep `express` in devDependencies (may be used for local dev server)
 
 4. **Update documentation**
-
    - Remove references to `src/api/` directory
    - Update CLAUDE.md to reflect single source of truth: `netlify/functions/`
    - Document that all functions are now V2 format
@@ -220,7 +216,6 @@ This document outlines the migration strategy to upgrade Gatsby from 5.11.0 to 5
    ```
 
 2. **Prepare for adapter auto-installation**
-
    - Gatsby 5.12.0+ will automatically:
      - Install `gatsby-adapter-netlify`
      - Remove `gatsby-plugin-netlify`
@@ -228,7 +223,6 @@ This document outlines the migration strategy to upgrade Gatsby from 5.11.0 to 5
    - **No manual action needed** (happens during Netlify build)
 
 3. **Update gatsby-config.js (if needed)**
-
    - Check if any configuration changes are required for adapter
    - Review Gatsby 5.12+ migration guide
 
@@ -452,19 +446,16 @@ git push
 ### Mitigation Strategies
 
 1. **Incremental Deployment**
-
    - Use Netlify deploy previews
    - Test on preview URL before promoting
    - Keep production on stable version until fully tested
 
 2. **Automated Testing**
-
    - Run full build locally before pushing
    - Use GitHub Actions to test build
    - Verify all function endpoints
 
 3. **Monitoring**
-
    - Watch Netlify function logs
    - Monitor error rates
    - Check response times
@@ -604,22 +595,18 @@ git push
 ## Open Questions
 
 1. **Should we keep `src/api/` for reference?**
-
    - **Recommendation**: No, remove entirely to avoid confusion
    - Can always reference git history if needed
 
 2. **Should we update styled-components to v6?**
-
    - **Recommendation**: No, defer to separate migration
    - v5 → v6 requires significant refactoring
 
 3. **Should we upgrade React to v19?**
-
    - **Recommendation**: No, stay on React 18.x
    - React 19 too new, may have compatibility issues
 
 4. **Should we test on deploy preview first?**
-
    - **Recommendation**: YES, always test on preview before production
    - Use Netlify's deploy preview feature
 

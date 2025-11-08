@@ -129,8 +129,8 @@ const MotionTest = () => {
             // Log every 500ms during countdown
             addLog(
               `Current position - Beta: ${beta.toFixed(
-                1
-              )}°, Gamma: ${gamma.toFixed(1)}°`
+                1,
+              )}°, Gamma: ${gamma.toFixed(1)}°`,
             )
           }
           return
@@ -156,8 +156,8 @@ const MotionTest = () => {
               calibrationReadings.current = []
               addLog(
                 `Calibration complete. Neutral position set to ${avgBeta.toFixed(
-                  1
-                )}°`
+                  1,
+                )}°`,
               )
             }
           }
@@ -174,8 +174,8 @@ const MotionTest = () => {
             // Limit warning frequency
             addLog(
               `Phone position warning: gamma=${gamma.toFixed(
-                1
-              )}° | Hold phone more vertical against forehead`
+                1,
+              )}° | Hold phone more vertical against forehead`,
             )
           }
           return
@@ -187,8 +187,8 @@ const MotionTest = () => {
           if (now % 1000 < 100) {
             addLog(
               `Phone position warning: gamma=${gamma.toFixed(
-                1
-              )}° | Hold phone more level`
+                1,
+              )}° | Hold phone more level`,
             )
           }
           return
@@ -212,7 +212,7 @@ const MotionTest = () => {
 
       // Calculate motion intensity
       const intensity = updateMotionIntensity(
-        Math.abs(tiltAngle - prevTiltAngles.current[1])
+        Math.abs(tiltAngle - prevTiltAngles.current[1]),
       )
 
       // Update state
@@ -242,8 +242,8 @@ const MotionTest = () => {
         // Log roughly every second
         addLog(
           `Tilt: ${tiltAngle.toFixed(1)}° | Intensity: ${intensity.toFixed(
-            1
-          )} | Zone: ${zone}`
+            1,
+          )} | Zone: ${zone}`,
         )
       }
     } catch (error) {
@@ -345,7 +345,7 @@ const MotionTest = () => {
                   addLog(
                     `Switched to ${
                       !foreheadMode ? "Forehead" : "Flat"
-                    } Position mode`
+                    } Position mode`,
                   )
                 }}
                 className="w-full rounded-lg bg-purple-500 px-4 py-2 font-medium text-white hover:bg-purple-600"
@@ -367,14 +367,14 @@ const MotionTest = () => {
                   style={{
                     left: `${Math.min(
                       Math.max((currentTilt + 45) * (100 / 90), 0),
-                      100
+                      100,
                     )}%`,
                     backgroundColor:
                       currentZone === "action"
                         ? "#EF4444"
                         : currentZone === "warning"
-                        ? "#F59E0B"
-                        : "#3B82F6",
+                          ? "#F59E0B"
+                          : "#3B82F6",
                   }}
                 />
               </div>
@@ -402,15 +402,13 @@ const MotionTest = () => {
               <div className="text-center">
                 <div className="font-semibold">Zone</div>
                 <div
-                  className={`mt-1 rounded-md px-3 py-1 font-medium
-                  ${
+                  className={`mt-1 rounded-md px-3 py-1 font-medium ${
                     currentZone === "action"
                       ? "bg-red-100 text-red-700"
                       : currentZone === "warning"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-blue-100 text-blue-700"
-                  }
-                `}
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-blue-100 text-blue-700"
+                  } `}
                 >
                   {currentZone.toUpperCase()}
                 </div>
