@@ -9,62 +9,77 @@
   - This matches the Netlify build configuration in `netlify.toml`
   - Ensures consistency between local and CI/CD builds
 
-## ⚠️ CRITICAL: Gatsby Version Constraint
+## ✅ Serverless Functions - Modern V2 Format
 
-**DO NOT upgrade Gatsby beyond version 5.11.0 without migrating serverless functions**
+**All serverless functions are now using modern Netlify Functions V2 API format.**
 
 ### Current Setup
 
-- **Gatsby version**: 5.11.0 (locked)
-- **Functions format**: Mixed (netlify/functions uses V2, src/api uses V1)
-- **Reason**: Gatsby 5.12.0+ auto-installs `gatsby-adapter-netlify` which ONLY works with modern Netlify Functions V2 API
+- **Gatsby version**: 5.15.0 ✅ **MIGRATION COMPLETE**
+- **Functions location**: `netlify/functions/` (single source of truth)
+- **Functions format**: Modern V2 API (Request/Response objects)
+- **Status**: Fully migrated to Gatsby 5.15.0 with `gatsby-adapter-netlify`
 
-### The Problem
+### Migration Completed (All Phases)
 
-Starting with Gatsby 5.12.0, Gatsby automatically:
+**Phase 1 - Cleanup:**
 
-1. Installs `gatsby-adapter-netlify` during Netlify builds (no opt-out)
-2. Removes `gatsby-plugin-netlify`
-3. Requires ALL functions to use modern V2 API format (Request/Response objects)
+- ✅ Removed legacy `src/api/` directory (Express-style functions)
+- ✅ Removed dangerous prebuild script from package.json
+- ✅ Removed unused `node-fetch` dependency (V2 functions use native fetch)
+- ✅ Single source of truth: `netlify/functions/` with all functions in V2 format
 
-This is a **breaking change** that was not clearly documented and causes 502 errors if functions use the old Express-style format.
+**Phase 2 - Plugin Ecosystem:**
 
-### Directory Structure ⚠️
+- ✅ Updated all Gatsby plugins to 5.15.0 compatible versions
+- ✅ Updated React to 18.3.1 (stable)
+- ✅ Updated build tooling (Sass, Prettier, Tailwind)
+- ✅ Updated fast-xml-parser to 5.x (breaking change handled)
 
-```
-src/api/           - Source functions (Express-style: req, res)
-netlify/functions/ - Deployed functions (Modern V2: Request/Response)
-```
+**Phase 3 - Gatsby Core:**
 
-**CRITICAL**: These directories use DIFFERENT API formats!
+- ✅ Upgraded Gatsby from 5.11.0 to 5.15.0
+- ✅ Upgraded gatsby-cli to 5.15.0
+- ✅ Confirmed compatibility with gatsby-adapter-netlify
+- ✅ All builds successful
 
-- `netlify/functions/` = Modern V2 format (committed to git, works with Gatsby 5.11.0)
-- `src/api/` = Legacy Express-style format (kept for reference/local dev)
+**Phase 4 - Final Polish:**
 
-### What NOT To Do
+- ✅ Updated remaining dev dependencies (ESLint, Tailwind, PostCSS, etc.)
+- ✅ All security patches applied
+- ✅ Build time optimized
 
-- ❌ DO NOT run the prebuild script (`cp -r src/api/* netlify/functions/`)
-- ❌ DO NOT regenerate netlify/functions from src/api
-- ❌ DO NOT upgrade Gatsby to 5.12.0+ without migrating functions
-- ❌ DO NOT edit functions in both directories
+### Serverless Functions in Production
 
-### Future Migration Path (When Ready)
+All functions in `netlify/functions/` use modern V2 format:
 
-To upgrade to Gatsby 5.12.0+:
+1. **history.js** - History tracking with automatic token refresh
+2. **goodreads.js** - Goodreads API integration
+3. **lastfm.js** - Last.fm API integration
+4. **trakt-token.js** - OAuth token exchange with dynamic redirect URI
+5. **refresh-token.js** - Automatic Trakt token refresh
 
-1. Migrate ALL functions in `src/api/` to modern V2 format:
-   - Change `(req, res)` → `(req)`
-   - Replace `res.status().json()` → `new Response(JSON.stringify())`
-   - Replace `req.headers.property` → `req.headers.get("property")`
-   - Replace `req.body` → `await req.json()`
-2. Update prebuild script to copy correctly
-3. Test all functions thoroughly
-4. Then upgrade Gatsby to 5.12.0+
+### Migration Plan
+
+A comprehensive migration plan has been created to upgrade Gatsby and fully migrate to modern Netlify Functions V2:
+
+**📋 See: [`GATSBY_NETLIFY_MIGRATION_PLAN.md`](./GATSBY_NETLIFY_MIGRATION_PLAN.md)**
+
+The plan includes:
+
+- Detailed analysis of current state
+- Phase-by-phase migration strategy
+- Risk assessment and mitigation
+- Testing checklist
+- Rollback procedures
+
+**Key Finding**: All functions in `netlify/functions/` are ALREADY in V2 format! Migration primarily involves cleanup of legacy `src/api/` directory and Gatsby upgrade.
 
 ### References
 
 - [Gatsby Issue #38542](https://github.com/gatsbyjs/gatsby/issues/38542) - Adapter breaking changes
 - [Netlify Functions V2 Migration Guide](https://developers.netlify.com/guides/migrating-to-the-modern-netlify-functions/)
+- **[Migration Plan](./GATSBY_NETLIFY_MIGRATION_PLAN.md)** - Comprehensive upgrade strategy
 
 ## File Structure
 
@@ -155,8 +170,8 @@ const handleOAuth = () => {
   const redirectUri = isDevelopment
     ? "http://localhost:8000/callback/oauth"
     : isDeployPreview
-    ? "https://brendantreed.com/callback/oauth" // Fallback to main site
-    : `${currentHost}/callback/oauth`
+      ? "https://brendantreed.com/callback/oauth" // Fallback to main site
+      : `${currentHost}/callback/oauth`
 }
 ```
 
