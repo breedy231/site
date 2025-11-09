@@ -93,7 +93,7 @@ export default function Layout({ children }) {
             </div>
           )}
           {(matches.large || matches.medium) && !matches.small && (
-            <div className="my-0 mx-auto py-0 px-4">
+            <div className="mx-auto my-0 px-4 py-0">
               <div className={container}>
                 <Link
                   className="text-gray-900 no-underline dark:text-white"
