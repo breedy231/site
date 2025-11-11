@@ -1,7 +1,8 @@
-import React, { Fragment } from "react"
+import React, { Fragment, useState, useEffect } from "react"
 import Media from "react-media"
 import "./layout.sass"
 import ThemeToggle from "./ThemeToggle"
+import DebugOverlay from "./DebugOverlay"
 import {
   container,
   smallContainer,
@@ -44,6 +45,16 @@ export const Head = () => {
 }
 
 export default function Layout({ children }) {
+  const [showDebug, setShowDebug] = useState(false)
+
+  useEffect(() => {
+    // Check for ?debug query parameter
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search)
+      setShowDebug(params.has("debug"))
+    }
+  }, [])
+
   return (
     <Media
       queries={{
@@ -54,6 +65,7 @@ export default function Layout({ children }) {
     >
       {matches => (
         <Fragment>
+          {showDebug && <DebugOverlay />}
           {matches.small && !(matches.large || matches.medium) && (
             <div style={{ margin: `0 auto`, padding: `0 1rem` }}>
               <div className={smallContainer}>
