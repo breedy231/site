@@ -136,7 +136,7 @@ const NowPage = () => {
         "OAuth testing on deploy previews requires adding this URL to your Trakt app's redirect URI whitelist temporarily:\n\n" +
           redirectUri +
           "\n\n" +
-          "Or test on the main site: https://brendantreed.com/?admin"
+          "Or test on the main site: https://brendantreed.com/?admin",
       )
     }
 
@@ -172,7 +172,7 @@ const NowPage = () => {
         .finally(() => setWatchLoading(false))
     } else {
       setWatchError(
-        "No authentication token found. Please connect your Trakt account."
+        "No authentication token found. Please connect your Trakt account.",
       )
       setWatchLoading(false)
     }

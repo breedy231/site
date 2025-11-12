@@ -31,11 +31,9 @@
 ### Safari Remote Debugging (See real-time console errors)
 
 1. **On iPhone:**
-
    - Settings → Safari → Advanced → Enable "Web Inspector"
 
 2. **On Mac:**
-
    - Open Safari
    - Enable Develop menu: Safari → Preferences → Advanced → "Show Develop menu"
    - Connect iPhone via USB
