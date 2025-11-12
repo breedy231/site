@@ -363,6 +363,148 @@ npx eslint src/ --fix
 npx lint-staged
 ```
 
+## React/JSX Linting Rules
+
+### Prettier vs ESLint
+
+It's important to understand the difference between these two tools:
+
+- **Prettier**: Code formatter - handles style (spacing, quotes, line breaks)
+- **ESLint**: Code linter - enforces code quality and catches bugs
+
+**Common confusion:** Error messages may say "Prettier error" but actually refer to ESLint issues that need fixing before Prettier can format.
+
+### Common JSX/React Rules
+
+**1. Unescaped Entities (`react/no-unescaped-entities`)**
+
+Apostrophes, quotes, and special characters in JSX text must be escaped:
+
+```jsx
+// ❌ Wrong - will cause ESLint error
+<p>Don't use unescaped apostrophes</p>
+<p>Use "proper" quotes</p>
+
+// ✅ Correct - use HTML entities
+<p>Don&apos;t use unescaped apostrophes</p>
+<p>Use &quot;proper&quot; quotes</p>
+
+// ✅ Alternative - use JavaScript strings
+<p>{"Don't use unescaped apostrophes"}</p>
+<p>Use {'"'}proper{'"'} quotes</p>
+```
+
+**Common HTML entities:**
+
+- `&apos;` or `&#39;` - apostrophe (')
+- `&quot;` - quotation mark (")
+- `&lt;` - less than (<)
+- `&gt;` - greater than (>)
+- `&amp;` - ampersand (&)
+
+**2. Unused Variables**
+
+Remove or prefix with underscore:
+
+```jsx
+// ❌ Wrong
+const MyComponent = ({ data, index }) => {
+  return <div>{data}</div> // index is unused
+}
+
+// ✅ Correct - remove unused variable
+const MyComponent = ({ data }) => {
+  return <div>{data}</div>
+}
+
+// ✅ Alternative - prefix with underscore if needed for documentation
+const MyComponent = ({ data, _index }) => {
+  return <div>{data}</div>
+}
+```
+
+**3. Missing Keys in Lists**
+
+Always add unique `key` prop when mapping arrays:
+
+```jsx
+// ❌ Wrong
+items.map(item => <div>{item.name}</div>)
+
+// ✅ Correct
+items.map(item => <div key={item.id}>{item.name}</div>)
+```
+
+### Checking for Errors Before Committing
+
+**Run linters manually:**
+
+```bash
+# Check for ESLint errors
+npx eslint src/
+
+# Auto-fix ESLint errors (where possible)
+npx eslint src/ --fix
+
+# Check specific file
+npx eslint src/pages/myfile.js
+
+# Check formatting
+npx prettier --check "src/**/*.{js,jsx}"
+```
+
+**What gets checked automatically:**
+
+1. **Pre-commit hook**: Runs `eslint --fix` on staged files
+2. **GitHub Actions CI**: Runs Prettier on all commits/PRs
+
+**Best practice workflow:**
+
+1. Write code
+2. Run `npx eslint src/ --fix` to catch issues early
+3. Commit (pre-commit hook will run automatically)
+4. If commit fails, check error output and fix manually
+5. Stage fixes and commit again
+
+### Common Error Messages
+
+**"react/no-unescaped-entities"**
+
+- **Cause**: Apostrophes or quotes in JSX text
+- **Fix**: Use HTML entities (`&apos;`, `&quot;`) or wrap in `{}`
+
+**"react/prop-types"**
+
+- **Cause**: Missing PropTypes validation
+- **Fix**: Add PropTypes or use TypeScript
+
+**"no-unused-vars"**
+
+- **Cause**: Imported/declared variable not used
+- **Fix**: Remove unused variable or prefix with `_`
+
+**"react-hooks/exhaustive-deps"**
+
+- **Cause**: Missing dependencies in useEffect/useCallback
+- **Fix**: Add missing dependencies or explain with comment
+
+### Quick Reference
+
+```bash
+# Before starting work
+npx eslint src/ --fix
+
+# Before committing
+npx eslint src/ --fix
+git add .
+git commit -m "message"  # Pre-commit hook runs automatically
+
+# If pre-commit fails
+# 1. Read error message
+# 2. Fix issues manually
+# 3. Stage and commit again
+```
+
 ## GitHub Actions CI Pipeline
 
 ### Overview

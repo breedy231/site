@@ -20,6 +20,8 @@ export const Head = () => {
     <>
       <title>{data.site.siteMetadata.title}</title>
       <html lang="en" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="theme-color" content="#032740" />
     </>
   )
 }
@@ -43,9 +45,9 @@ export default function New() {
       {() => (
         <Fragment>
           <Layout>
-            <div className="text-5x flex flex-col items-center justify-center">
+            <div className="text-5x flex flex-col items-center justify-center pb-16">
               <div className="max-w-xs md:max-w-3xl">
-                <div className="mt-14 text-3xl text-gray-900 dark:text-white md:text-4xl">
+                <div className="mt-6 text-3xl text-gray-900 dark:text-white md:mt-14 md:text-4xl">
                   {mainText}
                 </div>
                 <p className="mt-10 text-lg text-gray-900 dark:text-white md:text-4xl">
@@ -96,21 +98,21 @@ export default function New() {
                   </a>
                   .
                 </p>
-                <div className="mt-5 flex flex-row">
+                <div className="mt-10 flex flex-col gap-6 md:mt-5 md:flex-row md:gap-0">
                   <div className="flex flex-col">
-                    <p className="mr-36 text-xl font-bold text-gray-900 dark:text-white">
+                    <p className="text-xl font-bold text-gray-900 dark:text-white md:mr-36">
                       {locatedIn}
                     </p>
                     <p className="text-xl text-gray-900 dark:text-white">
                       {location}
                     </p>
                   </div>
-                  <div>
-                    <p className="mr-36 text-xl font-bold text-gray-900 dark:text-white">
+                  <div className="flex flex-col">
+                    <p className="text-xl font-bold text-gray-900 dark:text-white md:mr-36">
                       {getInTouch}
                     </p>
                     <a
-                      className="mr-36 text-xl text-gray-900 underline decoration-red-700 dark:text-white"
+                      className="break-words text-xl text-gray-900 underline decoration-red-700 dark:text-white md:mr-36"
                       href="mailto:bren.reed@protonmail.com"
                     >
                       {email}
