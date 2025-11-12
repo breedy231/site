@@ -9,6 +9,70 @@
   - This matches the Netlify build configuration in `netlify.toml`
   - Ensures consistency between local and CI/CD builds
 
+## Analytics
+
+### GoatCounter Integration
+
+The site uses [GoatCounter](https://www.goatcounter.com/) for lightweight, privacy-friendly analytics.
+
+**Why GoatCounter:**
+
+- ✅ **Free** for non-commercial use
+- ✅ **Lightweight** (~3.5kb script)
+- ✅ **Privacy-focused** (no cookies, GDPR compliant)
+- ✅ **Simple setup** with official Gatsby plugin
+
+### Setup
+
+**1. Sign up for GoatCounter:**
+
+- Visit https://www.goatcounter.com/signup
+- Choose a code (e.g., `yoursite` → analytics at `https://yoursite.goatcounter.com`)
+- Verify email and complete registration
+
+**2. Configure environment variable:**
+
+Add to your `.env.development` and `.env.production` files:
+
+```
+GATSBY_GOATCOUNTER_CODE=your_code_here
+```
+
+**3. Add to Netlify:**
+
+In Netlify Dashboard → Site Settings → Environment Variables, add:
+
+- Key: `GATSBY_GOATCOUNTER_CODE`
+- Value: Your GoatCounter code
+
+**4. Deploy:**
+
+The plugin is already configured in `gatsby-config.js`. After setting the environment variable, rebuild/redeploy the site.
+
+### Configuration
+
+The plugin is configured with these options (in `gatsby-config.js`):
+
+- `head: false` - Script loads in body for better performance
+- `pixel: false` - Uses JavaScript tracking (not pixel tracking)
+- `allowLocal: false` - Doesn't track localhost visits
+- `localStorageKey: "skipgc"` - Allows users to opt-out via localStorage
+
+### Accessing Analytics
+
+Visit `https://[your-code].goatcounter.com` to view your analytics dashboard.
+
+### Alternative: Netlify Analytics
+
+Netlify offers built-in server-side analytics at $9/month with these features:
+
+- Server-side tracking (not blocked by ad blockers)
+- No client-side JavaScript required
+- 30 days data retention
+- 404 error tracking
+
+GoatCounter was chosen for being free and lightweight while providing sufficient analytics for a personal site.
+
 ## ✅ Serverless Functions - Modern V2 Format
 
 **All serverless functions are now using modern Netlify Functions V2 API format.**

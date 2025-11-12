@@ -15,6 +15,16 @@ module.exports = {
     "gatsby-plugin-mdx",
     `gatsby-transformer-sharp`,
     {
+      resolve: `gatsby-plugin-goatcounter`,
+      options: {
+        code: process.env.GATSBY_GOATCOUNTER_CODE,
+        head: false,
+        pixel: false,
+        allowLocal: false,
+        localStorageKey: "skipgc",
+      },
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
