@@ -49,6 +49,7 @@ https://brendantreed.com/now/?admin
 For testing on deploy preview URLs:
 
 1. **Add temporary redirect URI to Trakt app:**
+
    - Go to your Trakt.tv app settings
    - Add the deploy preview callback URL (shown in alert when clicking re-auth button)
    - Example: `https://deploy-preview-X--site.netlify.app/callback/trakt`

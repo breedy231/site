@@ -110,7 +110,7 @@ export default function ResponsiveTest() {
               </li>
             </ul>
             <p className="mt-3 rounded bg-yellow-100 p-2 text-sm dark:bg-yellow-900">
-              ⚠️ These are DIFFERENT from Tailwind's default breakpoints!
+              ⚠️ These are DIFFERENT from Tailwind&apos;s default breakpoints!
             </p>
           </section>
 
@@ -161,8 +161,8 @@ export default function ResponsiveTest() {
                 <p className="whitespace-nowrap">
                   This text is very long and should scroll horizontally within
                   its container: Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua.
+                  adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                  dolore magna aliqua.
                 </p>
               </div>
             </div>
@@ -180,8 +180,8 @@ export default function ResponsiveTest() {
               <div className="aspect-video w-full rounded bg-gradient-to-r from-blue-500 to-purple-500"></div>
             </div>
             <p className="mt-2 text-sm">
-              ↑ This gradient box should scale to screen width, maintaining
-              16:9 aspect ratio
+              ↑ This gradient box should scale to screen width, maintaining 16:9
+              aspect ratio
             </p>
           </section>
 
@@ -215,7 +215,7 @@ export default function ResponsiveTest() {
               </li>
               <li>
                 <strong>Safari inspector:</strong> Connect iPhone via USB and
-                use Safari's Web Inspector (see MOBILE_TESTING.md)
+                use Safari&apos;s Web Inspector (see MOBILE_TESTING.md)
               </li>
             </ol>
           </section>

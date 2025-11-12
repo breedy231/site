@@ -15,7 +15,7 @@ export const ThemeProvider = ({ children }) => {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("theme")
       const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)",
+        "(prefers-color-scheme: dark)"
       ).matches
 
       if (savedTheme === "light") {
