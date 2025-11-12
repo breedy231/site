@@ -5,8 +5,12 @@
   display: flex;
   flex-direction: row;
   font-size: 45px;
-  @apply text-gray-900 dark:text-white;
+  @apply text-gray-900;
   text-decoration: none;
+}
+
+:global(.dark) .container {
+  @apply text-white;
 }
 
 /* Mobile fallback: ensure vertical layout on small screens even if JS hasn't loaded */
@@ -22,8 +26,12 @@
   display: flex;
   flex-direction: column;
   font-size: 35px;
-  @apply text-gray-900 dark:text-white;
+  @apply text-gray-900;
   text-decoration: none;
+}
+
+:global(.dark) .smallContainer {
+  @apply text-white;
 }
 
 /* Responsive fallback: ensure horizontal layout on larger screens */
@@ -35,7 +43,11 @@
 }
 
 .container:visited {
-  @apply text-gray-900 dark:text-white;
+  @apply text-gray-900;
+}
+
+:global(.dark) .container:visited {
+  @apply text-white;
 }
 
 .rightTab {
@@ -63,26 +75,47 @@
   padding-right: 0.5rem;
 }
 .nav-link-text {
-  @apply text-gray-900 dark:text-white;
+  @apply text-gray-900;
   text-decoration: none;
 }
+
+:global(.dark) .nav-link-text {
+  @apply text-white;
+}
 .small-nav-link-header {
-  @apply text-gray-900 dark:text-white;
+  @apply text-gray-900;
   text-decoration: none;
   font-size: 35px;
   align-self: center;
 }
+
+:global(.dark) .small-nav-link-header {
+  @apply text-white;
+}
 .small-nav-link-text {
-  @apply text-gray-900 dark:text-white;
+  @apply text-gray-900;
   text-decoration: none;
   font-size: 20px;
   align-self: center;
 }
-.nav-link-text:visited {
-  @apply text-gray-900 dark:text-white;
+
+:global(.dark) .small-nav-link-text {
+  @apply text-white;
 }
+.nav-link-text:visited {
+  @apply text-gray-900;
+}
+
+:global(.dark) .nav-link-text:visited {
+  @apply text-white;
+}
+
 .nav-link-text:link {
-  @apply text-gray-900 dark:text-white;
+  @apply text-gray-900;
+}
+
+:global(.dark) .nav-link-text:link {
+  @apply text-white;
 }
 
 .divider {
