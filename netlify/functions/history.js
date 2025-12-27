@@ -20,7 +20,7 @@ export default async function handler(req) {
       {
         status: 401,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     )
   }
 
@@ -38,7 +38,7 @@ export default async function handler(req) {
 
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`
+        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
       )
       if (!response.ok) return null
 
@@ -57,11 +57,11 @@ export default async function handler(req) {
     const [episodesRes, moviesRes] = await Promise.all([
       fetch(
         "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
-        { headers }
+        { headers },
       ),
       fetch(
         "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
-        { headers }
+        { headers },
       ),
     ])
 
@@ -76,7 +76,7 @@ export default async function handler(req) {
         {
           status: 401,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       )
     }
 
@@ -101,10 +101,10 @@ export default async function handler(req) {
     if (TMDB_API_KEY) {
       const [showImages, movieImages] = await Promise.all([
         Promise.all(
-          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb))
+          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb)),
         ),
         Promise.all(
-          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb))
+          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb)),
         ),
       ])
 
@@ -127,7 +127,7 @@ export default async function handler(req) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     )
   } catch (error) {
     console.error("Error fetching history:", error)
@@ -138,7 +138,7 @@ export default async function handler(req) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     )
   }
 }
