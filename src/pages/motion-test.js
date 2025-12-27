@@ -402,15 +402,13 @@ const MotionTest = () => {
               <div className="text-center">
                 <div className="font-semibold">Zone</div>
                 <div
-                  className={`mt-1 rounded-md px-3 py-1 font-medium
-                  ${
+                  className={`mt-1 rounded-md px-3 py-1 font-medium ${
                     currentZone === "action"
                       ? "bg-red-100 text-red-700"
                       : currentZone === "warning"
                       ? "bg-yellow-100 text-yellow-700"
                       : "bg-blue-100 text-blue-700"
-                  }
-                `}
+                  } `}
                 >
                   {currentZone.toUpperCase()}
                 </div>
