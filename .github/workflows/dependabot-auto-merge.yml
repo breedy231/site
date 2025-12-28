@@ -1,7 +1,8 @@
 name: Dependabot Auto-Merge
 
+# Use pull_request_target for Dependabot PRs (they run in a fork-like context)
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - synchronize
@@ -22,31 +23,37 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Auto-merge minor and patch updates
-        if: >
-          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
-          steps.metadata.outputs.update-type == 'version-update:semver-minor'
-        run: gh pr merge --auto --squash "$PR_URL"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Auto-merge security updates
-        if: steps.metadata.outputs.update-type == 'version-update:semver-major'
+      - name: Approve and auto-merge patch updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
         run: |
-          echo "Major version update detected. Checking if it's a security update..."
-          # For major updates, we'll still auto-merge if it's flagged as security
-          if [[ "${{ steps.metadata.outputs.dependency-type }}" == "direct:production" ]]; then
-            echo "Production dependency - will require manual review for major updates"
-          else
-            echo "Dev dependency major update - auto-merging"
-            gh pr merge --auto --squash "$PR_URL"
-          fi
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Add comment for major updates
+      - name: Approve and auto-merge minor updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Handle major updates for dev dependencies
+        if: >
+          steps.metadata.outputs.update-type == 'version-update:semver-major' &&
+          steps.metadata.outputs.dependency-type == 'direct:development'
+        run: |
+          echo "Dev dependency major update - auto-approving and merging"
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on production major updates
         if: >
           steps.metadata.outputs.update-type == 'version-update:semver-major' &&
           steps.metadata.outputs.dependency-type == 'direct:production'
@@ -57,5 +64,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '⚠️ **Major Version Update**\n\nThis PR contains a major version update for a production dependency. Please review the changelog and test before merging.\n\nTo merge manually, use: `gh pr merge --squash`'
+              body: '⚠️ **Major Version Update**\n\nThis PR contains a major version update for a production dependency. Please review the changelog and test before merging.\n\nTo merge manually:\n```bash\ngh pr review --approve ${{ github.event.pull_request.number }}\ngh pr merge --squash ${{ github.event.pull_request.number }}\n```'
             })
