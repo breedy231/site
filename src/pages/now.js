@@ -192,23 +192,30 @@ const NowPage = () => {
               error={bookError}
               loading={bookLoading}
             >
-              {bookData && bookData.recentlyRead && (
+              {bookData && (
                 <>
                   {bookData.currentlyReading && (
-                    <div className="mb-4">
-                      <h3 className="mb-2 text-lg">Currently Reading</h3>
+                    <div className="mb-6">
+                      <h3 className="mb-3 text-lg font-semibold">
+                        Currently Reading
+                      </h3>
                       <BookDisplay
                         book={bookData.currentlyReading}
                         type="current"
                       />
                     </div>
                   )}
-                  <div>
-                    <h3 className="mb-2 text-lg">Recently Read</h3>
-                    {bookData.recentlyRead.map((book, index) => (
-                      <BookDisplay key={index} book={book} type="read" />
-                    ))}
-                  </div>
+                  {bookData.recentlyRead &&
+                    bookData.recentlyRead.length > 0 && (
+                      <div>
+                        <h3 className="mb-3 text-lg font-semibold">
+                          Recently Read
+                        </h3>
+                        {bookData.recentlyRead.map((book, index) => (
+                          <BookDisplay key={index} book={book} type="read" />
+                        ))}
+                      </div>
+                    )}
                 </>
               )}
             </MediaSection>
