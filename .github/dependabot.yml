@@ -1,0 +1,65 @@
+# Dependabot configuration for automated security updates
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Enable version updates for npm/yarn
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    # Limit open PRs to avoid overwhelming the repo
+    open-pull-requests-limit: 10
+    # Group minor and patch updates to reduce PR noise
+    groups:
+      # Group all Gatsby-related updates together
+      gatsby:
+        patterns:
+          - "gatsby*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group development dependencies
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      # Group production dependencies (excluding gatsby)
+      production-minor-patch:
+        dependency-type: "production"
+        exclude-patterns:
+          - "gatsby*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Automatically add labels
+    labels:
+      - "dependencies"
+      - "automated"
+    # Commit message format
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    # Reviewers for PRs (optional - uncomment if needed)
+    # reviewers:
+    #   - "breedy231"
+    # Allow Dependabot to update major versions for security fixes
+    versioning-strategy: "increase"
+
+  # Enable GitHub Actions updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci)"
