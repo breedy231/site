@@ -1,0 +1,68 @@
+name: Dependabot Auto-Merge
+
+# Use pull_request_target for Dependabot PRs (they run in a fork-like context)
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot-auto-merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Approve and auto-merge patch updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Approve and auto-merge minor updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Handle major updates for dev dependencies
+        if: >
+          steps.metadata.outputs.update-type == 'version-update:semver-major' &&
+          steps.metadata.outputs.dependency-type == 'direct:development'
+        run: |
+          echo "Dev dependency major update - auto-approving and merging"
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on production major updates
+        if: >
+          steps.metadata.outputs.update-type == 'version-update:semver-major' &&
+          steps.metadata.outputs.dependency-type == 'direct:production'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ **Major Version Update**\n\nThis PR contains a major version update for a production dependency. Please review the changelog and test before merging.\n\nTo merge manually:\n```bash\ngh pr review --approve ${{ github.event.pull_request.number }}\ngh pr merge --squash ${{ github.event.pull_request.number }}\n```'
+            })
