@@ -515,7 +515,7 @@ const HeadsUpGame = () => {
           </h1>
 
           {/* Debug Toggle Button */}
-          <div className="fixed right-4 top-4 flex gap-2">
+          <div className="fixed top-4 right-4 flex gap-2">
             <button
               onClick={() => {
                 const newMuted = soundManager.toggleMute()
@@ -643,7 +643,7 @@ const HeadsUpGame = () => {
                   key={currentWord}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="relative flex h-full min-h-[200px] items-center justify-center rounded-lg bg-white p-8 text-4xl font-bold text-gray-900 shadow-lg dark:bg-gray-700 dark:text-white landscape:min-h-[40vh] landscape:p-4 landscape:text-3xl"
+                  className="relative flex h-full min-h-[200px] items-center justify-center rounded-lg bg-white p-8 text-4xl font-bold text-gray-900 shadow-lg landscape:min-h-[40vh] landscape:p-4 landscape:text-3xl dark:bg-gray-700 dark:text-white"
                 >
                   {currentWord}
                 </motion.div>

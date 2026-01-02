@@ -38,7 +38,7 @@ const BlogPage = ({ data, children }) => {
           {/* eslint-disable-next-line react/prop-types */}
           {data.mdx.frontmatter.datePublished}
         </p>
-        <article className="prose text-gray-900 lg:prose-lg prose-headings:text-gray-900 prose-a:text-red-500 prose-a:decoration-red-500 prose-code:text-gray-900 dark:text-white dark:prose-headings:text-white dark:prose-code:text-white">
+        <article className="prose lg:prose-lg prose-headings:text-gray-900 prose-a:text-red-500 prose-a:decoration-red-500 prose-code:text-gray-900 dark:prose-headings:text-white dark:prose-code:text-white text-gray-900 dark:text-white">
           {children}
         </article>
         <div className="mb-20 underline decoration-red-500 underline-offset-4">
