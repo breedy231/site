@@ -52,7 +52,7 @@ export default function ResponsiveTest() {
             <div className="space-y-3">
               <div className="rounded bg-blue-500 p-3 text-white md:bg-green-500 lg:bg-purple-500">
                 <strong>Color Test:</strong>
-                <ul className="ml-4 mt-1 list-disc text-sm">
+                <ul className="mt-1 ml-4 list-disc text-sm">
                   <li>
                     Mobile (&lt;768px): <strong>Blue</strong>
                   </li>
