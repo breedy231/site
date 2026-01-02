@@ -55,7 +55,7 @@
 		"gatsby-plugin-postcss": "^6.15.0",
 		"husky": ">=6",
 		"lint-staged": ">=10",
-		"open": "^10.2.0",
+		"open": "^11.0.0",
 		"postcss": "^8.5.6",
 		"prettier": "^3.0.0",
 		"tailwindcss": "^3.4.18"
