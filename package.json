@@ -21,7 +21,7 @@
 		"babel-plugin-styled-components": "^1.13.3",
 		"encoding": "^0.1.13",
 		"fast-xml-parser": "^5.3.3",
-		"framer-motion": "^12.23.28",
+		"framer-motion": "^12.26.1",
 		"g": "^2.0.1",
 		"gatsby": "^5.15.0",
 		"gatsby-cli": "^5.15.0",
@@ -41,7 +41,7 @@
 		"react-dom": "^18.3.1",
 		"react-helmet": "^6.1.0",
 		"react-media": "^1.10.0",
-		"sass": "^1.97.1",
+		"sass": "^1.97.2",
 		"stringify": "^5.2.0",
 		"styled-components": "^5.3.11"
 	},
