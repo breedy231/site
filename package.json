@@ -18,7 +18,7 @@
 	"dependencies": {
 		"@mdx-js/react": "^2.3.0",
 		"axios": "^1.13.3",
-		"babel-plugin-styled-components": "^1.13.3",
+		"babel-plugin-styled-components": "^2.1.4",
 		"encoding": "^0.1.13",
 		"fast-xml-parser": "^5.3.3",
 		"framer-motion": "^12.29.2",
