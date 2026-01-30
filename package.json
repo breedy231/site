@@ -20,7 +20,7 @@
 		"axios": "^1.13.3",
 		"babel-plugin-styled-components": "^1.13.3",
 		"encoding": "^0.1.13",
-		"fast-xml-parser": "^5.3.3",
+		"fast-xml-parser": "^5.3.4",
 		"framer-motion": "^12.29.2",
 		"g": "^2.0.1",
 		"gatsby": "^5.15.0",
