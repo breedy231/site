@@ -9,16 +9,15 @@ export default async function handler(req) {
     })
   }
 
-  const token = req.headers.get("authorization")?.split("Bearer ")[1]
+  const token = process.env.GATSBY_TRAKT_ACCESS_TOKEN
 
   if (!token) {
     return new Response(
       JSON.stringify({
-        message: "No authentication token provided",
-        authRequired: true,
+        message: "Trakt access token not configured on server",
       }),
       {
-        status: 401,
+        status: 500,
         headers: { "Content-Type": "application/json" },
       },
     )
