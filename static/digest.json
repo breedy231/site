@@ -1,0 +1,1501 @@
+{
+  "generatedAt": "2026-03-18T18:00:52.516Z",
+  "briefing": "Tensions in the Middle East continue to escalate as Israel intensifies its strikes on Beirut in its campaign against Hezbollah and has killed Iran's intelligence minister, Esmaeil Khatib, marking a significant escalation in the broader regional conflict. Stateside, a disturbing investigation has surfaced accusing civil rights icon Cesar Chavez of abusing girls for years, potentially reshaping the legacy of the celebrated labor leader. In tech news, Marvel fans are buzzing over the new *Spider-Man: Brand New Day* trailer, while smart home enthusiasts will note that Matter support is coming to one of the market's top robot vacuums. Meanwhile, Chicago's theater scene is thriving, with the Black Ensemble Theater reviving *The Jackie Wilson Story* and Lookingglass exploring themes of ghosts and desire in *White Rooster*.",
+  "categories": [
+    {
+      "name": "Tech",
+      "articles": [
+        {
+          "id": "article-24-1773856852516",
+          "title": "Breaking Down the Secrets of the ‘Spider-Man: Brand New Day’ Trailer",
+          "summary": "Our first look at the next 'Spider-Man' film is jam-packed with nods to the comics—and some very interesting stories it could be taking inspiration from.",
+          "url": "https://gizmodo.com/spider-man-brand-new-day-trailer-breakdown-marvel-2000734989",
+          "sources": [
+            "Gizmodo",
+            "io9 | We Come From the Future"
+          ],
+          "score": 9,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T16:52:21.000Z"
+        },
+        {
+          "id": "article-61-1773856852516",
+          "title": "My favorite robot vacuum now supports Matter",
+          "summary": "The Matic robot vacuum finally adds smart home control. | Photo by Jennifer Pattison Tuohy / The Verge Matic, my current top pick for the best robot vacuum, just got a big update. The unique-looking f",
+          "url": "https://www.theverge.com/tech/896775/matic-robot-vacuum-apple-home-matter",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 9,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:30:07.000Z"
+        },
+        {
+          "id": "article-63-1773856852516",
+          "title": "Weird Nintendo never went away",
+          "summary": "Nintendo has been playing it safe of late, whether it's the conservative nature of its Switch successor or the squeaky-clean image presented in its museum. As the company has expanded its ambitions, i",
+          "url": "https://www.theverge.com/entertainment/896736/talking-flower-weird-nintendo",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 9,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:00:00.000Z"
+        },
+        {
+          "id": "article-18-1773856852516",
+          "title": "The Download: The Pentagon’s new AI plans, and next-gen nuclear reactors",
+          "summary": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. The Pentagon is planning for AI companies to train on classifi",
+          "url": "https://www.technologyreview.com/2026/03/18/1134371/the-download-the-pentagons-new-ai-plans-and-next-gen-nuclear-reactors/",
+          "sources": [
+            "MIT Technology Review"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T12:38:00.000Z"
+        },
+        {
+          "id": "article-22-1773856852516",
+          "title": "Robot Losing Its Mind in a California Restaurant Is Just as Fed Up as Everyone Else",
+          "summary": "Dance like no one's watching.",
+          "url": "https://gizmodo.com/robot-losing-its-mind-in-a-california-restaurant-is-just-as-fed-up-as-everyone-else-2000735088",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:50:20.000Z"
+        },
+        {
+          "id": "article-23-1773856852516",
+          "title": "Frozen Food Item From Aldi Recalled Over ‘Rodent Hair’ Worries",
+          "summary": "Check your freezers.",
+          "url": "https://gizmodo.com/frozen-food-item-from-aldi-recalled-over-rodent-hair-worries-2000735063",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:10:56.000Z"
+        },
+        {
+          "id": "article-30-1773856852516",
+          "title": "Sony Wants to Defeat Ghibli AI Slop… By Feeding Ghibli Movies Into Its Own Slop Machine",
+          "summary": "Sony hopes its new technology, Protective AI, will protect creators and rights holders from copyright infringement by making their own in-house AI slop machine that does the same thing.",
+          "url": "https://gizmodo.com/sony-protective-ai-studio-ghibli-2000735011",
+          "sources": [
+            "Gizmodo",
+            "io9 | We Come From the Future"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:00:14.000Z"
+        },
+        {
+          "id": "article-34-1773856852516",
+          "title": "‘1000 Women in Horror’ Explores Blood, Guts, and Long-Overdue Equality",
+          "summary": "A new Shudder documentary gazes at horror history through a feminist lens, featuring interviews with Akela Cooper, Mary Harron, Kate Siegel, and more.",
+          "url": "https://gizmodo.com/1000-women-in-horror-documentary-review-shudder-streaming-2000729665",
+          "sources": [
+            "Gizmodo",
+            "io9 | We Come From the Future"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T14:00:27.000Z"
+        },
+        {
+          "id": "article-36-1773856852516",
+          "title": "Hulu Assassinated the ‘Hitman’ TV Series This Week, Too",
+          "summary": "Plus, 'Booster Gold' TV writer Paul Jenkins offers a vague update on those cancelation rumors.",
+          "url": "https://gizmodo.com/hitman-tv-series-hulu-canceled-2000734865",
+          "sources": [
+            "Gizmodo",
+            "io9 | We Come From the Future"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T13:00:19.000Z"
+        },
+        {
+          "id": "article-37-1773856852516",
+          "title": "The First Trailer for ‘Spider-Man: Brand New Day’ Teases Spidey’s Big New Problems",
+          "summary": "Brand new days, same old crises for Peter Parker.",
+          "url": "https://gizmodo.com/spider-man-brand-new-day-trailer-marvel-mcu-2000700556",
+          "sources": [
+            "Gizmodo",
+            "io9 | We Come From the Future"
+          ],
+          "score": 8,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T12:01:02.000Z"
+        },
+        {
+          "id": "article-38-1773856852516",
+          "title": "Jessica Jones Is Back in the MCU Because ‘Jessica Jones’ Was So Good",
+          "summary": "Krysten Ritter returns as the hero in 'Daredevil: Born Again' season two, which begins on March 24.",
+          "url": "https://gizmodo.com/jessica-jones-is-back-in-the-mcu-because-jessica-jones-was-so-good-2000734851",
+          "sources": [
+            "Gizmodo",
+            "io9 | We Come From the Future"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T12:00:51.000Z"
+        },
+        {
+          "id": "article-42-1773856852516",
+          "title": "Snowflake Cortex AI Escapes Sandbox and Executes Malware",
+          "summary": "Comments",
+          "url": "https://www.promptarmor.com/resources/snowflake-ai-escapes-sandbox-and-executes-malware",
+          "sources": [
+            "Simon Willison's Weblog",
+            "Hacker News"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:30:07.000Z"
+        },
+        {
+          "id": "article-45-1773856852516",
+          "title": "A Journey Through Infertility",
+          "summary": "An interactive journey about IVF, told from two perspectives.",
+          "url": "https://pudding.cool/2026/03/ivf",
+          "sources": [
+            "The Pudding"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-19T05:00:00.000Z"
+        },
+        {
+          "id": "article-47-1773856852516",
+          "title": "Show HN: Will my flight have Starlink?",
+          "summary": "Comments",
+          "url": "https://news.ycombinator.com/item?id=47428650",
+          "sources": [
+            "Hacker News"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:29:21.000Z"
+        },
+        {
+          "id": "article-50-1773856852516",
+          "title": "The Outdoor Trees and Plants That Are Safe for Pets (and What to Avoid)",
+          "summary": "When i’s time to plan your garden and landscaping, and you want to make sure your pets can enjoy them safely, too.",
+          "url": "https://lifehacker.com/home/pet-safe-outdoor-plants-for-your-garden-and-landscaping?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:30:41.000Z"
+        },
+        {
+          "id": "article-66-1773856852516",
+          "title": "Philips’ new audio gear brings back the bright, bold colors of the ’80s",
+          "summary": "What’s old is new again. | Image: Philips Not even electronics were able to escape the dominant '80s aesthetic of garishly bright colors. Both Sony and Philips offered devices wrapped in yellow plasti",
+          "url": "https://www.theverge.com/tech/896593/philips-moving-sound-bluetooth-speaker-wireless-headphones-earbuds",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:04:26.000Z"
+        },
+        {
+          "id": "article-67-1773856852516",
+          "title": "Oh, you think the government will regulate Kalshi and Polymarket? Wanna bet?",
+          "summary": "Who’s keeping an ear out for insiders? | Image: Cath Virginia / The Verge, Getty Images The Commodity Futures Trading Commission has a problem: It's not very good at policing insider trading. And insi",
+          "url": "https://www.theverge.com/business/896517/kalshi-cftc-insider-trading-polymarket",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T14:30:00.000Z"
+        },
+        {
+          "id": "article-68-1773856852516",
+          "title": "The hits keep coming in Spider-Man: Brand New Day’s first trailer",
+          "summary": "The first trailer for Spider-Man: Brand New Day is finally here, and it looks like Marvel and Sony are about to put Peter Parker through a different kind of existential crisis. Though nobody in Brand ",
+          "url": "https://www.theverge.com/entertainment/896564/spider-man-brand-new-day-trailer",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 8,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T13:37:54.000Z"
+        },
+        {
+          "id": "article-69-1773856852516",
+          "title": "The great EV pullback: all the obstacles, cancellations, and delays",
+          "summary": "The auto industry bet big on electric vehicles, but now those ambitious goals are falling apart. Demand was already slowing down when Donald Trump took office and took an ax to pro-EV policy: the elim",
+          "url": "https://www.theverge.com/transportation/896559/ev-cancellation-delay-hybrid-china",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T13:00:41.000Z"
+        },
+        {
+          "id": "article-25-1773856852516",
+          "title": "Quitting Ozempic Could Hit Your Heart Hard, Study Finds",
+          "summary": "New research reaffirms that GLP-1s can help prevent heart attacks, but only as long as you're taking them.",
+          "url": "https://gizmodo.com/quitting-ozempic-could-hit-your-heart-hard-study-finds-2000733999",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T16:00:29.000Z"
+        },
+        {
+          "id": "article-26-1773856852516",
+          "title": "This May Be the World’s First Quantum Battery",
+          "summary": "The proof-of-concept still has a long way to go before it’ll end up in real devices, but it’s a great start.",
+          "url": "https://gizmodo.com/this-may-be-the-worlds-first-quantum-battery-2000735053",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:55:00.000Z"
+        },
+        {
+          "id": "article-27-1773856852516",
+          "title": "Prediction Market Bets on Nukes and the Oscars Could Soon Be Illegal",
+          "summary": "\"There are clearly individuals in the White House who are making money off of when the United States goes to war or not,” Sen. Murphy said.",
+          "url": "https://gizmodo.com/new-bill-aims-to-ban-prediction-market-bets-on-nukes-and-the-oscars-2000735016",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:45:05.000Z"
+        },
+        {
+          "id": "article-28-1773856852516",
+          "title": "Using Gemini to Turn on Your Lights Is Now 40% Faster—but It’s Still Too Slow",
+          "summary": "It's still not instant.",
+          "url": "https://gizmodo.com/using-gemini-to-turn-on-your-lights-is-now-40-faster-but-its-still-too-slow-2000734994",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:15:15.000Z"
+        },
+        {
+          "id": "article-29-1773856852516",
+          "title": "NASA’s Quiet Supersonic Jet Is Back for Round 2. Here’s What to Expect",
+          "summary": "After making its debut last year, X-59 is preparing to soar over California for its second flight.",
+          "url": "https://gizmodo.com/nasas-quiet-supersonic-jet-is-back-for-round-2-heres-what-to-expect-2000734999",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:10:16.000Z"
+        },
+        {
+          "id": "article-31-1773856852516",
+          "title": "Satellite Images Reveal Mega-Leaks of Potent Greenhouse Gas",
+          "summary": "UCLA's Stop Methane Project ranked the 25 oil and gas sites with the largest methane emissions rates worldwide.",
+          "url": "https://gizmodo.com/satellite-images-reveal-mega-leaks-of-potent-greenhouse-gas-2000734990",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T14:35:15.000Z"
+        },
+        {
+          "id": "article-32-1773856852516",
+          "title": "Leak Claims Next reMarkable Tablet Will Be ‘Mass-Market Focused’",
+          "summary": "Say hello to the \"reMarkable Paper Pure\" tablet?",
+          "url": "https://gizmodo.com/leak-claims-next-remarkable-tablet-will-be-mass-market-focused-2000734995",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T14:30:26.000Z"
+        },
+        {
+          "id": "article-33-1773856852516",
+          "title": "BMW’s New i3 Sedan Targets Tesla Model 3 in a World of Electric SUVs",
+          "summary": "While its rivals keep rethinking their EV strategies, BMW has persisted.",
+          "url": "https://gizmodo.com/bmws-new-i3-sedan-targets-tesla-model-3-in-a-world-of-electric-suvs-2000734998",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T14:20:25.000Z"
+        },
+        {
+          "id": "article-35-1773856852516",
+          "title": "Jeff Bezos Wants to Save Earth With This Freaky-Looking Probe",
+          "summary": "Blue Origin unveiled a planetary defense concept to protect Earth from incoming asteroids.",
+          "url": "https://gizmodo.com/if-an-asteroid-heads-toward-earth-we-may-have-to-rely-on-jeff-bezos-to-save-us-2000734796",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T13:48:27.000Z"
+        },
+        {
+          "id": "article-39-1773856852516",
+          "title": "Damon Lindelof Forced to Defend the Color Green After ‘Lanterns’ Controversy",
+          "summary": "Comic book writer Grant Morrison took the HBO Max show's co-creator to task, prompting a hasty apology.",
+          "url": "https://gizmodo.com/dc-lanterns-tv-show-backlash-damon-lindelof-apology-2000734800",
+          "sources": [
+            "Gizmodo",
+            "io9 | We Come From the Future"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T11:00:58.000Z"
+        },
+        {
+          "id": "article-46-1773856852516",
+          "title": "Death to Scroll Fade",
+          "summary": "Comments",
+          "url": "https://dbushell.com/2026/01/09/death-to-scroll-fade/",
+          "sources": [
+            "Hacker News"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:23:58.000Z"
+        },
+        {
+          "id": "article-48-1773856852516",
+          "title": "A tiny, decentralised tool to explore the small web",
+          "summary": "Comments",
+          "url": "https://codeberg.org/susam/wander",
+          "sources": [
+            "Hacker News"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:57:48.000Z"
+        },
+        {
+          "id": "article-52-1773856852516",
+          "title": "You Should Turn On This New Security Update Feature on Your iPhone and Mac",
+          "summary": "\"Background Security Improvements\" is Apple's new way of installing security updates.",
+          "url": "https://lifehacker.com/tech/apples-security-update-iphone-mac-setting?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:30:00.000Z"
+        },
+        {
+          "id": "article-53-1773856852516",
+          "title": "Garmin Just Launched a Long-Awaited Integration on Its Fitness Watches",
+          "summary": "WhatsApp on Garmin has been a popular request for a long time, and it's finally here.",
+          "url": "https://lifehacker.com/health/garmin-whatsapp-integration-fitness-watches?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 7,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T15:00:00.000Z"
+        },
+        {
+          "id": "article-20-1773856852516",
+          "title": "The Pentagon is planning for AI companies to train on classified data, defense official says",
+          "summary": "The Pentagon is discussing plans to set up secure environments for generative AI companies to train military-specific versions of their models on classified data, MIT Technology Review has learned. AI",
+          "url": "https://www.technologyreview.com/2026/03/17/1134351/the-pentagon-is-planning-for-ai-companies-to-train-on-classified-data-defense-official-says/",
+          "sources": [
+            "MIT Technology Review"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T22:30:46.000Z"
+        },
+        {
+          "id": "article-21-1773856852516",
+          "title": "Egg receipts for 25 years",
+          "summary": "John Rush has been scanning his receipts for 25 years. He did something… Tags: eggs, John Rush, receipt",
+          "url": "https://flowingdata.com/2026/03/18/egg-receipts-for-25-years/",
+          "sources": [
+            "FlowingData"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T09:03:25.000Z"
+        },
+        {
+          "id": "article-40-1773856852516",
+          "title": "INIU’s Portable Chargers Are Smaller, Slimmer, and More Powerful Than Ever",
+          "summary": "Meet five tiny multiport titans ready to juice up your smartphone, tablet, smartwatch, and even your laptop.",
+          "url": "https://gizmodo.com/inius-portable-chargers-are-smaller-slimmer-and-more-powerful-than-ever-2000720465",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T10:55:22.000Z"
+        },
+        {
+          "id": "article-41-1773856852516",
+          "title": "5 Companies Competing to Replace the International Space Station",
+          "summary": "Each of these aerospace firms has a unique vision for the future of humanity's presence in low-Earth orbit.",
+          "url": "https://gizmodo.com/5-companies-competing-to-replace-the-international-space-station-2000734746",
+          "sources": [
+            "Gizmodo"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T10:00:17.000Z"
+        },
+        {
+          "id": "article-49-1773856852516",
+          "title": "Rob Pike's Rules of Programming (1989)",
+          "summary": "Comments",
+          "url": "https://www.cs.unc.edu/~stotts/COMP590-059-f24/robsrules.html",
+          "sources": [
+            "Hacker News"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T09:59:54.000Z"
+        },
+        {
+          "id": "article-56-1773856852516",
+          "title": "Power Zone Workouts Are My Favorite Thing About the Peloton Bike",
+          "summary": "For when you want to train more seriously.",
+          "url": "https://lifehacker.com/health/how-to-use-power-zone-workouts-on-peloton-bike?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T12:00:00.000Z"
+        },
+        {
+          "id": "article-43-1773856852516",
+          "title": "Quoting Ken Jin",
+          "summary": "Great news—we’ve hit our (very modest) performance goals for the CPython JIT over a year early for macOS AArch64, and a few months early for x86_64 Linux. The 3.15 alpha JIT is about 11-12% faster on ",
+          "url": "https://simonwillison.net/2026/Mar/17/ken-jin/#atom-everything",
+          "sources": [
+            "Simon Willison's Weblog"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T21:48:26.000Z"
+        },
+        {
+          "id": "article-44-1773856852516",
+          "title": "GPT-5.4 mini and GPT-5.4 nano, which can describe 76,000 photos for $52",
+          "summary": "OpenAI today: Introducing GPT‑5.4 mini and nano. These models join GPT-5.4 which was released two weeks ago. OpenAI's self-reported benchmarks show the new 5.4-nano out-performing their previous GPT-5",
+          "url": "https://simonwillison.net/2026/Mar/17/mini-and-nano/#atom-everything",
+          "sources": [
+            "Simon Willison's Weblog"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T19:39:17.000Z"
+        },
+        {
+          "id": "article-19-1773856852516",
+          "title": "What do new nuclear reactors mean for waste?",
+          "summary": "MIT Technology Review Explains: Let our writers untangle the complex, messy world of technology to help you understand what’s coming next. You can read more from the series here. The way the world cur",
+          "url": "https://www.technologyreview.com/2026/03/18/1134345/advanced-nuclear-reactors-waste/",
+          "sources": [
+            "MIT Technology Review"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T09:00:00.000Z"
+        },
+        {
+          "id": "article-51-1773856852516",
+          "title": "You Can Get These Nothing Over-Ear Headphones for $79 Right Now",
+          "summary": "Nothing's budget-friendly over-ear headphones boast 100 hours of battery life.",
+          "url": "https://lifehacker.com/tech/cmf-nothing-headphone-pros-sale-march-2026?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:00:00.000Z"
+        },
+        {
+          "id": "article-54-1773856852516",
+          "title": "This Samsung Smart Monitor Is $300 Off Right Now",
+          "summary": "Movies and games look more lifelike on the OLED M9 than they would on a standard IPS display.",
+          "url": "https://lifehacker.com/tech/samsung-smart-monitor-m9-sale-march-2026?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T13:00:00.000Z"
+        },
+        {
+          "id": "article-55-1773856852516",
+          "title": "This Motorola Razr+ Is on Sale for $400 Right Now",
+          "summary": "A more accessible way to try a folding phone without paying flagship prices.",
+          "url": "https://lifehacker.com/tech/motorola-razr-plus-sale-march-2026?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T12:30:00.000Z"
+        },
+        {
+          "id": "article-57-1773856852516",
+          "title": "Lifehacker Deals Live Blog: The Best Tech Sales, All in One Place",
+          "summary": "Keep up with all of the best deals that Lifehacker publishes, including laptops, speakers, TVs, security cameras, and more.",
+          "url": "https://lifehacker.com/lifehacker-deals-live-blog?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T21:54:21.000Z"
+        },
+        {
+          "id": "article-58-1773856852516",
+          "title": "The Best Sales on Headphones and Earbuds Right Now",
+          "summary": "Get a great price on headphones and earbuds from Sony, Marshall, JBL, and more.",
+          "url": "https://lifehacker.com/best-deals-on-earbuds-and-headphones-right-now?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T20:30:00.000Z"
+        },
+        {
+          "id": "article-59-1773856852516",
+          "title": "Best Buy's Spring Sale Is Live, Ahead of Amazon's 'Big Spring Sale'",
+          "summary": "Until Sunday, you can get discounts on TVs, laptops, headphones, video games, e-bikes, and more.",
+          "url": "https://lifehacker.com/tech/best-buys-spring-sale-2026-has-begun?utm_medium=RSS",
+          "sources": [
+            "Lifehacker"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T19:30:58.000Z"
+        },
+        {
+          "id": "article-60-1773856852516",
+          "title": "Kasa’s Matter-compatible smart plugs are on sale for $11 a pop",
+          "summary": "With the smart plugs, you can schedule lights to turn on and off while you’re away on spring break. | Photo by Amelia Holowaty Krales / The Verge If you’re looking for an easy and affordable way to ad",
+          "url": "https://www.theverge.com/gadgets/896899/kasa-smart-wi-fi-plug-slim-amazon-early-big-spring-sale-deal-sale",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:43:23.000Z"
+        },
+        {
+          "id": "article-62-1773856852516",
+          "title": "The best AirPods deals you can get right now",
+          "summary": "If you know where to look, you can often score deals on Apple’s ever-expanding AirPods lineup. Both the first-gen AirPods Max and the AirPods 4 (with and without ANC) now consistently receive discount",
+          "url": "https://www.theverge.com/21302051/best-apple-airpods-deals",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:29:46.000Z"
+        },
+        {
+          "id": "article-64-1773856852516",
+          "title": "PSA: Hackers can raid iOS 18 with an infected link",
+          "summary": "If you've been putting off an update to iOS 26, now might be the time to do it. On Wednesday, security researchers published findings on a new hacking tool that targets iPhones running iOS 18.4 to 18.",
+          "url": "https://www.theverge.com/tech/896841/iphone-ios-18-attack-darksword",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T16:45:45.000Z"
+        },
+        {
+          "id": "article-65-1773856852516",
+          "title": "The best early Amazon Big Spring Sale deals you can get right now",
+          "summary": "Amazon’s Prime Day sale may arrive earlier than usual this year, but there’s a deal event happening much sooner: Amazon’s annual Big Spring Sale, which is happening March 25th through the 31st. While ",
+          "url": "https://www.theverge.com/gadgets/895635/best-amazon-big-spring-sale-early-deals-2026",
+          "sources": [
+            "The Verge"
+          ],
+          "score": 3,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:52:39.000Z"
+        }
+      ]
+    },
+    {
+      "name": "Gaming",
+      "articles": [
+        {
+          "id": "article-83-1773856852516",
+          "title": "Digital Foundry Addresses DLSS 5 Blowback: ‘We Should Have Taken More Time’",
+          "summary": "The tech analysis team called out people who sent death threats over their recent Nvidia video",
+          "url": "https://kotaku.com/digital-foundry-dlss5-nvidia-genai-response-video-2000680002",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:11:29.000Z"
+        },
+        {
+          "id": "article-84-1773856852516",
+          "title": "Val Kilmer Is Dead, But AI Is Bringing Him Back To Star In A New Movie",
+          "summary": "A digital version of the late Batman actor will play a priest in the upcoming film As Deep as the Grave",
+          "url": "https://kotaku.com/val-kilmer-ai-generated-actor-tech-new-movie-first-look-2000680001",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:02:27.000Z"
+        },
+        {
+          "id": "article-85-1773856852516",
+          "title": "Free Yourself From The Pressure Of Playing Pokémon Pokopia Wrong",
+          "summary": "Yes, people are building amazing towns, but yours has its charms",
+          "url": "https://kotaku.com/pokemon-pokopia-best-creations-building-builds-towns-2000680008",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T16:54:28.000Z"
+        },
+        {
+          "id": "article-86-1773856852516",
+          "title": "Everything You Need To Know About Crimson Desert",
+          "summary": "We'll answer your biggest questions about the gorgeous, massively hyped open-world game",
+          "url": "https://kotaku.com/crimson-desert-how-long-to-beat-what-kind-of-game-story-2000679990",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T16:05:13.000Z"
+        },
+        {
+          "id": "article-80-1773856852516",
+          "title": "I Roved Out In Search Of Truth And Love Is An Erotic Fantasy Saga That Has More Than Just Spice",
+          "summary": "Not safe for work, obviously.",
+          "url": "https://aftermath.site/i-roved-out-in-search-of-truth-and-love-is-an-erotic-fantasy-saga-that-has-more-than-just-spice/",
+          "sources": [
+            "Aftermath"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T14:00:13.000Z"
+        },
+        {
+          "id": "article-87-1773856852516",
+          "title": "Sony Updates 3-Year-Old Blog Celebrating Game’s Launch To Announce It’s Shutting Down",
+          "summary": "Firewall Ultra's launch week post on the official PlayStation site is now an awkward tombstone for the online shooter",
+          "url": "https://kotaku.com/firewall-ultra-shutdown-september-closing-servers-offline-ps5-psvr2-blog-post-2000679977",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:56:04.000Z"
+        },
+        {
+          "id": "article-88-1773856852516",
+          "title": "Share In The Incredible Moment An Indie Dev Discovers His Game Made $250,000",
+          "summary": "Tangy TD developer Cakez livestreamed the moment he looked at his game's income",
+          "url": "https://kotaku.com/tangy-td-cakez-twitch-steam-pc-indie-success-story-2000679960",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:45:16.000Z"
+        },
+        {
+          "id": "article-89-1773856852516",
+          "title": "Pirates Have A Field Day With Death Stranding 2 After It Accidentally Leaks Early On Steam",
+          "summary": "Also: what new game is Charlie Cox acting in?",
+          "url": "https://kotaku.com/death-stranding-2-steam-leak-piracy-pc-2000679952",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:35:37.000Z"
+        },
+        {
+          "id": "article-90-1773856852516",
+          "title": "One Of The Biggest Competitive Pokémon Players Declares One ‘Mon The Best Of The Bunch",
+          "summary": "WolfeyVGC ranked all 1000+ Pokémon to put one of them on top",
+          "url": "https://kotaku.com/pokemon-best-worst-wolfeyvgc-video-ranking-kyogre-2000679975",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:22:42.000Z"
+        },
+        {
+          "id": "article-91-1773856852516",
+          "title": "Pokémon Pokopia Gets Tiniest Patch Imaginable As Fans Beg For Bigger Fixes",
+          "summary": "The game is less than two weeks old, so the update focuses on some smaller issues",
+          "url": "https://kotaku.com/pokemon-pokopia-patch-notes-update-1-0-2-storage-fixes-2000679954",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T13:27:05.000Z"
+        },
+        {
+          "id": "article-92-1773856852516",
+          "title": "Spider-Man: Brand New Day Trailer Shows Peter In A World That’s Forgotten Him",
+          "summary": "We also see Scorpion, Punisher, Bruce Banner, and possibly Sadie Sink's villain",
+          "url": "https://kotaku.com/spider-man-brand-new-day-trailer-shows-peter-in-a-world-thats-forgotten-him-2000679935",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 7,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T12:38:31.000Z"
+        },
+        {
+          "id": "article-93-1773856852516",
+          "title": "Your [Checks Notes] PlayStation 3 Just Got An Update",
+          "summary": "Sony just rolled out its annual patch for the 2006 console, to both support and break games preservation",
+          "url": "https://kotaku.com/playsstation-3-update-4-93-sony-drm-blu-ray-jailbroken-modding-2000679921",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T11:26:26.000Z"
+        },
+        {
+          "id": "article-94-1773856852516",
+          "title": "Nvidia Says DLSS 5 Haters Are ‘Wrong’ As It Defends Fusing ‘Everything About The Game With Generative AI’",
+          "summary": "That's one way to respond to the DLSS 5 backlash",
+          "url": "https://kotaku.com/dlss5-nvidia-gen-ai-graphics-jensen-huang-2000679764",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T06:40:35.000Z"
+        },
+        {
+          "id": "article-95-1773856852516",
+          "title": "Highguard Players Get Surprise Refunds On PS5 As Studio Shuts Its Doors For Good",
+          "summary": "Wildlight Entertainment appears to be no more",
+          "url": "https://kotaku.com/highguard-refunds-ps5-steam-xbox-shutdown-2000679761",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T06:01:10.000Z"
+        },
+        {
+          "id": "article-81-1773856852516",
+          "title": "Tonight At The World Baseball Classic, I Hope Team USA Eats Shit",
+          "summary": "Please Team Venezuela, destroy us.",
+          "url": "https://aftermath.site/world-baseball-classic-team-usa-military-robert-oneill/",
+          "sources": [
+            "Aftermath"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T21:38:37.000Z"
+        },
+        {
+          "id": "article-82-1773856852516",
+          "title": "The Art Of The Fanmix",
+          "summary": "When you really love a story, eventually everything reminds you of it.",
+          "url": "https://aftermath.site/fanmix-music-fandom-utena-anthy-evangelion-asuka-nana-mitski-ethel-cain/",
+          "sources": [
+            "Aftermath"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T19:41:34.000Z"
+        },
+        {
+          "id": "article-96-1773856852516",
+          "title": "Arc Raiders Studio Parts Ways With Cofounder Over Sexual Misconduct Allegations It Was Unable To Substantiate",
+          "summary": "Robert Runesson was a longtime veteran of DICE before starting Embark Studios",
+          "url": "https://kotaku.com/rob-runesson-embark-finals-esports-misconduct-allegations-2000679734",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T22:38:22.000Z"
+        },
+        {
+          "id": "article-97-1773856852516",
+          "title": "Street Fighter 6’s Latest DLC Ending Is Upsetting Fans Because Alex Marries His Sister-Cousin",
+          "summary": "Alex's arrival saw the game break its all-time peak player count on Steam",
+          "url": "https://kotaku.com/street-fighter-6-alex-dlc-ending-patricia-tom-sister-cousin-married-2000679707",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T20:43:35.000Z"
+        },
+        {
+          "id": "article-98-1773856852516",
+          "title": "Alan Wake 2 Studio Is Keeping Its Multiplayer Game Alive Even Though Only 38 People Are Playing It On Steam Right Now",
+          "summary": "Also: one game ditches AI while another game company invests in AI war machines",
+          "url": "https://kotaku.com/fbc-firebreak-hitman-tv-mindseye-arc-raiders-2000679690",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T20:31:46.000Z"
+        },
+        {
+          "id": "article-99-1773856852516",
+          "title": "The Wait For Subnautica 2 Is Finally Over In May After Messy Legal Battle [Update]",
+          "summary": "The highly-anticipated underwater survival sequel will release via early access on Xbox and PC",
+          "url": "https://kotaku.com/subnautica-2-will-finally-launch-soon-after-devs-win-messy-legal-fight-2000679709",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T20:30:52.000Z"
+        },
+        {
+          "id": "article-100-1773856852516",
+          "title": "Unofficial Animal Crossing Port Brings The OG Cozy Game To PC",
+          "summary": "You can play this PC port of the GameCube classic to hold you over until Nintendo releases a new Animal Crossing sequel for Switch 2",
+          "url": "https://kotaku.com/unofficial-animal-crossing-port-brings-the-og-cozy-game-to-pc-2000679688",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T20:24:43.000Z"
+        },
+        {
+          "id": "article-101-1773856852516",
+          "title": "An Early Script For The Buffy The Vampire Slayer Reboot Leaked And It’s Unbelievably Bad",
+          "summary": "The 2024 script barely featured the titular vampire slayer",
+          "url": "https://kotaku.com/buffy-vampire-slayer-new-sunnydale-reboot-script-canceled-2000679693",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T19:58:17.000Z"
+        },
+        {
+          "id": "article-102-1773856852516",
+          "title": "Pokémon Pokopia Players Are Turning Their Towns Into Sweatshops",
+          "summary": "That’s one way to gather resources that your friends would otherwise willingly give you",
+          "url": "https://kotaku.com/pokemon-pokopia-factory-sweatshop-prison-jail-labor-2000679679",
+          "sources": [
+            "Kotaku"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T18:30:10.000Z"
+        }
+      ]
+    },
+    {
+      "name": "News",
+      "articles": [
+        {
+          "id": "article-1-1773856852516",
+          "title": "Israel Intensifies Strikes on Beirut, Escalating Its Campaign Against Hezbollah",
+          "summary": "The Israeli military widened its attacks to the districts in the center of the Lebanese capital, destroying buildings, forcing residents to flee and killing at least 10.",
+          "url": "https://www.nytimes.com/2026/03/18/world/middleeast/israel-strikes-beirut-lebanon-hezbollah.html",
+          "sources": [
+            "NYT > Top Stories"
+          ],
+          "score": 9,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:26:10.000Z"
+        },
+        {
+          "id": "article-4-1773856852516",
+          "title": "Cesar Chavez, a Civil Rights Icon, Is Accused of Abusing Girls for Years",
+          "summary": "An investigation by The New York Times found extensive evidence that the United Farm Workers co-founder groomed and sexually abused girls who worked in the movement.",
+          "url": "https://www.nytimes.com/2026/03/18/us/cesar-chavez-sexual-abuse-allegations-ufw.html",
+          "sources": [
+            "NYT > Top Stories"
+          ],
+          "score": 9,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:00:35.000Z"
+        },
+        {
+          "id": "article-0-1773856852516",
+          "title": "Israel Has Killed Esmaeil Khatib, Iran’s Intelligence Minister",
+          "summary": "The Israeli military said on Wednesday that it had killed Esmaeil Khatib in an airstrike. Iran confirmed the killing.",
+          "url": "https://www.nytimes.com/2026/03/18/world/middleeast/iran-intelligence-minister-khatib-israel.html",
+          "sources": [
+            "NYT > Top Stories"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T14:35:50.000Z"
+        },
+        {
+          "id": "article-9-1773856852516",
+          "title": "White Rooster examines ghosts, longing, and desire at Lookingglass",
+          "summary": "White Rooster, through 4/26 at Lookingglass Theatre The post White Rooster examines ghosts, longing, and desire at Lookingglass appeared first on Chicago Reader.",
+          "url": "https://chicagoreader.com/performing-arts/theater/theater-review/white-rooster-lookingglass-theatre/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:49:22.000Z"
+        },
+        {
+          "id": "article-10-1773856852516",
+          "title": "The Jackie Wilson Story returns to Black Ensemble Theater",
+          "summary": "The Jackie Wilson Story, through 4/26 at Black Ensemble Theater Cultural Center The post The Jackie Wilson Story returns to Black Ensemble Theater appeared first on Chicago Reader.",
+          "url": "https://chicagoreader.com/performing-arts/theater/theater-review/jackie-wilson-story-black-ensemble-theater/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:25:17.000Z"
+        },
+        {
+          "id": "article-11-1773856852516",
+          "title": "When words fail",
+          "summary": "Song About Himself, through 4/5, Theater Oobleck at Facility Theatre The post When words fail appeared first on Chicago Reader.",
+          "url": "https://chicagoreader.com/performing-arts/theater/theater-review/song-about-himself-theater-oobleck-mickle-maher/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:06:49.000Z"
+        },
+        {
+          "id": "article-12-1773856852516",
+          "title": "A tasty amuse-bouche",
+          "summary": "Fully Committed, through 3/28 at the Den Theatre The post A tasty amuse-bouche appeared first on Chicago Reader.",
+          "url": "https://chicagoreader.com/performing-arts/theater/theater-review/fully-committed-mike-newquist-den-theatre/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T16:53:08.000Z"
+        },
+        {
+          "id": "article-13-1773856852516",
+          "title": "A nose for sweetness",
+          "summary": "Cyrano, through 4/12, Theatre Above the Law at Jarvis Square Theater The post A nose for sweetness appeared first on Chicago Reader.",
+          "url": "https://chicagoreader.com/performing-arts/theater/theater-review/cyrano-theatre-above-the-law/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T16:40:17.000Z"
+        },
+        {
+          "id": "article-2-1773856852516",
+          "title": "As Iran War Drags On, Europe Wants to Avoid a New Migration Crisis",
+          "summary": "A decade ago, a surge in migration to Europe spurred the far-right’s rise. European leaders now fear the Iran war could set off another crisis, and they have taken tentative steps to prepare.",
+          "url": "https://www.nytimes.com/2026/03/18/world/europe/iran-war-refugees-turkey.html",
+          "sources": [
+            "NYT > Top Stories"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T09:01:22.000Z"
+        },
+        {
+          "id": "article-3-1773856852516",
+          "title": "The Cost of the A.I. Boom: A Trade Deficit the President Detests",
+          "summary": "A recent surge of A.I.-related imports has become an impediment to the smaller trade deficit President Trump wants.",
+          "url": "https://www.nytimes.com/2026/03/18/business/economy/us-trade-deficit-ai-boom.html",
+          "sources": [
+            "NYT > Top Stories"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T09:00:48.000Z"
+        },
+        {
+          "id": "article-8-1773856852516",
+          "title": "Health workers lobby for law change as they face increasing violence on the job",
+          "summary": "Rising concerns about violence in hospitals and emergency departments has led doctors and nurses to demand stronger legal protections for health care workers — and tougher penalties for those who assa",
+          "url": "https://www.wbur.org/news/2026/03/17/health-care-worker-assault-legislation-felony-mental-health",
+          "sources": [
+            "WBUR News"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T12:54:34.000Z"
+        },
+        {
+          "id": "article-14-1773856852516",
+          "title": "Review: Project Hail Mary",
+          "summary": "Project Hail Mary in wide release in theaters The post Review: Project Hail Mary appeared first on Chicago Reader.",
+          "url": "https://chicagoreader.com/film-tv/movie-review/review-project-hail-mary/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T15:00:00.000Z"
+        },
+        {
+          "id": "article-15-1773856852516",
+          "title": "Heavy Crownz aims for the Chicago rap canon with Trench Baby Turned Farmer",
+          "summary": "Last week, Englewood rapper Heavy Crownz released his accomplished new album, Trench Baby Turned Farmer. “Clap for Me!” makes a great showcase for his earthy vocals, emotive flow, and forthright lyric",
+          "url": "https://chicagoreader.com/music/gossip-wolf/heavy-crownz-farmer-newchicago-resavoir-uncaged-red-pk-cbvb/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T13:00:00.000Z"
+        },
+        {
+          "id": "article-16-1773856852516",
+          "title": "How the Oneida Nation of Wisconsin got their land back",
+          "summary": "The Oneida people have inhabited the Great Lakes region for millennia, and their ancestral lands include approximately six million acres in present-day New York state. During the American Revolution, ",
+          "url": "https://chicagoreader.com/books/book-review/unsettling-territory-douglas-metoxen-kiel/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T12:00:00.000Z"
+        },
+        {
+          "id": "article-5-1773856852516",
+          "title": "Illinois Results: Daniel Biss Beats Kat Abughazaleh in Blow to Left and AIPAC Alike",
+          "summary": "Pro-Israel, AI, and crypto groups saw mixed results across Illinois as outside interests sought to snatch up open seats that favor Democrats. The post Illinois Results: Daniel Biss Beats Kat Abughazal",
+          "url": "https://theintercept.com/2026/03/17/illinois-house-senate-primary-results-biss-abughazaleh/",
+          "sources": [
+            "The Intercept"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T02:01:09.000Z"
+        },
+        {
+          "id": "article-6-1773856852516",
+          "title": "Trump Wants to Put You in a Massive, Secret Government Database",
+          "summary": "Agencies are reportedly pooling immigration data, Social Security numbers, and more into a central database. FPF is suing to learn how deep it goes. The post Trump Wants to Put You in a Massive, Secre",
+          "url": "https://theintercept.com/2026/03/17/government-surveillance-centralized-database-privacy/",
+          "sources": [
+            "The Intercept"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T18:59:15.000Z"
+        },
+        {
+          "id": "article-7-1773856852516",
+          "title": "BSO musicians rally in support of embattled director",
+          "summary": "Musicians with the Boston Symphony Orchestra gathered Tuesday on the steps of Symphony Hall to support their embattled music director Andris Nelsons.",
+          "url": "https://www.wbur.org/news/2026/03/17/bso-andris-nelsons-musicians-support",
+          "sources": [
+            "WBUR News"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T23:46:34.000Z"
+        },
+        {
+          "id": "article-17-1773856852516",
+          "title": "The Sunny Naqvi case shows how outrage, politics, and incomplete information collide",
+          "summary": "As a journalist, it’s always been important for me to center the people directly impacted by injustice and tell stories that capture their full humanity, not just ones that fixate on their trauma. So,",
+          "url": "https://chicagoreader.com/columns-opinion/commentary/ice-ohare-cbp-broadview-citizen-detained/",
+          "sources": [
+            "Chicago Reader"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T18:34:53.000Z"
+        }
+      ]
+    },
+    {
+      "name": "Cool Stuff",
+      "articles": [
+        {
+          "id": "article-71-1773856852516",
+          "title": "The Art of Everyday: Building a Hyper-Realistic LEGO Kitchen",
+          "summary": "At first glance, you might want to cook in this kitchen… until you realize it’s made entirely of LEGO. We talk to builder Victor van den Berg about capturing realism, the art of everyday design, and c",
+          "url": "https://bricknerd.com/home/the-art-of-everyday-building-a-hyper-realistic-lego-kitchen-3-18-26",
+          "sources": [
+            "BrickNerd - All things LEGO and the LEGO fan community"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:20:00.000Z"
+        },
+        {
+          "id": "article-72-1773856852516",
+          "title": "The Party of Small Government Demands Twenty-Four-Hour Video Footage of Your Children",
+          "summary": "“GOP Ohio lawmaker calls for camera monitoring system to prevent child care fraud.” — Dayton Daily News - - - We Republicans know what you, the American people, want most: round-the-clock video survei",
+          "url": "https://www.mcsweeneys.net/articles/the-party-of-small-government-demands-twenty-four-hour-video-footage-of-your-children",
+          "sources": [
+            "McSweeney’s"
+          ],
+          "score": 8,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T16:47:00.000Z"
+        },
+        {
+          "id": "article-73-1773856852516",
+          "title": "An Excerpt from Annabelle Gurwitch’s New Memoir, The End of My Life Is Killing Me: The Unexpected Joys of a Cancer Slacker",
+          "summary": "- - - After Annabelle Gurwitch received an out-of-the-blue diagnosis of Stage 4 lung cancer, an existential dread set in. Precision medicine offered a temporary reprieve—but instead of turning into a ",
+          "url": "https://www.mcsweeneys.net/articles/an-excerpt-from-annabelle-gurwitchs-new-memoir-the-end-of-my-life-is-killing-me-the-unexpected-joys-of-a-cancer-slacker",
+          "sources": [
+            "McSweeney’s"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T13:00:00.000Z"
+        },
+        {
+          "id": "article-74-1773856852516",
+          "title": "Literary References, According to Tech Bros",
+          "summary": "From Grok to Palantír to “wireheading,” tech bros are renowned for flawlessly using literary references to name and explain technology in ways that absolutely never misunderstand the source texts. Her",
+          "url": "https://www.mcsweeneys.net/articles/literary-references-according-to-tech-bros",
+          "sources": [
+            "McSweeney’s"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T12:00:00.000Z"
+        },
+        {
+          "id": "article-75-1773856852516",
+          "title": "Disney’s ‘Galaxy’s Edge’ Timeline Reboot Erased a Galactic Starcruiser Nod",
+          "summary": "A fun wink to the controversial 'Star Wars' hotel experience was removed as the theme park shifts gears.",
+          "url": "https://gizmodo.com/disneys-galaxys-edge-timeline-reboot-erased-a-galactic-starcruiser-nod-2000734745",
+          "sources": [
+            "io9 | We Come From the Future"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T22:30:02.000Z"
+        },
+        {
+          "id": "article-76-1773856852516",
+          "title": "Oh, So Now Netflix Is Interested in More Theatrical Releases",
+          "summary": "The animated series 'Stranger Things: Tales From '85' will get a special big-screen preview of its first two episodes.",
+          "url": "https://gizmodo.com/netflix-theaterical-release-stranger-things-tales-from-85-2000734715",
+          "sources": [
+            "io9 | We Come From the Future"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T21:30:30.000Z"
+        },
+        {
+          "id": "article-77-1773856852516",
+          "title": "Rebecca Ferguson Says She Has Just One Scene in ‘Dune: Part Three’",
+          "summary": "Sorry, Lady Jessica fans: Ferguson's character plays a much smaller part in Denis Villeneuve's next Frank Herbert adaptation.",
+          "url": "https://gizmodo.com/rebecca-ferguson-dune-3-denis-villeneuve-2000734686",
+          "sources": [
+            "io9 | We Come From the Future"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T20:30:18.000Z"
+        },
+        {
+          "id": "article-78-1773856852516",
+          "title": "‘V For Vendetta’ at 20: We Spoke to Its Director About the Increasingly Relevant Comic Adaptation",
+          "summary": "io9 spoke with James McTeigue about the Natalie Portman and Hugo Weaving film, which opened 20 years ago today.",
+          "url": "https://gizmodo.com/v-for-vendetta-at-20-we-spoke-to-its-director-about-the-increasingly-relevant-comic-adaptation-2000734103",
+          "sources": [
+            "io9 | We Come From the Future"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T19:30:49.000Z"
+        },
+        {
+          "id": "article-79-1773856852516",
+          "title": "The Hutt Sex Explainer You Don’t Want But Are Kind of Curious About",
+          "summary": "'The Mandalorian and Grogu' adding Jabba the Hutt's son got you thinking too many awkward questions about how that happens? We've got you covered.",
+          "url": "https://gizmodo.com/star-wars-hutt-sex-jabba-son-explained-mandalorian-and-grogu-2000734600",
+          "sources": [
+            "io9 | We Come From the Future"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T18:30:03.000Z"
+        }
+      ]
+    },
+    {
+      "name": "Media",
+      "articles": [
+        {
+          "id": "article-103-1773856852516",
+          "title": "Lovely Trailer for Series 'Babies' with Paapa Essiedu & Siobhan Cullen",
+          "summary": "\"This isn't gonna change us. I feel like we should start trying again...\" BBC has unveiled their official trailer a for new series soon titled Babies, a BBC TV production about a couple. This \"grippin",
+          "url": "https://www.firstshowing.net/2026/lovely-trailer-for-series-babies-with-paapa-essiedu-siobhan-cullen/",
+          "sources": [
+            "First Showing"
+          ],
+          "score": 8,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T16:01:22.000Z"
+        },
+        {
+          "id": "article-104-1773856852516",
+          "title": "Gnarly Full Trailer for 'Beast' MMA Movie Starring Daniel MacPherson",
+          "summary": "\"I fought for my life every day...\" Lionsgate has launched the main official trailer for a brutal action movie called Beast, made by Australian filmmaker Tyler Atkins. Yet another MMA movie about a st",
+          "url": "https://www.firstshowing.net/2026/gnarly-full-trailer-for-beast-mma-thriller-starring-daniel-macpherson/",
+          "sources": [
+            "First Showing"
+          ],
+          "score": 7,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T14:39:54.000Z"
+        },
+        {
+          "id": "article-105-1773856852516",
+          "title": "Must Watch First Trailer for Marvel's 'Spider-Man: Brand New Day'",
+          "summary": "\"We are facing with a danger we can't control, one we can't even see.\" Sony Pictures + Marvel Studios have revealed the first official trailer for Spider-Man: Brand New Day, directed by Destin Daniel ",
+          "url": "https://www.firstshowing.net/2026/must-watch-first-trailer-for-marvels-spider-man-brand-new-day/",
+          "sources": [
+            "First Showing"
+          ],
+          "score": 7,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T12:58:53.000Z"
+        },
+        {
+          "id": "article-106-1773856852516",
+          "title": "Official US Trailer for 'Two Seasons, Two Strangers' Japanese Drama",
+          "summary": "\"I wonder what the atmosphere would be like to see us walking in the snow from afar.\" ❄️ Several Futures has unveiled an official US trailer for Two Seasons, Two Strangers, an acclaimed Japanese drama",
+          "url": "https://www.firstshowing.net/2026/official-us-trailer-for-two-seasons-two-strangers-japanese-drama/",
+          "sources": [
+            "First Showing"
+          ],
+          "score": 5,
+          "isVideo": true,
+          "publishedAt": "2026-03-18T01:14:04.000Z"
+        },
+        {
+          "id": "article-107-1773856852516",
+          "title": "Invincible is back, but it's not clear why it bothered",
+          "summary": "The superhero show kicks off season four with a trio of frustrating episodes.",
+          "url": "https://www.avclub.com/invincible-season-4-premiere-recap-episodes-1-2-3",
+          "sources": [
+            "AV Club"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T03:00:57.000Z"
+        },
+        {
+          "id": "article-108-1773856852516",
+          "title": "Oscar viewership sinks to four-year low",
+          "summary": "17.9 million people tuned into the Academy Awards, the lowest viewership since 2022.",
+          "url": "https://www.avclub.com/2026-oscars-viewership-hits-four-year-low",
+          "sources": [
+            "AV Club"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T20:43:53.000Z"
+        },
+        {
+          "id": "article-109-1773856852516",
+          "title": "Damon Lindelof apologizes to Green Lantern Corps. for off-color joke from 2024",
+          "summary": "After joking that the \"Green\" in Green Lantern was \"stupid,\" the co-creator of Lanterns felt the ire of Grant Morrison.",
+          "url": "https://www.avclub.com/damon-lindelof-apologizes-for-green-lantern-joke",
+          "sources": [
+            "AV Club"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T18:36:34.000Z"
+        }
+      ]
+    },
+    {
+      "name": "Design",
+      "articles": [
+        {
+          "id": "article-110-1773856852516",
+          "title": "Pejac Transforms Basic Graph Paper into Detailed, Trompe-L’œil Tableaux",
+          "summary": "Pejac challenges our sense of space and the possibilities of the \"blank slate.\" Do stories and artists like this matter to you? Become a Colossal Member today and support independent arts publishing f",
+          "url": "https://www.thisiscolossal.com/2026/03/pejac-graph-paper-graphite-drawings/",
+          "sources": [
+            "Colossal"
+          ],
+          "score": 8,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T17:00:00.000Z"
+        },
+        {
+          "id": "article-111-1773856852516",
+          "title": "Folklore and Nature Converge in Cat Johnston’s Expressive, Eccentric Puppets",
+          "summary": "Johnston's otherworldly cast seems both familiar and strange. Do stories and artists like this matter to you? Become a Colossal Member today and support independent arts publishing for as little as $7",
+          "url": "https://www.thisiscolossal.com/2026/03/cat-johnston-models-puppets-paper-sculptures-animation/",
+          "sources": [
+            "Colossal"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T14:42:31.000Z"
+        },
+        {
+          "id": "article-114-1773856852516",
+          "title": "For Spring, a Rainbow of Purses",
+          "summary": "From squishy to structured, a colorful bag is the season’s must-have accessory.",
+          "url": "https://www.nytimes.com/2026/03/18/t-magazine/colorful-bags.html",
+          "sources": [
+            "NYT > T Magazine"
+          ],
+          "score": 7,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T09:00:36.000Z"
+        },
+        {
+          "id": "article-112-1773856852516",
+          "title": "How Food Stylist Olivia Somary Makes Onscreen Meals Look Delicious",
+          "summary": "The ‘Hamnet’ food stylist Olivia Somary reveals the tools of her trade.",
+          "url": "https://www.nytimes.com/2026/03/14/t-magazine/olivia-somary-food-stylist-kit.html",
+          "sources": [
+            "NYT > T Magazine"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T19:04:36.000Z"
+        },
+        {
+          "id": "article-113-1773856852516",
+          "title": "In a Historic Kyoto Neighborhood, a New Hotel Channels the Past",
+          "summary": "Plus: black sesame pastries, a Roy Lichtenstein exhibition in New York and more recommendations from T Magazine.",
+          "url": "https://www.nytimes.com/2026/03/12/t-magazine/capella-kyoto-hotel.html",
+          "sources": [
+            "NYT > T Magazine"
+          ],
+          "score": 6,
+          "isVideo": false,
+          "publishedAt": "2026-03-17T22:06:17.000Z"
+        }
+      ]
+    },
+    {
+      "name": "Comics",
+      "articles": [
+        {
+          "id": "article-70-1773856852516",
+          "title": "Landscape Features",
+          "summary": "",
+          "url": "https://xkcd.com/3221/",
+          "sources": [
+            "xkcd"
+          ],
+          "score": 5,
+          "isVideo": false,
+          "publishedAt": "2026-03-18T04:00:00.000Z"
+        }
+      ]
+    }
+  ],
+  "videos": [
+    {
+      "id": "video-24-1773856852516",
+      "title": "Breaking Down the Secrets of the ‘Spider-Man: Brand New Day’ Trailer",
+      "url": "https://gizmodo.com/spider-man-brand-new-day-trailer-breakdown-marvel-2000734989",
+      "source": "Gizmodo",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-37-1773856852516",
+      "title": "The First Trailer for ‘Spider-Man: Brand New Day’ Teases Spidey’s Big New Problems",
+      "url": "https://gizmodo.com/spider-man-brand-new-day-trailer-marvel-mcu-2000700556",
+      "source": "Gizmodo",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-68-1773856852516",
+      "title": "The hits keep coming in Spider-Man: Brand New Day’s first trailer",
+      "url": "https://www.theverge.com/entertainment/896564/spider-man-brand-new-day-trailer",
+      "source": "The Verge",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-53-1773856852516",
+      "title": "Garmin Just Launched a Long-Awaited Integration on Its Fitness Watches",
+      "url": "https://lifehacker.com/health/garmin-whatsapp-integration-fitness-watches?utm_medium=RSS",
+      "source": "Lifehacker",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-92-1773856852516",
+      "title": "Spider-Man: Brand New Day Trailer Shows Peter In A World That’s Forgotten Him",
+      "url": "https://kotaku.com/spider-man-brand-new-day-trailer-shows-peter-in-a-world-thats-forgotten-him-2000679935",
+      "source": "Kotaku",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-72-1773856852516",
+      "title": "The Party of Small Government Demands Twenty-Four-Hour Video Footage of Your Children",
+      "url": "https://www.mcsweeneys.net/articles/the-party-of-small-government-demands-twenty-four-hour-video-footage-of-your-children",
+      "source": "McSweeney’s",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-103-1773856852516",
+      "title": "Lovely Trailer for Series 'Babies' with Paapa Essiedu & Siobhan Cullen",
+      "url": "https://www.firstshowing.net/2026/lovely-trailer-for-series-babies-with-paapa-essiedu-siobhan-cullen/",
+      "source": "First Showing",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-104-1773856852516",
+      "title": "Gnarly Full Trailer for 'Beast' MMA Movie Starring Daniel MacPherson",
+      "url": "https://www.firstshowing.net/2026/gnarly-full-trailer-for-beast-mma-thriller-starring-daniel-macpherson/",
+      "source": "First Showing",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-105-1773856852516",
+      "title": "Must Watch First Trailer for Marvel's 'Spider-Man: Brand New Day'",
+      "url": "https://www.firstshowing.net/2026/must-watch-first-trailer-for-marvels-spider-man-brand-new-day/",
+      "source": "First Showing",
+      "addedToWatchLater": false
+    },
+    {
+      "id": "video-106-1773856852516",
+      "title": "Official US Trailer for 'Two Seasons, Two Strangers' Japanese Drama",
+      "url": "https://www.firstshowing.net/2026/official-us-trailer-for-two-seasons-two-strangers-japanese-drama/",
+      "source": "First Showing",
+      "addedToWatchLater": false
+    }
+  ]
+}
