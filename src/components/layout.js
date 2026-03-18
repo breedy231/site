@@ -97,6 +97,14 @@ export default function Layout({ children }) {
                           Now
                         </Link>
                       </li>
+                      <li className={smallNavLinkItem}>
+                        <p className={divider}>{"//"}</p>
+                      </li>
+                      <li className={smallNavLinkItem}>
+                        <Link className={smallNavLinkText} to="/digest">
+                          Digest
+                        </Link>
+                      </li>
                     </ul>
                   </nav>
                 </div>
@@ -145,6 +153,17 @@ export default function Layout({ children }) {
                           to="/now"
                         >
                           Now
+                        </Link>
+                      </li>
+                      <li className={navLinkItem}>
+                        <p className={divider}>{"//"}</p>
+                      </li>
+                      <li className={navLinkItem}>
+                        <Link
+                          className="text-gray-900 no-underline dark:text-white"
+                          to="/digest"
+                        >
+                          Digest
                         </Link>
                       </li>
                     </ul>
