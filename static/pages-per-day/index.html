@@ -253,8 +253,32 @@
   const lookupBtn = document.getElementById('lookup-btn');
   const dropdown = document.getElementById('dropdown');
 
+  const STORAGE_KEY = 'ppd-book';
+
   const today = new Date(); today.setHours(0,0,0,0);
   deadlineInput.min = today.toISOString().split('T')[0];
+
+  // Restore saved book from localStorage
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(saved){
+      if(saved.title) titleInput.value = saved.title;
+      if(saved.totalPages) totalPagesInput.value = saved.totalPages;
+      if(saved.pagesRead) pagesReadInput.value = saved.pagesRead;
+      if(saved.deadline) deadlineInput.value = saved.deadline;
+    }
+  } catch(e){}
+
+  function saveState(){
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        title: titleInput.value,
+        totalPages: totalPagesInput.value,
+        pagesRead: pagesReadInput.value,
+        deadline: deadlineInput.value,
+      }));
+    } catch(e){}
+  }
 
   let lastResults = [];
 
@@ -309,6 +333,7 @@
         titleInput.value = b.title;
         if(b.pages) totalPagesInput.value = b.pages;
         dropdown.innerHTML = '';
+        saveState();
         calc();
         if(!b.pages) totalPagesInput.focus();
         else if(!deadlineInput.value) deadlineInput.focus();
@@ -328,10 +353,16 @@
 
   function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
+  // Run calc on load if we restored saved data
+  calc();
+
+  // Save on title changes too
+  titleInput.addEventListener('input', saveState);
+
   // --- Calculation ---
-  totalPagesInput.addEventListener('input', calc);
-  pagesReadInput.addEventListener('input', calc);
-  deadlineInput.addEventListener('input', calc);
+  totalPagesInput.addEventListener('input', ()=>{ saveState(); calc(); });
+  pagesReadInput.addEventListener('input', ()=>{ saveState(); calc(); });
+  deadlineInput.addEventListener('input', ()=>{ saveState(); calc(); });
 
   function calc(){
     const totalPages = parseInt(totalPagesInput.value)||0;
