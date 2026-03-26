@@ -1,5 +1,84 @@
 // netlify/functions/history.js
-// Simplified Trakt history fetcher using free OAuth API
+// Trakt watch history with automatic token refresh via Netlify Blobs
+
+import { getTokens, refreshTokens } from "./lib/trakt-tokens.js"
+
+const TMDB_API_KEY = process.env.GATSBY_TMDB_API_KEY
+
+function traktHeaders(accessToken) {
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${accessToken}`,
+    "trakt-api-version": "2",
+    "trakt-api-key": process.env.GATSBY_TRAKT_CLIENT_ID,
+  }
+}
+
+async function getTMDBImage(type, id) {
+  if (!id || !TMDB_API_KEY) return null
+
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
+    )
+    if (!response.ok) return null
+
+    const data = await response.json()
+    return data.poster_path
+      ? `https://image.tmdb.org/t/p/w300${data.poster_path}`
+      : null
+  } catch (error) {
+    console.error(`Error fetching TMDB image for ${type} ${id}:`, error)
+    return null
+  }
+}
+
+async function fetchHistory(accessToken) {
+  const headers = traktHeaders(accessToken)
+
+  const [episodesRes, moviesRes] = await Promise.all([
+    fetch(
+      "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
+      { headers },
+    ),
+    fetch(
+      "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
+      { headers },
+    ),
+  ])
+
+  if (episodesRes.status === 401 || moviesRes.status === 401) {
+    return { authFailed: true }
+  }
+
+  if (!episodesRes.ok || !moviesRes.ok) {
+    const errorText = !episodesRes.ok
+      ? await episodesRes.text()
+      : await moviesRes.text()
+    throw new Error(`Failed to fetch history: ${errorText}`)
+  }
+
+  const [episodes, movies] = await Promise.all([
+    episodesRes.json(),
+    moviesRes.json(),
+  ])
+
+  return { authFailed: false, episodes, movies }
+}
+
+async function enrichWithPosters(episodes, movies) {
+  if (!TMDB_API_KEY) return { episodes, movies }
+
+  const [showImages, movieImages] = await Promise.all([
+    Promise.all(episodes.map(ep => getTMDBImage("tv", ep.show?.ids?.tmdb))),
+    Promise.all(movies.map(mv => getTMDBImage("movie", mv.movie?.ids?.tmdb))),
+  ])
+
+  return {
+    episodes: episodes.map((ep, i) => ({ ...ep, image: showImages[i] })),
+    movies: movies.map((mv, i) => ({ ...mv, image: movieImages[i] })),
+  }
+}
 
 export default async function handler(req) {
   if (req.method !== "GET") {
@@ -9,12 +88,12 @@ export default async function handler(req) {
     })
   }
 
-  const token = process.env.GATSBY_TRAKT_ACCESS_TOKEN
+  const tokens = await getTokens()
 
-  if (!token) {
+  if (!tokens) {
     return new Response(
       JSON.stringify({
-        message: "Trakt access token not configured on server",
+        message: "No Trakt tokens configured",
       }),
       {
         status: 500,
@@ -23,105 +102,62 @@ export default async function handler(req) {
     )
   }
 
-  const TMDB_API_KEY = process.env.GATSBY_TMDB_API_KEY
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-    "trakt-api-version": "2",
-    "trakt-api-key": process.env.GATSBY_TRAKT_CLIENT_ID,
-  }
-
-  // Helper to fetch TMDB poster images
-  async function getTMDBImage(type, id) {
-    if (!id || !TMDB_API_KEY) return null
-
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}`,
-      )
-      if (!response.ok) return null
-
-      const data = await response.json()
-      return data.poster_path
-        ? `https://image.tmdb.org/t/p/w300${data.poster_path}`
-        : null
-    } catch (error) {
-      console.error(`Error fetching TMDB image for ${type} ${id}:`, error)
-      return null
-    }
-  }
+  // Admin-only: skip initial fetch and go straight to refresh to test the flow
+  const url = new URL(req.url)
+  const forceRefresh = url.searchParams.get("force-refresh") === "true"
 
   try {
-    // Fetch recent watch history for episodes and movies
-    const [episodesRes, moviesRes] = await Promise.all([
-      fetch(
-        "https://api.trakt.tv/users/me/history/episodes?limit=3&extended=full",
-        { headers },
-      ),
-      fetch(
-        "https://api.trakt.tv/users/me/history/movies?limit=3&extended=full",
-        { headers },
-      ),
-    ])
+    let result
 
-    // Check for authentication errors
-    if (episodesRes.status === 401 || moviesRes.status === 401) {
-      console.log("Trakt token expired - re-authentication required")
-      return new Response(
-        JSON.stringify({
-          message: "Trakt access token has expired. Please re-authenticate.",
-          authRequired: true,
-        }),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        },
-      )
+    if (forceRefresh) {
+      console.log("force-refresh: skipping initial fetch, refreshing tokens")
+      result = { authFailed: true }
+    } else {
+      result = await fetchHistory(tokens.access_token)
     }
 
-    // Check for other errors
-    if (!episodesRes.ok || !moviesRes.ok) {
-      const errorText = !episodesRes.ok
-        ? await episodesRes.text()
-        : await moviesRes.text()
-      throw new Error(`Failed to fetch history: ${errorText}`)
+    // Auto-refresh on 401 and retry once
+    if (result.authFailed) {
+      console.log("Trakt token expired or force-refresh — attempting refresh")
+      try {
+        const newTokens = await refreshTokens(tokens.refresh_token)
+        console.log("Token refresh succeeded, retrying fetch")
+        result = await fetchHistory(newTokens.access_token)
+
+        if (result.authFailed) {
+          return new Response(
+            JSON.stringify({
+              message:
+                "Auth still failing after token refresh. Manual re-auth required.",
+              authRequired: true,
+            }),
+            {
+              status: 401,
+              headers: { "Content-Type": "application/json" },
+            },
+          )
+        }
+      } catch (refreshError) {
+        console.error("Token refresh failed:", refreshError)
+        return new Response(
+          JSON.stringify({
+            message: `Token refresh failed: ${refreshError.message}. Manual re-auth required.`,
+            authRequired: true,
+          }),
+          {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+          },
+        )
+      }
     }
 
-    // Parse the responses
-    const [episodes, movies] = await Promise.all([
-      episodesRes.json(),
-      moviesRes.json(),
-    ])
-
-    // Enhance with TMDB poster images
-    let enhancedEpisodes = [...episodes]
-    let enhancedMovies = [...movies]
-
-    if (TMDB_API_KEY) {
-      const [showImages, movieImages] = await Promise.all([
-        Promise.all(
-          episodes.map(episode => getTMDBImage("tv", episode.show?.ids?.tmdb)),
-        ),
-        Promise.all(
-          movies.map(movie => getTMDBImage("movie", movie.movie?.ids?.tmdb)),
-        ),
-      ])
-
-      enhancedEpisodes = episodes.map((episode, index) => ({
-        ...episode,
-        image: showImages[index],
-      }))
-
-      enhancedMovies = movies.map((movie, index) => ({
-        ...movie,
-        image: movieImages[index],
-      }))
-    }
+    const enriched = await enrichWithPosters(result.episodes, result.movies)
 
     return new Response(
       JSON.stringify({
-        tv: enhancedEpisodes,
-        movies: enhancedMovies,
+        tv: enriched.episodes,
+        movies: enriched.movies,
       }),
       {
         status: 200,
