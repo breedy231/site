@@ -8,6 +8,7 @@ const TMDB_API_KEY = process.env.GATSBY_TMDB_API_KEY
 function traktHeaders(accessToken) {
   return {
     "Content-Type": "application/json",
+    "User-Agent": "brendanreed-site/1.0",
     Authorization: `Bearer ${accessToken}`,
     "trakt-api-version": "2",
     "trakt-api-key": process.env.GATSBY_TRAKT_CLIENT_ID,
@@ -52,10 +53,17 @@ async function fetchHistory(accessToken) {
   }
 
   if (!episodesRes.ok || !moviesRes.ok) {
-    const errorText = !episodesRes.ok
-      ? await episodesRes.text()
-      : await moviesRes.text()
-    throw new Error(`Failed to fetch history: ${errorText}`)
+    const failedRes = !episodesRes.ok ? episodesRes : moviesRes
+    const contentType = failedRes.headers.get("content-type") || ""
+    if (contentType.includes("text/html")) {
+      throw new Error(
+        `Trakt API blocked (status ${failedRes.status}) — possible Cloudflare challenge`,
+      )
+    }
+    const errorText = await failedRes.text()
+    throw new Error(
+      `Failed to fetch history (${failedRes.status}): ${errorText}`,
+    )
   }
 
   const [episodes, movies] = await Promise.all([
