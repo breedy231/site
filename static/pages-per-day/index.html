@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pages Per Day</title>
+<meta name="description" content="How many pages per day do you need to read?">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pages/Day">
+<meta name="theme-color" content="#ffffff">
+<style>
+  @font-face {
+    font-family: "Poppins Regular";
+    src: url("/fonts/Poppins/Poppins-Regular.ttf");
+  }
+  @font-face {
+    font-family: "Poppins Bold";
+    src: url("/fonts/Poppins/Poppins-Bold.ttf");
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  html{background:#fff;transition:background-color .2s}
+  html.dark{background:#032740}
+
+  body{
+    font-family:'Poppins Regular',system-ui,sans-serif;
+    color:#111827;background:inherit;
+    min-height:100vh;min-height:100dvh;
+    padding:env(safe-area-inset-top) 20px 20px;
+    display:flex;justify-content:center;
+    transition:color .2s,background-color .2s;
+  }
+  html.dark body{color:#fff}
+
+  .card{width:100%;max-width:480px;padding-top:40px;padding-bottom:60px}
+
+  /* Header */
+  .page-header{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:32px;
+  }
+  .back-link{
+    font-family:'Poppins Regular',sans-serif;font-size:14px;
+    color:#111827;text-decoration:none;
+    transition:color .2s;
+  }
+  html.dark .back-link{color:#fff}
+  .back-link:hover{text-decoration:underline;text-decoration-color:#da300f;text-underline-offset:4px}
+
+  .theme-toggle{
+    background:#e5e7eb;border:none;border-radius:9999px;
+    width:36px;height:36px;font-size:16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background-color .2s;
+  }
+  html.dark .theme-toggle{background:#1f2937;color:#e5e7eb}
+
+  h1{
+    font-family:'Poppins Bold',sans-serif;font-size:28px;font-weight:700;
+    color:#111827;line-height:1.2;
+  }
+  html.dark h1{color:#fff}
+
+  .subtitle{font-size:14px;color:#6b7280;margin-top:6px}
+  html.dark .subtitle{color:#9ca3af}
+
+  .divider{height:1px;background:#d1d5db;margin:24px 0}
+  html.dark .divider{background:#374151}
+
+  .field{margin-bottom:20px;position:relative}
+  .field label{
+    display:block;font-size:11px;font-weight:600;text-transform:uppercase;
+    letter-spacing:1.2px;color:#6b7280;margin-bottom:8px;
+  }
+  html.dark .field label{color:#9ca3af}
+
+  .field input{
+    width:100%;padding:12px 16px;border:1.5px solid #d1d5db;border-radius:8px;
+    background:#fff;font-family:'Poppins Regular',sans-serif;font-size:16px;
+    color:#111827;outline:none;transition:border-color .2s,background-color .2s,color .2s;
+    -webkit-appearance:none;appearance:none;
+  }
+  html.dark .field input{
+    background:#0a3a5c;border-color:#1e5a80;color:#fff;
+  }
+  .field input:focus{border-color:#6b7280}
+  html.dark .field input:focus{border-color:#60a5fa}
+  .field input::placeholder{color:#9ca3af}
+  html.dark .field input::placeholder{color:#6b7280}
+
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  @media(max-width:480px){
+    .row-3{grid-template-columns:1fr;gap:12px}
+  }
+
+  /* Search wrapper */
+  .search-wrap{position:relative}
+  .search-wrap input{padding-right:70px}
+  .lookup-btn{
+    position:absolute;right:6px;top:50%;transform:translateY(-50%);
+    background:#e5e7eb;border:none;border-radius:6px;padding:6px 12px;
+    font-family:'Poppins Regular',sans-serif;font-size:12px;font-weight:600;
+    color:#4b5563;cursor:pointer;transition:background .15s,color .2s;
+    letter-spacing:.3px;
+  }
+  .lookup-btn:hover,.lookup-btn:active{background:#d1d5db}
+  .lookup-btn:disabled{opacity:.5;cursor:default}
+  html.dark .lookup-btn{background:#1e5a80;color:#d1d5db}
+  html.dark .lookup-btn:hover,html.dark .lookup-btn:active{background:#2563eb}
+
+  /* Dropdown */
+  .dropdown{
+    position:absolute;top:100%;left:0;right:0;z-index:10;
+    background:#fff;border:1.5px solid #d1d5db;border-radius:10px;
+    margin-top:4px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.1);
+    max-height:340px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  }
+  html.dark .dropdown{background:#0a3a5c;border-color:#1e5a80;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .dropdown:empty{display:none}
+  .dd-item{
+    display:flex;align-items:center;gap:12px;padding:10px 14px;
+    cursor:pointer;transition:background .15s;border-bottom:1px solid #e5e7eb;
+  }
+  html.dark .dd-item{border-bottom-color:#1e5a80}
+  .dd-item:last-child{border-bottom:none}
+  .dd-item:hover,.dd-item:active{background:#f3f4f6}
+  html.dark .dd-item:hover,html.dark .dd-item:active{background:#0c4a6e}
+  .dd-cover{width:36px;height:54px;border-radius:4px;object-fit:cover;background:#e5e7eb;flex-shrink:0}
+  html.dark .dd-cover{background:#1e5a80}
+  .dd-cover-ph{
+    width:36px;height:54px;border-radius:4px;background:#e5e7eb;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:14px;color:#9ca3af;
+  }
+  html.dark .dd-cover-ph{background:#1e5a80;color:#6b7280}
+  .dd-info{flex:1;min-width:0}
+  .dd-title{font-size:14px;font-weight:600;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html.dark .dd-title{color:#fff}
+  .dd-sub{font-size:12px;color:#6b7280;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html.dark .dd-sub{color:#9ca3af}
+  .dd-pages{font-size:12px;font-weight:600;color:#4b5563;flex-shrink:0;background:#e5e7eb;padding:3px 8px;border-radius:12px}
+  html.dark .dd-pages{background:#1e5a80;color:#d1d5db}
+  .dd-msg{padding:14px;text-align:center;font-size:13px;color:#6b7280}
+  html.dark .dd-msg{color:#9ca3af}
+
+  /* Results */
+  .result-card{
+    background:#111827;border-radius:12px;padding:28px;color:#fff;
+    animation:slideUp .35s ease-out;
+  }
+  html.dark .result-card{background:#0a3a5c}
+  @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .r-big{font-family:'Poppins Bold',sans-serif;font-size:56px;font-weight:700;line-height:1;color:#fff}
+  .r-big span{font-size:20px;font-weight:400;color:#9ca3af;margin-left:4px}
+  .r-label{font-size:13px;color:#9ca3af;margin-top:4px}
+  .prog-track{width:100%;height:4px;background:#374151;border-radius:2px;margin-top:16px;overflow:hidden}
+  html.dark .prog-track{background:#1e3a5c}
+  .prog-fill{height:100%;background:linear-gradient(90deg,#da300f,#ef4444);border-radius:2px;transition:width .5s ease}
+  .r-meta{display:flex;gap:24px;margin-top:20px;padding-top:18px;border-top:1px solid #374151}
+  html.dark .r-meta{border-top-color:#1e3a5c}
+  .m-item{display:flex;flex-direction:column}
+  .m-val{font-size:18px;font-weight:600;color:#fff;font-family:'Poppins Bold',sans-serif}
+  .m-lbl{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+  .effort-tag{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:16px;letter-spacing:.3px}
+  .done-card{
+    background:#111827;border-radius:12px;padding:28px;color:#fff;
+    text-align:center;animation:slideUp .35s ease-out;
+    font-family:'Poppins Bold',sans-serif;font-size:22px;
+  }
+  html.dark .done-card{background:#0a3a5c}
+  .error-msg{background:#7f1d1d;color:#fca5a5;padding:16px 20px;border-radius:12px;font-size:14px;animation:slideUp .35s ease-out}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="page-header">
+    <a href="/" class="back-link">&larr; brendanreed.com</a>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
+  </div>
+
+  <h1>How many pages<br>per day?</h1>
+  <p class="subtitle">Type a book, set your deadline, get your daily target.</p>
+  <div class="divider"></div>
+
+  <div class="field">
+    <label>Book title</label>
+    <div class="search-wrap">
+      <input type="text" id="book-title" placeholder="e.g. The Corrections" autocomplete="off" autocorrect="off">
+      <button class="lookup-btn" id="lookup-btn">Look up</button>
+      <div class="dropdown" id="dropdown"></div>
+    </div>
+  </div>
+
+  <div class="row-3">
+    <div class="field">
+      <label>Total pages</label>
+      <input type="number" id="total-pages" placeholder="e.g. 576" min="1" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label>Pages read</label>
+      <input type="number" id="pages-read" placeholder="0" min="0" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label>Finish by</label>
+      <input type="date" id="deadline">
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div id="result-slot"></div>
+</div>
+
+<!-- Theme toggle (matches site's localStorage-based dark mode) -->
+<script>
+(function(){
+  const toggle = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+
+  function applyTheme(dark){
+    if(dark){
+      html.classList.add('dark');
+      toggle.textContent = '\u{1F319}';
+      document.querySelector('meta[name="theme-color"]').content = '#032740';
+    } else {
+      html.classList.remove('dark');
+      toggle.textContent = '\u{2600}\u{FE0F}';
+      document.querySelector('meta[name="theme-color"]').content = '#ffffff';
+    }
+  }
+
+  // Read from the same localStorage key the Gatsby site uses
+  const stored = localStorage.getItem('theme');
+  const prefersDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  applyTheme(prefersDark);
+
+  toggle.addEventListener('click', ()=>{
+    const nowDark = html.classList.contains('dark');
+    localStorage.setItem('theme', nowDark ? 'light' : 'dark');
+    applyTheme(!nowDark);
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const titleInput = document.getElementById('book-title');
+  const totalPagesInput = document.getElementById('total-pages');
+  const pagesReadInput = document.getElementById('pages-read');
+  const deadlineInput = document.getElementById('deadline');
+  const resultSlot = document.getElementById('result-slot');
+  const lookupBtn = document.getElementById('lookup-btn');
+  const dropdown = document.getElementById('dropdown');
+
+  const STORAGE_KEY = 'ppd-book';
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  deadlineInput.min = today.toISOString().split('T')[0];
+
+  // Restore saved book from localStorage
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(saved){
+      if(saved.title) titleInput.value = saved.title;
+      if(saved.totalPages) totalPagesInput.value = saved.totalPages;
+      if(saved.pagesRead) pagesReadInput.value = saved.pagesRead;
+      if(saved.deadline) deadlineInput.value = saved.deadline;
+    }
+  } catch(e){}
+
+  function saveState(){
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        title: titleInput.value,
+        totalPages: totalPagesInput.value,
+        pagesRead: pagesReadInput.value,
+        deadline: deadlineInput.value,
+      }));
+    } catch(e){}
+  }
+
+  let lastResults = [];
+
+  // --- Optional lookup via Open Library ---
+  async function searchBooks(q){
+    try{
+      const r = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=6&fields=key,title,author_name,first_publish_year,number_of_pages_median,cover_i`);
+      const d = await r.json();
+      if(!d.docs) return [];
+      return d.docs.map(doc=>({
+        title: doc.title||'Untitled',
+        authors: (doc.author_name||[]).join(', ')||'Unknown',
+        pages: doc.number_of_pages_median||null,
+        cover: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-S.jpg` : null,
+        year: doc.first_publish_year||null,
+      }));
+    }catch(e){
+      return [];
+    }
+  }
+
+  lookupBtn.addEventListener('click', async ()=>{
+    const q = titleInput.value.trim();
+    if(q.length < 2) return;
+    lookupBtn.disabled = true;
+    lookupBtn.textContent = '\u2026';
+    dropdown.innerHTML = '<div class="dd-msg">Searching\u2026</div>';
+    const books = await searchBooks(q);
+    lastResults = books;
+    lookupBtn.disabled = false;
+    lookupBtn.textContent = 'Look up';
+    if(!books.length){
+      dropdown.innerHTML = '<div class="dd-msg">No results \u2014 enter pages manually</div>';
+      setTimeout(()=>{ dropdown.innerHTML=''; }, 2000);
+      return;
+    }
+    dropdown.innerHTML = books.map((b,i)=>`
+      <div class="dd-item" data-idx="${i}">
+        ${b.cover
+          ? `<img class="dd-cover" src="${b.cover}" alt="">`
+          : `<div class="dd-cover-ph">\u{1F4D6}</div>`}
+        <div class="dd-info">
+          <div class="dd-title">${esc(b.title)}</div>
+          <div class="dd-sub">${esc(b.authors)}${b.year?' \u00B7 '+b.year:''}</div>
+        </div>
+        ${b.pages ? `<div class="dd-pages">${b.pages} pg</div>` : ''}
+      </div>
+    `).join('');
+    dropdown.querySelectorAll('.dd-item').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const b = lastResults[+el.dataset.idx];
+        titleInput.value = b.title;
+        if(b.pages) totalPagesInput.value = b.pages;
+        dropdown.innerHTML = '';
+        saveState();
+        calc();
+        if(!b.pages) totalPagesInput.focus();
+        else if(!deadlineInput.value) deadlineInput.focus();
+      });
+    });
+  });
+
+  // Also trigger lookup on Enter in title field
+  titleInput.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ e.preventDefault(); lookupBtn.click(); }
+  });
+
+  // Close dropdown on outside click
+  document.addEventListener('mousedown', e=>{
+    if(!e.target.closest('.search-wrap')) dropdown.innerHTML='';
+  });
+
+  function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  // Run calc on load if we restored saved data
+  calc();
+
+  // Save on title changes too
+  titleInput.addEventListener('input', saveState);
+
+  // --- Calculation ---
+  totalPagesInput.addEventListener('input', ()=>{ saveState(); calc(); });
+  pagesReadInput.addEventListener('input', ()=>{ saveState(); calc(); });
+  deadlineInput.addEventListener('input', ()=>{ saveState(); calc(); });
+
+  function calc(){
+    const totalPages = parseInt(totalPagesInput.value)||0;
+    if(!totalPages || !deadlineInput.value){ resultSlot.innerHTML=''; return; }
+
+    const read = parseInt(pagesReadInput.value)||0;
+    const remaining = totalPages - read;
+
+    if(remaining <= 0){
+      resultSlot.innerHTML = '<div class="done-card">You\'ve already finished this one! \u{1F389}</div>';
+      return;
+    }
+
+    const now = new Date(); now.setHours(0,0,0,0);
+    const end = new Date(deadlineInput.value+'T00:00:00');
+    const daysLeft = Math.ceil((end - now)/(1000*60*60*24));
+
+    if(daysLeft <= 0){
+      resultSlot.innerHTML = '<div class="error-msg">That deadline has already passed.</div>';
+      return;
+    }
+
+    const ppd = remaining / daysLeft;
+    const ppdCeil = Math.ceil(ppd);
+    const mins = Math.round(ppd * 1.7);
+    const pct = Math.round((read/totalPages)*100);
+
+    let effortText, effortColor;
+    if(ppdCeil<=15){ effortText='Light read'; effortColor='#4a7c59'; }
+    else if(ppdCeil<=30){ effortText='Steady pace'; effortColor='#8b6914'; }
+    else if(ppdCeil<=50){ effortText='Committed'; effortColor='#b45309'; }
+    else { effortText='Sprint mode'; effortColor='#9f1239'; }
+
+    resultSlot.innerHTML = `
+      <div class="result-card">
+        <div class="r-big">${ppdCeil}<span>pg/day</span></div>
+        <div class="r-label">~${mins} min/day at average reading speed</div>
+        <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+        <div class="r-meta">
+          <div class="m-item"><div class="m-val">${remaining}</div><div class="m-lbl">Pages left</div></div>
+          <div class="m-item"><div class="m-val">${daysLeft}</div><div class="m-lbl">Days left</div></div>
+          <div class="m-item"><div class="m-val">${pct}%</div><div class="m-lbl">Complete</div></div>
+        </div>
+        <div class="effort-tag" style="background:${effortColor}22;color:${effortColor}">${effortText}</div>
+      </div>
+    `;
+  }
+})();
+</script>
+
+<!-- Inline PWA manifest -->
+<script>
+(function(){
+  const isDark = document.documentElement.classList.contains('dark');
+  const manifest = {
+    name: "Pages Per Day",
+    short_name: "Pages/Day",
+    description: "How many pages per day to finish your book on time",
+    start_url: ".",
+    display: "standalone",
+    background_color: isDark ? "#032740" : "#ffffff",
+    theme_color: isDark ? "#032740" : "#ffffff",
+    icons: [{
+      src: "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#032740"/><text x="64" y="82" font-family="serif" font-size="64" fill="#fff" text-anchor="middle">\u{1F4D6}</text></svg>'),
+      sizes: "128x128",
+      type: "image/svg+xml"
+    }]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = URL.createObjectURL(blob);
+  document.head.appendChild(link);
+})();
+</script>
+
+<!-- Minimal service worker for offline -->
+<script>
+if('serviceWorker' in navigator){
+  const sw = `
+    const CACHE = 'ppd-v4';
+    const URLS = [self.location.href];
+    self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS))));
+    self.addEventListener('fetch', e => {
+      e.respondWith(
+        caches.match(e.request).then(r => r || fetch(e.request).catch(()=>caches.match(self.location.href)))
+      );
+    });
+  `;
+  const blob = new Blob([sw], {type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+}
+</script>
+</body>
+</html>
