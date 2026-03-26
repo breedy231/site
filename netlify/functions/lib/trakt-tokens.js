@@ -47,7 +47,10 @@ export async function getTokens() {
 export async function refreshTokens(currentRefreshToken) {
   const response = await fetch("https://api.trakt.tv/oauth/token", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "User-Agent": "brendanreed-site/1.0",
+    },
     body: JSON.stringify({
       refresh_token: currentRefreshToken,
       client_id: process.env.GATSBY_TRAKT_CLIENT_ID,
