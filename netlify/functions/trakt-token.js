@@ -1,5 +1,7 @@
 // netlify/functions/trakt-token.js
 
+import { saveTokens } from "./lib/trakt-tokens.js"
+
 export default async function handler(req) {
   // Handle preflight request
   if (req.method === "OPTIONS") {
@@ -88,6 +90,16 @@ export default async function handler(req) {
     }
 
     console.log("Token exchange successful") // Debug log
+
+    // Persist tokens to Blobs so history.js can use them immediately
+    try {
+      await saveTokens(data)
+      console.log("Tokens saved to Blobs store")
+    } catch (blobError) {
+      console.error("Failed to save tokens to Blobs:", blobError)
+      // Still return success — tokens are in the response for manual fallback
+    }
+
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: { "Content-Type": "application/json" },

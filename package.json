@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"@mdx-js/react": "^2.3.0",
+		"@netlify/blobs": "^10.7.4",
 		"axios": "^1.13.6",
 		"babel-plugin-styled-components": "^1.13.3",
 		"encoding": "^0.1.13",

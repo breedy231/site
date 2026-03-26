@@ -127,33 +127,21 @@ const NowPage = () => {
   useEffect(() => {
     if (typeof window === "undefined") return
 
-    const token = process.env.GATSBY_TRAKT_ACCESS_TOKEN
-    if (token) {
-      fetch(getApiUrl("history"), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    fetch(getApiUrl("history"))
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(errorData => {
+            throw new Error(errorData.message || `HTTP ${res.status}`)
+          })
+        }
+        return res.json()
       })
-        .then(res => {
-          if (!res.ok) {
-            return res.json().then(errorData => {
-              throw new Error(errorData.message || `HTTP ${res.status}`)
-            })
-          }
-          return res.json()
-        })
-        .then(data => setWatchData(data))
-        .catch(err => {
-          console.error("Trakt API error:", err)
-          setWatchError(err.message)
-        })
-        .finally(() => setWatchLoading(false))
-    } else {
-      setWatchError(
-        "No authentication token found. Please connect your Trakt account.",
-      )
-      setWatchLoading(false)
-    }
+      .then(data => setWatchData(data))
+      .catch(err => {
+        console.error("Trakt API error:", err)
+        setWatchError(err.message)
+      })
+      .finally(() => setWatchLoading(false))
 
     // Fetch book data
     fetch(getApiUrl("goodreads"))
