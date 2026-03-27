@@ -53,10 +53,11 @@
 
 All functions in `netlify/functions/` use modern V2 format:
 
-1. **history.js** - Trakt watch history (simplified, no auto-refresh)
+1. **history.js** - Trakt watch history with automatic token refresh via Netlify Blobs
 2. **goodreads.js** - Goodreads API integration
 3. **lastfm.js** - Last.fm API integration
-4. **trakt-token.js** - OAuth token exchange
+4. **trakt-token.js** - OAuth token exchange (persists tokens to Blobs)
+5. **lib/trakt-tokens.js** - Shared module for token storage, retrieval, and refresh
 
 ### Migration Plan
 
@@ -141,29 +142,34 @@ Always check data structure before mapping:
 
 This prevents "Cannot read properties of undefined" errors when APIs fail.
 
-## OAuth Integration (Trakt) - Simplified
+## OAuth Integration (Trakt) - Auto-Refresh
 
-### Overview (Updated January 2025)
+### Overview (Updated March 2026)
 
-The Trakt integration now uses a **simplified OAuth approach** using the free Trakt API:
+The Trakt integration uses **automatic token refresh** via Netlify Blobs:
 
-- **No automatic token refresh** - Manual re-auth every ~3 months
-- **No complex notifications** - Simple admin error messages
-- **~200 lines of code** (previously ~500 lines)
-- **$0 cost** - No VIP subscription required
+- **Automatic token refresh** - No manual intervention when tokens expire
+- **Netlify Blobs** for persistent token storage (free, built into Netlify)
+- **Server-side only** - Tokens never exposed in client JavaScript bundle
+- **$0 cost** - Free Trakt API + free Netlify Blobs
 
-See `TRAKT_SETUP.md` for complete setup instructions.
+### How It Works
 
-### Token Management
+1. On first request after deploy, tokens are seeded from env vars into Netlify Blobs
+2. Blobs becomes the source of truth for tokens going forward
+3. When the access token expires (~3 months), `history.js` detects the 401, uses the refresh token to get new tokens, saves them to Blobs, and retries — all in a single request
+4. Both access and refresh tokens are rotated on each refresh (Trakt invalidates the old refresh token)
 
-**When tokens expire (~3 months):**
+**No manual steps required** unless the refresh token itself becomes invalid (e.g., Trakt app revoked).
+
+### Fallback: Manual Re-Authentication
+
+If auto-refresh fails (refresh token invalid), the admin re-auth flow still works:
 
 1. Visit `/now?admin`
 2. Click "Re-authenticate" button
 3. Authorize on Trakt.tv
-4. Copy new tokens from callback page
-5. Update environment variables in Netlify
-6. Trigger new deployment
+4. Tokens are saved to Blobs automatically (no manual env var copy needed)
 
 **Admin detection:**
 
@@ -171,36 +177,37 @@ See `TRAKT_SETUP.md` for complete setup instructions.
 - Development mode (`npm run develop`)
 - Localhost access
 
-### Environment Variables Required
+### Testing the Refresh Flow
+
+Hit the history function with `?force-refresh=true` to skip the initial API call and force a token refresh:
 
 ```
-GATSBY_TRAKT_CLIENT_ID=your_client_id
-GATSBY_TRAKT_CLIENT_SECRET=your_client_secret
-GATSBY_TRAKT_ACCESS_TOKEN=your_access_token
-GATSBY_TRAKT_REFRESH_TOKEN=your_refresh_token
-GATSBY_TMDB_API_KEY=your_tmdb_key (optional, for poster images)
+/.netlify/functions/history?force-refresh=true
 ```
 
-### Implementation Pattern
+This is useful for verifying the refresh flow works without waiting for real token expiry.
 
-```javascript
-const handleOAuth = () => {
-  const isDevelopment = process.env.NODE_ENV === "development"
-  const currentHost = window.location.origin
+### Environment Variables
 
-  const redirectUri = isDevelopment
-    ? "http://localhost:8000/callback/oauth"
-    : `${currentHost}/callback/oauth`
-
-  // Redirect to Trakt authorization
-  window.location.href = `https://trakt.tv/oauth/authorize?...`
-}
 ```
+GATSBY_TRAKT_CLIENT_ID=your_client_id        # Required: used in API headers and frontend OAuth redirect
+GATSBY_TRAKT_CLIENT_SECRET=your_client_secret  # Required: used in token refresh
+GATSBY_TRAKT_ACCESS_TOKEN=your_access_token    # Seeds Blobs on first use; optional after that
+GATSBY_TRAKT_REFRESH_TOKEN=your_refresh_token  # Seeds Blobs on first use; optional after that
+GATSBY_TMDB_API_KEY=your_tmdb_key              # Optional: enables poster images
+```
+
+After the first successful request, `GATSBY_TRAKT_ACCESS_TOKEN` and `GATSBY_TRAKT_REFRESH_TOKEN` are no longer read (Blobs is the source of truth). They can be kept as a fallback/reset mechanism — if Blobs is cleared, the function falls back to env vars and re-seeds.
+
+### Important: Cloudflare / User-Agent
+
+All requests to the Trakt API (history fetch and token refresh) **must include a `User-Agent` header** or Cloudflare blocks them from Netlify's server IPs. This is set to `brendanreed-site/1.0` in both `history.js` and `lib/trakt-tokens.js`.
 
 ### Files Involved
 
-- `netlify/functions/history.js` - Fetches watch history
-- `netlify/functions/trakt-token.js` - OAuth token exchange
+- `netlify/functions/lib/trakt-tokens.js` - Shared token module (getTokens, refreshTokens, saveTokens)
+- `netlify/functions/history.js` - Fetches watch history, auto-refreshes on 401
+- `netlify/functions/trakt-token.js` - OAuth token exchange, persists to Blobs
 - `src/pages/now.js` - Displays watch history
 - `src/pages/callback/oauth.js` - OAuth callback handler
 
@@ -565,17 +572,16 @@ permissions:
 - Verify `.prettierrc` configuration matches local setup
 - Check file patterns match between CI and lint-staged
 
-### Testing After Token Update
+### Testing the Now Page
 
-After updating tokens and deploying:
-
-1. Visit `/now` page (without `?admin`)
-2. Verify "Reading" and "Listening" sections load
-3. Verify "Watching" section shows data (not fallback message)
-4. Check browser console for any remaining API errors
+1. Visit `/now` page
+2. Verify "Reading", "Watching", and "Listening" sections all load
+3. Check browser console for any API errors
 
 **Troubleshooting:**
 
-- If you see "Token expired" - Visit `/now?admin` and re-authenticate
+- If Watching shows "temporarily unavailable" - Check Netlify function logs for the specific error
+- If you see "Token refresh failed" - The refresh token may be invalid; visit `/now?admin` and re-authenticate
+- If you see "Cloudflare" errors - Verify the `User-Agent` header is set in API requests
 - If images don't load - Check `GATSBY_TMDB_API_KEY` is set
-- If no data shows - Verify all environment variables are set correctly
+- To test refresh flow - Hit `/.netlify/functions/history?force-refresh=true` directly
