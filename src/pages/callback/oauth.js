@@ -123,7 +123,7 @@ You can now restart your Gatsby development server.`)
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="max-w-xl rounded-lg bg-white p-6 shadow-md">
         <h1 className="mb-4 text-2xl font-bold">Trakt Authentication</h1>
-        <pre className="whitespace-pre-wrap rounded bg-gray-100 p-4">
+        <pre className="rounded bg-gray-100 p-4 whitespace-pre-wrap">
           {status}
         </pre>
       </div>

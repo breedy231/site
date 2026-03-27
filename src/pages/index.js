@@ -47,10 +47,10 @@ export default function New() {
           <Layout>
             <div className="text-5x flex flex-col items-center justify-center pb-16">
               <div className="max-w-xs md:max-w-3xl">
-                <div className="mt-6 text-3xl text-gray-900 dark:text-white md:mt-14 md:text-4xl">
+                <div className="mt-6 text-3xl text-gray-900 md:mt-14 md:text-4xl dark:text-white">
                   {mainText}
                 </div>
-                <p className="mt-10 text-lg text-gray-900 dark:text-white md:text-4xl">
+                <p className="mt-10 text-lg text-gray-900 md:text-4xl dark:text-white">
                   Lead software engineer at{" "}
                   <a
                     className="text-gray-900 underline decoration-red-700 dark:text-white"
@@ -81,7 +81,7 @@ export default function New() {
                   </a>
                   .
                 </p>
-                <p className="mt-10 text-lg text-gray-900 dark:text-white md:text-4xl">
+                <p className="mt-10 text-lg text-gray-900 md:text-4xl dark:text-white">
                   You can find me on{" "}
                   <a
                     className="text-gray-900 underline decoration-red-700 dark:text-white"
@@ -100,7 +100,7 @@ export default function New() {
                 </p>
                 <div className="mt-10 flex flex-col gap-6 md:mt-5 md:flex-row md:gap-0">
                   <div className="flex flex-col">
-                    <p className="text-xl font-bold text-gray-900 dark:text-white md:mr-36">
+                    <p className="text-xl font-bold text-gray-900 md:mr-36 dark:text-white">
                       {locatedIn}
                     </p>
                     <p className="text-xl text-gray-900 dark:text-white">
@@ -108,11 +108,11 @@ export default function New() {
                     </p>
                   </div>
                   <div className="flex flex-col">
-                    <p className="text-xl font-bold text-gray-900 dark:text-white md:mr-36">
+                    <p className="text-xl font-bold text-gray-900 md:mr-36 dark:text-white">
                       {getInTouch}
                     </p>
                     <a
-                      className="break-words text-xl text-gray-900 underline decoration-red-700 dark:text-white md:mr-36"
+                      className="text-xl break-words text-gray-900 underline decoration-red-700 md:mr-36 dark:text-white"
                       href="mailto:bren.reed@protonmail.com"
                     >
                       {email}

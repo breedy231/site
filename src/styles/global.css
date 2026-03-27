@@ -1,3 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "../css/typography.css";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  font-family: "Poppins Regular";
+  background-color: #fff;
+  color: #111827;
+  transition-property: color, background-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+.dark body {
+  background-color: #032740;
+  color: #fff;
+}

@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 @import "../css/typography.css";
 
 .container {

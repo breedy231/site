@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react"
 import Media from "react-media"
-import "./layout.sass"
 import ThemeToggle from "./ThemeToggle"
 import DebugOverlay from "./DebugOverlay"
 import {

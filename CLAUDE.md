@@ -33,7 +33,7 @@
 
 - ✅ Updated all Gatsby plugins to 5.15.0 compatible versions
 - ✅ Updated React to 18.3.1 (stable)
-- ✅ Updated build tooling (Sass, Prettier, Tailwind)
+- ✅ Updated build tooling (Prettier, Tailwind)
 - ✅ Updated fast-xml-parser to 5.x (breaking change handled)
 
 **Phase 3 - Gatsby Core:**
@@ -210,6 +210,76 @@ All requests to the Trakt API (history fetch and token refresh) **must include a
 - `netlify/functions/trakt-token.js` - OAuth token exchange, persists to Blobs
 - `src/pages/now.js` - Displays watch history
 - `src/pages/callback/oauth.js` - OAuth callback handler
+
+## CSS & Styling (Tailwind v4)
+
+### Architecture
+
+The project uses **Tailwind CSS v4** with PostCSS via `gatsby-plugin-postcss`. Configuration is CSS-based (no `tailwind.config.js`).
+
+**Key files:**
+
+- `src/styles/global.css` - Tailwind entry point, dark mode config, body styles, font imports
+- `src/components/layout.module.css` - CSS modules with `@apply` for layout components
+- `src/css/typography.css` - `@font-face` declarations for Poppins fonts
+- `postcss.config.js` - Only `@tailwindcss/postcss` (autoprefixer is built into Tailwind v4)
+
+### Tailwind v4 Configuration (CSS-based)
+
+All Tailwind config lives in `src/styles/global.css`:
+
+```css
+@import "tailwindcss";
+@import "../css/typography.css";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+- No `tailwind.config.js` — v4 uses CSS directives instead
+- `@plugin` replaces the `plugins` array
+- `@custom-variant dark` replaces `darkMode: "class"`
+- Content paths are auto-detected (no `content` config needed)
+
+### Dark Mode
+
+Dark mode uses class-based toggling (`.dark` class on `<html>`):
+
+- `ThemeContext.js` manages state and adds/removes `.dark` on `<html>`
+- `@custom-variant dark (&:where(.dark, .dark *))` in `global.css` overrides Tailwind's default `prefers-color-scheme` behavior
+- JSX uses `dark:` prefix utilities: `className="bg-white dark:bg-gray-900"`
+- CSS modules use `:global(.dark)` selectors for dark variants
+
+### Critical: Multiple PostCSS Entry Points
+
+**Gatsby processes each CSS file through `@tailwindcss/postcss` independently.** Each file that goes through PostCSS becomes its own Tailwind entry point that scans the project and generates utility CSS.
+
+This means:
+
+- **Every CSS file with Tailwind directives needs its own `@custom-variant dark`** or it will use the default `prefers-color-scheme` media query
+- `layout.module.css` has `@reference "tailwindcss"` + `@custom-variant dark` for this reason
+- **Do NOT add new `.sass`/`.css` files that import Tailwind** without including `@custom-variant dark` — it will silently break dark mode by generating a competing `prefers-color-scheme` rule
+- When debugging dark mode issues, check the built HTML for `prefers-color-scheme` — if present, a CSS entry point is missing the `@custom-variant`
+
+### Adding New CSS Files
+
+If you need a new CSS file that uses `@apply` with Tailwind utilities:
+
+```css
+@reference "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* your styles */
+.my-class {
+  @apply text-gray-900;
+}
+```
+
+### Styling Approaches in Use
+
+- **Tailwind utilities** in JSX `className` (primary approach)
+- **CSS modules** (`.module.css`) for component-scoped styles with `@apply`
+- **Styled Components** for `src/components/textElements.js`
+- **Plain CSS** in `global.css` for body-level styles
 
 ## Code Formatting & Pre-commit Hooks
 
