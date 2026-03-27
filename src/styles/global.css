@@ -4,5 +4,14 @@
 
 body {
   font-family: "Poppins Regular";
-  @apply bg-white text-gray-900 dark:bg-[#032740] dark:text-white transition-colors duration-200;
+  background-color: #fff;
+  color: #111827;
+  transition-property: color, background-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+.dark body {
+  background-color: #032740;
+  color: #fff;
 }
