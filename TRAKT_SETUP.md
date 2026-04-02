@@ -1,24 +1,16 @@
-# Simplified Trakt Integration Setup
+# Trakt Integration Setup
 
 ## Overview
 
-This site uses the **free Trakt OAuth API** to display watch history on the "Now" page. No paid VIP subscription is required.
-
-## Key Simplifications (January 2025)
-
-- Removed automatic token refresh system
-- Removed admin notification system
-- Removed complex error handling
-- **Result:** Reduced from ~500 lines to ~200 lines of code
-- **Cost savings:** $30-60/year (no VIP needed)
+This site uses the **free Trakt OAuth API** to display watch history on the "/now" page. Tokens are automatically refreshed via Netlify Blobs — no manual intervention needed unless the refresh token itself becomes invalid.
 
 ## How It Works
 
 1. **OAuth Flow:** User authenticates via Trakt OAuth
-2. **Token Storage:** Access tokens stored in Netlify environment variables
-3. **API Calls:** Netlify function fetches recent watch history
-4. **Display:** Frontend shows 3 recent TV episodes and 3 recent movies
-5. **Images:** TMDB API provides poster images
+2. **Token Storage:** Tokens stored in Netlify Blobs (seeded from env vars on first use)
+3. **Auto-Refresh:** When access token expires, `history.js` detects the 401, refreshes via the refresh token, saves to Blobs, and retries
+4. **API Calls:** Netlify function fetches 3 recent TV episodes and 3 recent movies
+5. **Images:** TMDB API provides poster images (optional)
 
 ## Setup Instructions
 
@@ -28,161 +20,97 @@ This site uses the **free Trakt OAuth API** to display watch history on the "Now
 2. Create a new application:
    - **Name:** Your site name
    - **Redirect URI:** `https://yourdomain.com/callback/oauth`
-   - For local dev: Also add `http://localhost:8000/callback/oauth`
+   - For local dev: Also add `http://localhost:4321/callback/oauth`
 3. Save your Client ID and Client Secret
 
 ### 2. Configure Environment Variables
 
-Add to Netlify (Site Settings → Environment Variables):
+Add to Netlify (Site Settings > Environment Variables):
 
 ```bash
-# Trakt OAuth
-GATSBY_TRAKT_CLIENT_ID=your_client_id_here
-GATSBY_TRAKT_CLIENT_SECRET=your_client_secret_here
-GATSBY_TRAKT_ACCESS_TOKEN=will_get_after_oauth
-GATSBY_TRAKT_REFRESH_TOKEN=will_get_after_oauth
+# Required
+TRAKT_CLIENT_ID=your_client_id_here
+TRAKT_CLIENT_SECRET=your_client_secret_here
+TRAKT_ACCESS_TOKEN=your_initial_access_token
+TRAKT_REFRESH_TOKEN=your_initial_refresh_token
 
-# TMDB (for poster images) - Optional but recommended
-GATSBY_TMDB_API_KEY=your_tmdb_key
+# Client-side (for OAuth redirect URL in the browser)
+PUBLIC_TRAKT_CLIENT_ID=your_client_id_here
+
+# Optional (for poster images)
+TMDB_API_KEY=your_tmdb_key
 ```
 
-### 3. Get Access Tokens
+After the first successful request, `TRAKT_ACCESS_TOKEN` and `TRAKT_REFRESH_TOKEN` are no longer read from env vars — Netlify Blobs becomes the source of truth. They can be kept as a fallback if Blobs is cleared.
+
+### 3. Get Initial Access Tokens
 
 **Development:**
 
-1. Run `npm run develop`
-2. Visit `http://localhost:8000/now?admin`
-3. Click "Re-authenticate" if you see an error
+1. Run `npm run dev`
+2. Visit `http://localhost:4321/now?admin`
+3. Click "Re-authenticate"
 4. Authorize on Trakt.tv
-5. Copy tokens from callback page
-6. Add to `.env.development`
+5. Tokens are displayed on the callback page — add to your `.env` file
 
 **Production:**
 
 1. Visit `https://yourdomain.com/now?admin`
 2. Click "Re-authenticate"
 3. Authorize on Trakt.tv
-4. Copy tokens from callback page
-5. Add to Netlify environment variables
-6. Trigger new deployment
+4. Tokens are saved to Netlify Blobs automatically
 
 ### 4. Token Lifecycle
 
 - **Access tokens expire:** Every ~3 months
-- **Refresh tokens expire:** Every ~3 months (unused)
-- **When expired:** Simply re-authenticate using the same OAuth flow
-- **No automation:** Manual re-auth every few months is simple and reliable
+- **Auto-refresh:** Handled automatically by `history.js` via Netlify Blobs
+- **Manual re-auth:** Only needed if the refresh token itself becomes invalid
+- **Test refresh flow:** Hit `/.netlify/functions/history?force-refresh=true`
 
 ## Files Involved
 
 ### Netlify Functions
 
-- `netlify/functions/history.js` - Fetches watch history from Trakt API
-- `netlify/functions/trakt-token.js` - OAuth token exchange
+- `netlify/functions/history.js` - Fetches watch history, auto-refreshes on 401
+- `netlify/functions/trakt-token.js` - OAuth token exchange, saves to Blobs
+- `netlify/functions/lib/trakt-tokens.js` - Token storage/retrieval/refresh via Blobs
 
 ### Frontend
 
-- `src/pages/now.js` - Displays watch history
-- `src/pages/callback/oauth.js` - OAuth callback handler
-- `src/components/mediaDisplay.js` - Display components
+- `src/components/NowPage.jsx` - Displays watch history (React island)
+- `src/components/OAuthCallback.jsx` - OAuth callback handler (React island)
+- `src/components/mediaDisplay.jsx` - BookDisplay, WatchDisplay, TrackDisplay components
 
-## Testing
+## Admin Access
 
-### Admin Access
-
-Access admin features via any of these methods:
+Access admin features (re-auth button, detailed errors) via:
 
 - `?admin` query parameter (e.g., `/now?admin`)
-- Development mode (`npm run develop`)
+- Development mode (`npm run dev`)
 - Localhost access
-
-### Re-authentication
-
-When tokens expire (~3 months):
-
-1. Visit `/now?admin`
-2. See re-authenticate button in error message
-3. Click button → authorize → copy new tokens
-4. Update environment variables
-5. Redeploy (production only)
 
 ## Troubleshooting
 
-### "Token expired" error
+### "Token expired" / 401 errors
 
-- Visit `/now?admin`
-- Click "Re-authenticate"
-- Update environment variables with new tokens
+The system should auto-refresh. If it doesn't:
 
-### "No authentication token provided"
+1. Visit `/now?admin`
+2. Click "Re-authenticate"
+3. Tokens are saved to Blobs automatically
 
-- Check that `GATSBY_TRAKT_ACCESS_TOKEN` is set in environment variables
-- Verify environment variable starts with `GATSBY_` prefix (required for frontend)
+### Cloudflare blocking requests
 
-### Redirect URI mismatch
-
-- Verify redirect URI in Trakt app settings matches exactly
-- Check for trailing slashes (should not have one)
-- Ensure protocol matches (http vs https)
+All Trakt API requests must include a `User-Agent` header or Cloudflare blocks them from Netlify's server IPs. This is set to `brendanreed-site/1.0` in `history.js` and `lib/trakt-tokens.js`.
 
 ### TMDB images not loading
 
 - TMDB API key is optional but recommended
-- Get free key at https://www.themoviedb.org/settings/api
-- Add as `GATSBY_TMDB_API_KEY`
+- Get a free key at https://www.themoviedb.org/settings/api
+- Add as `TMDB_API_KEY` in Netlify env vars
 
-## Cost Comparison
+### Redirect URI mismatch
 
-| Setup                    | Annual Cost | Maintenance                      | Complexity |
-| ------------------------ | ----------- | -------------------------------- | ---------- |
-| **Current (Simplified)** | $0          | Re-auth every 3 months           | Low        |
-| Previous (Auto-refresh)  | $0          | Auto-refresh, manual env updates | High       |
-| Trakt VIP RSS            | $30-60      | Minimal                          | Very Low   |
-
-## Migration Notes
-
-If upgrading from the previous complex setup:
-
-**Removed files:**
-
-- `netlify/functions/refresh-token.js`
-- `src/utils/trakt-auth.js`
-- `static/trakt-token-alerts.html`
-- `static/trakt-alert.html`
-- `src/pages/callback/trakt.js` (duplicate)
-
-**Removed features:**
-
-- Automatic token refresh
-- Admin email notifications
-- Webhook alerts
-- Complex admin banners
-
-**Environment variables no longer needed:**
-
-- `ADMIN_ALERT_WEBHOOK_URL`
-- `EMAIL_SERVICE_URL`
-- `EMAIL_API_KEY`
-- `ADMIN_EMAIL`
-
-## FAQ
-
-**Q: Do I need Trakt VIP?**
-A: No! The OAuth API is completely free.
-
-**Q: How often do I need to re-authenticate?**
-A: About every 3 months when tokens expire.
-
-**Q: Can I automate token refresh?**
-A: Yes, but it adds complexity. The previous auto-refresh system required environment variable updates anyway, so manual re-auth every 3 months is simpler.
-
-**Q: What happens when tokens expire?**
-A: Admins see a re-authenticate button. Public visitors see a friendly "temporarily unavailable" message.
-
-**Q: Can I track this automatically from my viewing habits?**
-A: Trakt doesn't auto-track. You need to use Plex/Jellyfin scrobblers or track manually at trakt.tv.
-
-## Support
-
-For Trakt API issues: https://trakt.tv/support
-For TMDB API issues: https://www.themoviedb.org/talk
+- Verify redirect URI in Trakt app settings matches the callback URL exactly
+- Dev: `http://localhost:4321/callback/oauth`
+- Prod: `https://yourdomain.com/callback/oauth`

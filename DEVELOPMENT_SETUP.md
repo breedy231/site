@@ -1,192 +1,134 @@
 # Development Setup Guide
 
-This guide covers setting up the development environment for Brendan Reed's personal site.
-
 ## Prerequisites
 
-- **Node.js** (v16 or higher)
-- **npm** or **yarn**
+- **Node.js** v20 or higher
+- **npm**
 - **Git**
 
 ## Quick Start
 
 ```bash
-# Clone the repository
 git clone https://github.com/breedy231/site.git
 cd site
-
-# Install dependencies
 npm install
-
-# Start development server
-npm run develop
-
-# For HTTPS development (required for some OAuth testing)
-npm run develop-https
+npm run dev
 ```
+
+Visit [http://localhost:4321](http://localhost:4321).
 
 ## Code Quality & Formatting
 
 ### Automatic Setup
 
-The project automatically configures code quality tools during `npm install`:
+The project configures code quality tools during `npm install`:
 
-- ✅ **Husky** git hooks installed
-- ✅ **lint-staged** configured for pre-commit formatting
-- ✅ **Prettier** + **ESLint** integration ready
+- Husky git hooks
+- lint-staged for pre-commit formatting
+- Prettier + ESLint integration
 
 ### Pre-commit Process
 
 Every commit automatically:
 
-1. **Formats code** with Prettier
-2. **Fixes linting issues** with ESLint
-3. **Stages changes** automatically
-4. **Prevents commits** if unfixable errors exist
+1. Formats code with Prettier (`.js`, `.jsx`, `.ts`, `.tsx`, `.json`, `.md`, `.astro`)
+2. Fixes linting issues with ESLint (`.js`, `.jsx`, `.ts`, `.tsx`)
+3. Stages changes automatically
+4. Prevents commits if unfixable errors exist
 
 ### Manual Commands
 
 ```bash
-# Format all files
-npm run format
-
-# Check formatting without changes
-npx prettier --check "**/*.{js,jsx,ts,tsx,json,md}"
-
-# Lint with auto-fix
-npx eslint src/ --fix
-
-# Test pre-commit hooks
-npx lint-staged
-
-# Clean Gatsby cache
-npm run clean
+npm run format                # Format all files
+npm run build                 # Build for production
+npm run dev                   # Start dev server (port 4321)
+npm run preview               # Preview production build
+npx eslint src/ --fix         # Fix lint errors
+npx lint-staged               # Test pre-commit hooks
 ```
 
 ## Configuration Files
 
 ### Code Formatting
 
-- **`.prettierrc`** - Prettier configuration
-- **`.prettierignore`** - Files to exclude from formatting
-- **`.eslintrc.js`** - ESLint rules and settings
+- **`.prettierrc`** - Prettier config (includes Astro and Tailwind plugins)
+- **`.prettierignore`** - Files excluded from formatting
+- **`.eslintrc.cjs`** - ESLint rules and settings
 
 ### Build System
 
-- **`gatsby-config.js`** - Gatsby configuration
-- **`gatsby-node.js`** - Build-time node APIs
-- **`tailwind.config.js`** - Tailwind CSS configuration
-- **`postcss.config.js`** - PostCSS configuration
+- **`astro.config.mjs`** - Astro config with React, MDX, Netlify, Sitemap integrations
+- **`netlify.toml`** - Netlify build config and API redirects
 
 ## Environment Variables
 
-### Required for Development
-
-Create `.env.development` with:
+Create a `.env` file in the project root:
 
 ```bash
-# Trakt API (for TV/Movie tracking)
-GATSBY_TRAKT_CLIENT_ID=your_client_id
-GATSBY_TRAKT_CLIENT_SECRET=your_client_secret
-GATSBY_TRAKT_ACCESS_TOKEN=your_access_token
-GATSBY_TRAKT_REFRESH_TOKEN=your_refresh_token
+# Trakt API (server-side, used by Netlify functions)
+TRAKT_CLIENT_ID=your_client_id
+TRAKT_CLIENT_SECRET=your_client_secret
+TRAKT_ACCESS_TOKEN=your_access_token
+TRAKT_REFRESH_TOKEN=your_refresh_token
 
-# TMDB API (for poster images)
-GATSBY_TMDB_API_KEY=your_tmdb_api_key
+# TMDB API (for poster images, optional)
+TMDB_API_KEY=your_tmdb_api_key
 
-# Last.fm API (for music tracking)
-GATSBY_LASTFM_API_KEY=your_lastfm_api_key
-GATSBY_LASTFM_USERNAME=your_lastfm_username
-
-# Goodreads (for book tracking)
-GATSBY_GOODREADS_USER_ID=your_goodreads_user_id
+# Trakt Client ID (client-side, for OAuth redirect URL)
+PUBLIC_TRAKT_CLIENT_ID=your_client_id
 ```
 
-### Optional (for alerts/notifications)
-
-```bash
-# For automated alerts
-ADMIN_ALERT_WEBHOOK_URL=your_slack_webhook_url
-EMAIL_SERVICE_URL=your_email_service_url
-EMAIL_API_KEY=your_email_api_key
-ADMIN_EMAIL=your_email@domain.com
-```
+Note: Astro only exposes `PUBLIC_`-prefixed variables to client-side code via `import.meta.env`.
 
 ## Project Structure
 
 ```
 ├── src/
-│   ├── api/           # Gatsby serverless functions (dev)
-│   ├── components/    # React components
-│   ├── context/       # React context providers
-│   ├── pages/         # Gatsby pages (routes)
-│   └── utils/         # Utility functions
-├── netlify/
-│   └── functions/     # Netlify serverless functions (production)
-├── static/            # Static assets (copied to public/)
+│   ├── components/    # React island components (.jsx)
+│   ├── content.config.ts  # Blog content collection schema
+│   ├── data/          # Static data (game categories)
+│   ├── layouts/       # Astro layouts (BaseLayout.astro)
+│   ├── pages/         # Astro pages (routes)
+│   └── styles/        # Global CSS (Tailwind entry point)
 ├── blog/              # MDX blog posts
-└── public/            # Build output (auto-generated)
+├── netlify/
+│   └── functions/     # Netlify serverless functions
+├── public/            # Static assets (fonts, sounds, images)
+└── dist/              # Build output (gitignored)
 ```
 
-## Development Workflow
+## Architecture
 
-### 1. Feature Development
+- **Static pages** (homepage, 404, blog) are `.astro` files — zero JS to client
+- **Interactive pages** use React components as Astro islands:
+  - `client:load` — hydrates on page load (ThemeToggle, NowPage)
+  - `client:only="react"` — client-only rendering (HeadsUpGame, MotionTest, OAuthCallback)
+
+## Development Workflow
 
 ```bash
 # Create feature branch
 git checkout -b feature/your-feature-name
 
-# Make changes, commits are automatically formatted
+# Make changes — commits are auto-formatted
 git add .
 git commit -m "feat: your feature description"
 
-# Push when ready
+# Push
 git push origin feature/your-feature-name
 ```
 
-### 2. No More Formatting Conflicts!
-
-Previously, developers experienced this frustrating cycle:
+### Testing
 
 ```bash
-git commit -m "fix: something"
-git push                        # ❌ Rejected
-git pull                        # GitHub Actions reformatted code
-git push                        # ✅ Finally works
+npm run dev       # Dev server at localhost:4321
+npm run build     # Production build
+npm run preview   # Preview production build locally
 ```
-
-**Now:** Local formatting matches CI exactly, so pushes work on the first try!
-
-### 3. Testing
-
-```bash
-# Test locally
-npm run develop
-
-# Test production build
-npm run build
-npm run serve
-
-# Test HTTPS (for OAuth)
-npm run develop-https
-```
-
-## Build System
-
-### Source Files vs Build Output
-
-**Important:** Always edit files in `src/` and `static/`, never in `public/`!
-
-- **Source**: `static/` directory (version controlled)
-- **Build output**: `public/` directory (gitignored)
-- **Build process**: Copies `static/` → `public/` + generates pages
 
 ### Netlify Functions
 
-**Development:** Files in `src/api/` are copied to `netlify/functions/`
-**Production:** Netlify serves `netlify/functions/` directly
-
-Both use modern ES module syntax:
+Functions in `netlify/functions/` use modern V2 format and are independent of Astro:
 
 ```javascript
 export default async function handler(req) {
@@ -197,82 +139,32 @@ export default async function handler(req) {
 }
 ```
 
-## API Integration
+API redirects in `netlify.toml` map `/api/*` to `/.netlify/functions/*`.
 
 ### OAuth Flow (Trakt)
 
-1. **Development**: Uses `localhost:8000/callback/oauth`
-2. **Production**: Uses `${currentHost}/callback/oauth`
-3. **Deploy previews**: Falls back to main site URL
-
-### Automatic Token Refresh
-
-The system automatically refreshes expired tokens:
-
-- **Success**: Logs new tokens for manual environment variable updates
-- **Failure**: Falls back to manual re-authentication
-- **Notifications**: Sends alerts via configured methods
+- **Development**: Redirect URI is `http://localhost:4321/callback/oauth`
+- **Production**: Uses `${currentHost}/callback/oauth`
 
 ## Troubleshooting
 
-### Pre-commit Issues
-
-**Hooks not running:**
+### Pre-commit hooks not running
 
 ```bash
 npm run prepare
-ls -la .git/hooks/  # Should see pre-commit file
+ls -la .git/hooks/
 ```
 
-**Formatting inconsistencies:**
+### Build issues
 
 ```bash
-npm run format
-git add .
-git commit --amend --no-edit
-```
-
-### Build Issues
-
-**Cache problems:**
-
-```bash
-npm run clean
-npm run develop
-```
-
-**Dependency issues:**
-
-```bash
-rm -rf node_modules package-lock.json
+rm -rf node_modules dist .astro
 npm install
+npm run build
 ```
 
-### OAuth Issues
-
-**Redirect URI errors:**
-
-- Check Trakt app settings match callback URLs
-- For deploy previews, test on main site instead
-
-**Token expiration:**
+### OAuth issues
 
 - Visit `/now?admin` to trigger re-authentication
-- Check Netlify function logs for auto-refresh status
-
-## Contributing
-
-1. **Follow the commit convention**: `feat:`, `fix:`, `docs:`, etc.
-2. **Let pre-commit hooks do their job** - they ensure code quality
-3. **Test OAuth changes** on deploy previews when possible
-4. **Update documentation** when adding new features
-5. **Check function logs** in Netlify dashboard for debugging
-
-## Getting Help
-
-- **Documentation**: See `CLAUDE.md` for comprehensive setup info
-- **OAuth Setup**: See `TRAKT_SETUP.md` for API integration
-- **Alert Setup**: See `AUTOMATED_ALERTS_SETUP.md` for notifications
-- **Issues**: Check Netlify function logs and browser console
-
-The development environment is designed to "just work" - if something seems overly complicated, there's probably a simpler way! ✨
+- Check Netlify function logs for token refresh errors
+- Verify redirect URIs in Trakt app settings match
