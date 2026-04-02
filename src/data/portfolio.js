@@ -1,4 +1,8 @@
 // TODO: Replace placeholder highlights with your real accomplishments and metrics
+//
+// Images: add an optional `image` field to any work or project entry:
+//   image: { src: "/portfolio-images/your-image.png", alt: "Description" }
+// Supports .png, .jpg, .gif, .webp — place files in public/portfolio-images/
 
 export const workExperience = [
   {
@@ -6,6 +10,7 @@ export const workExperience = [
     url: "https://www.klaviyo.com",
     role: "Lead Software Engineer",
     period: "2022 – Present",
+    // image: { src: "/portfolio-images/klaviyo.png", alt: "Klaviyo dashboard" },
     highlights: [
       "Placeholder: Led a major frontend initiative that improved performance or user experience",
       "Placeholder: Mentored engineers and drove engineering culture improvements",
@@ -50,6 +55,7 @@ export const sideProjects = [
     url: "https://github.com/breedy231",
     description:
       "Placeholder: Describe what this project does and why you built it.",
+    // image: { src: "/portfolio-images/project.gif", alt: "Project demo" },
     tech: ["React", "Node.js", "PostgreSQL"],
   },
   {
