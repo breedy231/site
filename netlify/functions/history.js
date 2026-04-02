@@ -3,7 +3,7 @@
 
 import { getTokens, refreshTokens } from "./lib/trakt-tokens.js"
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY
+const TMDB_API_KEY = process.env.TMDB_API_KEY || process.env.GATSBY_TMDB_API_KEY
 
 function traktHeaders(accessToken) {
   return {
@@ -11,7 +11,8 @@ function traktHeaders(accessToken) {
     "User-Agent": "brendanreed-site/1.0",
     Authorization: `Bearer ${accessToken}`,
     "trakt-api-version": "2",
-    "trakt-api-key": process.env.TRAKT_CLIENT_ID,
+    "trakt-api-key":
+      process.env.TRAKT_CLIENT_ID || process.env.GATSBY_TRAKT_CLIENT_ID,
   }
 }
 
