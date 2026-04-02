@@ -6,19 +6,20 @@ Gatsby has been effectively deprecated since Netlify acquired it in early 2023 a
 
 ## Current State Summary
 
-| Aspect | Current Setup |
-|--------|--------------|
-| Framework | Gatsby 5.16.1 |
-| React | 18.3.1 |
-| Styling | Tailwind v4 + CSS Modules + Styled Components |
-| Content | 3 MDX blog posts in `blog/` |
-| Hosting | Netlify (functions + static) |
-| Functions | 5 Netlify Functions (V2 format) |
+| Aspect            | Current Setup                                        |
+| ----------------- | ---------------------------------------------------- |
+| Framework         | Gatsby 5.16.1                                        |
+| React             | 18.3.1                                               |
+| Styling           | Tailwind v4 + CSS Modules + Styled Components        |
+| Content           | 3 MDX blog posts in `blog/`                          |
+| Hosting           | Netlify (functions + static)                         |
+| Functions         | 5 Netlify Functions (V2 format)                      |
 | Interactive pages | `/headsup` (game), `/motion-test`, `/now` (API data) |
 
 ## Migration Strategy: Incremental, Page-by-Page
 
 Rather than a big-bang rewrite, migrate incrementally:
+
 1. Set up Astro project alongside Gatsby config
 2. Migrate static pages first
 3. Move interactive pages as React islands
@@ -31,6 +32,7 @@ Rather than a big-bang rewrite, migrate incrementally:
 **Goal:** Get Astro running with the existing styling and layout infrastructure.
 
 ### Tasks
+
 - [ ] Install Astro and core integrations (`@astrojs/react`, `@astrojs/tailwind`, `@astrojs/mdx`, `@astrojs/netlify`)
 - [ ] Create `astro.config.mjs` with Netlify adapter
 - [ ] Port `src/styles/global.css` (Tailwind v4 entry point) — should work as-is
@@ -42,12 +44,13 @@ Rather than a big-bang rewrite, migrate incrementally:
 - [ ] Verify Tailwind dark mode (`@custom-variant`) works in Astro's PostCSS pipeline
 
 ### Key Differences
-| Gatsby | Astro |
-|--------|-------|
-| `static/` → copied to `public/` at build | `public/` is the static dir directly |
-| `gatsby-ssr.js` for head injection | `<script is:inline>` in layout `<head>` |
-| `gatsby-browser.js` for client wrappers | Astro layouts or client directives |
-| `useStaticQuery` for site metadata | Import from a config file or `Astro.props` |
+
+| Gatsby                                   | Astro                                      |
+| ---------------------------------------- | ------------------------------------------ |
+| `static/` → copied to `public/` at build | `public/` is the static dir directly       |
+| `gatsby-ssr.js` for head injection       | `<script is:inline>` in layout `<head>`    |
+| `gatsby-browser.js` for client wrappers  | Astro layouts or client directives         |
+| `useStaticQuery` for site metadata       | Import from a config file or `Astro.props` |
 
 ---
 
@@ -56,6 +59,7 @@ Rather than a big-bang rewrite, migrate incrementally:
 **Goal:** Migrate pages with no/minimal client-side interactivity.
 
 ### Homepage (`/`)
+
 - [ ] Create `src/pages/index.astro`
 - [ ] Replace `useStaticQuery` for site metadata with a static config import
 - [ ] Replace `react-media` responsive breakpoints with CSS-only approach (Tailwind responsive classes already handle this — `react-media` is only used in `layout.js` for conditional rendering)
@@ -63,12 +67,15 @@ Rather than a big-bang rewrite, migrate incrementally:
 - [ ] Convert `layout.js` responsive navigation to CSS-based show/hide (Tailwind `hidden md:block` etc.)
 
 ### 404 Page
+
 - [ ] Create `src/pages/404.astro`
 
 ### Responsive Test Page (`/responsive-test`)
+
 - [ ] Create `src/pages/responsive-test.astro` (or drop it if no longer needed)
 
 ### Blog
+
 - [ ] Move MDX files from `blog/` to `src/content/blog/` (Astro content collections)
 - [ ] Define content collection schema in `src/content/config.ts`
 - [ ] Create `src/pages/blog/index.astro` for blog listing
@@ -83,6 +90,7 @@ Rather than a big-bang rewrite, migrate incrementally:
 **Goal:** Migrate pages that require significant client-side JavaScript using Astro's island architecture (`client:load` / `client:only="react"`).
 
 ### Now Page (`/now`)
+
 - [ ] Create `src/pages/now.astro` with static shell
 - [ ] Extract data-fetching sections into React island components:
   - `ReadingSection.tsx` (Goodreads data)
@@ -94,9 +102,11 @@ Rather than a big-bang rewrite, migrate incrementally:
 - [ ] Port Trakt re-auth button
 
 ### OAuth Callback (`/callback/oauth`)
+
 - [ ] Create as a React island (`client:only="react"`) since it's entirely client-side (reads URL params, posts to API)
 
 ### Heads Up Game (`/headsup`)
+
 - [ ] Create `src/pages/headsup.astro` with minimal shell
 - [ ] Keep the entire game as a single React island (`client:only="react"`) — it's 100% interactive
 - [ ] Port `SoundManager.js` as-is
@@ -106,6 +116,7 @@ Rather than a big-bang rewrite, migrate incrementally:
 - [ ] Test device orientation APIs
 
 ### Motion Test (`/motion-test`)
+
 - [ ] Create `src/pages/motion-test.astro` with minimal shell
 - [ ] Keep as React island (`client:only="react"`)
 
@@ -114,6 +125,7 @@ Rather than a big-bang rewrite, migrate incrementally:
 ## Phase 3: Infrastructure & Config
 
 ### Netlify Functions
+
 - [ ] **No changes needed** — functions in `netlify/functions/` are independent of the framework
 - [ ] Update `netlify.toml`:
   - Build command: `astro build` (replaces `gatsby build`)
@@ -122,21 +134,25 @@ Rather than a big-bang rewrite, migrate incrementally:
 - [ ] Verify Netlify adapter generates correct function wrappers (if using SSR routes)
 
 ### SEO & Head Management
+
 - [ ] Replace `react-helmet` with Astro's built-in `<head>` management
 - [ ] Port manifest config from `gatsby-plugin-manifest` to a static `manifest.json` in `public/`
 - [ ] Port any Open Graph / meta tags
 
 ### Images
+
 - [ ] Replace `gatsby-plugin-image` / `gatsby-plugin-sharp` with Astro's built-in `<Image>` component (`astro:assets`)
 - [ ] Audit image usage — currently minimal (blog images, media posters from APIs)
 
 ### Theme Context
+
 - [ ] Replace React Context (`ThemeContext.js`) with a vanilla JS approach:
   - Inline script in `<head>` reads localStorage and sets `.dark` class (prevents FOUC)
   - `ThemeToggle` becomes a small client-side island or vanilla JS web component
   - Astro components use Tailwind `dark:` variants (no change needed)
 
 ### Environment Variables
+
 - [ ] Rename `GATSBY_*` env vars to standard names (Astro uses `PUBLIC_` prefix for client-exposed vars)
   - `GATSBY_TRAKT_CLIENT_ID` → `PUBLIC_TRAKT_CLIENT_ID`
   - `GATSBY_TMDB_API_KEY` → `PUBLIC_TMDB_API_KEY`
@@ -166,54 +182,60 @@ Rather than a big-bang rewrite, migrate incrementally:
 ## Dependency Mapping
 
 ### Keep
-| Package | Reason |
-|---------|--------|
-| `react`, `react-dom` | Used by interactive islands |
-| `tailwindcss`, `@tailwindcss/postcss`, `@tailwindcss/typography` | Styling (works with Astro) |
-| `framer-motion` | Heads Up game animations |
-| `axios` | API calls in islands |
-| `fast-xml-parser` | Used by Netlify function (not framework-dependent) |
-| `@netlify/blobs` | Used by Netlify function |
-| `prop-types` | Used by React components |
-| `prettier`, `eslint`, `husky`, `lint-staged` | Dev tooling |
+
+| Package                                                          | Reason                                             |
+| ---------------------------------------------------------------- | -------------------------------------------------- |
+| `react`, `react-dom`                                             | Used by interactive islands                        |
+| `tailwindcss`, `@tailwindcss/postcss`, `@tailwindcss/typography` | Styling (works with Astro)                         |
+| `framer-motion`                                                  | Heads Up game animations                           |
+| `axios`                                                          | API calls in islands                               |
+| `fast-xml-parser`                                                | Used by Netlify function (not framework-dependent) |
+| `@netlify/blobs`                                                 | Used by Netlify function                           |
+| `prop-types`                                                     | Used by React components                           |
+| `prettier`, `eslint`, `husky`, `lint-staged`                     | Dev tooling                                        |
 
 ### Add
-| Package | Reason |
-|---------|--------|
-| `astro` | Framework |
-| `@astrojs/react` | React island support |
-| `@astrojs/mdx` | MDX blog posts |
-| `@astrojs/netlify` | Netlify adapter (SSR/functions) |
-| `@astrojs/tailwind` or manual PostCSS | Tailwind integration |
-| `prettier-plugin-astro` | Format `.astro` files |
+
+| Package                               | Reason                          |
+| ------------------------------------- | ------------------------------- |
+| `astro`                               | Framework                       |
+| `@astrojs/react`                      | React island support            |
+| `@astrojs/mdx`                        | MDX blog posts                  |
+| `@astrojs/netlify`                    | Netlify adapter (SSR/functions) |
+| `@astrojs/tailwind` or manual PostCSS | Tailwind integration            |
+| `prettier-plugin-astro`               | Format `.astro` files           |
 
 ### Remove
-| Package | Reason |
-|---------|--------|
-| `gatsby` + all `gatsby-*` plugins | Replaced by Astro |
-| `gatsby-cli` | Replaced by `astro` CLI |
-| `react-helmet` | Astro handles `<head>` natively |
-| `react-media` | Replace with CSS-only responsive |
-| `styled-components` + babel plugin | Unused / replaceable with Tailwind |
-| `@mdx-js/react` | Astro MDX integration handles this |
-| `sass` | Not needed if all styles use Tailwind/CSS |
+
+| Package                            | Reason                                    |
+| ---------------------------------- | ----------------------------------------- |
+| `gatsby` + all `gatsby-*` plugins  | Replaced by Astro                         |
+| `gatsby-cli`                       | Replaced by `astro` CLI                   |
+| `react-helmet`                     | Astro handles `<head>` natively           |
+| `react-media`                      | Replace with CSS-only responsive          |
+| `styled-components` + babel plugin | Unused / replaceable with Tailwind        |
+| `@mdx-js/react`                    | Astro MDX integration handles this        |
+| `sass`                             | Not needed if all styles use Tailwind/CSS |
 
 ---
 
 ## Risk Assessment
 
 ### Low Risk
+
 - Static pages (homepage, 404, blog) — straightforward template conversion
 - Netlify functions — completely independent of framework
 - Tailwind CSS — works identically in Astro
 - Static assets — just move `static/` contents to `public/`
 
 ### Medium Risk
+
 - Dark mode FOUC prevention — need to replicate the `gatsby-ssr.js` inline script approach
 - MDX blog posts — Astro's MDX handling differs slightly (content collections vs file-based routing)
 - Environment variable renaming — need to update code + Netlify dashboard simultaneously
 
 ### Higher Risk
+
 - Heads Up game as React island — complex state + device APIs + framer-motion; needs thorough testing on mobile
 - OAuth flow — redirect URIs and token exchange must work identically
 - `react-media` removal — need to verify CSS-only responsive approach covers all layout cases
@@ -222,13 +244,13 @@ Rather than a big-bang rewrite, migrate incrementally:
 
 ## Estimated Effort by Phase
 
-| Phase | Scope | Complexity |
-|-------|-------|------------|
-| Phase 0 | Scaffolding | Low |
-| Phase 1 | Static pages + blog | Low-Medium |
+| Phase   | Scope               | Complexity  |
+| ------- | ------------------- | ----------- |
+| Phase 0 | Scaffolding         | Low         |
+| Phase 1 | Static pages + blog | Low-Medium  |
 | Phase 2 | Interactive islands | Medium-High |
-| Phase 3 | Infrastructure | Medium |
-| Phase 4 | Cleanup | Low |
+| Phase 3 | Infrastructure      | Medium      |
+| Phase 4 | Cleanup             | Low         |
 
 ---
 
