@@ -1,7 +1,16 @@
 @import "tailwindcss";
-@import "../css/typography.css";
 @plugin "@tailwindcss/typography";
 @custom-variant dark (&:where(.dark, .dark *));
+
+@font-face {
+  font-family: "Poppins Regular";
+  src: url("/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Poppins Bold";
+  src: url("/fonts/Poppins/Poppins-Bold.ttf");
+}
 
 body {
   font-family: "Poppins Regular";
@@ -15,4 +24,8 @@ body {
 .dark body {
   background-color: #032740;
   color: #fff;
+}
+
+div {
+  font-family: "Poppins Regular";
 }

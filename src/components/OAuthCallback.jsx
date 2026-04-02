@@ -1,7 +1,6 @@
-// src/pages/callback/trakt.js
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
-const TraktCallback = () => {
+const OAuthCallback = () => {
   const [status, setStatus] = useState("Processing...")
   const [error, setError] = useState(null)
   const [mounted, setMounted] = useState(false)
@@ -26,11 +25,10 @@ const TraktCallback = () => {
           return
         }
 
-        console.log("Sending token exchange request...") // Debug log
-        const apiUrl =
-          process.env.NODE_ENV === "development"
-            ? "/api/trakt-token"
-            : "/.netlify/functions/trakt-token"
+        console.log("Sending token exchange request...")
+        const apiUrl = import.meta.env.DEV
+          ? "/api/trakt-token"
+          : "/.netlify/functions/trakt-token"
         const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
@@ -40,14 +38,13 @@ const TraktCallback = () => {
           body: JSON.stringify({ code }),
         })
 
-        console.log("Response status:", response.status) // Debug log
-        console.log("Response headers:", Object.fromEntries(response.headers)) // Debug log
+        console.log("Response status:", response.status)
 
         const contentType = response.headers.get("content-type")
         let data
         if (contentType && contentType.includes("application/json")) {
           data = await response.json()
-          console.log("Response data:", data) // Debug log
+          console.log("Response data:", data)
         } else {
           const text = await response.text()
           console.error("Unexpected response type:", contentType, text)
@@ -58,14 +55,14 @@ const TraktCallback = () => {
           throw new Error(data.error || "Failed to exchange code for token")
         }
 
-        if (process.env.NODE_ENV === "development") {
+        if (import.meta.env.DEV) {
           setStatus(`
-Authentication successful! Add these to your .env.development file:
+Authentication successful! Add these to your .env file:
 
-GATSBY_TRAKT_ACCESS_TOKEN=${data.access_token}
-GATSBY_TRAKT_REFRESH_TOKEN=${data.refresh_token}
+PUBLIC_TRAKT_ACCESS_TOKEN=${data.access_token}
+PUBLIC_TRAKT_REFRESH_TOKEN=${data.refresh_token}
 
-You can now restart your Gatsby development server.`)
+You can now restart your development server.`)
         } else {
           setStatus(
             "Authentication successful! Tokens have been saved automatically. You can return to the Now page.",
@@ -131,4 +128,4 @@ You can now restart your Gatsby development server.`)
   )
 }
 
-export default TraktCallback
+export default OAuthCallback

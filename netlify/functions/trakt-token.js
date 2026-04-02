@@ -51,18 +51,15 @@ export default async function handler(req) {
 
     const redirectUri =
       process.env.NODE_ENV === "development"
-        ? "http://localhost:8000/callback/oauth"
+        ? "http://localhost:4321/callback/oauth"
         : `${currentOrigin}/callback/oauth`
 
     console.log("Using redirect URI:", redirectUri) // Debug log
     console.log(
       "Using client ID:",
-      process.env.GATSBY_TRAKT_CLIENT_ID?.substring(0, 10) + "...",
+      process.env.TRAKT_CLIENT_ID?.substring(0, 10) + "...",
     ) // Debug log
-    console.log(
-      "Client secret exists:",
-      !!process.env.GATSBY_TRAKT_CLIENT_SECRET,
-    ) // Debug log
+    console.log("Client secret exists:", !!process.env.TRAKT_CLIENT_SECRET) // Debug log
 
     const response = await fetch("https://api.trakt.tv/oauth/token", {
       method: "POST",
@@ -71,8 +68,8 @@ export default async function handler(req) {
       },
       body: JSON.stringify({
         code,
-        client_id: process.env.GATSBY_TRAKT_CLIENT_ID,
-        client_secret: process.env.GATSBY_TRAKT_CLIENT_SECRET,
+        client_id: process.env.TRAKT_CLIENT_ID,
+        client_secret: process.env.TRAKT_CLIENT_SECRET,
         redirect_uri: redirectUri,
         grant_type: "authorization_code",
       }),

@@ -23,8 +23,8 @@ export async function getTokens() {
   }
 
   // Fall back to env vars (initial seed)
-  const accessToken = process.env.GATSBY_TRAKT_ACCESS_TOKEN
-  const refreshToken = process.env.GATSBY_TRAKT_REFRESH_TOKEN
+  const accessToken = process.env.TRAKT_ACCESS_TOKEN
+  const refreshToken = process.env.TRAKT_REFRESH_TOKEN
 
   if (accessToken && refreshToken) {
     const tokens = {
@@ -53,8 +53,8 @@ export async function refreshTokens(currentRefreshToken) {
     },
     body: JSON.stringify({
       refresh_token: currentRefreshToken,
-      client_id: process.env.GATSBY_TRAKT_CLIENT_ID,
-      client_secret: process.env.GATSBY_TRAKT_CLIENT_SECRET,
+      client_id: process.env.TRAKT_CLIENT_ID,
+      client_secret: process.env.TRAKT_CLIENT_SECRET,
       redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
       grant_type: "refresh_token",
     }),
