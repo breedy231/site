@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { getCollection } from "astro:content"
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) =>
+    new Date(b.data.datePublished).getTime() -
+    new Date(a.data.datePublished).getTime(),
+)
+---
+
+<BaseLayout title="Blog - Brendan Reed">
+  <div class="m-auto flex max-w-3xl flex-col items-start">
+    {
+      posts.map(post => (
+        <div class="mt-20 flex w-full flex-col">
+          <article>
+            <h2 class="text-3xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 dark:text-white">
+              <a href={`/blog/${post.data.slug}`}>{post.data.name}</a>
+            </h2>
+            <p class="mt-3 text-gray-900 dark:text-white">
+              Posted:{" "}
+              {new Date(post.data.datePublished).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          </article>
+          <p class="divider">{"/////"}</p>
+        </div>
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .divider {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #da300f;
+    align-self: center;
+    font-size: 30px;
+  }
+</style>

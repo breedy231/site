@@ -55,9 +55,11 @@ typings/
 .env*
 !.env.example
 
-# gatsby files
-.cache/
-public
+# Astro build output
+dist/
+
+# Astro cache (generated types, etc.)
+.astro/
 
 # Mac files
 .DS_Store
