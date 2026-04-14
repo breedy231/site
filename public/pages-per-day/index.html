@@ -91,15 +91,17 @@
   html.dark .field input::placeholder{color:#6b7280}
 
   .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  .row-3{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:16px}
   @media(max-width:480px){
     .row-3{grid-template-columns:1fr;gap:12px}
   }
 
-  /* Progress mode toggle (pages vs %) */
-  .field-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;min-height:20px;flex-wrap:nowrap}
-  .field-label-row label{margin-bottom:0;white-space:nowrap}
-  .mode-toggle{display:inline-flex;background:#e5e7eb;border-radius:6px;padding:2px;gap:2px;flex-shrink:0}
+  /* Progress mode toggle (pages vs %) — absolutely positioned so it
+     doesn't push the Progress grid column wider than the others. */
+  .mode-toggle{
+    position:absolute;top:-4px;right:0;z-index:1;
+    display:inline-flex;background:#e5e7eb;border-radius:6px;padding:2px;gap:2px;
+  }
   html.dark .mode-toggle{background:#1e5a80}
   .mode-btn{
     background:transparent;border:none;padding:2px 7px;border-radius:4px;
@@ -214,12 +216,10 @@
       <input type="number" id="total-pages" placeholder="e.g. 576" min="1" inputmode="numeric">
     </div>
     <div class="field">
-      <div class="field-label-row">
-        <label id="progress-label" for="pages-read">Progress</label>
-        <div class="mode-toggle" role="tablist" aria-label="Progress input mode">
-          <button type="button" class="mode-btn active" id="mode-pages" role="tab" aria-selected="true">Pages</button>
-          <button type="button" class="mode-btn" id="mode-pct" role="tab" aria-selected="false">%</button>
-        </div>
+      <label for="pages-read">Progress</label>
+      <div class="mode-toggle" role="tablist" aria-label="Progress input mode">
+        <button type="button" class="mode-btn active" id="mode-pages" role="tab" aria-selected="true">Pages</button>
+        <button type="button" class="mode-btn" id="mode-pct" role="tab" aria-selected="false">%</button>
       </div>
       <input type="number" id="pages-read" placeholder="0" min="0" inputmode="numeric">
     </div>
