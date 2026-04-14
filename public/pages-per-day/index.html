@@ -97,14 +97,14 @@
   }
 
   /* Progress mode toggle (pages vs %) */
-  .field-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;min-height:20px}
-  .field-label-row label{margin-bottom:0}
-  .mode-toggle{display:inline-flex;background:#e5e7eb;border-radius:6px;padding:2px;gap:2px}
+  .field-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;min-height:20px;flex-wrap:nowrap}
+  .field-label-row label{margin-bottom:0;white-space:nowrap}
+  .mode-toggle{display:inline-flex;background:#e5e7eb;border-radius:6px;padding:2px;gap:2px;flex-shrink:0}
   html.dark .mode-toggle{background:#1e5a80}
   .mode-btn{
-    background:transparent;border:none;padding:2px 8px;border-radius:4px;
+    background:transparent;border:none;padding:2px 7px;border-radius:4px;
     font-family:'Poppins Regular',sans-serif;font-size:10px;font-weight:600;
-    letter-spacing:.8px;color:#6b7280;cursor:pointer;transition:background .15s,color .15s;
+    letter-spacing:.5px;color:#6b7280;cursor:pointer;transition:background .15s,color .15s;
     text-transform:uppercase;
   }
   html.dark .mode-btn{color:#9ca3af}
@@ -215,7 +215,7 @@
     </div>
     <div class="field">
       <div class="field-label-row">
-        <label id="progress-label" for="pages-read">Pages read</label>
+        <label id="progress-label" for="pages-read">Progress</label>
         <div class="mode-toggle" role="tablist" aria-label="Progress input mode">
           <button type="button" class="mode-btn active" id="mode-pages" role="tab" aria-selected="true">Pages</button>
           <button type="button" class="mode-btn" id="mode-pct" role="tab" aria-selected="false">%</button>
@@ -273,7 +273,6 @@
   const resultSlot = document.getElementById('result-slot');
   const lookupBtn = document.getElementById('lookup-btn');
   const dropdown = document.getElementById('dropdown');
-  const progressLabel = document.getElementById('progress-label');
   const modePagesBtn = document.getElementById('mode-pages');
   const modePctBtn = document.getElementById('mode-pct');
 
@@ -309,7 +308,6 @@
     modePagesBtn.setAttribute('aria-selected', String(!isPct));
     modePctBtn.classList.toggle('active', isPct);
     modePctBtn.setAttribute('aria-selected', String(isPct));
-    progressLabel.textContent = isPct ? '% complete' : 'Pages read';
     pagesReadInput.placeholder = isPct ? 'e.g. 42' : '0';
     pagesReadInput.max = isPct ? '100' : '';
     pagesReadInput.step = isPct ? 'any' : '1';
