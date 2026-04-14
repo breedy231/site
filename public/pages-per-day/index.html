@@ -96,6 +96,21 @@
     .row-3{grid-template-columns:1fr;gap:12px}
   }
 
+  /* Progress mode toggle (pages vs %) */
+  .field-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;min-height:20px}
+  .field-label-row label{margin-bottom:0}
+  .mode-toggle{display:inline-flex;background:#e5e7eb;border-radius:6px;padding:2px;gap:2px}
+  html.dark .mode-toggle{background:#1e5a80}
+  .mode-btn{
+    background:transparent;border:none;padding:2px 8px;border-radius:4px;
+    font-family:'Poppins Regular',sans-serif;font-size:10px;font-weight:600;
+    letter-spacing:.8px;color:#6b7280;cursor:pointer;transition:background .15s,color .15s;
+    text-transform:uppercase;
+  }
+  html.dark .mode-btn{color:#9ca3af}
+  .mode-btn.active{background:#fff;color:#111827}
+  html.dark .mode-btn.active{background:#0a3a5c;color:#fff}
+
   /* Search wrapper */
   .search-wrap{position:relative}
   .search-wrap input{padding-right:70px}
@@ -199,7 +214,13 @@
       <input type="number" id="total-pages" placeholder="e.g. 576" min="1" inputmode="numeric">
     </div>
     <div class="field">
-      <label>Pages read</label>
+      <div class="field-label-row">
+        <label id="progress-label" for="pages-read">Pages read</label>
+        <div class="mode-toggle" role="tablist" aria-label="Progress input mode">
+          <button type="button" class="mode-btn active" id="mode-pages" role="tab" aria-selected="true">Pages</button>
+          <button type="button" class="mode-btn" id="mode-pct" role="tab" aria-selected="false">%</button>
+        </div>
+      </div>
       <input type="number" id="pages-read" placeholder="0" min="0" inputmode="numeric">
     </div>
     <div class="field">
@@ -252,8 +273,17 @@
   const resultSlot = document.getElementById('result-slot');
   const lookupBtn = document.getElementById('lookup-btn');
   const dropdown = document.getElementById('dropdown');
+  const progressLabel = document.getElementById('progress-label');
+  const modePagesBtn = document.getElementById('mode-pages');
+  const modePctBtn = document.getElementById('mode-pct');
 
   const STORAGE_KEY = 'ppd-book';
+
+  // Progress input mode: 'pages' or 'pct'. Track pages and percent separately
+  // so switching modes doesn't clobber the other value.
+  let mode = 'pages';
+  let pagesReadValue = '';
+  let percentReadValue = '';
 
   const today = new Date(); today.setHours(0,0,0,0);
   deadlineInput.min = today.toISOString().split('T')[0];
@@ -264,17 +294,53 @@
     if(saved){
       if(saved.title) titleInput.value = saved.title;
       if(saved.totalPages) totalPagesInput.value = saved.totalPages;
-      if(saved.pagesRead) pagesReadInput.value = saved.pagesRead;
+      if(saved.pagesRead) pagesReadValue = String(saved.pagesRead);
+      if(saved.percentRead) percentReadValue = String(saved.percentRead);
+      if(saved.mode === 'pct') mode = 'pct';
       if(saved.deadline) deadlineInput.value = saved.deadline;
     }
   } catch(e){}
 
+  applyMode();
+
+  function applyMode(){
+    const isPct = mode === 'pct';
+    modePagesBtn.classList.toggle('active', !isPct);
+    modePagesBtn.setAttribute('aria-selected', String(!isPct));
+    modePctBtn.classList.toggle('active', isPct);
+    modePctBtn.setAttribute('aria-selected', String(isPct));
+    progressLabel.textContent = isPct ? '% complete' : 'Pages read';
+    pagesReadInput.placeholder = isPct ? 'e.g. 42' : '0';
+    pagesReadInput.max = isPct ? '100' : '';
+    pagesReadInput.step = isPct ? 'any' : '1';
+    pagesReadInput.value = isPct ? percentReadValue : pagesReadValue;
+  }
+
+  function setMode(next){
+    if(next === mode) return;
+    // Capture the current value before switching
+    if(mode === 'pct') percentReadValue = pagesReadInput.value;
+    else pagesReadValue = pagesReadInput.value;
+    mode = next;
+    applyMode();
+    saveState();
+    calc();
+  }
+
+  modePagesBtn.addEventListener('click', ()=>setMode('pages'));
+  modePctBtn.addEventListener('click', ()=>setMode('pct'));
+
   function saveState(){
+    // Keep the live value in the correct slot before serializing
+    if(mode === 'pct') percentReadValue = pagesReadInput.value;
+    else pagesReadValue = pagesReadInput.value;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         title: titleInput.value,
         totalPages: totalPagesInput.value,
-        pagesRead: pagesReadInput.value,
+        pagesRead: pagesReadValue,
+        percentRead: percentReadValue,
+        mode,
         deadline: deadlineInput.value,
       }));
     } catch(e){}
@@ -368,7 +434,16 @@
     const totalPages = parseInt(totalPagesInput.value)||0;
     if(!totalPages || !deadlineInput.value){ resultSlot.innerHTML=''; return; }
 
-    const read = parseInt(pagesReadInput.value)||0;
+    let read;
+    if(mode === 'pct'){
+      let pct = parseFloat(pagesReadInput.value);
+      if(!isFinite(pct) || pct < 0) pct = 0;
+      if(pct > 100) pct = 100;
+      read = Math.round(totalPages * (pct/100));
+    } else {
+      read = parseInt(pagesReadInput.value)||0;
+    }
+    if(read > totalPages) read = totalPages;
     const remaining = totalPages - read;
 
     if(remaining <= 0){
