@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f6efe1">
+<title>Riviera &amp; Aegean — A Twelve-Week Crash Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f6efe1;
+    --paper-2:#efe6d3;
+    --ink:#26201a;
+    --ink-soft:#5b5247;
+    --line:#d8cdb6;
+    --french:#1f3a63;        /* riviera ink-blue */
+    --french-soft:#e6eaf1;
+    --greek:#bd5f30;          /* sun-baked terracotta */
+    --greek-soft:#f4e4d6;
+    --immersion:#6f7536;      /* olive */
+    --immersion-soft:#eaead2;
+    --gold:#bd8e34;
+    --shadow:0 1px 0 rgba(38,32,26,.04), 0 12px 28px -16px rgba(38,32,26,.35);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(120% 90% at 12% -10%, #fbf6ec 0%, rgba(251,246,236,0) 55%),
+      radial-gradient(120% 100% at 100% 0%, #f0e7d6 0%, rgba(240,231,214,0) 50%);
+    color:var(--ink);
+    font-family:"Archivo",system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* faint paper grain */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    mix-blend-mode:multiply;
+  }
+  .wrap{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:clamp(20px,5vw,64px) clamp(16px,4vw,40px) 80px}
+
+  /* ---------- Masthead ---------- */
+  header.masthead{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:26px;margin-bottom:8px}
+  .eyebrow{font-family:"Fraunces";font-style:italic;font-size:clamp(15px,2.4vw,19px);color:var(--greek);letter-spacing:.01em}
+  h1{
+    font-family:"Fraunces";font-weight:500;font-optical-sizing:auto;
+    font-size:clamp(34px,7vw,68px);line-height:1.02;margin:.18em 0 .15em;letter-spacing:-.01em;
+  }
+  h1 .amp{font-style:italic;font-weight:400;color:var(--french)}
+  .dek{max-width:62ch;margin:.4em auto 0;color:var(--ink-soft);font-size:clamp(15px,2vw,17px)}
+  .toprule{display:flex;align-items:center;justify-content:center;gap:14px;margin:16px 0 2px;color:var(--ink-soft);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+  .toprule span{height:1px;width:54px;background:var(--line)}
+
+  /* ---------- Strategy / TLDR ---------- */
+  .strategy{
+    margin:34px 0 10px;display:grid;grid-template-columns:1fr 1fr;gap:18px;
+  }
+  .card{
+    background:rgba(255,253,248,.7);border:1px solid var(--line);border-radius:3px;
+    padding:20px 22px;box-shadow:var(--shadow);backdrop-filter:blur(2px);
+  }
+  .card h3{margin:0 0 6px;font-family:"Fraunces";font-weight:600;font-size:19px}
+  .card.fr h3{color:var(--french)} .card.gr h3{color:var(--greek)}
+  .card p{margin:0;color:var(--ink-soft);font-size:14.5px}
+  .tag{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:2px 8px;border-radius:999px;margin-bottom:10px}
+  .tag.fr{background:var(--french-soft);color:var(--french)} .tag.gr{background:var(--greek-soft);color:var(--greek)}
+
+  /* ---------- Controls ---------- */
+  .controls{
+    margin:30px 0 14px;display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 2px;
+  }
+  .ctrl-label{font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.1em}
+  input[type=date]{
+    font-family:"Archivo";font-size:15px;border:1px solid var(--line);background:#fffdf8;
+    border-radius:3px;padding:7px 10px;color:var(--ink);
+  }
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-left:auto;font-size:13px;color:var(--ink-soft)}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:baseline}
+  .swatch-fr{background:var(--french)} .swatch-gr{background:var(--greek)} .swatch-im{background:var(--immersion)}
+  .progress-row{display:flex;align-items:center;gap:14px;margin:20px 0 8px}
+  .bar{flex:1;height:10px;background:var(--paper-2);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .bar > div{height:100%;width:0;background:linear-gradient(90deg,var(--french),var(--greek));transition:width .35s ease}
+  .pct{font-family:"Fraunces";font-weight:600;font-size:18px;min-width:3.2em;text-align:right}
+  .reset{font-family:"Archivo";font-size:12.5px;color:var(--ink-soft);background:none;border:1px solid var(--line);border-radius:3px;padding:6px 11px;cursor:pointer;transition:.18s}
+  .reset:hover{color:var(--greek);border-color:var(--greek)}
+
+  /* ---------- Phases & weeks ---------- */
+  .phase{margin-top:46px}
+  .phase-head{display:flex;align-items:baseline;gap:16px;margin-bottom:6px}
+  .phase-num{font-family:"Fraunces";font-style:italic;font-size:clamp(40px,8vw,72px);line-height:.8;color:var(--line)}
+  .phase-title h2{font-family:"Fraunces";font-weight:600;font-size:clamp(22px,4vw,30px);margin:0}
+  .phase-title p{margin:2px 0 0;color:var(--ink-soft);font-size:14.5px}
+  .phase-1 .phase-num{color:#c9d2de} .phase-2 .phase-num{color:#ecd4c2} .phase-3 .phase-num{color:#d9dcc0}
+
+  .weeks{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:22px}
+  .week{
+    background:#fffdf8;border:1px solid var(--line);border-radius:4px;padding:18px 20px 16px;
+    box-shadow:var(--shadow);border-left:4px solid var(--line);position:relative;
+  }
+  .week.t-fr{border-left-color:var(--french)} .week.t-gr{border-left-color:var(--greek)} .week.t-im{border-left-color:var(--immersion)}
+  .week-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .week-no{font-family:"Fraunces";font-style:italic;font-size:14px;color:var(--ink-soft)}
+  .week-dates{font-size:12.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+  .week h4{font-family:"Fraunces";font-weight:600;font-size:19px;margin:3px 0 4px;line-height:1.15}
+  .week .focus{margin:0 0 12px;color:var(--ink-soft);font-size:14px}
+  .note{font-size:12.5px;color:var(--greek);font-style:italic;margin:0 0 12px}
+  ul.tasks{list-style:none;margin:0 0 12px;padding:0}
+  ul.tasks li{margin:0 0 7px}
+  ul.tasks label{display:flex;gap:9px;align-items:flex-start;cursor:pointer;font-size:14px;line-height:1.4}
+  ul.tasks input{appearance:none;-webkit-appearance:none;margin:2px 0 0;flex:0 0 17px;width:17px;height:17px;border:1.5px solid var(--ink-soft);border-radius:3px;cursor:pointer;position:relative;transition:.15s}
+  ul.tasks input:checked{background:var(--french);border-color:var(--french)}
+  .t-gr ul.tasks input:checked{background:var(--greek);border-color:var(--greek)}
+  .t-im ul.tasks input:checked{background:var(--immersion);border-color:var(--immersion)}
+  ul.tasks input:checked::after{content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;border:solid #fffdf8;border-width:0 2px 2px 0;transform:rotate(42deg)}
+  ul.tasks input:checked + span{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--line)}
+  .milestone{font-size:13px;border-top:1px dashed var(--line);padding-top:10px;color:var(--ink)}
+  .milestone b{font-family:"Fraunces";font-weight:600;font-style:italic;color:var(--gold);font-size:12px;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:2px}
+
+  /* ---------- Phrasebook ---------- */
+  .section-head{margin:62px 0 4px;border-top:2px solid var(--ink);padding-top:18px}
+  .section-head .eyebrow{display:block;text-align:left}
+  .section-head h2{font-family:"Fraunces";font-weight:600;font-size:clamp(24px,5vw,34px);margin:.1em 0 0}
+  .tabs{display:flex;gap:8px;margin:22px 0 18px}
+  .tab{font-family:"Fraunces";font-size:16px;font-weight:500;padding:8px 18px;border:1px solid var(--line);background:#fffdf8;border-radius:3px;cursor:pointer;color:var(--ink-soft);transition:.18s}
+  .tab[aria-selected=true]{color:#fffdf8}
+  .tab.fr[aria-selected=true]{background:var(--french);border-color:var(--french)}
+  .tab.gr[aria-selected=true]{background:var(--greek);border-color:var(--greek)}
+  .phrases{display:none;grid-template-columns:1fr 1fr;gap:0 30px}
+  .phrases.active{display:grid}
+  .phrase{display:grid;grid-template-columns:1fr;padding:11px 0;border-bottom:1px solid var(--line)}
+  .phrase .native{font-family:"Fraunces";font-size:18px;font-weight:500}
+  .phrase .say{font-size:13px;color:var(--greek);font-style:italic}
+  .fr-pane .phrase .say{color:var(--french)}
+  .phrase .mean{font-size:13.5px;color:var(--ink-soft);margin-top:1px}
+  @media(max-width:680px){.phrases.active{grid-template-columns:1fr}}
+
+  /* ---------- Resources ---------- */
+  .res-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px}
+  .res{background:#fffdf8;border:1px solid var(--line);border-radius:4px;padding:16px 18px;box-shadow:var(--shadow)}
+  .res .rh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .res h4{font-family:"Fraunces";font-weight:600;font-size:18px;margin:0}
+  .res .cost{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);white-space:nowrap}
+  .res .cost.free{color:var(--immersion)} .res .cost.own{color:var(--french)}
+  .res p{margin:7px 0 10px;font-size:13.5px;color:var(--ink-soft)}
+  .res a{font-family:"Archivo";font-weight:600;font-size:13px;color:var(--greek);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+  .res a:hover{color:var(--french)}
+
+  footer{margin-top:64px;border-top:1px solid var(--line);padding-top:22px;color:var(--ink-soft);font-size:13.5px;text-align:center;line-height:1.7}
+  footer .bon{font-family:"Fraunces";font-style:italic;font-size:18px;color:var(--ink)}
+
+  @media(max-width:680px){
+    .strategy,.weeks,.res-grid{grid-template-columns:1fr}
+    .legend{margin-left:0;width:100%}
+  }
+
+  /* ---------- Password gate overlay ---------- */
+  #gate{
+    position:fixed;inset:0;z-index:50;display:none;
+    align-items:center;justify-content:center;padding:24px;
+    background:var(--paper);
+    background-image:
+      radial-gradient(120% 90% at 12% -10%, #fbf6ec 0%, rgba(251,246,236,0) 55%),
+      radial-gradient(120% 100% at 100% 0%, #f0e7d6 0%, rgba(240,231,214,0) 50%);
+  }
+  #gate.show{display:flex}
+  #gate .card{
+    width:100%;max-width:380px;background:#fffdf8;border:1px solid var(--line);
+    border-radius:16px;box-shadow:var(--shadow);padding:28px 26px;text-align:center;
+  }
+  #gate .eyebrow{display:block;margin-bottom:6px}
+  #gate h2{font-family:"Fraunces";font-weight:500;font-size:26px;margin:.1em 0 .5em}
+  #gate p{color:var(--ink-soft);font-size:14px;margin:0 0 18px}
+  #gate input{
+    width:100%;padding:12px 14px;font-size:16px;font-family:inherit;
+    border:1px solid var(--line);border-radius:10px;background:var(--paper);
+    color:var(--ink);margin-bottom:12px;
+  }
+  #gate input:focus{outline:2px solid var(--french);outline-offset:1px}
+  #gate button{
+    width:100%;padding:12px 14px;font-size:15px;font-family:inherit;font-weight:600;
+    border:none;border-radius:10px;background:var(--french);color:#fff;cursor:pointer;
+  }
+  #gate button:disabled{opacity:.6;cursor:default}
+  #gate .err{color:var(--greek);font-size:13px;min-height:18px;margin-top:10px}
+  /* Hide content until we know the auth state, to avoid a flash of the plan. */
+  body.gated .wrap{display:none}
+</style>
+</head>
+<body class="gated">
+<div id="gate" aria-hidden="true">
+  <div class="card">
+    <span class="eyebrow">Riviera &amp; Aegean</span>
+    <h2>Private study plan</h2>
+    <p>Enter the password to view and sync your progress.</p>
+    <form id="gateForm" autocomplete="off">
+      <input type="password" id="gatePass" name="password" placeholder="Password"
+             aria-label="Password" autocomplete="current-password">
+      <button type="submit" id="gateBtn">Unlock</button>
+      <div class="err" id="gateErr" role="alert"></div>
+    </form>
+  </div>
+</div>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">A honeymoon crash course · 6 days Greece, 3 days Nice</div>
+    <h1>Riviera <span class="amp">&amp;</span> Aegean</h1>
+    <div class="toprule"><span></span>Twelve weeks<span></span></div>
+    <p class="dek">Six days in Greece, three in Nice — so this leans Greek. French gets a fast, efficient reactivation up front (you have a base, and Nice rewards the effort); Greek is the main build, since it's most of the trip and you're starting from the alphabet. Twenty to thirty minutes a day.</p>
+  </header>
+
+  <section class="strategy">
+    <div class="card fr">
+      <span class="tag fr">The warm-up</span>
+      <h3>French is a quick reactivation</h3>
+      <p>Three days in Nice, and a base you already have — so French gets a short, efficient ramp to café-and-restaurant survival, then drops to maintenance. The attempt still matters: the French reward it. Weeks 1–3, then kept warm.</p>
+    </div>
+    <div class="card gr">
+      <span class="tag gr">The main build</span>
+      <h3>Greek is where the weeks go</h3>
+      <p>Six days, and you're starting from the alphabet — so Greek gets the long runway: read first, then survival, then charm. It's the daily driver from week 4 on. Even a little lands as outsized warmth.</p>
+    </div>
+  </section>
+
+  <div class="controls">
+    <span class="ctrl-label">Week&nbsp;1 begins</span>
+    <input type="date" id="startDate" value="2026-06-08">
+    <div class="legend">
+      <span><i class="swatch-fr"></i>French</span>
+      <span><i class="swatch-gr"></i>Greek</span>
+      <span><i class="swatch-im"></i>Immersion</span>
+    </div>
+  </div>
+
+  <div class="progress-row">
+    <div class="bar"><div id="barFill"></div></div>
+    <div class="pct" id="pct">0%</div>
+    <button class="reset" id="resetBtn">Reset progress</button>
+  </div>
+
+  <!-- PHASE 1 -->
+  <section class="phase phase-1">
+    <div class="phase-head">
+      <div class="phase-num">01</div>
+      <div class="phase-title"><h2>French Reactivation</h2><p>Weeks 1–3 · wake the base, bank it fast — it's only three days in Nice</p></div>
+    </div>
+    <div class="weeks">
+
+      <article class="week t-fr">
+        <div class="week-top"><span class="week-no">Week 1</span><span class="week-dates" data-week="0"></span></div>
+        <h4>Wake the French back up</h4>
+        <p class="focus">Reactivate the base you let lapse. Get the daily habit running again.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w1a"><span>Pimsleur French — one lesson/day (Lessons 1–5)</span></label></li>
+          <li><label><input type="checkbox" data-id="w1b"><span>5 min Duolingo French daily — restart the streak</span></label></li>
+          <li><label><input type="checkbox" data-id="w1c"><span>Open Rosetta Stone once to find where you left off</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>Greetings and "I'd like…" without having to think.</div>
+      </article>
+
+      <article class="week t-fr">
+        <div class="week-top"><span class="week-no">Week 2</span><span class="week-dates" data-week="1"></span></div>
+        <h4>Café &amp; street basics</h4>
+        <p class="focus">The handful of transactions you'll run dozens of times, even in three short days.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w2a"><span>Pimsleur French — next five lessons</span></label></li>
+          <li><label><input type="checkbox" data-id="w2b"><span>Rosetta Stone French ×2 — reactivate reading</span></label></li>
+          <li><label><input type="checkbox" data-id="w2c"><span>Drill numbers 1–20 out loud</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>Order a coffee, ask directions, handle small numbers.</div>
+      </article>
+
+      <article class="week t-fr">
+        <div class="week-top"><span class="week-no">Week 3</span><span class="week-dates" data-week="2"></span></div>
+        <h4>Restaurant fluency &amp; polish</h4>
+        <p class="focus">Bank the bon-vivant core, then let French go warm — Greek takes over next week.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w3a"><span>Pimsleur French daily — repeat any shaky lessons</span></label></li>
+          <li><label><input type="checkbox" data-id="w3b"><span>Read a real Nice menu online; learn the food-compliment lines</span></label></li>
+          <li><label><input type="checkbox" data-id="w3c"><span>Make the <em>bonjour</em>-first reflex automatic</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>A full, polite restaurant interaction feels easy. French is banked.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="phase phase-2">
+    <div class="phase-head">
+      <div class="phase-num">02</div>
+      <div class="phase-title"><h2>Greek — the Main Build</h2><p>Weeks 4–9 · Greek becomes the daily driver; French drops to light upkeep</p></div>
+    </div>
+    <div class="weeks">
+
+      <article class="week t-gr">
+        <div class="week-top"><span class="week-no">Week 4</span><span class="week-dates" data-week="3"></span></div>
+        <h4>Crack the alphabet</h4>
+        <p class="focus">The single highest-leverage task of the trip — moved up, because Greece is the main event.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w4a"><span>Learn all 24 Greek letters &amp; sounds (Duolingo + a chart)</span></label></li>
+          <li><label><input type="checkbox" data-id="w4b"><span>Sound out 10 real Greek signs / place names</span></label></li>
+          <li><label><input type="checkbox" data-id="w4c"><span>French drops to two light reviews/week from here</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>You can read (aloud) any Greek sign or menu, even without knowing the words.</div>
+      </article>
+
+      <article class="week t-gr">
+        <div class="week-top"><span class="week-no">Week 5</span><span class="week-dates" data-week="4"></span></div>
+        <h4>Greek survival audio</h4>
+        <p class="focus">Begin spoken Greek in earnest — this is your daily driver now.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w5a"><span>Pimsleur Greek begins — one lesson/day</span></label></li>
+          <li><label><input type="checkbox" data-id="w5b"><span>Language Transfer <em>Complete Greek</em> — ~3 lessons</span></label></li>
+          <li><label><input type="checkbox" data-id="w5c"><span>French: two light reviews this week</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>Greetings, thank-you, please, yes/no — by ear, not from a card.</div>
+      </article>
+
+      <article class="week t-gr">
+        <div class="week-top"><span class="week-no">Week 6</span><span class="week-dates" data-week="5"></span></div>
+        <h4>Greek, daily</h4>
+        <p class="focus">Build momentum while the alphabet is still fresh.</p>
+        <p class="note">If your mid-July long weekend lands this week — go audio-only, no pressure.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w6a"><span>Pimsleur Greek daily</span></label></li>
+          <li><label><input type="checkbox" data-id="w6b"><span>Language Transfer Greek continues</span></label></li>
+          <li><label><input type="checkbox" data-id="w6c"><span>5 min Duolingo Greek — keep the alphabet sharp</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>Ask for things and understand the simple reply.</div>
+      </article>
+
+      <article class="week t-gr">
+        <div class="week-top"><span class="week-no">Week 7</span><span class="week-dates" data-week="6"></span></div>
+        <h4>Numbers, prices &amp; real scenes</h4>
+        <p class="focus">The situations you'll actually hit across six days — tavernas, ferries, markets.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w7a"><span>Pimsleur Greek daily</span></label></li>
+          <li><label><input type="checkbox" data-id="w7b"><span>Drill Greek numbers &amp; prices out loud</span></label></li>
+          <li><label><input type="checkbox" data-id="w7c"><span>Run café / taverna / shop scenarios aloud</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>Order food and pay, in Greek, without freezing.</div>
+      </article>
+
+      <article class="week t-gr">
+        <div class="week-top"><span class="week-no">Week 8</span><span class="week-dates" data-week="7"></span></div>
+        <h4>Consolidate</h4>
+        <p class="focus">Stop expanding scope; deepen what you have.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w8a"><span>Pimsleur Greek — repeat any shaky lessons</span></label></li>
+          <li><label><input type="checkbox" data-id="w8b"><span>Language Transfer Greek — finish the core</span></label></li>
+          <li><label><input type="checkbox" data-id="w8c"><span>One French maintenance lesson to keep it warm</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>The Greek survival set is ~80% automatic.</div>
+      </article>
+
+      <article class="week t-gr">
+        <div class="week-top"><span class="week-no">Week 9</span><span class="week-dates" data-week="8"></span></div>
+        <h4>Greek, locked</h4>
+        <p class="focus">Greek should now feel like a tool, not a test.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w9a"><span>Run the full Greek phrase set daily — aloud</span></label></li>
+          <li><label><input type="checkbox" data-id="w9b"><span>Reading is fluent — practice on real Greek menus online</span></label></li>
+          <li><label><input type="checkbox" data-id="w9c"><span>One French maintenance lesson</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>The Greek phrasebook comes out spoken, not read.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="phase phase-3">
+    <div class="phase-head">
+      <div class="phase-num">03</div>
+      <div class="phase-title"><h2>Flourish &amp; Immersion</h2><p>Weeks 10–12 · No new grammar — rehearse (Greek-leaning), keep French warm, relax</p></div>
+    </div>
+    <div class="weeks">
+
+      <article class="week t-im">
+        <div class="week-top"><span class="week-no">Week 10</span><span class="week-dates" data-week="9"></span></div>
+        <h4>Stop learning, start rehearsing</h4>
+        <p class="focus">Shift from intake to output — Greek-heavy, with French kept alive in the evenings.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w10a"><span>Say the full phrasebook aloud daily — Greek-weighted</span></label></li>
+          <li><label><input type="checkbox" data-id="w10b"><span>Evenings: start <em>Call My Agent!</em> — French audio + subs — to keep French warm</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>Both phrase sets come out spoken; French still feels familiar.</div>
+      </article>
+
+      <article class="week t-im">
+        <div class="week-top"><span class="week-no">Week 11</span><span class="week-dates" data-week="10"></span></div>
+        <h4>Dress rehearsal</h4>
+        <p class="focus">Role-play the exact scenes you'll live — most of them in Greek.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w11a"><span>Out loud, in Greek: greet, order, pay, compliment the kitchen, ask prices</span></label></li>
+          <li><label><input type="checkbox" data-id="w11b"><span>Out loud, in French: checking in, ordering wine, the bill</span></label></li>
+        </ul>
+        <div class="milestone"><b>By Sunday</b>Run a full taverna scene, start to finish, no notes.</div>
+      </article>
+
+      <article class="week t-im">
+        <div class="week-top"><span class="week-no">Week 12</span><span class="week-dates" data-week="11"></span></div>
+        <h4>Travel-ready</h4>
+        <p class="focus">Don't cram. Stay loose and warm.</p>
+        <ul class="tasks">
+          <li><label><input type="checkbox" data-id="w12a"><span>Light phrase review only — keep it pleasant</span></label></li>
+          <li><label><input type="checkbox" data-id="w12b"><span>Skim the phrasebook on the plane — Greek side first</span></label></li>
+        </ul>
+        <div class="milestone"><b>Departure</b>Relaxed, warm, and able to charm a waiter in two languages. Καλό ταξίδι.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PHRASEBOOK -->
+  <div class="section-head">
+    <span class="eyebrow">Keep these close</span>
+    <h2>The phrasebook</h2>
+  </div>
+  <div class="tabs" role="tablist">
+    <button class="tab fr" id="tab-fr" role="tab" aria-selected="true" onclick="showPane('fr')">Français</button>
+    <button class="tab gr" id="tab-gr" role="tab" aria-selected="false" onclick="showPane('gr')">Ελληνικά</button>
+  </div>
+
+  <div class="phrases fr-pane active" id="pane-fr">
+    <div class="phrase"><span class="native">Bonjour / Bonsoir</span><span class="say">bon-ZHOOR / bon-SWAHR</span><span class="mean">Good day / good evening — always open with it before anything else</span></div>
+    <div class="phrase"><span class="native">S'il vous plaît</span><span class="say">seel voo PLEH</span><span class="mean">Please</span></div>
+    <div class="phrase"><span class="native">Merci (beaucoup)</span><span class="say">mair-SEE (boh-KOO)</span><span class="mean">Thank you (very much)</span></div>
+    <div class="phrase"><span class="native">Excusez-moi / Pardon</span><span class="say">ex-koo-zay MWAH / par-DON</span><span class="mean">Excuse me / sorry</span></div>
+    <div class="phrase"><span class="native">Parlez-vous anglais&nbsp;?</span><span class="say">par-lay voo on-GLEH</span><span class="mean">Do you speak English?</span></div>
+    <div class="phrase"><span class="native">Je voudrais…</span><span class="say">zhuh voo-DREH</span><span class="mean">I would like… (the polite way to order)</span></div>
+    <div class="phrase"><span class="native">L'addition, s'il vous plaît</span><span class="say">lah-dee-SYON seel voo pleh</span><span class="mean">The check, please</span></div>
+    <div class="phrase"><span class="native">C'était délicieux</span><span class="say">say-tay day-lee-SYUH</span><span class="mean">It was delicious — will genuinely make a server's night</span></div>
+    <div class="phrase"><span class="native">C'est combien&nbsp;?</span><span class="say">say kom-BYAN</span><span class="mean">How much is it?</span></div>
+    <div class="phrase"><span class="native">Santé&nbsp;!</span><span class="say">son-TAY</span><span class="mean">Cheers!</span></div>
+    <div class="phrase"><span class="native">Oui / Non</span><span class="say">WEE / NON</span><span class="mean">Yes / no</span></div>
+    <div class="phrase"><span class="native">Au revoir</span><span class="say">oh ruh-VWAHR</span><span class="mean">Goodbye</span></div>
+  </div>
+
+  <div class="phrases gr-pane" id="pane-gr">
+    <div class="phrase"><span class="native">Καλημέρα</span><span class="say">kah-lee-MEH-rah</span><span class="mean">Good morning</span></div>
+    <div class="phrase"><span class="native">Καλησπέρα</span><span class="say">kah-lee-SPEH-rah</span><span class="mean">Good evening</span></div>
+    <div class="phrase"><span class="native">Γεια σας / Γεια σου</span><span class="say">yah SAS / yah SOO</span><span class="mean">Hello — formal / informal</span></div>
+    <div class="phrase"><span class="native">Ευχαριστώ</span><span class="say">ef-khah-ree-STOH</span><span class="mean">Thank you</span></div>
+    <div class="phrase"><span class="native">Παρακαλώ</span><span class="say">pah-rah-kah-LOH</span><span class="mean">Please / you're welcome</span></div>
+    <div class="phrase"><span class="native">Ναι / Όχι</span><span class="say">neh / OH-khee</span><span class="mean">Yes / no — note: "neh" means yes, the classic trap</span></div>
+    <div class="phrase"><span class="native">Συγγνώμη</span><span class="say">see-GHNOH-mee</span><span class="mean">Excuse me / sorry</span></div>
+    <div class="phrase"><span class="native">Μιλάτε αγγλικά&nbsp;;</span><span class="say">mee-LAH-teh ang-glee-KAH</span><span class="mean">Do you speak English? (Greek "?" is a semicolon)</span></div>
+    <div class="phrase"><span class="native">Τον λογαριασμό, παρακαλώ</span><span class="say">ton lo-ghar-yas-MOH pah-rah-kah-LOH</span><span class="mean">The bill, please</span></div>
+    <div class="phrase"><span class="native">Όλα ήταν πολύ νόστιμα</span><span class="say">OH-lah EE-tan po-LEE NOH-stee-mah</span><span class="mean">Everything was delicious</span></div>
+    <div class="phrase"><span class="native">Πόσο κάνει&nbsp;;</span><span class="say">PO-so KAH-nee</span><span class="mean">How much is it?</span></div>
+    <div class="phrase"><span class="native">Γεια μας&nbsp;!</span><span class="say">yah MAS</span><span class="mean">Cheers!</span></div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="section-head">
+    <span class="eyebrow">The toolkit</span>
+    <h2>What to use, and for what</h2>
+  </div>
+  <div class="res-grid">
+    <div class="res">
+      <div class="rh"><h4>Pimsleur</h4><span class="cost">Paid · the spine</span></div>
+      <p>Audio-only, ~30-minute lessons built entirely around speaking and being understood fast. Your main driver, for both languages.</p>
+      <a href="https://www.pimsleur.com" target="_blank" rel="noopener">pimsleur.com →</a>
+    </div>
+    <div class="res">
+      <div class="rh"><h4>Language Transfer</h4><span class="cost free">Free</span></div>
+      <p>The "thinking method" — you reason out sentences rather than memorize them. <em>Complete Greek</em> is superb; the French course is intro-only, so use it as a refresher.</p>
+      <a href="https://www.languagetransfer.org" target="_blank" rel="noopener">languagetransfer.org →</a>
+    </div>
+    <div class="res">
+      <div class="rh"><h4>Rosetta Stone</h4><span class="cost own">You own it</span></div>
+      <p>Slow for travel phrases, but good for reactivating your lapsed French — vocabulary, reading, getting your ear back. French only; skip it for Greek.</p>
+      <a href="https://www.rosettastone.com" target="_blank" rel="noopener">rosettastone.com →</a>
+    </div>
+    <div class="res">
+      <div class="rh"><h4>Duolingo</h4><span class="cost free">Free</span></div>
+      <p>The daily-habit keeper and the Greek-alphabet trainer. Shallow by design — exactly right for the five-minute streak slot.</p>
+      <a href="https://www.duolingo.com" target="_blank" rel="noopener">duolingo.com →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p class="bon">Onze semaines, καλό ταξίδι.</p>
+    <p>Set your real Week&nbsp;1 Monday at the top and every date reshuffles. Progress is saved in this browser — host the file on your own site and it'll remember your checkmarks there too.<br>Tell me when you fly and how the days split between Greece and Nice, and I'll re-weight the back half of the plan.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var STORE_KEY = "honeymoon-lang-plan-v1";
+  var state = { checked: {}, start: "2026-06-08" };
+
+  // ---- local cache (optimistic / offline layer) ----
+  function loadLocal(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      if(raw){ var p = JSON.parse(raw); if(p && typeof p === "object"){ state = p; } }
+    }catch(e){ /* storage unavailable — keep in-memory state */ }
+  }
+  function saveLocal(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+
+  // ---- remote sync (Netlify Blobs via /api/progress) ----
+  var pushTimer = null;
+  function pushRemote(){
+    if(pushTimer) clearTimeout(pushTimer);
+    pushTimer = setTimeout(function(){
+      pushTimer = null;
+      fetch("/api/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify(state)
+      }).catch(function(){ /* offline — local cache keeps the change */ });
+    }, 500);
+  }
+  // Write-through: cache immediately, sync debounced.
+  function save(){ saveLocal(); pushRemote(); }
+
+  var boxes = Array.prototype.slice.call(document.querySelectorAll("ul.tasks input[type=checkbox]"));
+  var barFill = document.getElementById("barFill");
+  var pctEl = document.getElementById("pct");
+  var startEl = document.getElementById("startDate");
+
+  function updateProgress(){
+    var done = boxes.filter(function(b){ return b.checked; }).length;
+    var pct = boxes.length ? Math.round(done / boxes.length * 100) : 0;
+    barFill.style.width = pct + "%";
+    pctEl.textContent = pct + "%";
+  }
+
+  // ---- week date labels ----
+  var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function fmt(d){ return MONTHS[d.getMonth()] + " " + d.getDate(); }
+  function renderDates(){
+    var base = new Date(state.start + "T00:00:00");
+    if(isNaN(base.getTime())) return;
+    document.querySelectorAll(".week-dates").forEach(function(el){
+      var wk = parseInt(el.getAttribute("data-week"), 10);
+      var s = new Date(base); s.setDate(base.getDate() + wk*7);
+      var e = new Date(s);    e.setDate(s.getDate() + 6);
+      var endStr = (s.getMonth() === e.getMonth()) ? String(e.getDate()) : fmt(e);
+      el.textContent = fmt(s) + " – " + endStr;
+    });
+  }
+
+  // Reflect the current `state` object into the DOM.
+  function applyState(){
+    startEl.value = state.start || "2026-06-08";
+    boxes.forEach(function(b){
+      var id = b.getAttribute("data-id");
+      b.checked = !!(state.checked && state.checked[id]);
+    });
+    updateProgress();
+    renderDates();
+  }
+
+  // ---- input wiring (listeners attach once; content is gated above) ----
+  boxes.forEach(function(b){
+    var id = b.getAttribute("data-id");
+    b.addEventListener("change", function(){
+      if(!state.checked) state.checked = {};
+      if(b.checked) state.checked[id] = 1; else delete state.checked[id];
+      save(); updateProgress();
+    });
+  });
+  startEl.addEventListener("change", function(){
+    state.start = startEl.value || "2026-06-08";
+    save(); renderDates();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if(!confirm("Clear all checkmarks?")) return;
+    state.checked = {};
+    boxes.forEach(function(b){ b.checked = false; });
+    save(); updateProgress();   // save() pushes the cleared state to the server too
+  });
+
+  // ---- password gate + initial hydrate ----
+  var gate = document.getElementById("gate");
+  var gateForm = document.getElementById("gateForm");
+  var gatePass = document.getElementById("gatePass");
+  var gateBtn = document.getElementById("gateBtn");
+  var gateErr = document.getElementById("gateErr");
+  var started = false;
+
+  function showGate(){
+    document.body.classList.add("gated");
+    gate.classList.add("show");
+    gate.setAttribute("aria-hidden", "false");
+    setTimeout(function(){ gatePass.focus(); }, 0);
+  }
+  function hideGate(){
+    gate.classList.remove("show");
+    gate.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("gated");
+  }
+
+  // Render local cache instantly, then reconcile with the server (last-write-wins).
+  function start(){
+    if(started) return;
+    started = true;
+    loadLocal();
+    applyState();
+    fetch("/api/progress", { credentials: "same-origin" })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(remote){
+        if(remote && typeof remote === "object"){
+          state = remote;
+          saveLocal();
+          applyState();
+        }
+      })
+      .catch(function(){ /* offline — local cache already applied */ });
+  }
+
+  gateForm.addEventListener("submit", function(ev){
+    ev.preventDefault();
+    gateErr.textContent = "";
+    gateBtn.disabled = true;
+    fetch("/api/auth", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ password: gatePass.value })
+    }).then(function(r){
+      if(r.ok){ hideGate(); start(); }
+      else { gateErr.textContent = r.status === 401 ? "Incorrect password." : "Something went wrong."; }
+    }).catch(function(){
+      gateErr.textContent = "Network error — try again.";
+    }).then(function(){
+      gateBtn.disabled = false;
+      gatePass.value = "";
+    });
+  });
+
+  // On load, check whether a valid session cookie is already present.
+  fetch("/api/auth", { credentials: "same-origin" })
+    .then(function(r){ return r.ok ? r.json() : { authed: false }; })
+    .then(function(d){ if(d && d.authed){ hideGate(); start(); } else { showGate(); } })
+    .catch(function(){ showGate(); });
+
+  // ---- phrasebook tabs ----
+  window.showPane = function(which){
+    var fr = which === "fr";
+    document.getElementById("pane-fr").classList.toggle("active", fr);
+    document.getElementById("pane-gr").classList.toggle("active", !fr);
+    document.getElementById("tab-fr").setAttribute("aria-selected", fr);
+    document.getElementById("tab-gr").setAttribute("aria-selected", !fr);
+  };
+})();
+</script>
+</body>
+</html>
