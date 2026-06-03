@@ -152,16 +152,6 @@ const TrackDisplay = ({ track, type }) => (
             )}
           </div>
           <div className="text-right">
-            {type === "recent" &&
-              (track.isNowPlaying ? (
-                <span className="rounded-full bg-emerald-600 px-2 py-1 text-xs text-white">
-                  Now Playing
-                </span>
-              ) : (
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {track.timestamp ? formatTimestamp(track.timestamp) : ""}
-                </span>
-              ))}
             {type === "top" && (
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {track.playcount} plays
@@ -186,17 +176,6 @@ TrackDisplay.propTypes = {
     playcount: PropTypes.number,
   }).isRequired,
   type: PropTypes.oneOf(["recent", "top"]).isRequired,
-}
-
-const formatTimestamp = timestamp => {
-  const date = new Date(timestamp)
-  const now = new Date()
-  const diff = now - date
-
-  if (diff < 60000) return "Just now"
-  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
-  if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
-  return date.toLocaleDateString()
 }
 
 export { BookDisplay, WatchDisplay, TrackDisplay }

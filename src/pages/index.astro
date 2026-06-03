@@ -47,11 +47,21 @@ import BaseLayout from "../layouts/BaseLayout.astro"
             Get in touch
           </p>
           <a
+            id="contact-email"
             class="text-xl break-words text-gray-900 underline decoration-red-700 md:mr-36 dark:text-white"
-            href="mailto:bren.reed@protonmail.com"
+            href="#"
           >
-            bren.reed@protonmail.com
+            Email me
           </a>
+          <script is:inline>
+            ;(function () {
+              const el = document.getElementById("contact-email")
+              if (!el) return
+              const addr = ["bren.reed", "protonmail.com"].join("@")
+              el.href = "mailto:" + addr
+              el.textContent = addr
+            })()
+          </script>
         </div>
       </div>
     </div>
