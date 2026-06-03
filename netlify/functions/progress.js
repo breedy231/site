@@ -35,7 +35,8 @@ function sanitize(input) {
 export default async function handler(req) {
   if (!isAuthed(req)) return json({ error: "Unauthorized" }, 401)
 
-  const store = getStore({ name: STORE_NAME })
+  // Strong consistency so a write on one device is immediately visible on another.
+  const store = getStore({ name: STORE_NAME, consistency: "strong" })
 
   if (req.method === "GET") {
     const data = await store.get(KEY, { type: "json" })
