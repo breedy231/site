@@ -1,0 +1,219 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro"
+import {
+  workExperience,
+  coopsAndInternships,
+  sideProjects,
+  skills,
+} from "../data/portfolio.js"
+---
+
+<BaseLayout title="Portfolio - Brendan Reed">
+  <div class="m-auto flex max-w-3xl flex-col items-start pb-16">
+    <h1
+      class="mt-6 text-3xl font-bold text-gray-900 md:mt-10 md:text-4xl dark:text-white"
+    >
+      Portfolio
+    </h1>
+    <p class="mt-2 text-lg text-gray-900 dark:text-white">
+      A summary of my professional experience, side projects, and technical
+      skills.
+    </p>
+
+    <!-- Work Experience -->
+    <section class="mt-10 w-full">
+      <h2
+        class="text-2xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 md:text-3xl dark:text-white"
+      >
+        Work Experience
+      </h2>
+      {
+        workExperience.map(job => (
+          <div class="mt-8">
+            <div class="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                <a
+                  class="text-gray-900 underline decoration-red-700 dark:text-white"
+                  href={job.url}
+                >
+                  {job.company}
+                </a>
+              </h3>
+              <span class="text-sm text-gray-500 dark:text-gray-300">
+                {job.period}
+              </span>
+            </div>
+            <p class="mt-1 text-lg text-gray-900 dark:text-white">{job.role}</p>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-900 dark:text-white">
+              {job.highlights.map(h => (
+                <li>{h}</li>
+              ))}
+            </ul>
+            {job.image && (
+              <img
+                src={job.image.src}
+                alt={job.image.alt}
+                class="mt-4 w-full rounded-lg border border-gray-200 dark:border-gray-600"
+              />
+            )}
+            {job.images && (
+              <div class="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+                {job.images.map(img => (
+                  <figure class="flex flex-col">
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      class="w-full rounded-lg border border-gray-200 dark:border-gray-600"
+                    />
+                    <figcaption class="mt-1 text-center text-xs text-gray-500 dark:text-gray-400">
+                      {img.caption}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </section>
+
+    <!-- Co-ops & Internships -->
+    <section class="mt-8 w-full">
+      <h2
+        class="text-2xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 md:text-3xl dark:text-white"
+      >
+        Co-ops & Internships
+      </h2>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">
+        During university, 2015 – 2019
+      </p>
+      <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {
+          coopsAndInternships.map(job => (
+            <div>
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                <a
+                  class="text-gray-900 underline decoration-red-700 dark:text-white"
+                  href={job.url}
+                >
+                  {job.company}
+                </a>
+              </h3>
+              <p class="text-sm text-gray-900 dark:text-white">{job.role}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <p class="divider mt-10 self-center">{"/////"}</p>
+
+    <!-- Side Projects -->
+    <section class="mt-10 w-full">
+      <h2
+        class="text-2xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 md:text-3xl dark:text-white"
+      >
+        Side Projects
+      </h2>
+      <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+        {
+          sideProjects.map(project => (
+            <div class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-600">
+              {project.image && (
+                <img
+                  src={project.image.src}
+                  alt={project.image.alt}
+                  class="w-full border-b border-gray-200 dark:border-gray-600"
+                />
+              )}
+              <div class="p-5">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                  <a
+                    class="text-gray-900 underline decoration-red-700 dark:text-white"
+                    href={project.url}
+                  >
+                    {project.name}
+                  </a>
+                </h3>
+                <p class="mt-1 text-sm text-gray-900 dark:text-white">
+                  {project.description}
+                </p>
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  {project.tech.map(t => (
+                    <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-900 dark:bg-gray-700 dark:text-white">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <p class="divider mt-10 self-center">{"/////"}</p>
+
+    <!-- Skills & Technologies -->
+    <section class="mt-10 w-full">
+      <h2
+        class="text-2xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 md:text-3xl dark:text-white"
+      >
+        Skills & Technologies
+      </h2>
+      <div class="mt-6 grid grid-cols-2 gap-6 md:grid-cols-4">
+        {
+          skills.map(group => (
+            <div>
+              <h3 class="text-sm font-bold text-gray-900 dark:text-white">
+                {group.category}
+              </h3>
+              <div class="mt-2 flex flex-wrap gap-1.5">
+                {group.items.map(item => (
+                  <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-900 dark:bg-gray-700 dark:text-white">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <p class="divider mt-10 self-center">{"/////"}</p>
+
+    <!-- Education -->
+    <section class="mt-10 w-full">
+      <h2
+        class="text-2xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 md:text-3xl dark:text-white"
+      >
+        Education
+      </h2>
+      <div class="mt-6">
+        <div
+          class="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between"
+        >
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+            Northeastern University
+          </h3>
+          <span class="text-sm text-gray-500 dark:text-gray-300"
+            >2015 – 2019</span
+          >
+        </div>
+        <p class="mt-1 text-lg text-gray-900 dark:text-white">
+          Bachelor of Science, Computer and Information Science
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .divider {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #da300f;
+    font-size: 30px;
+  }
+</style>
