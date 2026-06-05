@@ -9,7 +9,7 @@ export const workExperience = [
     company: "Klaviyo",
     url: "https://www.klaviyo.com",
     role: "Lead Software Engineer",
-    period: "2022 – Present",
+    period: "2022 – 2025",
     // image: { src: "/portfolio-images/klaviyo.png", alt: "Klaviyo dashboard" },
     highlights: [
       "Placeholder: Led a major frontend initiative that improved performance or user experience",
@@ -20,7 +20,7 @@ export const workExperience = [
   {
     company: "Catalant",
     url: "https://www.gocatalant.com",
-    role: "Senior Software Engineer",
+    role: "Software Engineering Co-op",
     period: "2020 – 2022",
     highlights: [
       "Placeholder: Shipped a feature that improved a core business metric",
@@ -30,7 +30,7 @@ export const workExperience = [
   {
     company: "Carbonite",
     url: "https://www.carbonite.com",
-    role: "Software Engineer",
+    role: "Software Engineering Co-op",
     period: "2018 – 2020",
     highlights: [
       "Placeholder: Contributed to a product used by a large user base",
@@ -51,19 +51,19 @@ export const workExperience = [
 
 export const sideProjects = [
   {
-    name: "Project Name",
-    url: "https://github.com/breedy231",
+    name: "Kindle E-Ink Dashboard",
+    url: "https://github.com/breedy231/e_ink_screen",
     description:
-      "Placeholder: Describe what this project does and why you built it.",
-    // image: { src: "/portfolio-images/project.gif", alt: "Project demo" },
-    tech: ["React", "Node.js", "PostgreSQL"],
+      "A low-power e-ink dashboard for a jailbroken Kindle Touch, displaying real-time weather, system stats, and multiple customizable layouts. Uses serverless image generation via Netlify Functions with 5-minute refresh cycles optimized for battery life.",
+    // image: { src: "/portfolio-images/e-ink-dashboard.png", alt: "E-ink dashboard running on a Kindle" },
+    tech: ["JavaScript", "Netlify Functions", "Shell", "Python", "OpenSCAD"],
   },
   {
-    name: "Another Project",
-    url: "https://github.com/breedy231",
+    name: "brendanreed.com",
+    url: "https://github.com/breedy231/site",
     description:
-      "Placeholder: Describe what this project does and why you built it.",
-    tech: ["Python", "FastAPI", "Docker"],
+      "This personal site — built with Astro 5 and React islands for zero-JS static pages with interactive sections. Integrates Trakt, Last.fm, and Goodreads APIs via Netlify Functions with automatic OAuth token refresh.",
+    tech: ["Astro", "React", "Tailwind CSS", "Netlify Functions"],
   },
 ]
 
