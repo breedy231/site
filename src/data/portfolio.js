@@ -9,7 +9,7 @@ export const workExperience = [
     company: "Agency",
     url: "https://www.agency.com",
     role: "Member of Technical Staff",
-    period: "Nov 2025 – Present",
+    period: "Nov 2025 – Apr 2026",
     highlights: [
       "Building an autonomous AI agent for customer management (renewals, expansion, nurturing) powered by Anthropic's Claude, working across React/TypeScript frontend and Python backend",
       "Shipped AI-personalized broadcast messaging, enabling the agent to tailor outreach based on account context, prior touchpoints, and recipient attributes",
