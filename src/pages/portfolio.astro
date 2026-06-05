@@ -1,6 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro"
-import { workExperience, sideProjects, skills } from "../data/portfolio.js"
+import {
+  workExperience,
+  coopsAndInternships,
+  sideProjects,
+  skills,
+} from "../data/portfolio.js"
 ---
 
 <BaseLayout title="Portfolio - Brendan Reed">
@@ -51,6 +56,40 @@ import { workExperience, sideProjects, skills } from "../data/portfolio.js"
                 class="mt-4 w-full rounded-lg border border-gray-200 dark:border-gray-600"
               />
             )}
+          </div>
+        ))
+      }
+    </section>
+
+    <!-- Co-ops & Internships -->
+    <section class="mt-12 w-full">
+      <h2
+        class="text-2xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 md:text-3xl dark:text-white"
+      >
+        Co-ops & Internships
+      </h2>
+      <p class="mt-2 text-sm text-gray-500 dark:text-gray-300">
+        During university, 2015 – 2019
+      </p>
+      {
+        coopsAndInternships.map(job => (
+          <div class="mt-8">
+            <div class="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                <a
+                  class="text-gray-900 underline decoration-red-700 dark:text-white"
+                  href={job.url}
+                >
+                  {job.company}
+                </a>
+              </h3>
+            </div>
+            <p class="mt-1 text-lg text-gray-900 dark:text-white">{job.role}</p>
+            <ul class="mt-3 list-disc space-y-2 pl-5 text-gray-900 dark:text-white">
+              {job.highlights.map(h => (
+                <li>{h}</li>
+              ))}
+            </ul>
           </div>
         ))
       }

@@ -9,7 +9,7 @@ export const workExperience = [
     company: "Klaviyo",
     url: "https://www.klaviyo.com",
     role: "Lead Software Engineer",
-    period: "2022 – 2025",
+    period: "2019 – 2025",
     // image: { src: "/portfolio-images/klaviyo.png", alt: "Klaviyo dashboard" },
     highlights: [
       "Placeholder: Led a major frontend initiative that improved performance or user experience",
@@ -17,34 +17,31 @@ export const workExperience = [
       "Placeholder: Built or owned a key product feature with measurable impact",
     ],
   },
+]
+
+export const coopsAndInternships = [
   {
     company: "Catalant",
     url: "https://www.gocatalant.com",
     role: "Software Engineering Co-op",
-    period: "2020 – 2022",
     highlights: [
       "Placeholder: Shipped a feature that improved a core business metric",
-      "Placeholder: Introduced a technical improvement that boosted team velocity",
     ],
   },
   {
     company: "Carbonite",
     url: "https://www.carbonite.com",
     role: "Software Engineering Co-op",
-    period: "2018 – 2020",
     highlights: [
       "Placeholder: Contributed to a product used by a large user base",
-      "Placeholder: Improved reliability or performance of a key system",
     ],
   },
   {
     company: "Zipari",
     url: "https://www.zipari.com",
-    role: "Software Engineer",
-    period: "2016 – 2018",
+    role: "Software Engineering Intern",
     highlights: [
       "Placeholder: Built features for the platform from early stage",
-      "Placeholder: Gained foundational experience in full-stack development",
     ],
   },
 ]
@@ -59,7 +56,7 @@ export const sideProjects = [
     tech: ["JavaScript", "Netlify Functions", "Shell", "Python", "OpenSCAD"],
   },
   {
-    name: "brendanreed.com",
+    name: "brendantreed.com",
     url: "https://github.com/breedy231/site",
     description:
       "This personal site — built with Astro 5 and React islands for zero-JS static pages with interactive sections. Integrates Trakt, Last.fm, and Goodreads APIs via Netlify Functions with automatic OAuth token refresh.",
