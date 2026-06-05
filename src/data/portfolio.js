@@ -69,7 +69,7 @@ export const sideProjects = [
     description:
       "A low-power e-ink dashboard for a jailbroken Kindle Touch, displaying real-time weather, system stats, and multiple customizable layouts. Uses serverless image generation via Netlify Functions with 5-minute refresh cycles optimized for battery life.",
     // image: { src: "/portfolio-images/e-ink-dashboard.png", alt: "E-ink dashboard running on a Kindle" },
-    tech: ["JavaScript", "Netlify Functions", "Shell", "Python", "OpenSCAD"],
+    tech: ["Netlify Functions", "Shell", "Python"],
   },
   {
     name: "brendantreed.com",
@@ -108,7 +108,7 @@ export const skills = [
   },
   {
     category: "Databases",
-    items: ["PostgreSQL", "MySQL", "ClickHouse", "MongoDB", "BigQuery"],
+    items: ["PostgreSQL", "MySQL", "ClickHouse", "MongoDB"],
   },
   {
     category: "Tools & Platforms",
