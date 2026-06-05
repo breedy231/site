@@ -11,10 +11,10 @@ export const workExperience = [
     role: "Member of Technical Staff",
     period: "Nov 2025 – Apr 2026",
     highlights: [
-      "Building an autonomous AI agent for customer management (renewals, expansion, nurturing) powered by Anthropic's Claude, working across React/TypeScript frontend and Python backend",
-      "Shipped AI-personalized broadcast messaging, enabling the agent to tailor outreach based on account context, prior touchpoints, and recipient attributes",
-      "Built end-to-end task automation: generation from email, meetings, and Slack, 5+ agent tools for autonomous management, and daily rollup notifications for high-priority items",
-      "Created a task generation evaluation suite using production-mirrored scenarios with known-good and known-bad baselines to prevent quality regressions",
+      "Full-stack development on an autonomous AI agent for customer management, powered by Anthropic's Claude (React/TypeScript + Python)",
+      "Shipped AI-personalized broadcast messaging and Slack attachment ingestion into the knowledge pipeline",
+      "Built end-to-end task automation from multiple source channels with 5+ agent tools and daily rollup notifications",
+      "Created a task generation eval suite with production-mirrored scenarios to prevent quality regressions",
     ],
   },
   {
@@ -25,29 +25,33 @@ export const workExperience = [
     images: [
       {
         src: "/portfolio_images/klaviyo-portfolio.png",
-        alt: "Klaviyo Portfolio project — Account performance report with top performing accounts, revenue, and conversion metrics",
+        alt: "Klaviyo Portfolio project — Account performance report",
+        caption: "Portfolio",
       },
       {
         src: "/portfolio_images/klaviyo-campaign-performance.jpg",
-        alt: "Klaviyo Campaign Performance dashboard showing open rate, click rate, and placed order rate trends",
+        alt: "Klaviyo Campaign Performance dashboard",
+        caption: "Dashboard",
       },
       {
         src: "/portfolio_images/klaviyo-custom-reports.jpg",
-        alt: "Klaviyo custom report builder for single metric deep dive reports",
+        alt: "Klaviyo custom report builder",
+        caption: "Custom Reports",
       },
       {
         src: "/portfolio_images/klaviyo-campaign-detail.jpg",
-        alt: "Klaviyo Campaign Performance Detail table with email delivery and engagement metrics",
+        alt: "Klaviyo Campaign Performance Detail table",
+        caption: "Campaign Detail",
       },
     ],
     highlights: [
-      "Led implementation of the Portfolio project end-to-end — proof-of-concept, technical specs, cross-repo code across frontend/backend/infrastructure — delivering on time and exceeding adoption targets by 400%",
-      "Established the Reporting Consistency team: hired and onboarded 3 engineers, set up agile practices, and authored the team's technical narrative and long-term roadmap",
-      "Mentored 5 engineers across the org with weekly 1:1s, targeted stretch projects, and represented their performance cases during calibration",
-      "Led redesign of the dashboard experience from technical spec through implementation in Node.js and Python, incorporating customer feedback with stakeholders",
+      "Led the Portfolio project end-to-end — POC, technical specs, cross-repo implementation — exceeding adoption targets by 400%",
+      "Established the Reporting Consistency team: hired 3 engineers, authored the technical narrative and long-term roadmap",
+      "Mentored 5 engineers with weekly 1:1s and targeted stretch projects; represented their cases during calibration",
+      "Led dashboard redesign from spec through implementation in Node.js and Python",
       "Championed automated testing, increasing team code coverage from 30% to over 70%",
-      "Built backend Python services for custom reports, increasing feature adoption by 20% YoY through new feature development",
-      "Designed a profile management service for seamless merging of customer profiles and associated historical events",
+      "Built custom reports backend in Python, increasing feature adoption 20% YoY",
+      "Designed a profile management service for seamless merging of customer profiles and historical events",
     ],
   },
 ]
