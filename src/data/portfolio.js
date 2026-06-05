@@ -1,8 +1,8 @@
 // TODO: Replace placeholder highlights with your real accomplishments and metrics
 //
 // Images: add an optional `image` field to any work or project entry:
-//   image: { src: "/portfolio-images/your-image.png", alt: "Description" }
-// Supports .png, .jpg, .gif, .webp — place files in public/portfolio-images/
+//   image: { src: "/portfolio_images/your-image.png", alt: "Description" }
+// Supports .png, .jpg, .gif, .webp — place files in public/portfolio_images/
 
 export const workExperience = [
   {
@@ -22,22 +22,21 @@ export const workExperience = [
     url: "https://www.klaviyo.com",
     role: "Software Engineer → Senior SE → Lead SE / Engineering Manager",
     period: "June 2019 – Oct 2025",
-    // image: { src: "/portfolio-images/klaviyo.png", alt: "Klaviyo dashboard" },
     images: [
       {
-        src: "/portfolio-images/klaviyo-portfolio.png",
+        src: "/portfolio_images/klaviyo-portfolio.png",
         alt: "Klaviyo Portfolio project — Account performance report with top performing accounts, revenue, and conversion metrics",
       },
       {
-        src: "/portfolio-images/klaviyo-campaign-performance.png",
+        src: "/portfolio_images/klaviyo-campaign-performance.jpg",
         alt: "Klaviyo Campaign Performance dashboard showing open rate, click rate, and placed order rate trends",
       },
       {
-        src: "/portfolio-images/klaviyo-custom-reports.png",
+        src: "/portfolio_images/klaviyo-custom-reports.jpg",
         alt: "Klaviyo custom report builder for single metric deep dive reports",
       },
       {
-        src: "/portfolio-images/klaviyo-campaign-detail.png",
+        src: "/portfolio_images/klaviyo-campaign-detail.jpg",
         alt: "Klaviyo Campaign Performance Detail table with email delivery and engagement metrics",
       },
     ],
@@ -86,7 +85,7 @@ export const sideProjects = [
     url: "https://github.com/breedy231/e_ink_screen",
     description:
       "A low-power e-ink dashboard for a jailbroken Kindle Touch, displaying real-time weather, system stats, and multiple customizable layouts. Uses serverless image generation via Netlify Functions with 5-minute refresh cycles optimized for battery life.",
-    // image: { src: "/portfolio-images/e-ink-dashboard.png", alt: "E-ink dashboard running on a Kindle" },
+    // image: { src: "/portfolio_images/e-ink-dashboard.png", alt: "E-ink dashboard running on a Kindle" },
     tech: ["Netlify Functions", "Shell", "Python"],
   },
   {
