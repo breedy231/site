@@ -23,6 +23,24 @@ export const workExperience = [
     role: "Software Engineer → Senior SE → Lead SE / Engineering Manager",
     period: "June 2019 – Oct 2025",
     // image: { src: "/portfolio-images/klaviyo.png", alt: "Klaviyo dashboard" },
+    images: [
+      {
+        src: "/portfolio-images/klaviyo-portfolio.png",
+        alt: "Klaviyo Portfolio project — Account performance report with top performing accounts, revenue, and conversion metrics",
+      },
+      {
+        src: "/portfolio-images/klaviyo-campaign-performance.png",
+        alt: "Klaviyo Campaign Performance dashboard showing open rate, click rate, and placed order rate trends",
+      },
+      {
+        src: "/portfolio-images/klaviyo-custom-reports.png",
+        alt: "Klaviyo custom report builder for single metric deep dive reports",
+      },
+      {
+        src: "/portfolio-images/klaviyo-campaign-detail.png",
+        alt: "Klaviyo Campaign Performance Detail table with email delivery and engagement metrics",
+      },
+    ],
     highlights: [
       "Led implementation of the Portfolio project end-to-end — proof-of-concept, technical specs, cross-repo code across frontend/backend/infrastructure — delivering on time and exceeding adoption targets by 400%",
       "Established the Reporting Consistency team: hired and onboarded 3 engineers, set up agile practices, and authored the team's technical narrative and long-term roadmap",

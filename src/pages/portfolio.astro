@@ -56,6 +56,17 @@ import {
                 class="mt-4 w-full rounded-lg border border-gray-200 dark:border-gray-600"
               />
             )}
+            {job.images && (
+              <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+                {job.images.map(img => (
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    class="w-full rounded-lg border border-gray-200 dark:border-gray-600"
+                  />
+                ))}
+              </div>
+            )}
           </div>
         ))
       }
