@@ -150,7 +150,7 @@ import {
       >
         Skills & Technologies
       </h2>
-      <div class="mt-10 grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div class="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
         {
           skills.map(group => (
             <div>
@@ -167,6 +167,32 @@ import {
             </div>
           ))
         }
+      </div>
+    </section>
+
+    <p class="divider mt-16 self-center">{"/////"}</p>
+
+    <!-- Education -->
+    <section class="mt-16 w-full">
+      <h2
+        class="text-2xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 md:text-3xl dark:text-white"
+      >
+        Education
+      </h2>
+      <div class="mt-10">
+        <div
+          class="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between"
+        >
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+            Northeastern University
+          </h3>
+          <span class="text-sm text-gray-500 dark:text-gray-300"
+            >2015 – 2019</span
+          >
+        </div>
+        <p class="mt-1 text-lg text-gray-900 dark:text-white">
+          Bachelor of Science, Computer and Information Science
+        </p>
       </div>
     </section>
   </div>

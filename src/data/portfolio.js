@@ -6,15 +6,31 @@
 
 export const workExperience = [
   {
+    company: "Agency",
+    url: "https://www.agency.com",
+    role: "Member of Technical Staff",
+    period: "Nov 2025 – Present",
+    highlights: [
+      "Building an autonomous AI agent for customer management (renewals, expansion, nurturing) powered by Anthropic's Claude, working across React/TypeScript frontend and Python backend",
+      "Shipped AI-personalized broadcast messaging, enabling the agent to tailor outreach based on account context, prior touchpoints, and recipient attributes",
+      "Built end-to-end task automation: generation from email, meetings, and Slack, 5+ agent tools for autonomous management, and daily rollup notifications for high-priority items",
+      "Created a task generation evaluation suite using production-mirrored scenarios with known-good and known-bad baselines to prevent quality regressions",
+    ],
+  },
+  {
     company: "Klaviyo",
     url: "https://www.klaviyo.com",
-    role: "Lead Software Engineer",
-    period: "2019 – 2025",
+    role: "Software Engineer → Senior SE → Lead SE / Engineering Manager",
+    period: "June 2019 – Oct 2025",
     // image: { src: "/portfolio-images/klaviyo.png", alt: "Klaviyo dashboard" },
     highlights: [
-      "Placeholder: Led a major frontend initiative that improved performance or user experience",
-      "Placeholder: Mentored engineers and drove engineering culture improvements",
-      "Placeholder: Built or owned a key product feature with measurable impact",
+      "Led implementation of the Portfolio project end-to-end — proof-of-concept, technical specs, cross-repo code across frontend/backend/infrastructure — delivering on time and exceeding adoption targets by 400%",
+      "Established the Reporting Consistency team: hired and onboarded 3 engineers, set up agile practices, and authored the team's technical narrative and long-term roadmap",
+      "Mentored 5 engineers across the org with weekly 1:1s, targeted stretch projects, and represented their performance cases during calibration",
+      "Led redesign of the dashboard experience from technical spec through implementation in Node.js and Python, incorporating customer feedback with stakeholders",
+      "Championed automated testing, increasing team code coverage from 30% to over 70%",
+      "Built backend Python services for custom reports, increasing feature adoption by 20% YoY through new feature development",
+      "Designed a profile management service for seamless merging of customer profiles and associated historical events",
     ],
   },
 ]
@@ -67,14 +83,45 @@ export const sideProjects = [
 export const skills = [
   {
     category: "Languages",
-    items: ["JavaScript", "TypeScript", "Python", "HTML", "CSS"],
+    items: [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "SQL",
+      "HTML",
+      "CSS",
+      "Terraform",
+      "Java",
+    ],
   },
   {
     category: "Frameworks & Libraries",
-    items: ["React", "Astro", "Next.js", "Node.js", "Tailwind CSS"],
+    items: [
+      "React",
+      "Node.js",
+      "Django",
+      "Flask",
+      "React Query",
+      "Astro",
+      "Tailwind CSS",
+    ],
+  },
+  {
+    category: "Databases",
+    items: ["PostgreSQL", "MySQL", "ClickHouse", "MongoDB", "BigQuery"],
   },
   {
     category: "Tools & Platforms",
-    items: ["Git", "GitHub Actions", "Netlify", "Docker", "PostgreSQL"],
+    items: [
+      "Git",
+      "AWS",
+      "GCP",
+      "Docker",
+      "Jenkins",
+      "Kafka",
+      "GitHub Actions",
+      "Netlify",
+      "Figma",
+    ],
   },
 ]
