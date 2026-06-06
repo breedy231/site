@@ -3,7 +3,6 @@
 
 version: 2
 updates:
-  # Enable version updates for npm/yarn
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -11,46 +10,50 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "America/New_York"
-    # Limit open PRs to avoid overwhelming the repo
     open-pull-requests-limit: 10
-    # Group minor and patch updates to reduce PR noise
     groups:
-      # Group all Gatsby-related updates together
-      gatsby:
+      # Group all Astro + integrations together including majors — they share
+      # peer dep requirements and must be upgraded in a single PR
+      astro-ecosystem:
         patterns:
-          - "gatsby*"
+          - "astro"
+          - "@astrojs/*"
         update-types:
+          - "major"
           - "minor"
           - "patch"
-      # Group development dependencies
+      # Group React + types together including majors — react-dom and @types/*
+      # must match the react major version
+      react-ecosystem:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
+      # Group remaining dev dependency minor/patch updates
       dev-dependencies:
         dependency-type: "development"
         update-types:
           - "minor"
           - "patch"
-      # Group production dependencies (excluding gatsby)
+      # Group remaining production minor/patch updates
       production-minor-patch:
         dependency-type: "production"
-        exclude-patterns:
-          - "gatsby*"
         update-types:
           - "minor"
           - "patch"
-    # Automatically add labels
     labels:
       - "dependencies"
       - "automated"
-    # Commit message format
     commit-message:
       prefix: "chore(deps)"
       include: "scope"
-    # Reviewers for PRs (optional - uncomment if needed)
-    # reviewers:
-    #   - "breedy231"
-    # Allow Dependabot to update major versions for security fixes
     versioning-strategy: "increase"
 
-  # Enable GitHub Actions updates
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
