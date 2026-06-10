@@ -114,16 +114,38 @@
   .week .focus{margin:0 0 12px;color:var(--ink-soft);font-size:14px}
   .note{font-size:12.5px;color:var(--greek);font-style:italic;margin:0 0 12px}
   ul.tasks{list-style:none;margin:0 0 12px;padding:0}
-  ul.tasks li{margin:0 0 7px}
-  ul.tasks label{display:flex;gap:9px;align-items:flex-start;cursor:pointer;font-size:14px;line-height:1.4}
-  ul.tasks input{appearance:none;-webkit-appearance:none;margin:2px 0 0;flex:0 0 17px;width:17px;height:17px;border:1.5px solid var(--ink-soft);border-radius:3px;cursor:pointer;position:relative;transition:.15s}
-  ul.tasks input:checked{background:var(--french);border-color:var(--french)}
-  .t-gr ul.tasks input:checked{background:var(--greek);border-color:var(--greek)}
-  .t-im ul.tasks input:checked{background:var(--immersion);border-color:var(--immersion)}
-  ul.tasks input:checked::after{content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;border:solid #fffdf8;border-width:0 2px 2px 0;transform:rotate(42deg)}
-  ul.tasks input:checked + span{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--line)}
+  ul.tasks li{margin:0 0 10px}
+  .task-line{display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;font-size:14px;line-height:1.4}
+  .task-text{flex:1 1 210px;min-width:0}
+  .task-text .mode{font-size:13px;opacity:.6;margin-left:5px;white-space:nowrap}
+  .days{display:inline-flex;gap:4px;flex:0 0 auto}
+  .day{width:23px;height:23px;border-radius:50%;border:1.5px solid var(--line);background:#fffdf8;font:600 10px/1 "Archivo",sans-serif;color:var(--ink-soft);cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;transition:.14s;-webkit-tap-highlight-color:transparent}
+  .day:hover{border-color:var(--ink-soft)}
+  .day[aria-pressed=true]{background:var(--french);border-color:var(--french);color:#fffdf8}
+  .t-gr .day[aria-pressed=true]{background:var(--greek);border-color:var(--greek)}
+  .t-im .day[aria-pressed=true]{background:var(--immersion);border-color:var(--immersion)}
+  li.touched .task-text{color:var(--ink-soft)}
   .milestone{font-size:13px;border-top:1px dashed var(--line);padding-top:10px;color:var(--ink)}
   .milestone b{font-family:"Fraunces";font-weight:600;font-style:italic;color:var(--gold);font-size:12px;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:2px}
+
+  /* ---------- Mode markers / gym mode ---------- */
+  ul.tasks .mode{font-size:14px;line-height:1.5;opacity:.6}
+  .sessions{font-size:12.5px;color:var(--ink-soft);white-space:nowrap}
+  .mode-legend{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;margin:18px 0 2px;font-size:13.5px;color:var(--ink-soft)}
+  .mode-legend .ml{display:inline-flex;align-items:center;gap:7px}
+  .gym-toggle{margin-left:auto;font-family:"Archivo";font-size:13px;font-weight:600;color:var(--ink-soft);background:#fffdf8;border:1px solid var(--line);border-radius:999px;padding:7px 15px;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:7px}
+  .gym-toggle:hover{border-color:var(--immersion);color:var(--immersion)}
+  .gym-toggle[aria-pressed=true]{background:var(--immersion);border-color:var(--immersion);color:#fffdf8}
+  body.gym-mode li.task-screen{opacity:.26;transition:opacity .2s}
+  body.gym-mode li.task-screen .mode{opacity:.4}
+  @media(max-width:680px){.gym-toggle{margin-left:0}}
+
+  /* ---------- Session blocks ---------- */
+  .blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px}
+  .blocks .card h3{font-size:18px}
+  .tag.neutral{background:var(--paper-2);color:var(--ink-soft)}
+  .session-rhythm{margin:20px 0 0;color:var(--ink-soft);font-size:14.5px;max-width:70ch}
+  @media(max-width:680px){.blocks{grid-template-columns:1fr}}
 
   /* ---------- Phrasebook ---------- */
   .section-head{margin:62px 0 4px;border-top:2px solid var(--ink);padding-top:18px}
@@ -244,7 +266,14 @@
   <div class="progress-row">
     <div class="bar"><div id="barFill"></div></div>
     <div class="pct" id="pct">0%</div>
+    <span class="sessions" id="sessions"></span>
     <button class="reset" id="resetBtn">Reset progress</button>
+  </div>
+
+  <div class="mode-legend">
+    <span class="ml">🎧 Earbuds-friendly — gym or commute</span>
+    <span class="ml">👁 Needs a screen — couch or desk</span>
+    <button class="gym-toggle" id="gymBtn" aria-pressed="false">🎧 Gym mode</button>
   </div>
 
   <!-- PHASE 1 -->
@@ -260,9 +289,9 @@
         <h4>Wake the French back up</h4>
         <p class="focus">Reactivate the base you let lapse. Get the daily habit running again.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w1a"><span>Pimsleur French — one lesson/day (Lessons 1–5)</span></label></li>
-          <li><label><input type="checkbox" data-id="w1b"><span>5 min Duolingo French daily — restart the streak</span></label></li>
-          <li><label><input type="checkbox" data-id="w1c"><span>Open Rosetta Stone once to find where you left off</span></label></li>
+          <li class="task-audio" data-task="w1a"><div class="task-line"><span class="task-text">Coffee Break French — one episode/day (pick your level) <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w1b"><div class="task-line"><span class="task-text">5 min Duolingo French daily — restart the streak <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w1c"><div class="task-line"><span class="task-text">Open Rosetta Stone once to find where you left off <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>Greetings and "I'd like…" without having to think.</div>
       </article>
@@ -272,9 +301,9 @@
         <h4>Café &amp; street basics</h4>
         <p class="focus">The handful of transactions you'll run dozens of times, even in three short days.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w2a"><span>Pimsleur French — next five lessons</span></label></li>
-          <li><label><input type="checkbox" data-id="w2b"><span>Rosetta Stone French ×2 — reactivate reading</span></label></li>
-          <li><label><input type="checkbox" data-id="w2c"><span>Drill numbers 1–20 out loud</span></label></li>
+          <li class="task-audio" data-task="w2a"><div class="task-line"><span class="task-text">Coffee Break French — work through the next episodes <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w2b"><div class="task-line"><span class="task-text">Rosetta Stone French ×2 — reactivate reading <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w2c"><div class="task-line"><span class="task-text">Drill numbers 1–20 out loud <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>Order a coffee, ask directions, handle small numbers.</div>
       </article>
@@ -284,9 +313,9 @@
         <h4>Restaurant fluency &amp; polish</h4>
         <p class="focus">Bank the bon-vivant core, then let French go warm — Greek takes over next week.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w3a"><span>Pimsleur French daily — repeat any shaky lessons</span></label></li>
-          <li><label><input type="checkbox" data-id="w3b"><span>Read a real Nice menu online; learn the food-compliment lines</span></label></li>
-          <li><label><input type="checkbox" data-id="w3c"><span>Make the <em>bonjour</em>-first reflex automatic</span></label></li>
+          <li class="task-audio" data-task="w3a"><div class="task-line"><span class="task-text">Coffee Break French daily — re-listen to the tricky episodes <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w3b"><div class="task-line"><span class="task-text">Read a real Nice menu online; learn the food-compliment lines <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w3c"><div class="task-line"><span class="task-text">Make the <em>bonjour</em>-first reflex automatic <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>A full, polite restaurant interaction feels easy. French is banked.</div>
       </article>
@@ -307,9 +336,9 @@
         <h4>Crack the alphabet</h4>
         <p class="focus">The single highest-leverage task of the trip — moved up, because Greece is the main event.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w4a"><span>Learn all 24 Greek letters &amp; sounds (Duolingo + a chart)</span></label></li>
-          <li><label><input type="checkbox" data-id="w4b"><span>Sound out 10 real Greek signs / place names</span></label></li>
-          <li><label><input type="checkbox" data-id="w4c"><span>French drops to two light reviews/week from here</span></label></li>
+          <li class="task-screen" data-task="w4a"><div class="task-line"><span class="task-text">Learn all 24 Greek letters &amp; sounds (Duolingo + a chart) <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w4b"><div class="task-line"><span class="task-text">Sound out 10 real Greek signs / place names <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w4c"><div class="task-line"><span class="task-text">French drops to two light Coffee Break French episodes/week <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>You can read (aloud) any Greek sign or menu, even without knowing the words.</div>
       </article>
@@ -319,9 +348,9 @@
         <h4>Greek survival audio</h4>
         <p class="focus">Begin spoken Greek in earnest — this is your daily driver now.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w5a"><span>Pimsleur Greek begins — one lesson/day</span></label></li>
-          <li><label><input type="checkbox" data-id="w5b"><span>Language Transfer <em>Complete Greek</em> — ~3 lessons</span></label></li>
-          <li><label><input type="checkbox" data-id="w5c"><span>French: two light reviews this week</span></label></li>
+          <li class="task-audio" data-task="w5a"><div class="task-line"><span class="task-text">Language Transfer Complete Greek begins — 1–2 tracks/day <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w5b"><div class="task-line"><span class="task-text">Rosetta Stone Greek — start the basics (images + TruAccent speech) <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w5c"><div class="task-line"><span class="task-text">French: a couple of Coffee Break French episodes <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>Greetings, thank-you, please, yes/no — by ear, not from a card.</div>
       </article>
@@ -332,9 +361,9 @@
         <p class="focus">Build momentum while the alphabet is still fresh.</p>
         <p class="note">If your mid-July long weekend lands this week — go audio-only, no pressure.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w6a"><span>Pimsleur Greek daily</span></label></li>
-          <li><label><input type="checkbox" data-id="w6b"><span>Language Transfer Greek continues</span></label></li>
-          <li><label><input type="checkbox" data-id="w6c"><span>5 min Duolingo Greek — keep the alphabet sharp</span></label></li>
+          <li class="task-audio" data-task="w6a"><div class="task-line"><span class="task-text">Language Transfer Greek — continue, 1–2 tracks/day <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w6b"><div class="task-line"><span class="task-text">Language Transfer Greek — re-listen to any track that didn't stick <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w6c"><div class="task-line"><span class="task-text">5 min Duolingo Greek — keep the alphabet sharp <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>Ask for things and understand the simple reply.</div>
       </article>
@@ -344,9 +373,9 @@
         <h4>Numbers, prices &amp; real scenes</h4>
         <p class="focus">The situations you'll actually hit across six days — tavernas, ferries, markets.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w7a"><span>Pimsleur Greek daily</span></label></li>
-          <li><label><input type="checkbox" data-id="w7b"><span>Drill Greek numbers &amp; prices out loud</span></label></li>
-          <li><label><input type="checkbox" data-id="w7c"><span>Run café / taverna / shop scenarios aloud</span></label></li>
+          <li class="task-audio" data-task="w7a"><div class="task-line"><span class="task-text">Language Transfer Greek — daily <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w7b"><div class="task-line"><span class="task-text">Drill Greek numbers &amp; prices out loud <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w7c"><div class="task-line"><span class="task-text">Run café / taverna / shop scenarios aloud <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>Order food and pay, in Greek, without freezing.</div>
       </article>
@@ -356,9 +385,9 @@
         <h4>Consolidate</h4>
         <p class="focus">Stop expanding scope; deepen what you have.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w8a"><span>Pimsleur Greek — repeat any shaky lessons</span></label></li>
-          <li><label><input type="checkbox" data-id="w8b"><span>Language Transfer Greek — finish the core</span></label></li>
-          <li><label><input type="checkbox" data-id="w8c"><span>One French maintenance lesson to keep it warm</span></label></li>
+          <li class="task-audio" data-task="w8a"><div class="task-line"><span class="task-text">Language Transfer Greek — finish the core course <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w8b"><div class="task-line"><span class="task-text">Rosetta Stone Greek — review the weak spots <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w8c"><div class="task-line"><span class="task-text">One light Coffee Break French episode to keep it warm <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>The Greek survival set is ~80% automatic.</div>
       </article>
@@ -368,9 +397,9 @@
         <h4>Greek, locked</h4>
         <p class="focus">Greek should now feel like a tool, not a test.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w9a"><span>Run the full Greek phrase set daily — aloud</span></label></li>
-          <li><label><input type="checkbox" data-id="w9b"><span>Reading is fluent — practice on real Greek menus online</span></label></li>
-          <li><label><input type="checkbox" data-id="w9c"><span>One French maintenance lesson</span></label></li>
+          <li class="task-audio" data-task="w9a"><div class="task-line"><span class="task-text">Run the full Greek phrase set daily — aloud <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w9b"><div class="task-line"><span class="task-text">Reading is fluent — practice on real Greek menus online <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w9c"><div class="task-line"><span class="task-text">One light Coffee Break French episode <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>The Greek phrasebook comes out spoken, not read.</div>
       </article>
@@ -391,8 +420,8 @@
         <h4>Stop learning, start rehearsing</h4>
         <p class="focus">Shift from intake to output — Greek-heavy, with French kept alive in the evenings.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w10a"><span>Say the full phrasebook aloud daily — Greek-weighted</span></label></li>
-          <li><label><input type="checkbox" data-id="w10b"><span>Evenings: start <em>Call My Agent!</em> — French audio + subs — to keep French warm</span></label></li>
+          <li class="task-audio" data-task="w10a"><div class="task-line"><span class="task-text">Say the full phrasebook aloud daily — Greek-weighted <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w10b"><div class="task-line"><span class="task-text">Evenings: start <em>Call My Agent!</em> — French audio + subs — to keep French warm <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>Both phrase sets come out spoken; French still feels familiar.</div>
       </article>
@@ -402,8 +431,8 @@
         <h4>Dress rehearsal</h4>
         <p class="focus">Role-play the exact scenes you'll live — most of them in Greek.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w11a"><span>Out loud, in Greek: greet, order, pay, compliment the kitchen, ask prices</span></label></li>
-          <li><label><input type="checkbox" data-id="w11b"><span>Out loud, in French: checking in, ordering wine, the bill</span></label></li>
+          <li class="task-audio" data-task="w11a"><div class="task-line"><span class="task-text">Out loud, in Greek: greet, order, pay, compliment the kitchen, ask prices <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-audio" data-task="w11b"><div class="task-line"><span class="task-text">Out loud, in French: checking in, ordering wine, the bill <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>By Sunday</b>Run a full taverna scene, start to finish, no notes.</div>
       </article>
@@ -413,14 +442,39 @@
         <h4>Travel-ready</h4>
         <p class="focus">Don't cram. Stay loose and warm.</p>
         <ul class="tasks">
-          <li><label><input type="checkbox" data-id="w12a"><span>Light phrase review only — keep it pleasant</span></label></li>
-          <li><label><input type="checkbox" data-id="w12b"><span>Skim the phrasebook on the plane — Greek side first</span></label></li>
+          <li class="task-audio" data-task="w12a"><div class="task-line"><span class="task-text">Light phrase review only — keep it pleasant <span class="mode mode-audio" title="Earbuds-friendly — gym or commute">🎧</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
+          <li class="task-screen" data-task="w12b"><div class="task-line"><span class="task-text">Skim the phrasebook on the plane — Greek side first <span class="mode mode-screen" title="Needs a screen — couch or desk">👁</span></span><span class="days" role="group" aria-label="days done"><button type="button" class="day" data-d="0" aria-pressed="false" aria-label="Mon">M</button><button type="button" class="day" data-d="1" aria-pressed="false" aria-label="Tue">T</button><button type="button" class="day" data-d="2" aria-pressed="false" aria-label="Wed">W</button><button type="button" class="day" data-d="3" aria-pressed="false" aria-label="Thu">T</button><button type="button" class="day" data-d="4" aria-pressed="false" aria-label="Fri">F</button><button type="button" class="day" data-d="5" aria-pressed="false" aria-label="Sat">S</button><button type="button" class="day" data-d="6" aria-pressed="false" aria-label="Sun">S</button></span></div></li>
         </ul>
         <div class="milestone"><b>Departure</b>Relaxed, warm, and able to charm a waiter in two languages. Καλό ταξίδι.</div>
       </article>
 
     </div>
   </section>
+
+  <!-- SESSION BLOCKS -->
+  <div class="section-head">
+    <span class="eyebrow">How to run a session</span>
+    <h2>Blocking your time</h2>
+  </div>
+  <p class="session-rhythm">The plan already splits by format — so let your timing follow it. Audio is self-pacing; the focused screen work is where the Pomodoro earns its keep.</p>
+  <div class="blocks">
+    <div class="card">
+      <span class="tag neutral">🎧 In motion</span>
+      <h3>No timer needed</h3>
+      <p>The lesson <em>is</em> the block. One ~25–30 min Language Transfer track (or Coffee Break French episode) is a complete unit — done walking, lifting, or commuting. Don't try to chop audio into Pomodoros.</p>
+    </div>
+    <div class="card">
+      <span class="tag neutral">👁 The desk block</span>
+      <h3>25 on, 5 off</h3>
+      <p>One Pomodoro: ~18 min taking in new material, then ~7 min active recall — cover it and reproduce it, out loud or on paper. The recall half is where it sticks. Then a 5-minute break.</p>
+    </div>
+    <div class="card">
+      <span class="tag neutral">🏋️ Heavy days</span>
+      <h3>Stack 2–3</h3>
+      <p>For the big pushes — the Week-4 alphabet weekend, batched Language Transfer — run two or three blocks with a long 15–20 min break after the third. Make the last one pure application: sound out real signs and menus.</p>
+    </div>
+  </div>
+  <p class="session-rhythm">Day to day, the simplest rhythm is two-a-day: one audio lesson in motion, one short desk block for recall. Quick taps like the 5-minute Duolingo don't need a timer — just do them.</p>
 
   <!-- PHRASEBOOK -->
   <div class="section-head">
@@ -469,18 +523,18 @@
   </div>
   <div class="res-grid">
     <div class="res">
-      <div class="rh"><h4>Pimsleur</h4><span class="cost">Paid · the spine</span></div>
-      <p>Audio-only, ~30-minute lessons built entirely around speaking and being understood fast. Your main driver, for both languages.</p>
-      <a href="https://www.pimsleur.com" target="_blank" rel="noopener">pimsleur.com →</a>
-    </div>
-    <div class="res">
-      <div class="rh"><h4>Language Transfer</h4><span class="cost free">Free</span></div>
-      <p>The "thinking method" — you reason out sentences rather than memorize them. <em>Complete Greek</em> is superb; the French course is intro-only, so use it as a refresher.</p>
+      <div class="rh"><h4>Language Transfer</h4><span class="cost free">Free · the spine</span></div>
+      <p>The free, audio "thinking method" — you reason sentences out instead of memorizing them. <em>Complete Greek</em> is a full course and your main gym/commute audio. The French side is intro-only, so it's a quick refresher there.</p>
       <a href="https://www.languagetransfer.org" target="_blank" rel="noopener">languagetransfer.org →</a>
     </div>
     <div class="res">
-      <div class="rh"><h4>Rosetta Stone</h4><span class="cost own">You own it</span></div>
-      <p>Slow for travel phrases, but good for reactivating your lapsed French — vocabulary, reading, getting your ear back. French only; skip it for Greek.</p>
+      <div class="rh"><h4>Coffee Break French</h4><span class="cost free">Free · French audio</span></div>
+      <p>A free podcast that fills the French-audio slot — leveled seasons, perfect for the gym and the commute. Start at the season that matches your rusty base, not at episode one.</p>
+      <a href="https://coffeebreaklanguages.com" target="_blank" rel="noopener">coffeebreaklanguages.com →</a>
+    </div>
+    <div class="res">
+      <div class="rh"><h4>Rosetta Stone</h4><span class="cost own">You own it · both</span></div>
+      <p>Your lifetime covers French <em>and</em> Greek (one at a time — switch when you pivot). Screen-based, so it's a desk tool: immersion, reading, and TruAccent speech practice. Carries French reactivation and reinforces Greek.</p>
       <a href="https://www.rosettastone.com" target="_blank" rel="noopener">rosettastone.com →</a>
     </div>
     <div class="res">
@@ -500,7 +554,7 @@
 <script>
 (function(){
   "use strict";
-  var STORE_KEY = "honeymoon-lang-plan-v1";
+  var STORE_KEY = "honeymoon-lang-plan-v2";
   var state = { checked: {}, start: "2026-06-08" };
 
   // ---- local cache (optimistic / offline layer) ----
@@ -531,21 +585,33 @@
   // Write-through: cache immediately, sync debounced.
   function save(){ saveLocal(); pushRemote(); }
 
-  var boxes = Array.prototype.slice.call(document.querySelectorAll("ul.tasks input[type=checkbox]"));
+  var dayBtns = Array.prototype.slice.call(document.querySelectorAll(".day"));
+  var tasks = Array.prototype.slice.call(document.querySelectorAll("li[data-task]"));
   var barFill = document.getElementById("barFill");
   var pctEl = document.getElementById("pct");
+  var sessEl = document.getElementById("sessions");
   var startEl = document.getElementById("startDate");
 
+  function anyDay(t){ for(var d=0; d<7; d++){ if(state.checked[t+"-d"+d]) return true; } return false; }
+  function markTouched(){ tasks.forEach(function(li){ li.classList.toggle("touched", anyDay(li.getAttribute("data-task"))); }); }
+
   function updateProgress(){
-    var done = boxes.filter(function(b){ return b.checked; }).length;
-    var pct = boxes.length ? Math.round(done / boxes.length * 100) : 0;
+    var sessions = 0, touched = 0;
+    tasks.forEach(function(li){
+      var t = li.getAttribute("data-task"), any = false;
+      for(var d=0; d<7; d++){ if(state.checked[t+"-d"+d]){ sessions++; any = true; } }
+      if(any) touched++;
+    });
+    var pct = tasks.length ? Math.round(touched / tasks.length * 100) : 0;
     barFill.style.width = pct + "%";
     pctEl.textContent = pct + "%";
+    if(sessEl) sessEl.textContent = sessions ? sessions + (sessions===1 ? " session logged" : " sessions logged") : "";
   }
 
-  // ---- week date labels ----
+  // ---- week date labels + per-day tooltips ----
   var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   function fmt(d){ return MONTHS[d.getMonth()] + " " + d.getDate(); }
+  function weekIndexOf(taskId){ var m = taskId.match(/^w(\d+)/); return m ? parseInt(m[1],10)-1 : 0; }
   function renderDates(){
     var base = new Date(state.start + "T00:00:00");
     if(isNaN(base.getTime())) return;
@@ -556,25 +622,40 @@
       var endStr = (s.getMonth() === e.getMonth()) ? String(e.getDate()) : fmt(e);
       el.textContent = fmt(s) + " – " + endStr;
     });
+    dayBtns.forEach(function(btn){
+      var li = btn.closest("li[data-task]");
+      var wk = weekIndexOf(li.getAttribute("data-task"));
+      var d = parseInt(btn.getAttribute("data-d"), 10);
+      var day = new Date(base); day.setDate(base.getDate() + wk*7 + d);
+      btn.title = fmt(day);
+    });
   }
 
   // Reflect the current `state` object into the DOM.
   function applyState(){
+    if(!state.checked) state.checked = {};
     startEl.value = state.start || "2026-06-08";
-    boxes.forEach(function(b){
-      var id = b.getAttribute("data-id");
-      b.checked = !!(state.checked && state.checked[id]);
+    dayBtns.forEach(function(btn){
+      var li = btn.closest("li[data-task]");
+      var t = li.getAttribute("data-task");
+      var k = t + "-d" + btn.getAttribute("data-d");
+      btn.setAttribute("aria-pressed", state.checked[k] ? "true" : "false");
     });
+    markTouched();
     updateProgress();
     renderDates();
   }
 
   // ---- input wiring (listeners attach once; content is gated above) ----
-  boxes.forEach(function(b){
-    var id = b.getAttribute("data-id");
-    b.addEventListener("change", function(){
-      if(!state.checked) state.checked = {};
-      if(b.checked) state.checked[id] = 1; else delete state.checked[id];
+  dayBtns.forEach(function(btn){
+    var li = btn.closest("li[data-task]");
+    var t = li.getAttribute("data-task");
+    var k = t + "-d" + btn.getAttribute("data-d");
+    btn.addEventListener("click", function(){
+      var on = btn.getAttribute("aria-pressed") !== "true";
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      if(on) state.checked[k] = 1; else delete state.checked[k];
+      li.classList.toggle("touched", anyDay(t));
       save(); updateProgress();
     });
   });
@@ -583,10 +664,10 @@
     save(); renderDates();
   });
   document.getElementById("resetBtn").addEventListener("click", function(){
-    if(!confirm("Clear all checkmarks?")) return;
+    if(!confirm("Clear all day marks?")) return;
     state.checked = {};
-    boxes.forEach(function(b){ b.checked = false; });
-    save(); updateProgress();   // save() pushes the cleared state to the server too
+    dayBtns.forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
+    markTouched(); save(); updateProgress();   // save() pushes the cleared state to the server too
   });
 
   // ---- password gate + initial hydrate ----
@@ -652,6 +733,16 @@
     .then(function(r){ return r.ok ? r.json() : { authed: false }; })
     .then(function(d){ if(d && d.authed){ hideGate(); start(); } else { showGate(); } })
     .catch(function(){ showGate(); });
+
+  // ---- gym mode: dim the screen-only tasks ----
+  var gymBtn = document.getElementById("gymBtn");
+  if(gymBtn){
+    gymBtn.addEventListener("click", function(){
+      var on = document.body.classList.toggle("gym-mode");
+      gymBtn.setAttribute("aria-pressed", on ? "true" : "false");
+      gymBtn.textContent = on ? "🎧 Gym mode: on" : "🎧 Gym mode";
+    });
+  }
 
   // ---- phrasebook tabs ----
   window.showPane = function(which){
