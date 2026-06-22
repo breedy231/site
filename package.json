@@ -16,7 +16,7 @@
   "dependencies": {
     "@astrojs/mdx": "^6.0.3",
     "@astrojs/netlify": "^7.0.13",
-    "@astrojs/react": "^5.0.7",
+    "@astrojs/react": "^6.0.0",
     "@astrojs/sitemap": "^3.7.3",
     "@netlify/blobs": "^10.7.9",
     "astro": "^6.4.7",
