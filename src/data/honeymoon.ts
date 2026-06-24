@@ -451,24 +451,7 @@ export const stops: Stop[] = [
       {
         id: "nyc-sep5",
         dateLabel: "Sep 5",
-        part: "Match Day",
-        title: "US Open — Arthur Ashe Stadium",
-        desc: "The US Open runs Aug 31 – Sep 13; early September is the sweet spot — the best players still in it, the roar of the crowd, the best tennis in the world at Flushing Meadows.",
-        tags: [
-          { kind: "activity", label: "US Open · Arthur Ashe" },
-          { kind: "food", label: "Post-match Dinner" },
-        ],
-        spots: [
-          {
-            name: "Arthur Ashe Stadium",
-            mapsQuery: "Arthur Ashe Stadium, Flushing Meadows",
-          },
-        ],
-      },
-      {
-        id: "nyc-sep6",
-        dateLabel: "Sep 6",
-        part: "Full Day",
+        part: "Saturday",
         title: "The City",
         desc: "A day in New York — whatever you want it to be: a museum, a walk across the Brooklyn Bridge, shopping in SoHo, a long brunch.",
         tags: [
@@ -477,6 +460,24 @@ export const stops: Stop[] = [
         ],
         spots: [
           { name: "Brooklyn Bridge", mapsQuery: "Brooklyn Bridge, New York" },
+        ],
+      },
+      {
+        id: "nyc-sep6",
+        dateLabel: "Sep 6",
+        part: "Sunday · Match Day",
+        title: "US Open — Arthur Ashe Stadium",
+        desc: "Sunday at Flushing Meadows — the best players still in it, the roar of the crowd, the best tennis in the world. Tickets are booked.",
+        tags: [
+          { kind: "activity", label: "US Open · Arthur Ashe" },
+          { kind: "booked", label: "✓ Tickets Booked" },
+          { kind: "food", label: "Post-match Dinner" },
+        ],
+        spots: [
+          {
+            name: "Arthur Ashe Stadium",
+            mapsQuery: "Arthur Ashe Stadium, Flushing Meadows",
+          },
         ],
       },
       {
@@ -554,11 +555,6 @@ export const transits: Transit[] = [
 
 // ── CHECKLIST (To Book / Packing / Before We Go) ───────────────────────────────
 export const checklist: ChecklistItem[] = [
-  {
-    id: "cl-usopen",
-    label: "Buy US Open tickets (Arthur Ashe)",
-    category: "To Book",
-  },
   {
     id: "cl-westend",
     label: "Book West End show (London)",
@@ -659,9 +655,8 @@ export const budget: BudgetItem[] = [
   { id: "b-hotels", label: "Hotels (6 stops)", amount: 0, booked: true },
   {
     id: "b-usopen",
-    label: "US Open tickets",
+    label: "US Open tickets (Sun Sep 6)",
     amount: 0,
-    booked: false,
-    est: true,
+    booked: true,
   },
 ]
