@@ -94,7 +94,7 @@ export interface TripMeta {
 export const meta: TripMeta = {
   title: { lead: "Our", em: "Honeymoon" },
   travelers: "Brendan & Scott · August–September 2026",
-  dateRange: "August 23 – September 13, 2026",
+  dateRange: "August 23 – September 8, 2026",
   subtitle: "London · Greek Islands · Côte d'Azur · New York",
   route: [
     { label: "Chicago", highlight: true },
@@ -107,12 +107,12 @@ export const meta: TripMeta = {
     { label: "Home", highlight: true },
   ],
   stats: [
-    { num: "21", label: "Days Away" },
+    { num: "16", label: "Nights Away" },
     { num: "7", label: "Destinations" },
     { num: "6", label: "Flights" },
     { num: "3", label: "Islands" },
     { num: "Aug 23", label: "Departure" },
-    { num: "Sep 13", label: "Home" },
+    { num: "Sep 8", label: "Home" },
   ],
 }
 
@@ -493,13 +493,12 @@ export const stops: Stop[] = [
       },
       {
         id: "nyc-sep8",
-        dateLabel: "Sep 8+",
+        dateLabel: "Sep 8",
         part: "Home",
-        title: "Back to Chicago · Recovery",
-        desc: "Fly home to O'Hare on Delta (DL 2240), then recovery and a spa day through Sep 13. The honeymoon ends, the marriage continues.",
+        title: "Back to Chicago",
+        desc: "Fly home to O'Hare on Delta (DL 2240). The honeymoon ends, the marriage continues. A recovery day or two to land back in real life.",
         tags: [
           { kind: "transport", label: "NYC → ORD · DL 2240" },
-          { kind: "activity", label: "Spa / Recovery Day" },
           { kind: "transport", label: "Home ❤" },
         ],
       },
