@@ -14,8 +14,8 @@
 //   • Budget: edit `budget` — totals compute automatically; `est: true` marks
 //     a number as a rough estimate (shows a "~").
 //
-// VALUES MARKED `tbd: true` OR `booked: false` are placeholders Brendan still
-// needs to confirm. Real booked values from notes are filled where known.
+// Flights, hotels, and ferries are all booked (real values below). Remaining
+// `booked: false` items are reservations/tickets still to sort.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type TagKind = "transport" | "stay" | "activity" | "food" | "booked"
@@ -157,12 +157,16 @@ export const stops: Stop[] = [
         dateLabel: "Aug 24",
         part: "Arrival",
         title: "Land at Heathrow · Settle In",
-        desc: "Morning arrival into Terminal 5. Transfer to the hotel, rest, and ease into London time. An afternoon walk — the Thames, Southbank, wherever the mood takes you.",
+        desc: "Morning arrival into Terminal 5. Transfer to the Bankside Hotel (Autograph Collection) on the South Bank, rest, and ease into London time. An afternoon walk — the Thames, Southbank, wherever the mood takes you.",
         tags: [
           { kind: "transport", label: "LHR Terminal 5" },
-          { kind: "stay", label: "Hotel Check-in" },
+          { kind: "stay", label: "Bankside Hotel" },
         ],
         spots: [
+          {
+            name: "Bankside Hotel, Autograph Collection",
+            mapsQuery: "Bankside Hotel Autograph Collection London",
+          },
           {
             name: "The Wallace Collection",
             mapsQuery: "The Wallace Collection, London",
@@ -206,19 +210,23 @@ export const stops: Stop[] = [
     number: "03",
     tag: "Island One",
     name: { em: "Mykonos", trail: ", Greece" },
-    dates: "August 26–27 · 2 nights",
+    dates: "August 26–28 · 2 nights",
     days: [
       {
         id: "myk-aug26",
         dateLabel: "Aug 26",
         part: "Arrival",
         title: "Touch Down on the Cyclades",
-        desc: "Direct from Heathrow into Mykonos — the only Greek island with a direct Heathrow connection. Transfer to the hotel, find the water, and let Greece begin.",
+        desc: "Direct from Heathrow into Mykonos (BA 668) — the only Greek island with a direct Heathrow connection. Transfer to Rocabella Mykonos, find the water, and let Greece begin.",
         tags: [
-          { kind: "stay", label: "Hotel Check-in" },
+          { kind: "stay", label: "Rocabella Mykonos" },
           { kind: "food", label: "Dinner in Mykonos Town" },
         ],
         spots: [
+          {
+            name: "Rocabella Mykonos",
+            mapsQuery: "Rocabella Mykonos Hotel",
+          },
           { name: "Mykonos Windmills", mapsQuery: "Windmills of Mykonos" },
           { name: "Little Venice", mapsQuery: "Little Venice, Mykonos" },
         ],
@@ -247,9 +255,9 @@ export const stops: Stop[] = [
         id: "myk-aug28",
         dateLabel: "Aug 28",
         part: "Morning",
-        title: "Breakfast · Ferry to Paros",
-        desc: "One last breakfast in Mykonos, then the high-speed ferry south — roughly 40 minutes across brilliant blue water.",
-        tags: [{ kind: "transport", label: "Mykonos → Paros · ~40 min ferry" }],
+        title: "Early Breakfast · 9:40am Ferry to Paros",
+        desc: "One last breakfast in Mykonos, then the 9:40am high-speed ferry south — roughly 40 minutes across brilliant blue water.",
+        tags: [{ kind: "transport", label: "Mykonos → Paros · 9:40am ferry" }],
       },
     ],
   },
@@ -258,19 +266,22 @@ export const stops: Stop[] = [
     number: "04",
     tag: "Island Two",
     name: { em: "Paros", trail: ", Greece" },
-    dates: "August 28–29 · 2 nights",
+    dates: "August 28–30 · 2 nights",
     days: [
       {
         id: "par-aug28",
         dateLabel: "Aug 28",
         part: "Arrival",
         title: "Welcome to a Quieter Island",
-        desc: "Paros is the antidote to Mykonos — still gorgeous, still Cycladic, but calmer. The harbor at Naoussa is one of the prettiest in Greece. Arrive, find your hotel, breathe.",
+        desc: "Paros is the antidote to Mykonos — still gorgeous, still Cycladic, but calmer. Check in at the Argonauta Hotel in Parikia. The harbor at Naoussa is one of the prettiest in Greece. Arrive, settle in, breathe.",
         tags: [
-          { kind: "stay", label: "Hotel Check-in" },
+          { kind: "stay", label: "Argonauta Hotel" },
           { kind: "food", label: "Dinner in Naoussa" },
         ],
-        spots: [{ name: "Naoussa", mapsQuery: "Naoussa, Paros, Greece" }],
+        spots: [
+          { name: "Argonauta Hotel", mapsQuery: "Argonauta Hotel Paros" },
+          { name: "Naoussa", mapsQuery: "Naoussa, Paros, Greece" },
+        ],
       },
       {
         id: "par-aug29",
@@ -289,9 +300,9 @@ export const stops: Stop[] = [
         id: "par-aug30",
         dateLabel: "Aug 30",
         part: "Morning",
-        title: "Breakfast · Ferry to Milos",
-        desc: "Morning coffee in Paros, then the ferry southwest to Milos — about 1 hour 45 on the fastest service.",
-        tags: [{ kind: "transport", label: "Paros → Milos · ~1h 45m ferry" }],
+        title: "Breakfast · 10:10am Ferry to Milos",
+        desc: "Morning coffee in Paros, then the 10:10am ferry southwest to Milos — about 1 hour 45 on the fastest service.",
+        tags: [{ kind: "transport", label: "Paros → Milos · 10:10am ferry" }],
       },
     ],
   },
@@ -307,10 +318,16 @@ export const stops: Stop[] = [
         dateLabel: "Aug 30",
         part: "Arrival",
         title: "The Volcanic Island",
-        desc: "Milos is arguably the most dramatic landscape in the Cyclades — shaped by ancient volcanism into lunar-white cliffs, turquoise coves, and sulfuric hot springs. Check in and explore.",
+        desc: "Milos is arguably the most dramatic landscape in the Cyclades — shaped by ancient volcanism into lunar-white cliffs, turquoise coves, and sulfuric hot springs. Check in at Salt Suites (by Mr & Mrs White) and explore.",
         tags: [
-          { kind: "stay", label: "Hotel Check-in" },
+          { kind: "stay", label: "Salt Suites" },
           { kind: "activity", label: "Rent Car or Scooter" },
+        ],
+        spots: [
+          {
+            name: "Salt Suites by Mr & Mrs White",
+            mapsQuery: "Salt Suites Milos",
+          },
         ],
       },
       {
@@ -335,10 +352,13 @@ export const stops: Stop[] = [
         dateLabel: "Sep 1",
         part: "Morning",
         title: "Early Flight · Athens Layover · On to Nice",
-        desc: "Early Olympic Air flight from Milos (MLO) to Athens — about 40 minutes. A long but manageable layover at Athens before the afternoon Aegean flight to Nice. Arrive on the Riviera in time for dinner.",
+        desc: "Early Sky Express flight from Milos (GQ 419, 8:55am) to Athens — about 40 minutes. A layover at Athens, then the early-afternoon Aegean flight to Nice (A3 690, 1:35pm). Arrive on the Riviera in time for dinner.",
         tags: [
-          { kind: "transport", label: "MLO → ATH · Olympic Air · ~40 min" },
-          { kind: "transport", label: "ATH → NCE · Aegean A3 690" },
+          {
+            kind: "transport",
+            label: "MLO → ATH · Sky Express GQ 419 · 8:55am",
+          },
+          { kind: "transport", label: "ATH → NCE · Aegean A3 690 · 1:35pm" },
         ],
       },
     ],
@@ -348,19 +368,20 @@ export const stops: Stop[] = [
     number: "06",
     tag: "Stop Two",
     name: { em: "Nice", trail: ", Côte d'Azur" },
-    dates: "September 1–3 · 3 nights",
+    dates: "September 1–4 · 3 nights",
     days: [
       {
         id: "nce-sep1",
         dateLabel: "Sep 1",
         part: "Arrival",
         title: "Bienvenue sur la Riviera",
-        desc: "Arrive early evening from Athens. The Promenade des Anglais, Vieux-Nice, and the best rosé in the world are waiting. A light dinner and an early night — the Riviera rewards those who sleep.",
+        desc: "Arrive early afternoon from Athens and check in at Le Méridien Nice, right on the Promenade des Anglais. Vieux-Nice and the best rosé in the world are waiting. A light dinner and an early night — the Riviera rewards those who sleep.",
         tags: [
-          { kind: "stay", label: "Hotel Check-in" },
+          { kind: "stay", label: "Le Méridien Nice" },
           { kind: "food", label: "Dinner in Vieux-Nice" },
         ],
         spots: [
+          { name: "Le Méridien Nice", mapsQuery: "Le Méridien Nice" },
           {
             name: "Promenade des Anglais",
             mapsQuery: "Promenade des Anglais, Nice",
@@ -413,18 +434,19 @@ export const stops: Stop[] = [
     number: "07",
     tag: "Grand Finale",
     name: { em: "New York", trail: " City" },
-    dates: "September 4–7 · US Open",
+    dates: "September 4–8 · US Open",
     days: [
       {
         id: "nyc-sep4",
         dateLabel: "Sep 4",
         part: "Arrival",
         title: "Into New York",
-        desc: "La Compagnie into Newark — all-business class, so you arrive refreshed. Transfer to the hotel in the city. New York hits differently after two weeks in Europe.",
+        desc: "La Compagnie into Newark (B0 200, 12:25pm dep) — all-business class, so you arrive refreshed. Transfer to the Moxy NYC Chelsea. New York hits differently after two weeks in Europe.",
         tags: [
-          { kind: "stay", label: "Hotel Check-in" },
+          { kind: "stay", label: "Moxy NYC Chelsea" },
           { kind: "food", label: "Welcome Back to America Dinner" },
         ],
+        spots: [{ name: "Moxy NYC Chelsea", mapsQuery: "Moxy NYC Chelsea" }],
       },
       {
         id: "nyc-sep5",
@@ -447,11 +469,11 @@ export const stops: Stop[] = [
         id: "nyc-sep6",
         dateLabel: "Sep 6",
         part: "Full Day",
-        title: "The City · Final Dinner",
-        desc: "A last full day in New York — whatever you want it to be: a museum, a walk across the Brooklyn Bridge, shopping, a long brunch. End with a dinner worth remembering.",
+        title: "The City",
+        desc: "A day in New York — whatever you want it to be: a museum, a walk across the Brooklyn Bridge, shopping in SoHo, a long brunch.",
         tags: [
           { kind: "activity", label: "Explore NYC" },
-          { kind: "food", label: "Farewell Dinner — make it special" },
+          { kind: "food", label: "Dinner Out" },
         ],
         spots: [
           { name: "Brooklyn Bridge", mapsQuery: "Brooklyn Bridge, New York" },
@@ -459,12 +481,23 @@ export const stops: Stop[] = [
       },
       {
         id: "nyc-sep7",
-        dateLabel: "Sep 7+",
+        dateLabel: "Sep 7",
+        part: "Last Full Day",
+        title: "Final New York Day · Farewell Dinner",
+        desc: "The last full day of the honeymoon. Whatever you've been saving for the end — and a dinner worth remembering before flying home tomorrow.",
+        tags: [
+          { kind: "activity", label: "Explore NYC" },
+          { kind: "food", label: "Farewell Dinner — make it special" },
+        ],
+      },
+      {
+        id: "nyc-sep8",
+        dateLabel: "Sep 8+",
         part: "Home",
         title: "Back to Chicago · Recovery",
-        desc: "Fly home to O'Hare and Wrigleyville (return date still being finalized — 9/9 or 9/10), with recovery and a spa day through Sep 13. The honeymoon ends, the marriage continues.",
+        desc: "Fly home to O'Hare on Delta (DL 2240), then recovery and a spa day through Sep 13. The honeymoon ends, the marriage continues.",
         tags: [
-          { kind: "transport", label: "NYC → ORD" },
+          { kind: "transport", label: "NYC → ORD · DL 2240" },
           { kind: "activity", label: "Spa / Recovery Day" },
           { kind: "transport", label: "Home ❤" },
         ],
@@ -485,57 +518,42 @@ export const transits: Transit[] = [
   {
     id: "t-myk-par",
     icon: "⛴",
-    lead: "Aug 28",
-    text: "High-speed ferry · Mykonos → Paros · SeaJets / Golden Star · ~40 min",
-    booked: false,
-    badge: "Confirm time",
+    lead: "Aug 28 · 9:40am",
+    text: "High-speed ferry · Mykonos → Paros · ~40 minutes",
+    booked: true,
   },
   {
     id: "t-par-mil",
     icon: "⛴",
-    lead: "Aug 30",
+    lead: "Aug 30 · 10:10am",
     text: "High-speed ferry · Paros → Milos · ~1 hour 45 minutes",
-    booked: false,
-    badge: "Confirm time",
+    booked: true,
   },
   {
     id: "t-mil-nce",
     icon: "✈",
     lead: "Sep 1",
-    text: "Olympic Air: MLO → ATH · then Aegean A3 690: ATH 16:25 → NCE 18:05",
+    text: "Sky Express GQ 419: MLO 8:55am → ATH · then Aegean A3 690: ATH 1:35pm → NCE",
     booked: true,
   },
   {
     id: "t-nce-nyc",
     icon: "✈",
-    lead: "Sep 4",
+    lead: "Sep 4 · 12:25pm",
     text: "La Compagnie B0 200 all-business · NCE → EWR · Direct",
+    booked: true,
+  },
+  {
+    id: "t-nyc-ord",
+    icon: "✈",
+    lead: "Sep 8",
+    text: "Delta DL 2240 · New York → Chicago O'Hare",
     booked: true,
   },
 ]
 
 // ── CHECKLIST (To Book / Packing / Before We Go) ───────────────────────────────
 export const checklist: ChecklistItem[] = [
-  {
-    id: "cl-ferry1",
-    label: "Book Mykonos → Paros ferry (FerryHopper)",
-    category: "To Book",
-  },
-  {
-    id: "cl-ferry2",
-    label: "Book Paros → Milos ferry (FerryHopper)",
-    category: "To Book",
-  },
-  {
-    id: "cl-hotels",
-    label: "Confirm all 6 hotels (London, 3 islands, Nice, NYC)",
-    category: "To Book",
-  },
-  {
-    id: "cl-nycflight",
-    label: "Book return NYC → ORD flight (9/9 or 9/10)",
-    category: "To Book",
-  },
   {
     id: "cl-usopen",
     label: "Buy US Open tickets (Arthur Ashe)",
@@ -559,6 +577,11 @@ export const checklist: ChecklistItem[] = [
   {
     id: "cl-milosboat",
     label: "Book Kleftiko boat tour (Milos)",
+    category: "To Book",
+  },
+  {
+    id: "cl-antiparos",
+    label: "Book Antiparos sailboat day (Paros)",
     category: "To Book",
   },
   {
@@ -607,8 +630,8 @@ export const budget: BudgetItem[] = [
     est: true,
   },
   {
-    id: "b-a3690",
-    label: "Flight · Olympic + Aegean A3 690 →Nice",
+    id: "b-greece",
+    label: "Flights · Sky Express GQ 419 + Aegean A3 690 →Nice",
     amount: 450,
     booked: true,
     est: true,
@@ -621,26 +644,19 @@ export const budget: BudgetItem[] = [
     est: true,
   },
   {
-    id: "b-nycord",
-    label: "Flight · NYC→ORD return",
+    id: "b-dl2240",
+    label: "Flight · Delta DL 2240 NYC→ORD (Sep 8)",
     amount: 120,
-    booked: false,
+    booked: true,
     est: true,
   },
   {
     id: "b-ferries",
     label: "Greek island ferries (×2)",
     amount: 0,
-    booked: false,
-    est: true,
+    booked: true,
   },
-  {
-    id: "b-hotels",
-    label: "Hotels (6 stops)",
-    amount: 0,
-    booked: false,
-    est: true,
-  },
+  { id: "b-hotels", label: "Hotels (6 stops)", amount: 0, booked: true },
   {
     id: "b-usopen",
     label: "US Open tickets",
