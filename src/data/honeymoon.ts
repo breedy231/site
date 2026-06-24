@@ -37,6 +37,8 @@ export interface Tag {
 export interface Day {
   /** Stable id — used to persist check-off + notes in localStorage. Don't reuse. */
   id: string
+  /** Real calendar date, ISO yyyy-mm-dd — powers "today" detection. */
+  date: string
   dateLabel: string // e.g. "Aug 24"
   part: string // e.g. "Arrival" / "Full Day" / "Morning"
   title: string
@@ -127,6 +129,7 @@ export const stops: Stop[] = [
     days: [
       {
         id: "dep-aug23",
+        date: "2026-08-23",
         dateLabel: "Aug 23",
         part: "Evening",
         title: "Depart O'Hare for London Heathrow",
@@ -154,6 +157,7 @@ export const stops: Stop[] = [
     days: [
       {
         id: "lon-aug24",
+        date: "2026-08-24",
         dateLabel: "Aug 24",
         part: "Day 1 · Arrival",
         title: "Land 11:15am · Bankside & Borough Market",
@@ -193,6 +197,7 @@ export const stops: Stop[] = [
       },
       {
         id: "lon-aug25",
+        date: "2026-08-25",
         dateLabel: "Aug 25",
         part: "Day 2",
         title: "Shops · The Wallace Collection · Tea",
@@ -232,6 +237,7 @@ export const stops: Stop[] = [
     days: [
       {
         id: "myk-aug26",
+        date: "2026-08-26",
         dateLabel: "Aug 26",
         part: "Day 1 · Arrival",
         title: "Touch Down on the Cyclades",
@@ -251,6 +257,7 @@ export const stops: Stop[] = [
       },
       {
         id: "myk-aug27",
+        date: "2026-08-27",
         dateLabel: "Aug 27",
         part: "Full Day",
         title: "Elia Beach · Mykonos Town",
@@ -271,6 +278,7 @@ export const stops: Stop[] = [
       },
       {
         id: "myk-aug28",
+        date: "2026-08-28",
         dateLabel: "Aug 28",
         part: "Morning",
         title: "Early Breakfast · 9:40am Ferry to Paros",
@@ -288,6 +296,7 @@ export const stops: Stop[] = [
     days: [
       {
         id: "par-aug28",
+        date: "2026-08-28",
         dateLabel: "Aug 28",
         part: "Arrival",
         title: "Welcome to a Quieter Island",
@@ -303,6 +312,7 @@ export const stops: Stop[] = [
       },
       {
         id: "par-aug29",
+        date: "2026-08-29",
         dateLabel: "Aug 29",
         part: "Full Day",
         title: "Naoussa · Day Trip to Antiparos",
@@ -316,6 +326,7 @@ export const stops: Stop[] = [
       },
       {
         id: "par-aug30",
+        date: "2026-08-30",
         dateLabel: "Aug 30",
         part: "Morning",
         title: "Breakfast · 10:10am Ferry to Milos",
@@ -333,6 +344,7 @@ export const stops: Stop[] = [
     days: [
       {
         id: "mil-aug30",
+        date: "2026-08-30",
         dateLabel: "Aug 30",
         part: "Arrival",
         title: "The Volcanic Island",
@@ -350,6 +362,7 @@ export const stops: Stop[] = [
       },
       {
         id: "mil-aug31",
+        date: "2026-08-31",
         dateLabel: "Aug 31",
         part: "Full Day",
         title: "Sarakiniko · Kleftiko · Firopotamos",
@@ -367,6 +380,7 @@ export const stops: Stop[] = [
       },
       {
         id: "mil-sep1",
+        date: "2026-09-01",
         dateLabel: "Sep 1",
         part: "Morning",
         title: "Early Flight · Athens Layover · On to Nice",
@@ -390,6 +404,7 @@ export const stops: Stop[] = [
     days: [
       {
         id: "nce-sep1",
+        date: "2026-09-01",
         dateLabel: "Sep 1",
         part: "Arrival",
         title: "Bienvenue sur la Riviera",
@@ -412,6 +427,7 @@ export const stops: Stop[] = [
       },
       {
         id: "nce-sep2",
+        date: "2026-09-02",
         dateLabel: "Sep 2",
         part: "Full Day",
         title: "Nice · Èze · The Corniche",
@@ -429,6 +445,7 @@ export const stops: Stop[] = [
       },
       {
         id: "nce-sep3",
+        date: "2026-09-03",
         dateLabel: "Sep 3",
         part: "Full Day",
         title: "Day Trip: Monaco",
@@ -456,6 +473,7 @@ export const stops: Stop[] = [
     days: [
       {
         id: "nyc-sep4",
+        date: "2026-09-04",
         dateLabel: "Sep 4",
         part: "Arrival",
         title: "Into New York",
@@ -468,6 +486,7 @@ export const stops: Stop[] = [
       },
       {
         id: "nyc-sep5",
+        date: "2026-09-05",
         dateLabel: "Sep 5",
         part: "Saturday",
         title: "The City",
@@ -482,6 +501,7 @@ export const stops: Stop[] = [
       },
       {
         id: "nyc-sep6",
+        date: "2026-09-06",
         dateLabel: "Sep 6",
         part: "Sunday · Match Day",
         title: "US Open — Arthur Ashe Stadium",
@@ -500,6 +520,7 @@ export const stops: Stop[] = [
       },
       {
         id: "nyc-sep7",
+        date: "2026-09-07",
         dateLabel: "Sep 7",
         part: "Last Full Day",
         title: "Final New York Day · Farewell Dinner",
@@ -511,6 +532,7 @@ export const stops: Stop[] = [
       },
       {
         id: "nyc-sep8",
+        date: "2026-09-08",
         dateLabel: "Sep 8",
         part: "Home",
         title: "Back to Chicago",

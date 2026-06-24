@@ -145,6 +145,15 @@ import HoneymoonTracker from "../components/HoneymoonTracker"
     text-transform: uppercase;
     color: rgba(245, 240, 232, 0.5);
     font-weight: 400;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.15rem 0.1rem;
+    font-family: "Jost", sans-serif;
+    transition: color 0.2s ease;
+  }
+  .hero-route-stop:hover {
+    color: var(--cream);
   }
   .hero-route-stop.highlight {
     color: var(--warm);
@@ -278,6 +287,113 @@ import HoneymoonTracker from "../components/HoneymoonTracker"
     color: var(--muted);
     font-weight: 500;
     white-space: nowrap;
+  }
+
+  /* ── STATUS / TODAY BANNER ── */
+  .status {
+    background: var(--ink);
+    color: var(--cream);
+    text-align: center;
+    padding: 0.7rem 2rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .status strong {
+    color: var(--warm);
+    font-weight: 500;
+  }
+  .status-during {
+    background: var(--terracotta);
+  }
+  .status-during strong {
+    color: var(--cream);
+  }
+  .status-btn {
+    background: rgba(245, 240, 232, 0.15);
+    border: 1px solid rgba(245, 240, 232, 0.4);
+    color: var(--cream);
+    font-family: "Jost", sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2rem;
+    cursor: pointer;
+  }
+  .status-btn:hover {
+    background: rgba(245, 240, 232, 0.28);
+  }
+
+  /* ── SUB-BAR: view toggle + stop nav ── */
+  .subbar {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .viewtoggle {
+    display: flex;
+    flex: 0 0 auto;
+    border: 1px solid var(--sand);
+    border-radius: 2rem;
+    overflow: hidden;
+  }
+  .vt {
+    font-family: "Jost", sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.4rem 0.8rem;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    cursor: pointer;
+  }
+  .vt.active {
+    background: var(--warm);
+    color: var(--deep);
+  }
+  .stopnav {
+    display: flex;
+    gap: 0.35rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex: 1;
+  }
+  .stopnav::-webkit-scrollbar {
+    display: none;
+  }
+  .stopchip {
+    font-family: "Jost", sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--sand);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .stopchip:hover {
+    color: var(--ink);
+    border-color: var(--warm);
+  }
+  .stopchip.current {
+    background: var(--terracotta);
+    color: var(--cream);
+    border-color: var(--terracotta);
   }
 
   /* ── MAIN CONTENT ── */
@@ -760,6 +876,234 @@ import HoneymoonTracker from "../components/HoneymoonTracker"
     border-radius: 4px;
   }
 
+  /* ── TODAY HIGHLIGHT ── */
+  .day-card.today::before {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+    box-shadow: 0 0 0 4px rgba(181, 98, 58, 0.18);
+  }
+  .day-card.today {
+    background: linear-gradient(
+      90deg,
+      rgba(181, 98, 58, 0.07),
+      transparent 70%
+    );
+    border-radius: 10px;
+  }
+  .today-pill {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--terracotta);
+    color: var(--cream);
+    padding: 0.15rem 0.45rem;
+    border-radius: 2rem;
+    vertical-align: middle;
+  }
+  .destination.current-stop .dest-number {
+    color: var(--warm);
+  }
+
+  /* ── PER-DAY DETAILS ── */
+  .details {
+    margin-top: 0.85rem;
+  }
+  .details-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .mini-btn {
+    font-family: "Jost", sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--sand);
+    border-radius: 2rem;
+    background: transparent;
+    color: var(--sea);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .mini-btn:hover {
+    border-color: var(--warm);
+    color: var(--terracotta);
+  }
+  .mini-btn.link-live {
+    color: var(--sage);
+    border-color: rgba(122, 140, 110, 0.5);
+  }
+  .conf-chip {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .details-fields {
+    margin-top: 0.7rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .field-wide {
+    grid-column: 1 / -1;
+  }
+  .field-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .field-input {
+    font-family: "Jost", sans-serif;
+    font-size: 0.82rem;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+    width: 100%;
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--warm);
+  }
+  .note-input {
+    min-height: 70px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  /* ── AGENDA VIEW ── */
+  .agenda-stop {
+    padding-top: 2rem;
+  }
+  .agenda-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--sand);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+  }
+  .agenda-head.current {
+    border-color: var(--terracotta);
+  }
+  .agenda-stop-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--ink);
+  }
+  .agenda-stop-dates {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .agenda-row {
+    display: grid;
+    grid-template-columns: auto 88px 1fr;
+    gap: 0.8rem;
+    align-items: start;
+    padding: 0.7rem 0.3rem;
+    border-bottom: 1px solid rgba(232, 220, 200, 0.5);
+  }
+  .agenda-row.today {
+    background: rgba(181, 98, 58, 0.07);
+    border-radius: 8px;
+  }
+  .agenda-check {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    border: 1.5px solid var(--warm);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--cream);
+    font-size: 0.7rem;
+    cursor: pointer;
+    margin-top: 0.1rem;
+  }
+  .agenda-check.checked {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+  }
+  .agenda-when {
+    display: flex;
+    flex-direction: column;
+  }
+  .agenda-date {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.05rem;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .agenda-part {
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .agenda-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .agenda-title {
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+  .agenda-row.done .agenda-title {
+    text-decoration: line-through;
+    text-decoration-color: var(--warm);
+    color: var(--muted);
+  }
+  .agenda-maps {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sea);
+    text-decoration: none;
+    width: fit-content;
+  }
+  .agenda-maps:hover {
+    color: var(--terracotta);
+  }
+  .agenda-transit {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0.8rem;
+    margin: 0.5rem 0 0.5rem;
+    background: var(--deep);
+    border-radius: 8px;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.6);
+  }
+  .agenda-transit strong {
+    color: var(--warm);
+  }
+
   /* ── FOOTER ── */
   footer {
     background: var(--deep);
@@ -837,6 +1181,19 @@ import HoneymoonTracker from "../components/HoneymoonTracker"
     .budget-badge {
       grid-area: badge;
       justify-self: start;
+    }
+    .details-fields {
+      grid-template-columns: 1fr;
+    }
+    .subbar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.6rem;
+      padding: 0 1.2rem 0.75rem;
+    }
+    .agenda-row {
+      grid-template-columns: auto 70px 1fr;
+      gap: 0.6rem;
     }
   }
 </style>
