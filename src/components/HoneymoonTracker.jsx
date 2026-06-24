@@ -7,7 +7,7 @@ const mapsUrl = q =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`
 
 // Transits render after these stops, in order.
-const TRANSIT_ORDER = ["london", "mykonos", "paros", "milos", "nice"]
+const TRANSIT_ORDER = ["london", "mykonos", "paros", "milos", "nice", "nyc"]
 const transitAfter = stopId => {
   const i = TRANSIT_ORDER.indexOf(stopId)
   return i === -1 ? null : transits[i]
