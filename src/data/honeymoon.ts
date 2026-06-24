@@ -130,11 +130,11 @@ export const stops: Stop[] = [
         dateLabel: "Aug 23",
         part: "Evening",
         title: "Depart O'Hare for London Heathrow",
-        desc: "An Uber from Wrigleyville to ORD, then the overnight flight begins. British Airways First Class — fully flat beds, champagne, the works. Wake up over the Atlantic with England below.",
+        desc: "An Uber from Wrigleyville to O'Hare for the 9:15pm departure, then the overnight flight begins. British Airways First Class — fully flat beds, champagne, the works. Wake up over the Atlantic with England below.",
         tags: [
           { kind: "transport", label: "British Airways 296 · First" },
           { kind: "booked", label: "✓ Booked" },
-          { kind: "transport", label: "ORD → LHR" },
+          { kind: "transport", label: "ORD → LHR · 9:15pm" },
         ],
         spots: [
           {
@@ -155,39 +155,54 @@ export const stops: Stop[] = [
       {
         id: "lon-aug24",
         dateLabel: "Aug 24",
-        part: "Arrival",
-        title: "Land at Heathrow · Settle In",
-        desc: "Morning arrival into Terminal 5. Transfer to the Bankside Hotel (Autograph Collection) on the South Bank, rest, and ease into London time. An afternoon walk — the Thames, Southbank, wherever the mood takes you.",
+        part: "Day 1 · Arrival",
+        title: "Land 11:15am · Bankside & Borough Market",
+        desc: "Land at Heathrow around 11:15am and drop bags at the Bankside Hotel (Autograph Collection) on the South Bank. Lunch at Borough Market, then Shakespeare's Globe and the Tate Modern next door, and a walk up through Regent's Park (maybe La Fromagerie). Martinis at the Hawksmoor bar in King's Cross, then dinner at Dishoom King's Cross.",
         tags: [
-          { kind: "transport", label: "LHR Terminal 5" },
+          { kind: "transport", label: "Land LHR ~11:15am" },
           { kind: "stay", label: "Bankside Hotel" },
+          { kind: "activity", label: "Shakespeare's Globe" },
+          { kind: "food", label: "Borough Market Lunch" },
+          { kind: "food", label: "Dishoom King's Cross" },
         ],
         spots: [
           {
             name: "Bankside Hotel, Autograph Collection",
             mapsQuery: "Bankside Hotel Autograph Collection London",
           },
+          { name: "Borough Market", mapsQuery: "Borough Market, London" },
           {
-            name: "The Wallace Collection",
-            mapsQuery: "The Wallace Collection, London",
+            name: "Shakespeare's Globe",
+            mapsQuery: "Shakespeare's Globe, London",
           },
           { name: "Tate Modern", mapsQuery: "Tate Modern, London" },
           { name: "Regent's Park", mapsQuery: "Regent's Park, London" },
+          {
+            name: "La Fromagerie",
+            mapsQuery: "La Fromagerie Marylebone, London",
+          },
+          {
+            name: "Hawksmoor Bar, King's Cross",
+            mapsQuery: "Hawksmoor King's Cross, London",
+          },
+          {
+            name: "Dishoom King's Cross",
+            mapsQuery: "Dishoom King's Cross, London",
+          },
         ],
       },
       {
         id: "lon-aug25",
         dateLabel: "Aug 25",
-        part: "Full Day",
-        title: "A Day in the City",
-        desc: "One full day to soak up London — the shops, the markets, a West End show in the evening. Book theatre ahead; the good productions sell out weeks out.",
+        part: "Day 2",
+        title: "Shops · The Wallace Collection · Tea",
+        desc: "A day for the shops: Liberty of London and Fortnum & Mason, then the Wallace Collection. Afternoon tea at Dean Street Townhouse to close out London.",
         tags: [
-          { kind: "activity", label: "West End Theatre" },
-          { kind: "food", label: "Dinner at Dean St Townhouse" },
-          { kind: "transport", label: "Tube / Bus" },
+          { kind: "activity", label: "Liberty + Fortnum & Mason" },
+          { kind: "activity", label: "The Wallace Collection" },
+          { kind: "food", label: "Tea at Dean St Townhouse" },
         ],
         spots: [
-          { name: "Borough Market", mapsQuery: "Borough Market, London" },
           {
             name: "Liberty London",
             mapsQuery: "Liberty London, Great Marlborough St",
@@ -196,7 +211,10 @@ export const stops: Stop[] = [
             name: "Fortnum & Mason",
             mapsQuery: "Fortnum & Mason, Piccadilly, London",
           },
-          { name: "Savile Row", mapsQuery: "Savile Row, London" },
+          {
+            name: "The Wallace Collection",
+            mapsQuery: "The Wallace Collection, London",
+          },
           {
             name: "Dean Street Townhouse",
             mapsQuery: "Dean Street Townhouse, Soho, London",
@@ -215,9 +233,9 @@ export const stops: Stop[] = [
       {
         id: "myk-aug26",
         dateLabel: "Aug 26",
-        part: "Arrival",
+        part: "Day 1 · Arrival",
         title: "Touch Down on the Cyclades",
-        desc: "Direct from Heathrow into Mykonos (BA 668) — the only Greek island with a direct Heathrow connection. Transfer to Rocabella Mykonos, find the water, and let Greece begin.",
+        desc: "Depart Heathrow 10:55am on BA 668 and land in Mykonos around 4:50pm — the only Greek island with a direct Heathrow connection. Drop bags at Rocabella Mykonos, find the water, and let Greece begin.",
         tags: [
           { kind: "stay", label: "Rocabella Mykonos" },
           { kind: "food", label: "Dinner in Mykonos Town" },
@@ -256,7 +274,7 @@ export const stops: Stop[] = [
         dateLabel: "Aug 28",
         part: "Morning",
         title: "Early Breakfast · 9:40am Ferry to Paros",
-        desc: "One last breakfast in Mykonos, then the 9:40am high-speed ferry south — roughly 40 minutes across brilliant blue water.",
+        desc: "One last breakfast in Mykonos, then the 9:40am high-speed ferry south — about 45 minutes, arriving Paros around 10:25am.",
         tags: [{ kind: "transport", label: "Mykonos → Paros · 9:40am ferry" }],
       },
     ],
@@ -301,7 +319,7 @@ export const stops: Stop[] = [
         dateLabel: "Aug 30",
         part: "Morning",
         title: "Breakfast · 10:10am Ferry to Milos",
-        desc: "Morning coffee in Paros, then the 10:10am ferry southwest to Milos — about 1 hour 45 on the fastest service.",
+        desc: "Morning coffee in Paros, then the 10:10am ferry southwest to Milos, arriving around noon.",
         tags: [{ kind: "transport", label: "Paros → Milos · 10:10am ferry" }],
       },
     ],
@@ -352,7 +370,7 @@ export const stops: Stop[] = [
         dateLabel: "Sep 1",
         part: "Morning",
         title: "Early Flight · Athens Layover · On to Nice",
-        desc: "Early Sky Express flight from Milos (GQ 419, 8:55am) to Athens — about 40 minutes. A layover at Athens, then the early-afternoon Aegean flight to Nice (A3 690, 1:35pm). Arrive on the Riviera in time for dinner.",
+        desc: "Sky Express GQ 419 departs Milos 8:55am and lands in Athens around 9:35am. A layover at Athens airport, then Aegean A3 690 departs 1:35pm and lands in Nice around 3:10pm. On the Riviera in time for dinner.",
         tags: [
           {
             kind: "transport",
@@ -375,7 +393,7 @@ export const stops: Stop[] = [
         dateLabel: "Sep 1",
         part: "Arrival",
         title: "Bienvenue sur la Riviera",
-        desc: "Arrive early afternoon from Athens and check in at Le Méridien Nice, right on the Promenade des Anglais. Vieux-Nice and the best rosé in the world are waiting. A light dinner and an early night — the Riviera rewards those who sleep.",
+        desc: "Land around 3:10pm from Athens and check in at Le Méridien Nice, right on the Promenade des Anglais. Vieux-Nice and the best rosé in the world are waiting. A light dinner and an early night — the Riviera rewards those who sleep.",
         tags: [
           { kind: "stay", label: "Le Méridien Nice" },
           { kind: "food", label: "Dinner in Vieux-Nice" },
@@ -441,7 +459,7 @@ export const stops: Stop[] = [
         dateLabel: "Sep 4",
         part: "Arrival",
         title: "Into New York",
-        desc: "La Compagnie into Newark (B0 200, 12:25pm dep) — all-business class, so you arrive refreshed. Transfer to the Moxy NYC Chelsea. New York hits differently after two weeks in Europe.",
+        desc: "La Compagnie B0 200 departs Nice 12:25pm and lands at Newark around 3:45pm — all-business class, so you arrive refreshed. Transfer to the Moxy NYC Chelsea. New York hits differently after two weeks in Europe.",
         tags: [
           { kind: "stay", label: "Moxy NYC Chelsea" },
           { kind: "food", label: "Welcome Back to America Dinner" },
@@ -496,9 +514,9 @@ export const stops: Stop[] = [
         dateLabel: "Sep 8",
         part: "Home",
         title: "Back to Chicago",
-        desc: "Fly home to O'Hare on Delta (DL 2240). The honeymoon ends, the marriage continues. A recovery day or two to land back in real life.",
+        desc: "Delta DL 2240 departs New York 11:30am and lands at O'Hare around 1:15pm. The honeymoon ends, the marriage continues.",
         tags: [
-          { kind: "transport", label: "NYC → ORD · DL 2240" },
+          { kind: "transport", label: "NYC → ORD · DL 2240 · 11:30am" },
           { kind: "transport", label: "Home ❤" },
         ],
       },
@@ -511,43 +529,43 @@ export const transits: Transit[] = [
   {
     id: "t-lon-myk",
     icon: "✈",
-    lead: "Aug 26 morning",
-    text: "British Airways 668 direct · LHR T5 → Mykonos JMK · ~4 hours",
+    lead: "Aug 26 · 10:55am",
+    text: "British Airways 668 direct · LHR T5 → Mykonos JMK · lands ~4:50pm",
     booked: true,
   },
   {
     id: "t-myk-par",
     icon: "⛴",
     lead: "Aug 28 · 9:40am",
-    text: "High-speed ferry · Mykonos → Paros · ~40 minutes",
+    text: "High-speed ferry · Mykonos → Paros · arrives ~10:25am",
     booked: true,
   },
   {
     id: "t-par-mil",
     icon: "⛴",
     lead: "Aug 30 · 10:10am",
-    text: "High-speed ferry · Paros → Milos · ~1 hour 45 minutes",
+    text: "High-speed ferry · Paros → Milos · arrives ~12:00pm",
     booked: true,
   },
   {
     id: "t-mil-nce",
     icon: "✈",
     lead: "Sep 1",
-    text: "Sky Express GQ 419: MLO 8:55am → ATH · then Aegean A3 690: ATH 1:35pm → NCE",
+    text: "Sky Express GQ 419: MLO 8:55am → ATH 9:35am · then Aegean A3 690: ATH 1:35pm → NCE ~3:10pm",
     booked: true,
   },
   {
     id: "t-nce-nyc",
     icon: "✈",
     lead: "Sep 4 · 12:25pm",
-    text: "La Compagnie B0 200 all-business · NCE → EWR · Direct",
+    text: "La Compagnie B0 200 all-business · NCE → EWR · lands ~3:45pm",
     booked: true,
   },
   {
     id: "t-nyc-ord",
     icon: "✈",
-    lead: "Sep 8",
-    text: "Delta DL 2240 · New York → Chicago O'Hare",
+    lead: "Sep 8 · 11:30am",
+    text: "Delta DL 2240 · New York → Chicago O'Hare · lands ~1:15pm",
     booked: true,
   },
 ]
@@ -555,13 +573,18 @@ export const transits: Transit[] = [
 // ── CHECKLIST (To Book / Packing / Before We Go) ───────────────────────────────
 export const checklist: ChecklistItem[] = [
   {
-    id: "cl-westend",
-    label: "Book West End show (London)",
+    id: "cl-globe",
+    label: "Book Shakespeare's Globe tickets (London Day 1)",
+    category: "To Book",
+  },
+  {
+    id: "cl-dishoom",
+    label: "Reserve Hawksmoor bar + Dishoom King's Cross (Day 1)",
     category: "To Book",
   },
   {
     id: "cl-deanst",
-    label: "Reserve Dean Street Townhouse dinner",
+    label: "Reserve Dean Street Townhouse tea (Day 2)",
     category: "To Book",
   },
   {
