@@ -1,0 +1,842 @@
+---
+import HoneymoonTracker from "../components/HoneymoonTracker"
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Our Honeymoon — August 2026</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <HoneymoonTracker client:only="react" />
+    <noscript>
+      <p style="padding:2rem;font-family:sans-serif;text-align:center">
+        This honeymoon tracker needs JavaScript enabled.
+      </p>
+    </noscript>
+  </body>
+</html>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --cream: #f5f0e8;
+    --sand: #e8dcc8;
+    --warm: #c9a96e;
+    --terracotta: #b5623a;
+    --deep: #1a1510;
+    --ink: #2d2418;
+    --sea: #4a7c8e;
+    --sage: #7a8c6e;
+    --muted: #8a7a66;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: "Jost", sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    background: var(--deep);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse 80% 50% at 20% 60%,
+        rgba(201, 169, 110, 0.15) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 60% 70% at 80% 30%,
+        rgba(74, 124, 142, 0.12) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 100% 80% at 50% 100%,
+        rgba(181, 98, 58, 0.1) 0%,
+        transparent 50%
+      );
+  }
+  .hero-label {
+    font-family: "Jost", sans-serif;
+    font-weight: 400;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 300;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    line-height: 0.95;
+    color: var(--cream);
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--warm);
+  }
+  .hero-sub {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: rgba(245, 240, 232, 0.55);
+    margin-top: 1.5rem;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+  .hero-route {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+  .hero-route-stop {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.5);
+    font-weight: 400;
+  }
+  .hero-route-stop.highlight {
+    color: var(--warm);
+  }
+  .hero-route-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--warm);
+    opacity: 0.4;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: fadeUp 1s 1.8s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .scroll-hint span {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.3);
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--warm), transparent);
+    animation: scrollPulse 2s 2s infinite;
+  }
+
+  /* ── OVERVIEW STRIP ── */
+  .overview {
+    background: var(--warm);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: center;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    flex-wrap: wrap;
+  }
+  .overview-stat {
+    text-align: center;
+  }
+  .overview-stat .num {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--deep);
+    line-height: 1;
+  }
+  .overview-stat .label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(26, 21, 16, 0.6);
+    margin-top: 0.25rem;
+  }
+
+  /* ── STICKY CONTROL BAR ── */
+  .ctrlbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(245, 240, 232, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--sand);
+  }
+  .ctrlbar-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .tabs {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .tab {
+    font-family: "Jost", sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--sand);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tab:hover {
+    color: var(--ink);
+  }
+  .tab.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .progress-track {
+    width: 90px;
+    height: 5px;
+    background: var(--sand);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--terracotta);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── DESTINATION SECTIONS ── */
+  .destination {
+    padding: 5rem 0 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+  }
+  .destination.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .dest-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+  .dest-number {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 5rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--sand);
+    letter-spacing: -0.04em;
+    user-select: none;
+  }
+  .dest-meta {
+    padding-top: 0.5rem;
+  }
+  .dest-tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--warm);
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  .dest-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .dest-name em {
+    font-style: italic;
+    color: var(--terracotta);
+  }
+  .dest-dates {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    font-weight: 400;
+  }
+
+  /* ── DAY CARDS ── */
+  .days {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 1px solid var(--sand);
+    margin-left: 1rem;
+    padding-left: 0;
+  }
+  .day-card {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 0 1.5rem 2rem;
+    position: relative;
+    transition: opacity 0.3s ease;
+  }
+  .day-card::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 2rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 2px solid var(--warm);
+    transition: background 0.2s ease;
+  }
+  .day-card.done::before {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+  }
+  .day-card.done .day-desc {
+    opacity: 0.55;
+  }
+  .day-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    padding-top: 0.15rem;
+    line-height: 1.4;
+  }
+  .day-label strong {
+    display: block;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: 0;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+  .day-content {
+    padding-bottom: 0.5rem;
+  }
+  .day-check {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
+  .day-check-box {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--warm);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--cream);
+    transition: all 0.2s ease;
+  }
+  .day-check.checked .day-check-box {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+  }
+  .day-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .day-check.checked .day-title {
+    text-decoration: line-through;
+    text-decoration-color: var(--warm);
+    color: var(--muted);
+  }
+  .day-desc {
+    font-size: 0.82rem;
+    line-height: 1.75;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .day-highlights {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2rem;
+    font-weight: 500;
+  }
+  .tag-transport {
+    background: rgba(74, 124, 142, 0.12);
+    color: var(--sea);
+  }
+  .tag-stay {
+    background: rgba(122, 140, 110, 0.15);
+    color: var(--sage);
+  }
+  .tag-activity {
+    background: rgba(201, 169, 110, 0.2);
+    color: #7a5e28;
+  }
+  .tag-food {
+    background: rgba(181, 98, 58, 0.12);
+    color: var(--terracotta);
+  }
+  .tag-booked {
+    background: rgba(26, 21, 16, 0.07);
+    color: var(--ink);
+  }
+  .tag-map {
+    background: rgba(26, 21, 16, 0.06);
+    color: var(--ink);
+    text-decoration: none;
+    border: 1px solid var(--sand);
+    transition: all 0.2s ease;
+  }
+  .tag-map:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  /* ── NOTES ── */
+  .note-row {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .note-toggle {
+    font-family: "Jost", sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--sea);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .note-toggle:hover {
+    color: var(--terracotta);
+  }
+  .note-preview {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+  .note-input {
+    margin-top: 0.6rem;
+    width: 100%;
+    min-height: 70px;
+    resize: vertical;
+    font-family: "Jost", sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+  }
+  .note-input:focus {
+    outline: none;
+    border-color: var(--warm);
+  }
+
+  /* ── TRANSIT ROWS ── */
+  .transit {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 2rem;
+    background: var(--deep);
+    margin: 1rem -2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .transit::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(201, 169, 110, 0.05) 0%,
+      transparent 50%
+    );
+  }
+  .transit-icon {
+    font-size: 1.1rem;
+    opacity: 0.7;
+  }
+  .transit-text {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.55);
+    font-weight: 400;
+    flex: 1;
+  }
+  .transit-text strong {
+    color: var(--warm);
+    font-weight: 500;
+  }
+  .transit-badge {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid rgba(201, 169, 110, 0.3);
+    color: var(--warm);
+    border-radius: 2rem;
+    white-space: nowrap;
+  }
+  .transit-badge.booked {
+    border-color: rgba(122, 140, 110, 0.5);
+    color: var(--sage);
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sand), transparent);
+    margin: 3rem 0;
+  }
+
+  /* ── LIST SECTIONS (To-Do / Budget) ── */
+  .list-section {
+    padding: 3.5rem 0 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s forwards;
+  }
+  .list-head {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--ink);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--sand);
+    padding-bottom: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+  .list-count {
+    font-family: "Jost", sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.4rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+  }
+  .check-row:hover {
+    background: rgba(201, 169, 110, 0.08);
+  }
+  .check-row input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .check-box {
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--warm);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: var(--cream);
+    transition: all 0.2s ease;
+  }
+  .check-row.checked .check-box {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+  }
+  .check-label {
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+  .check-row.checked .check-label {
+    text-decoration: line-through;
+    text-decoration-color: var(--warm);
+    color: var(--muted);
+  }
+
+  /* ── BUDGET ── */
+  .budget {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .budget-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0.4rem;
+    border-bottom: 1px solid var(--sand);
+  }
+  .budget-label {
+    font-size: 0.85rem;
+    color: var(--ink);
+  }
+  .budget-amt {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .budget-badge {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 2rem;
+    border: 1px solid var(--sand);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .budget-badge.booked {
+    border-color: rgba(122, 140, 110, 0.5);
+    color: var(--sage);
+  }
+  .budget-totals {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    padding: 1.2rem 0.4rem;
+  }
+  .budget-totals > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .budget-total-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .budget-total-num {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.8rem;
+    color: var(--terracotta);
+    line-height: 1;
+  }
+  .budget-note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    line-height: 1.6;
+  }
+  .budget-note code {
+    font-family: monospace;
+    background: rgba(26, 21, 16, 0.06);
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep);
+    padding: 4rem 2rem;
+    text-align: center;
+    margin-top: 3rem;
+  }
+  footer .footer-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--warm);
+    margin-bottom: 1rem;
+  }
+  footer p {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: rgba(245, 240, 232, 0.3);
+    text-transform: uppercase;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes scrollPulse {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .dest-header {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .dest-number {
+      font-size: 3rem;
+    }
+    .day-card {
+      grid-template-columns: 60px 1fr;
+      gap: 1rem;
+    }
+    .transit {
+      margin: 1rem -2rem;
+      padding: 1rem 1.5rem;
+      flex-wrap: wrap;
+    }
+    .ctrlbar-inner {
+      padding: 0.6rem 1.2rem;
+    }
+    .budget-row {
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "label amt" "badge badge";
+      row-gap: 0.3rem;
+    }
+    .budget-label {
+      grid-area: label;
+    }
+    .budget-amt {
+      grid-area: amt;
+    }
+    .budget-badge {
+      grid-area: badge;
+      justify-self: start;
+    }
+  }
+</style>
