@@ -14,7 +14,7 @@
     "prepare": "husky install || true"
   },
   "dependencies": {
-    "@astrojs/mdx": "^6.0.3",
+    "@astrojs/mdx": "^7.0.0",
     "@astrojs/netlify": "^7.0.13",
     "@astrojs/react": "^6.0.0",
     "@astrojs/sitemap": "^3.7.3",
