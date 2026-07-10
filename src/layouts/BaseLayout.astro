@@ -7,6 +7,12 @@ interface Props {
 }
 
 const { title = "Brendan Reed" } = Astro.props
+
+// Cloudflare Web Analytics: only load in production and only when the beacon
+// token is configured (set PUBLIC_CF_BEACON_TOKEN in Netlify env). No cookies,
+// no consent banner needed.
+const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN
+const enableAnalytics = import.meta.env.PROD && Boolean(cfBeaconToken)
 ---
 
 <html lang="en">
@@ -50,6 +56,16 @@ const { title = "Brendan Reed" } = Astro.props
         }
       })()
     </script>
+    {
+      enableAnalytics && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${cfBeaconToken}"}`}
+        />
+      )
+    }
   </head>
   <body>
     <div class="mx-auto my-0 px-4 py-0">
