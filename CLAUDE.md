@@ -2,7 +2,7 @@
 
 ## Build System
 
-- **Framework**: Astro 5 with React islands for interactive components
+- **Framework**: Astro 7 with React islands for interactive components
 - **Build command**: `npm run build` (runs `astro build`, outputs to `dist/`)
 - **Dev server**: `npm run dev` (runs `astro dev` on port 4321)
 - **Static assets**: `public/` directory (served as-is by Astro, tracked in git)
