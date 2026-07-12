@@ -34,6 +34,35 @@ export interface Tag {
   label: string
 }
 
+// ── HOUR-BY-HOUR TIMELINE ──────────────────────────────────────────────────--
+// Optional granular schedule for a day. A day can have a narrative `desc` AND a
+// `timeline` — the timeline renders as a collapsible "hour-by-hour" sub-list
+// under the day card. Use it for days with real logistics (transfers, ferries,
+// reservation slots). Days without one just render the narrative as before.
+export type TimelineKind =
+  | "travel" // a transfer leg — taxi, ferry, flight, walk
+  | "meal" // food / wine
+  | "activity" // beach, town, sightseeing
+  | "checkin" // hotel arrival / settling in
+  | "downtime" // rest, nap, slow morning
+
+export interface TimelineEntry {
+  /** Clock label, e.g. "4:50pm". Keep them in chronological order. */
+  time: string
+  title: string
+  /** One line of specifics — what/where/why. */
+  detail?: string
+  kind: TimelineKind
+  /** How long the thing itself takes, e.g. "2h", "45 min". */
+  duration?: string
+  /** For `travel` legs: door-to-door estimate, e.g. "~20 min taxi". */
+  travelTime?: string
+  /** Reservation state — drives a small chip. */
+  booking?: "booked" | "to-book" | "walk-in"
+  /** Opens in Maps, same behavior as a Spot. */
+  mapsQuery?: string
+}
+
 export interface Day {
   /** Stable id — used to persist check-off + notes in localStorage. Don't reuse. */
   id: string
@@ -45,6 +74,8 @@ export interface Day {
   desc: string
   tags?: Tag[]
   spots?: Spot[]
+  /** Optional hour-by-hour breakdown (renders collapsed under the card). */
+  timeline?: TimelineEntry[]
 }
 
 export interface Stop {
@@ -240,19 +271,76 @@ export const stops: Stop[] = [
         date: "2026-08-26",
         dateLabel: "Aug 26",
         part: "Day 1 · Arrival",
-        title: "Touch Down on the Cyclades",
-        desc: "Depart Heathrow 10:55am on BA 668 and land in Mykonos around 4:50pm — the only Greek island with a direct Heathrow connection. Drop bags at Rocabella Mykonos, find the water, and let Greece begin.",
+        title: "Touch Down · Sunset in Little Venice",
+        desc: "Land around 4:50pm — the only Greek island with a direct Heathrow connection — and settle into Rocabella, up in quiet Agios Stefanos on the sunset side of the island. A drink on the terrace, then into Mykonos Town for golden hour over Little Venice and a long first dinner. An easy, no-club first night.",
         tags: [
           { kind: "stay", label: "Rocabella Mykonos" },
-          { kind: "food", label: "Dinner in Mykonos Town" },
+          { kind: "activity", label: "Little Venice Sunset" },
+          { kind: "food", label: "Dinner · M-eating" },
         ],
         spots: [
           {
             name: "Rocabella Mykonos",
-            mapsQuery: "Rocabella Mykonos Hotel",
+            mapsQuery: "Rocabella Mykonos Hotel Agios Stefanos",
           },
-          { name: "Mykonos Windmills", mapsQuery: "Windmills of Mykonos" },
           { name: "Little Venice", mapsQuery: "Little Venice, Mykonos" },
+          { name: "Galleraki", mapsQuery: "Galleraki Little Venice Mykonos" },
+          { name: "M-eating", mapsQuery: "M-eating restaurant Mykonos Town" },
+        ],
+        timeline: [
+          {
+            time: "4:50pm",
+            title: "Land at Mykonos (JMK)",
+            detail: "BA 668 from Heathrow — bags, then out to the taxi rank.",
+            kind: "travel",
+          },
+          {
+            time: "5:15pm",
+            title: "Transfer to Rocabella",
+            detail: "North to Agios Stefanos, the quiet sunset-facing side.",
+            kind: "travel",
+            travelTime: "~15 min taxi",
+            mapsQuery: "Rocabella Mykonos Hotel Agios Stefanos",
+          },
+          {
+            time: "5:40pm",
+            title: "Check in · arrival drink",
+            detail: "Drop bags, decompress on the terrace over the bay.",
+            kind: "checkin",
+            duration: "1h",
+          },
+          {
+            time: "7:15pm",
+            title: "Into Mykonos Town",
+            kind: "travel",
+            travelTime: "~12 min taxi",
+          },
+          {
+            time: "7:40pm",
+            title: "Sunset drinks · Galleraki",
+            detail:
+              "Waterfront table in Little Venice. Sunset ~8:00pm — grab the table early. (Skip Baos/Semeli — DJ-loud.)",
+            kind: "activity",
+            booking: "walk-in",
+            mapsQuery: "Galleraki Little Venice Mykonos",
+          },
+          {
+            time: "9:00pm",
+            title: "Dinner · M-eating",
+            detail:
+              "Cycladic tasting-menu cooking, serious Greek wine list. The honeymoon-night table.",
+            kind: "meal",
+            duration: "~2h",
+            booking: "to-book",
+            mapsQuery: "M-eating restaurant Mykonos Town",
+          },
+          {
+            time: "11:15pm",
+            title: "Wander back · taxi to Rocabella",
+            detail: "A loop past the windmills on the way out of town.",
+            kind: "travel",
+            travelTime: "~12 min taxi",
+          },
         ],
       },
       {
@@ -260,19 +348,88 @@ export const stops: Stop[] = [
         date: "2026-08-27",
         dateLabel: "Aug 27",
         part: "Full Day",
-        title: "Elia Beach · Mykonos Town",
-        desc: "Mykonos does beaches and nightlife better than almost anywhere. Elia or Super Paradise for the day, then Mykonos Town at sunset. Consider a beach club day with a minimum spend — Scorpios and Jackie O' are the iconic options.",
+        title: "Beach by Day · Gay Mykonos, Quietly, by Night",
+        desc: "The one full day. A relaxed luxe beach club where you can actually hear each other — Solymar on calm Kalo Livadi, not a Scorpios sound-system — then town at night the way it suits you: an intimate cocktail at Lola, the buzz of Jackie O' Town Bar soaked up from the street, and a second great dinner. (Easy to flip to an all-in-town day — swap the beach block for a slow Chora morning.)",
         tags: [
-          { kind: "activity", label: "Beach Club" },
-          { kind: "activity", label: "Town + Windmills" },
-          { kind: "food", label: "Drinks & Nightlife" },
+          { kind: "activity", label: "Solymar · Kalo Livadi" },
+          { kind: "food", label: "Dinner · Kalita" },
+          { kind: "activity", label: "Lola + Jackie O' (street)" },
         ],
         spots: [
-          { name: "Elia Beach", mapsQuery: "Elia Beach, Mykonos" },
-          { name: "Scorpios", mapsQuery: "Scorpios Mykonos" },
           {
-            name: "Jackie O' Beach",
-            mapsQuery: "Jackie O' Beach Club Mykonos",
+            name: "Solymar Beach Club",
+            mapsQuery: "Solymar Kalo Livadi Beach Mykonos",
+          },
+          { name: "Kalita", mapsQuery: "Kalita restaurant Mykonos Town" },
+          { name: "Lola Bar", mapsQuery: "Lola Bar Mykonos Town" },
+          {
+            name: "Jackie O' Town Bar",
+            mapsQuery: "Jackie O' Town Bar Mykonos old port",
+          },
+        ],
+        timeline: [
+          {
+            time: "9:30am",
+            title: "Slow breakfast at Rocabella",
+            kind: "downtime",
+            duration: "1.5h",
+          },
+          {
+            time: "11:30am",
+            title: "Out to Kalo Livadi",
+            kind: "travel",
+            travelTime: "~25 min taxi",
+            mapsQuery: "Solymar Kalo Livadi Beach Mykonos",
+          },
+          {
+            time: "12:00pm",
+            title: "Solymar · daybeds, swim, long lunch",
+            detail:
+              "Lounge/chill music by day, fine-dining lunch. Calm half of the beach — book a daybed ahead in August.",
+            kind: "activity",
+            duration: "~5h",
+            booking: "to-book",
+            mapsQuery: "Solymar Kalo Livadi Beach Mykonos",
+          },
+          {
+            time: "5:15pm",
+            title: "Back to the hotel · rest & shower",
+            kind: "downtime",
+            travelTime: "~25 min taxi",
+          },
+          {
+            time: "8:15pm",
+            title: "Dinner · Kalita",
+            detail:
+              "Refined Greek in town. (Or swap for Nobu/Matsuhisa — book days ahead.)",
+            kind: "meal",
+            duration: "~2h",
+            booking: "to-book",
+            mapsQuery: "Kalita restaurant Mykonos Town",
+          },
+          {
+            time: "10:30pm",
+            title: "Cocktail at Lola",
+            detail:
+              "Small, intimate, conversation-friendly — the one gay bar built for people who don't love loud rooms.",
+            kind: "activity",
+            booking: "walk-in",
+            mapsQuery: "Lola Bar Mykonos Town",
+          },
+          {
+            time: "11:30pm",
+            title: "Past Jackie O' Town Bar",
+            detail:
+              "The heart of gay Mykonos spills into the street by the old port — soak up the buzz, no sweaty club required.",
+            kind: "activity",
+            booking: "walk-in",
+            mapsQuery: "Jackie O' Town Bar Mykonos old port",
+          },
+          {
+            time: "12:30am",
+            title: "Taxi back to Rocabella",
+            kind: "travel",
+            travelTime: "~12 min taxi",
           },
         ],
       },
@@ -284,6 +441,29 @@ export const stops: Stop[] = [
         title: "Early Breakfast · 9:40am Ferry to Paros",
         desc: "One last breakfast in Mykonos, then the 9:40am high-speed ferry south — about 45 minutes, arriving Paros around 10:25am.",
         tags: [{ kind: "transport", label: "Mykonos → Paros · 9:40am ferry" }],
+        timeline: [
+          {
+            time: "8:00am",
+            title: "Breakfast & pack up",
+            kind: "downtime",
+            duration: "45 min",
+          },
+          {
+            time: "8:50am",
+            title: "Taxi to the New Port",
+            detail: "Buffer for August port chaos — be there ~30 min early.",
+            kind: "travel",
+            travelTime: "~15 min taxi",
+            mapsQuery: "Mykonos New Port",
+          },
+          {
+            time: "9:40am",
+            title: "High-speed ferry to Paros",
+            detail: "~45 min crossing, arrives Paros ~10:25am.",
+            kind: "travel",
+            booking: "booked",
+          },
+        ],
       },
     ],
   },
@@ -610,8 +790,13 @@ export const checklist: ChecklistItem[] = [
     category: "To Book",
   },
   {
+    id: "cl-myk-dinners",
+    label: "Reserve Mykonos dinners — M-eating (26th) + Kalita/Nobu (27th)",
+    category: "To Book",
+  },
+  {
     id: "cl-beachclub",
-    label: "Reserve Mykonos beach club (Scorpios / Jackie O')",
+    label: "Reserve Solymar daybed, Kalo Livadi (Aug 27)",
     category: "To Book",
   },
   {

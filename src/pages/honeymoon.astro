@@ -986,6 +986,143 @@ import HoneymoonTracker from "../components/HoneymoonTracker"
     line-height: 1.6;
   }
 
+  /* ── HOUR-BY-HOUR TIMELINE ── */
+  .timeline-wrap {
+    margin-top: 0.85rem;
+  }
+  .timeline-toggle {
+    color: var(--warm);
+    border-color: rgba(201, 169, 110, 0.4);
+  }
+  .timeline {
+    list-style: none;
+    margin: 0.9rem 0 0.3rem;
+    padding: 0;
+    position: relative;
+  }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 58px 14px 1fr;
+    gap: 0.6rem;
+    align-items: start;
+    padding: 0 0 1rem 0;
+    position: relative;
+  }
+  /* connector line through the dots */
+  .tl-row::before {
+    content: "";
+    position: absolute;
+    left: 64px;
+    top: 1.1rem;
+    bottom: -0.1rem;
+    width: 1px;
+    background: var(--sand);
+  }
+  .tl-row:last-child::before {
+    display: none;
+  }
+  .tl-time {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-align: right;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+  .tl-dot {
+    width: 9px;
+    height: 9px;
+    margin-top: 0.45rem;
+    border-radius: 50%;
+    background: var(--cream);
+    border: 2px solid var(--warm);
+    z-index: 1;
+    justify-self: center;
+  }
+  /* kind-coded dots */
+  .tl-travel .tl-dot {
+    border-color: var(--sea);
+  }
+  .tl-meal .tl-dot {
+    border-color: var(--terracotta);
+    background: var(--terracotta);
+  }
+  .tl-activity .tl-dot {
+    border-color: #7a5e28;
+    background: rgba(201, 169, 110, 0.5);
+  }
+  .tl-checkin .tl-dot {
+    border-color: var(--sage);
+  }
+  .tl-downtime .tl-dot {
+    border-color: var(--muted);
+    background: transparent;
+  }
+  .tl-body {
+    padding-top: 0.05rem;
+  }
+  .tl-title {
+    font-size: 0.85rem;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .tl-link {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--warm);
+  }
+  .tl-link:hover {
+    color: var(--terracotta);
+  }
+  .tl-detail {
+    font-size: 0.76rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+  .tl-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.4rem;
+  }
+  .tl-chip {
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.18rem 0.5rem;
+    border-radius: 2rem;
+    background: rgba(26, 21, 16, 0.06);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .tl-chip-travel {
+    background: rgba(74, 124, 142, 0.12);
+    color: var(--sea);
+  }
+  .tl-chip-booked {
+    background: rgba(122, 140, 110, 0.15);
+    color: var(--sage);
+  }
+  .tl-chip-to-book {
+    background: rgba(181, 98, 58, 0.12);
+    color: var(--terracotta);
+  }
+  .tl-chip-walk-in {
+    background: rgba(201, 169, 110, 0.2);
+    color: #7a5e28;
+  }
+  @media (max-width: 600px) {
+    .tl-row {
+      grid-template-columns: 50px 12px 1fr;
+      gap: 0.5rem;
+    }
+    .tl-row::before {
+      left: 55px;
+    }
+  }
+
   /* ── AGENDA VIEW ── */
   .agenda-stop {
     padding-top: 2rem;

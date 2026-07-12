@@ -77,6 +77,7 @@ export default function HoneymoonTracker() {
   const [links, setLinks] = useState({})
   const [packing, setPacking] = useState({})
   const [openDetails, setOpenDetails] = useState({})
+  const [openTimeline, setOpenTimeline] = useState({})
   const [tab, setTab] = useState("itinerary")
   const [view, setView] = useState("story") // story | agenda
   const [hydrated, setHydrated] = useState(false)
@@ -162,6 +163,7 @@ export default function HoneymoonTracker() {
   const setConfVal = (id, v) => setConf(c => ({ ...c, [id]: v }))
   const setLinkVal = (id, v) => setLinks(l => ({ ...l, [id]: v }))
   const toggleOpen = id => setOpenDetails(o => ({ ...o, [id]: !o[id] }))
+  const toggleTimeline = id => setOpenTimeline(o => ({ ...o, [id]: !o[id] }))
 
   const bookedTotal = budget
     .filter(b => b.booked)
@@ -170,6 +172,72 @@ export default function HoneymoonTracker() {
   const checklistCats = ["To Book", "Before We Go", "Packing"]
 
   const goToday = () => currentDay && scrollToId(`day-${currentDay.id}`)
+
+  // ── Hour-by-hour timeline (collapsible, Story view) ─────────────────────────
+  const BOOKING_LABEL = {
+    booked: "✓ Booked",
+    "to-book": "To book",
+    "walk-in": "Walk-in",
+  }
+  const renderTimeline = day => {
+    if (!day.timeline || !day.timeline.length) return null
+    const open = !!openTimeline[day.id]
+    return (
+      <div className="timeline-wrap">
+        <button
+          className="mini-btn timeline-toggle"
+          onClick={() => toggleTimeline(day.id)}
+        >
+          {open ? "− Hide hour-by-hour" : "⌚ Hour-by-hour"} ·{" "}
+          {day.timeline.length} stops
+        </button>
+        {open && (
+          <ol className="timeline">
+            {day.timeline.map((e, i) => (
+              <li className={`tl-row tl-${e.kind}`} key={`tl-${i}`}>
+                <span className="tl-time">{e.time}</span>
+                <span className="tl-dot" />
+                <div className="tl-body">
+                  <div className="tl-title">
+                    {e.mapsQuery ? (
+                      <a
+                        className="tl-link"
+                        href={mapsUrl(e.mapsQuery)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {e.title}
+                      </a>
+                    ) : (
+                      e.title
+                    )}
+                  </div>
+                  {e.detail && <div className="tl-detail">{e.detail}</div>}
+                  {(e.travelTime || e.duration || e.booking) && (
+                    <div className="tl-meta">
+                      {e.travelTime && (
+                        <span className="tl-chip tl-chip-travel">
+                          → {e.travelTime}
+                        </span>
+                      )}
+                      {e.duration && (
+                        <span className="tl-chip">{e.duration}</span>
+                      )}
+                      {e.booking && (
+                        <span className={`tl-chip tl-chip-${e.booking}`}>
+                          {BOOKING_LABEL[e.booking]}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+    )
+  }
 
   // ── Shared per-day detail panel (notes / confirmation / link) ───────────────
   const renderDetails = day => {
@@ -451,6 +519,7 @@ export default function HoneymoonTracker() {
                               </div>
                             )}
 
+                            {renderTimeline(day)}
                             {renderDetails(day)}
                           </div>
                         </div>
