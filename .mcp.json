@@ -1,0 +1,37 @@
+{
+  "mcpServers": {
+    "lsp-ts": {
+      "command": "/Users/brendanreed/go/bin/mcp-language-server",
+      "args": [
+        "--workspace",
+        "/Users/brendanreed/Projects/site",
+        "--lsp",
+        "typescript-language-server",
+        "--",
+        "--stdio"
+      ]
+    },
+    "lsp-html": {
+      "command": "/Users/brendanreed/go/bin/mcp-language-server",
+      "args": [
+        "--workspace",
+        "/Users/brendanreed/Projects/site",
+        "--lsp",
+        "vscode-html-language-server",
+        "--",
+        "--stdio"
+      ]
+    },
+    "lsp-css": {
+      "command": "/Users/brendanreed/go/bin/mcp-language-server",
+      "args": [
+        "--workspace",
+        "/Users/brendanreed/Projects/site",
+        "--lsp",
+        "vscode-css-language-server",
+        "--",
+        "--stdio"
+      ]
+    }
+  }
+}

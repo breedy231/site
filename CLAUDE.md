@@ -117,6 +117,7 @@ TMDB_API_KEY=your_tmdb_key              # Optional: poster images
 
 ```
 PUBLIC_TRAKT_CLIENT_ID=your_client_id   # Used in OAuth redirect URL on /now page
+PUBLIC_CF_BEACON_TOKEN=your_cf_token    # Cloudflare Web Analytics beacon; only loads in prod builds when set
 ```
 
 Note: Astro exposes only `PUBLIC_` prefixed vars to client code via `import.meta.env`.
