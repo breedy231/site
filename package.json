@@ -21,7 +21,7 @@
     "@netlify/blobs": "^10.7.9",
     "astro": "^7.0.7",
     "axios": "^1.18.1",
-    "fast-xml-parser": "^5.9.3",
+    "fast-xml-parser": "^5.10.0",
     "framer-motion": "^12.42.2",
     "prop-types": "^15.8.1",
     "react": "^19.2.7",
