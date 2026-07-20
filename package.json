@@ -14,14 +14,14 @@
     "prepare": "husky install || true"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.2",
-    "@astrojs/netlify": "^8.1.1",
+    "@astrojs/mdx": "^7.0.3",
+    "@astrojs/netlify": "^8.1.2",
     "@astrojs/react": "^6.0.1",
     "@astrojs/sitemap": "^3.7.3",
     "@netlify/blobs": "^10.7.9",
     "astro": "^7.1.2",
     "axios": "^1.18.1",
-    "fast-xml-parser": "^5.10.0",
+    "fast-xml-parser": "^5.10.1",
     "framer-motion": "^12.42.2",
     "prop-types": "^15.8.1",
     "react": "^19.2.7",
