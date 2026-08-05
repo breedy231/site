@@ -1,8 +1,8 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro"
-import HeadsUpGame from "../components/HeadsUpGame"
+import GameLayout from "../layouts/GameLayout.astro"
+import HeadsUpGame from "../components/headsup/HeadsUpGame"
 ---
 
-<BaseLayout title="Heads Up! Game">
+<GameLayout title="Heads Up! Game">
   <HeadsUpGame client:only="react" />
-</BaseLayout>
+</GameLayout>
