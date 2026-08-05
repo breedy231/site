@@ -18,31 +18,46 @@
   - `client:load` — hydrates on page load (e.g., ThemeToggle, NowPage)
   - `client:only="react"` — renders only on client, no SSR (e.g., HeadsUpGame, MotionTest, OAuthCallback)
 - Base layout: `src/layouts/BaseLayout.astro`
+- Game layout: `src/layouts/GameLayout.astro` — chrome-free (no nav), 100dvh,
+  no-zoom viewport; used by `/headsup`
 
 ### Key Files
 
-| File                           | Purpose                                                     |
-| ------------------------------ | ----------------------------------------------------------- |
-| `astro.config.mjs`             | Astro config with React, MDX, Netlify, Sitemap integrations |
-| `src/layouts/BaseLayout.astro` | Shared layout with nav, theme toggle, dark mode script      |
-| `src/styles/global.css`        | Tailwind v4 entry point, fonts, dark mode, body styles      |
-| `src/content.config.ts`        | Blog content collection schema                              |
-| `src/components/*.jsx`         | React island components                                     |
-| `netlify.toml`                 | Build config, API redirects, function paths                 |
+| File                           | Purpose                                                         |
+| ------------------------------ | --------------------------------------------------------------- |
+| `astro.config.mjs`             | Astro config with React, MDX, Netlify, Sitemap integrations     |
+| `src/layouts/BaseLayout.astro` | Shared layout with nav, theme toggle, dark mode script          |
+| `src/styles/global.css`        | Tailwind v4 entry point, fonts, dark mode, body styles          |
+| `src/content.config.ts`        | Blog content collection schema                                  |
+| `src/components/*.jsx`         | React island components                                         |
+| `src/components/headsup/`      | Heads Up game (reducer orchestrator, screens, WebAudio)         |
+| `src/hooks/`                   | Shared hooks: tilt controls, round timer, wake lock, fullscreen |
+| `netlify.toml`                 | Build config, API redirects, function paths                     |
 
 ### Pages
 
-| Route              | File                              | Type                               |
-| ------------------ | --------------------------------- | ---------------------------------- |
-| `/`                | `src/pages/index.astro`           | Static                             |
-| `/404`             | `src/pages/404.astro`             | Static                             |
-| `/blog`            | `src/pages/blog/index.astro`      | Static (content collection)        |
-| `/blog/[slug]`     | `src/pages/blog/[slug].astro`     | Static (content collection)        |
-| `/responsive-test` | `src/pages/responsive-test.astro` | Static                             |
-| `/now`             | `src/pages/now.astro`             | React island (`NowPage.jsx`)       |
-| `/headsup`         | `src/pages/headsup.astro`         | React island (`HeadsUpGame.jsx`)   |
-| `/motion-test`     | `src/pages/motion-test.astro`     | React island (`MotionTest.jsx`)    |
-| `/callback/oauth`  | `src/pages/callback/oauth.astro`  | React island (`OAuthCallback.jsx`) |
+| Route              | File                              | Type                                                   |
+| ------------------ | --------------------------------- | ------------------------------------------------------ |
+| `/`                | `src/pages/index.astro`           | Static                                                 |
+| `/404`             | `src/pages/404.astro`             | Static                                                 |
+| `/blog`            | `src/pages/blog/index.astro`      | Static (content collection)                            |
+| `/blog/[slug]`     | `src/pages/blog/[slug].astro`     | Static (content collection)                            |
+| `/responsive-test` | `src/pages/responsive-test.astro` | Static                                                 |
+| `/now`             | `src/pages/now.astro`             | React island (`NowPage.jsx`)                           |
+| `/headsup`         | `src/pages/headsup.astro`         | React island (`headsup/HeadsUpGame.jsx`, `GameLayout`) |
+| `/motion-test`     | `src/pages/motion-test.astro`     | React island (`MotionTest.jsx`)                        |
+| `/callback/oauth`  | `src/pages/callback/oauth.astro`  | React island (`OAuthCallback.jsx`)                     |
+
+### Heads Up game notes
+
+- Tilt detection: `src/hooks/useTiltControls.js` (devicemotion gravity-vector
+  pitch; tuning constants in `TILT_TUNING` at the top of the file)
+- `/motion-test` is a diagnostic harness over the same hook
+- `/headsup?debug` shows an in-game overlay (pitch, arm state, audio state)
+- Sounds: `src/components/headsup/sounds.js` (WebAudio), assets in
+  `public/sounds/` (wav/mp3 only — Safari can't decode ogg/flac)
+- Sensor APIs need HTTPS: test on-device via `npx netlify dev --live` or a
+  branch deploy (see `MOBILE_TESTING.md`)
 
 ## Serverless Functions
 
