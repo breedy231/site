@@ -296,7 +296,11 @@ const HeadsUpGame = () => {
   useEffect(() => {
     if (!debugEnabled) return
     const interval = setInterval(
-      () => setDebugSnapshot(tilt.getDebugState()),
+      () =>
+        setDebugSnapshot({
+          ...tilt.getDebugState(),
+          audio: sounds.getAudioDebug(),
+        }),
       200,
     )
     return () => clearInterval(interval)
@@ -392,6 +396,11 @@ const HeadsUpGame = () => {
                 >
                   Start Game
                 </button>
+                {isMuted && (
+                  <p className="text-sm text-yellow-600 dark:text-yellow-400">
+                    🔇 Sounds are muted — tap the speaker icon to unmute
+                  </p>
+                )}
               </>
             )}
             <button
@@ -452,6 +461,12 @@ const HeadsUpGame = () => {
           <div>
             last: {debugSnapshot?.lastAction?.action ?? "-"} @{" "}
             {debugSnapshot?.lastAction?.pitch?.toFixed(0) ?? "-"}°
+          </div>
+          <div>
+            audio: {debugSnapshot?.audio?.ctxState ?? "-"} ·{" "}
+            {debugSnapshot?.audio?.buffersLoaded ?? 0} buf ·{" "}
+            {debugSnapshot?.audio?.muted ? "muted" : "unmuted"} · session:{" "}
+            {debugSnapshot?.audio?.audioSessionType ?? "-"}
           </div>
         </div>
       )}
