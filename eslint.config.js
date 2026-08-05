@@ -1,24 +1,21 @@
 import js from "@eslint/js"
 import reactPlugin from "eslint-plugin-react"
+import globals from "globals"
 
 export default [
   js.configs.recommended,
   {
+    files: ["**/*.{js,mjs,cjs,jsx}"],
     plugins: { react: reactPlugin },
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+      },
       globals: {
-        window: "readonly",
-        document: "readonly",
-        navigator: "readonly",
-        console: "readonly",
-        process: "readonly",
-        __dirname: "readonly",
-        __filename: "readonly",
-        module: "readonly",
-        require: "readonly",
-        exports: "readonly",
+        ...globals.browser,
+        ...globals.node,
       },
     },
     settings: {
