@@ -1,4 +1,10 @@
-const ResultsScreen = ({ results, onPlayAgain, onNewCategory }) => {
+const ResultsScreen = ({
+  results,
+  best,
+  isNewBest,
+  onPlayAgain,
+  onNewCategory,
+}) => {
   const correct = results.filter(r => r.correct)
   const passed = results.filter(r => !r.correct)
 
@@ -15,6 +21,16 @@ const ResultsScreen = ({ results, onPlayAgain, onNewCategory }) => {
             <p className="mt-4 text-2xl font-bold">
               Total Score: {correct.length - passed.length}
             </p>
+            {best != null && (
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Best for this deck: {best}
+                {isNewBest && (
+                  <span className="ml-2 font-bold text-yellow-500">
+                    🏆 New best!
+                  </span>
+                )}
+              </p>
+            )}
           </div>
         </div>
 

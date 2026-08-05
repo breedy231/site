@@ -117,6 +117,8 @@ const HeadsUpGame = () => {
   roundLengthRef.current = roundLength
 
   const [isMuted, setIsMuted] = useState(sounds.isMuted())
+  const [bestScore, setBestScore] = useState(null)
+  const [isNewBest, setIsNewBest] = useState(false)
   const [flash, setFlash] = useState(null)
   const [countdownStep, setCountdownStep] = useState(null)
   const [isPortrait, setIsPortrait] = useState(false)
@@ -204,6 +206,33 @@ const HeadsUpGame = () => {
       wakeLock.release()
       fullscreen.exit()
     }
+  }, [phase])
+
+  // Track the per-deck best score (correct − passed) in localStorage.
+  useEffect(() => {
+    if (phase !== "finished") return
+    const { deck: finishedDeck, results: finishedResults } = stateRef.current
+    if (!finishedDeck) return
+    const correct = finishedResults.filter(r => r.correct).length
+    const score = correct - (finishedResults.length - correct)
+    let previous = null
+    try {
+      const stored = localStorage.getItem("headsupBest:" + finishedDeck.id)
+      if (stored != null) previous = parseInt(stored, 10)
+      if (Number.isNaN(previous)) previous = null
+    } catch {
+      previous = null
+    }
+    const beat = previous == null || score > previous
+    if (beat) {
+      try {
+        localStorage.setItem("headsupBest:" + finishedDeck.id, String(score))
+      } catch {
+        // storage unavailable — best just isn't persisted
+      }
+    }
+    setBestScore(beat ? score : previous)
+    setIsNewBest(previous != null && score > previous)
   }, [phase])
 
   // 3-2-1-GO countdown; calibrates the tilt neutral at "GO".
@@ -445,6 +474,8 @@ const HeadsUpGame = () => {
       {phase === "finished" && (
         <ResultsScreen
           results={results}
+          best={bestScore}
+          isNewBest={isNewBest}
           onPlayAgain={() => dispatch({ type: "PLAY_AGAIN" })}
           onNewCategory={() => dispatch({ type: "BACK" })}
         />
