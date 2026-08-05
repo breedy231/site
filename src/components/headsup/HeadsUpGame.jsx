@@ -13,6 +13,10 @@ import ResultsScreen from "./ResultsScreen"
 const ROUND_LENGTHS = [60, 90, 120]
 const MIN_ACTION_GAP_MS = 250
 const FLASH_MS = 350
+// tilt-to-start: hold the phone roughly level at the forehead this long
+const TILT_START_HOLD_MS = 500
+const TILT_START_MAX_PITCH_DEG = 30
+const TILT_START_MIN_VERTICAL_G = 4
 
 function shuffle(words) {
   const arr = [...words]
@@ -128,6 +132,7 @@ const HeadsUpGame = () => {
     new URLSearchParams(window.location.search).has("debug")
 
   const lastMarkAtRef = useRef(0)
+  const hasStartedOnceRef = useRef(false)
   const rootRef = useRef(null)
 
   const timer = useRoundTimer({
@@ -179,6 +184,7 @@ const HeadsUpGame = () => {
   // Start button: the one user gesture that unlocks audio, requests motion
   // permission (iOS), enters fullscreen, and grabs the wake lock.
   const handleStart = async () => {
+    hasStartedOnceRef.current = true
     sounds.unlock()
     sounds.load()
     await tilt.requestPermission().catch(() => {})
@@ -186,6 +192,43 @@ const HeadsUpGame = () => {
     wakeLock.acquire()
     dispatch({ type: "START_COUNTDOWN", words: shuffle(deck.words) })
   }
+
+  // Tilt-to-start: once a manual Start has unlocked audio this page load,
+  // later rounds can begin by holding the phone level at the forehead.
+  // Gesture-bound steps (permission, audio unlock, fullscreen) are skipped.
+  const tiltStartArmed =
+    phase === "ready" &&
+    !isPortrait &&
+    tilt.permission === "granted" &&
+    hasStartedOnceRef.current
+
+  useEffect(() => {
+    if (!tiltStartArmed) return
+    let heldSince = null
+    let fired = false
+    const interval = setInterval(() => {
+      const { pitch, gravity } = tilt.getDebugState()
+      const holding =
+        Math.abs(pitch) < TILT_START_MAX_PITCH_DEG &&
+        Math.abs(gravity.x) > TILT_START_MIN_VERTICAL_G
+      if (!holding) {
+        heldSince = null
+        return
+      }
+      if (heldSince == null) {
+        heldSince = Date.now()
+      } else if (!fired && Date.now() - heldSince >= TILT_START_HOLD_MS) {
+        fired = true
+        sounds.load()
+        wakeLock.acquire()
+        dispatch({
+          type: "START_COUNTDOWN",
+          words: shuffle(stateRef.current.deck.words),
+        })
+      }
+    }, 100)
+    return () => clearInterval(interval)
+  }, [tiltStartArmed, tilt, wakeLock])
 
   // Arm tilt detection only while actively playing.
   useEffect(() => {
@@ -425,6 +468,11 @@ const HeadsUpGame = () => {
                 >
                   Start Game
                 </button>
+                {tiltStartArmed && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    …or hold the phone to your forehead to start
+                  </p>
+                )}
                 {isMuted && (
                   <p className="text-sm text-yellow-600 dark:text-yellow-400">
                     🔇 Sounds are muted — tap the speaker icon to unmute
