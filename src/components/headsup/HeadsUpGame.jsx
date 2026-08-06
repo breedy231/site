@@ -6,6 +6,7 @@ import { useRoundTimer } from "../../hooks/useRoundTimer"
 import { useWakeLock } from "../../hooks/useWakeLock"
 import { useFullscreen } from "../../hooks/useFullscreen"
 import { sounds } from "./sounds"
+import { recordSeenWords } from "./trendingSeen"
 import CategoryPicker from "./CategoryPicker"
 import PlayScreen from "./PlayScreen"
 import ResultsScreen from "./ResultsScreen"
@@ -254,8 +255,21 @@ const HeadsUpGame = () => {
   // Track the per-deck best score (correct − passed) in localStorage.
   useEffect(() => {
     if (phase !== "finished") return
-    const { deck: finishedDeck, results: finishedResults } = stateRef.current
+    const {
+      deck: finishedDeck,
+      results: finishedResults,
+      currentWord: finishedCurrentWord,
+    } = stateRef.current
     if (!finishedDeck) return
+
+    // "Now Trending" words the player has already seen get excluded next
+    // time, so repeat plays surface fresher words.
+    if (finishedDeck.id === "trending") {
+      const seenWords = finishedResults.map(r => r.word)
+      if (finishedCurrentWord) seenWords.push(finishedCurrentWord)
+      recordSeenWords(seenWords)
+    }
+
     const correct = finishedResults.filter(r => r.correct).length
     const score = correct - (finishedResults.length - correct)
     let previous = null
