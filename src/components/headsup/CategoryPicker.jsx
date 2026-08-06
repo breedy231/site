@@ -40,6 +40,7 @@ const CategoryPicker = ({ decks, onSelect }) => {
       if (!res.ok) throw new Error("Request failed")
       const data = await res.json()
       const fetched = Array.isArray(data.words) ? data.words : []
+      if (fetched.length === 0) throw new Error("Empty word list")
       const seen = loadSeenWords()
       let words = fetched.filter(word => !seen[word])
       if (words.length < MIN_TRENDING_WORDS) {
