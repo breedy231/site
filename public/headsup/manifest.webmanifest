@@ -1,0 +1,22 @@
+{
+  "name": "Heads Up!",
+  "short_name": "Heads Up",
+  "start_url": "/headsup",
+  "scope": "/headsup",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#032740",
+  "theme_color": "#032740",
+  "icons": [
+    {
+      "src": "/headsup/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/headsup/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#032740" />
+
+  <!-- Side-profile head silhouette, facing right -->
+  <path
+    fill="#f4f6f8"
+    d="
+      M 172 122
+      C 217 90, 287 94, 314 137
+      C 322 157, 317 174, 307 187
+      C 327 197, 344 210, 342 228
+      C 340 242, 328 250, 316 258
+      C 306 274, 292 288, 272 294
+      C 254 298, 236 292, 226 276
+      L 220 382
+      L 152 382
+      L 148 292
+      C 134 252, 134 192, 154 154
+      C 160 140, 166 130, 172 122
+      Z
+    "
+  />
+
+  <!-- Ear -->
+  <ellipse cx="150" cy="248" rx="13" ry="19" fill="#032740" />
+
+  <!-- Phone resting on the forehead -->
+  <g transform="translate(298,158) rotate(22)">
+    <rect x="-44" y="-76" width="88" height="150" rx="17" fill="#f5a623" />
+    <rect x="-34" y="-62" width="68" height="112" rx="6" fill="#032740" />
+    <text
+      x="0"
+      y="14"
+      text-anchor="middle"
+      font-family="Arial, Helvetica, sans-serif"
+      font-size="62"
+      font-weight="700"
+      fill="#f5a623"
+    >?</text>
+  </g>
+</svg>
