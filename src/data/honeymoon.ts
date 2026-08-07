@@ -348,19 +348,23 @@ export const stops: Stop[] = [
         date: "2026-08-27",
         dateLabel: "Aug 27",
         part: "Full Day",
-        title: "Beach by Day · Gay Mykonos, Quietly, by Night",
-        desc: "The one full day. A relaxed luxe beach club where you can actually hear each other — Solymar on calm Kalo Livadi, not a Scorpios sound-system — then town at night the way it suits you: an intimate cocktail at Lola, the buzz of Jackie O' Town Bar soaked up from the street, and a second great dinner. (Easy to flip to an all-in-town day — swap the beach block for a slow Chora morning.)",
+        title: "Old Port Morning · Jackie O' Beach · Hippie Fish",
+        desc: "The one full day. A slow morning wander through the Old Port and Chora before the day-trippers flood in, then out to Jackie O' Beach Club on Super Paradise — arrive by noon to claim chairs. Back to the hotel to rinse off, then dinner at Hippie Fish on Agios Ioannis beach at 8pm. Town afterward if the night wants it: a cocktail at Lola, the Jackie O' Town Bar buzz from the street.",
         tags: [
-          { kind: "activity", label: "Solymar · Kalo Livadi" },
-          { kind: "food", label: "Dinner · Kalita" },
-          { kind: "activity", label: "Lola + Jackie O' (street)" },
+          { kind: "activity", label: "Old Port Morning" },
+          { kind: "activity", label: "Jackie O' Beach Club" },
+          { kind: "food", label: "Hippie Fish · 8pm" },
         ],
         spots: [
+          { name: "Mykonos Old Port", mapsQuery: "Old Port, Mykonos Town" },
           {
-            name: "Solymar Beach Club",
-            mapsQuery: "Solymar Kalo Livadi Beach Mykonos",
+            name: "Jackie O' Beach Club",
+            mapsQuery: "Jackie O' Beach Club Super Paradise Mykonos",
           },
-          { name: "Kalita", mapsQuery: "Kalita restaurant Mykonos Town" },
+          {
+            name: "Hippie Fish",
+            mapsQuery: "Hippie Fish Agios Ioannis Mykonos",
+          },
           { name: "Lola Bar", mapsQuery: "Lola Bar Mykonos Town" },
           {
             name: "Jackie O' Town Bar",
@@ -369,27 +373,36 @@ export const stops: Stop[] = [
         ],
         timeline: [
           {
-            time: "9:30am",
-            title: "Slow breakfast at Rocabella",
+            time: "8:45am",
+            title: "Breakfast at Rocabella",
             kind: "downtime",
-            duration: "1.5h",
+            duration: "1h",
+          },
+          {
+            time: "10:00am",
+            title: "Old Port + Chora stroll",
+            detail:
+              "Morning light on the harbor, coffee, the alleys before the crowds.",
+            kind: "activity",
+            travelTime: "~12 min taxi in",
+            mapsQuery: "Old Port, Mykonos Town",
           },
           {
             time: "11:30am",
-            title: "Out to Kalo Livadi",
+            title: "Out to Super Paradise",
             kind: "travel",
-            travelTime: "~25 min taxi",
-            mapsQuery: "Solymar Kalo Livadi Beach Mykonos",
+            travelTime: "~20 min taxi",
+            mapsQuery: "Jackie O' Beach Club Super Paradise Mykonos",
           },
           {
             time: "12:00pm",
-            title: "Solymar · daybeds, swim, long lunch",
+            title: "Jackie O' Beach Club · chairs by noon",
             detail:
-              "Lounge/chill music by day, fine-dining lunch. Calm half of the beach — book a daybed ahead in August.",
+              "Arrive by 12pm to get chairs — no reservation, just be early. Swim, long lunch, the classic gay beach day.",
             kind: "activity",
             duration: "~5h",
-            booking: "to-book",
-            mapsQuery: "Solymar Kalo Livadi Beach Mykonos",
+            booking: "walk-in",
+            mapsQuery: "Jackie O' Beach Club Super Paradise Mykonos",
           },
           {
             time: "5:15pm",
@@ -398,14 +411,14 @@ export const stops: Stop[] = [
             travelTime: "~25 min taxi",
           },
           {
-            time: "8:15pm",
-            title: "Dinner · Kalita",
+            time: "8:00pm",
+            title: "Dinner · Hippie Fish",
             detail:
-              "Refined Greek in town. (Or swap for Nobu/Matsuhisa — book days ahead.)",
+              "Toes-in-the-sand seafood on Agios Ioannis beach, 8pm table.",
             kind: "meal",
             duration: "~2h",
-            booking: "to-book",
-            mapsQuery: "Kalita restaurant Mykonos Town",
+            booking: "booked",
+            mapsQuery: "Hippie Fish Agios Ioannis Mykonos",
           },
           {
             time: "10:30pm",
@@ -610,17 +623,25 @@ export const stops: Stop[] = [
         date: "2026-09-02",
         dateLabel: "Sep 2",
         part: "Full Day",
-        title: "Nice · Èze · The Corniche",
-        desc: "A perfect Riviera day: the Old Town market in the morning, then the Grande Corniche to the perched village of Èze for lunch and vertigo-inducing views. Spa in the afternoon if the mood strikes.",
+        title: "In-Town Day · Matisse · Castle Hill · Beach",
+        desc: "A local Nice day: the Cours Saleya market and Vieux-Nice in the morning, the Matisse Museum up in Cimiez (~13 min drive), the Castle Hill walk above the old town, and a lazy stretch on the beach. If the mood strikes, the Clos Saint-Vincent winery is about 30 minutes out.",
         tags: [
-          { kind: "activity", label: "Cours Saleya Market" },
-          { kind: "activity", label: "Èze Village" },
-          { kind: "activity", label: "Spa Day" },
-          { kind: "food", label: "Fancy Dinner" },
+          { kind: "activity", label: "Matisse Museum" },
+          { kind: "activity", label: "Castle Hill" },
+          { kind: "activity", label: "Beach + Winery" },
+          { kind: "food", label: "Dinner in Town" },
         ],
         spots: [
           { name: "Cours Saleya Market", mapsQuery: "Cours Saleya, Nice" },
-          { name: "Èze Village", mapsQuery: "Èze, France" },
+          { name: "Matisse Museum", mapsQuery: "Musée Matisse, Nice" },
+          {
+            name: "Castle Hill",
+            mapsQuery: "Colline du Château, Nice",
+          },
+          {
+            name: "Clos Saint-Vincent",
+            mapsQuery: "Clos Saint-Vincent winery Nice",
+          },
         ],
       },
       {
@@ -628,17 +649,22 @@ export const stops: Stop[] = [
         date: "2026-09-03",
         dateLabel: "Sep 3",
         part: "Full Day",
-        title: "Day Trip: Monaco",
-        desc: "A 20-minute train ride to the most glamorous microstate in Europe. The Casino de Monte-Carlo, a harbor full of superyachts, a long lunch overlooking it all. Back to Nice for a final Riviera dinner.",
+        title: "Private Guide Day on the Riviera",
+        desc: "A driver/guide for the day (~€350) to do the coast properly — the Picasso Museum in Antibes, the Antibes markets, the Fragonard perfume factory, the perched village of Èze. Back to Nice for a final Riviera dinner.",
         tags: [
-          { kind: "activity", label: "Monaco Day Trip" },
-          { kind: "activity", label: "Casino de Monte-Carlo" },
+          { kind: "activity", label: "Private Driver/Guide" },
+          { kind: "activity", label: "Antibes · Èze · Fragonard" },
           { kind: "food", label: "Final Nice Dinner" },
         ],
         spots: [
           {
-            name: "Casino de Monte-Carlo",
-            mapsQuery: "Casino de Monte-Carlo, Monaco",
+            name: "Picasso Museum, Antibes",
+            mapsQuery: "Musée Picasso, Antibes",
+          },
+          { name: "Èze Village", mapsQuery: "Èze, France" },
+          {
+            name: "Fragonard Factory",
+            mapsQuery: "Fragonard perfume factory Èze",
           },
         ],
       },
@@ -657,26 +683,34 @@ export const stops: Stop[] = [
         dateLabel: "Sep 4",
         part: "Arrival",
         title: "Into New York",
-        desc: "La Compagnie B0 200 departs Nice 12:25pm and lands at Newark around 3:45pm — all-business class, so you arrive refreshed. Transfer to the Moxy NYC Chelsea. New York hits differently after two weeks in Europe.",
+        desc: "La Compagnie B0 200 departs Nice 12:25pm and lands at Newark around 3:45pm — all-business class, so you arrive refreshed. Transfer to the Moxy NYC Chelsea, then keep it easy: chill Thai dinner and drinks at Sappesan.",
         tags: [
           { kind: "stay", label: "Moxy NYC Chelsea" },
-          { kind: "food", label: "Welcome Back to America Dinner" },
+          { kind: "food", label: "Thai at Sappesan" },
         ],
-        spots: [{ name: "Moxy NYC Chelsea", mapsQuery: "Moxy NYC Chelsea" }],
+        spots: [
+          { name: "Moxy NYC Chelsea", mapsQuery: "Moxy NYC Chelsea" },
+          { name: "Sappesan", mapsQuery: "Sappesan Thai New York" },
+        ],
       },
       {
         id: "nyc-sep5",
         date: "2026-09-05",
         dateLabel: "Sep 5",
         part: "Saturday",
-        title: "The City",
-        desc: "A day in New York — whatever you want it to be: a museum, a walk across the Brooklyn Bridge, shopping in SoHo, a long brunch.",
+        title: "The City · Cat Cohen at Night",
+        desc: "A day in New York — whatever you want it to be: a museum, a walk across the Brooklyn Bridge, shopping in SoHo, a long brunch. Dinner at Aria Wine Bar in the West Village (reservation needed), then Cat Cohen: Broad Strokes at 8:15pm.",
         tags: [
           { kind: "activity", label: "Explore NYC" },
-          { kind: "food", label: "Dinner Out" },
+          { kind: "food", label: "Aria Wine Bar · WV" },
+          { kind: "activity", label: "Cat Cohen · 8:15pm" },
         ],
         spots: [
           { name: "Brooklyn Bridge", mapsQuery: "Brooklyn Bridge, New York" },
+          {
+            name: "Aria Wine Bar",
+            mapsQuery: "Aria Wine Bar West Village New York",
+          },
         ],
       },
       {
@@ -685,11 +719,11 @@ export const stops: Stop[] = [
         dateLabel: "Sep 6",
         part: "Sunday · Match Day",
         title: "US Open — Arthur Ashe Stadium",
-        desc: "Sunday at Flushing Meadows — the best players still in it, the roar of the crowd, the best tennis in the world. Tickets are booked.",
+        desc: "Sunday at Flushing Meadows — the best players still in it, the roar of the crowd, the best tennis in the world. Tickets are booked. Post-match, Chinese food around Grand Central on the way back into Manhattan.",
         tags: [
           { kind: "activity", label: "US Open · Arthur Ashe" },
           { kind: "booked", label: "✓ Tickets Booked" },
-          { kind: "food", label: "Post-match Dinner" },
+          { kind: "food", label: "Chinese near Grand Central" },
         ],
         spots: [
           {
@@ -791,12 +825,13 @@ export const checklist: ChecklistItem[] = [
   },
   {
     id: "cl-myk-dinners",
-    label: "Reserve Mykonos dinners — M-eating (26th) + Kalita/Nobu (27th)",
+    label:
+      "Reserve M-eating, Mykonos (Aug 26) — Hippie Fish 8pm on the 27th is set",
     category: "To Book",
   },
   {
-    id: "cl-beachclub",
-    label: "Reserve Solymar daybed, Kalo Livadi (Aug 27)",
+    id: "cl-aria",
+    label: "Reserve Aria Wine Bar, West Village (Sep 5)",
     category: "To Book",
   },
   {
