@@ -9,7 +9,14 @@ export default defineConfig({
   site: "https://brendanreed.net",
   output: "static",
   adapter: netlify(),
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({
+      // Keep the private honeymoon tracker out of the sitemap.
+      filter: page => !page.includes("/honeymoon"),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
