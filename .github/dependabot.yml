@@ -11,6 +11,12 @@ updates:
       time: "09:00"
       timezone: "America/New_York"
     open-pull-requests-limit: 10
+    ignore:
+      # eslint 10 blocked: eslint-plugin-react (even latest) peer-pins ^9.7 and
+      # crashes at runtime on v10 — see jsx-eslint/eslint-plugin-react#3977.
+      # Remove this once that issue is resolved.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
     groups:
       # Group all Astro + integrations together including majors — they share
       # peer dep requirements and must be upgraded in a single PR
