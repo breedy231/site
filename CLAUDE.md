@@ -68,6 +68,7 @@ All functions in `netlify/functions/` use modern Netlify Functions V2 format:
 3. **lastfm.js** - Last.fm API integration
 4. **trakt-token.js** - OAuth token exchange (persists tokens to Blobs)
 5. **lib/trakt-tokens.js** - Shared module for token storage, retrieval, and refresh
+6. **game-progress.js** - Per-game checklist progress store (Netlify Blobs), public reads, key-gated writes
 
 ### Function Format
 
@@ -126,6 +127,7 @@ TRAKT_CLIENT_SECRET=your_client_secret   # Required: token refresh
 TRAKT_ACCESS_TOKEN=your_access_token     # Seeds Blobs on first use
 TRAKT_REFRESH_TOKEN=your_refresh_token   # Seeds Blobs on first use
 TMDB_API_KEY=your_tmdb_key              # Optional: poster images
+TRACKER_KEY=shared_write_secret         # Required: game tracker PUT auth
 ```
 
 ### Client-side (Astro `import.meta.env`)

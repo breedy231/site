@@ -28,6 +28,11 @@
   to = "/.netlify/functions/progress"
   status = 200
 
+[[redirects]]
+  from = "/api/game-progress"
+  to = "/.netlify/functions/game-progress"
+  status = 200
+
 [build]
   command = "npm run build"
   publish = "dist"
