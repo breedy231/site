@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { getCollection } from "astro:content"
+import GameTracker from "../../components/games/GameTracker"
+
+export async function getStaticPaths() {
+  const games = await getCollection("games")
+  return games.map(entry => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }))
+}
+
+const { entry } = Astro.props
+---
+
+<BaseLayout title={`${entry.data.title} — Brendan Reed`}>
+  <GameTracker client:load game={entry.data} />
+</BaseLayout>

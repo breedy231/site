@@ -1,8 +1,23 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro"
+import { getCollection } from "astro:content"
 import NowPage from "../components/NowPage"
+
+const gameEntries = await getCollection("games")
+const games = gameEntries.map(entry => ({
+  slug: entry.data.slug,
+  title: entry.data.title,
+  character: entry.data.character,
+  items: entry.data.regions.flatMap(region =>
+    region.items.map(item => ({
+      id: item.id,
+      name: item.name,
+      hint: item.hint,
+    })),
+  ),
+}))
 ---
 
 <BaseLayout title="Now - Brendan Reed">
-  <NowPage client:load />
+  <NowPage client:load games={games} />
 </BaseLayout>
