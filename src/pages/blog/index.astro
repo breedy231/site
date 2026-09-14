@@ -11,26 +11,24 @@ const posts = (await getCollection("blog")).sort(
 
 <BaseLayout title="Blog - Brendan Reed">
   <div class="m-auto flex max-w-3xl flex-col items-start">
-    {
-      posts.map(post => (
-        <div class="mt-20 flex w-full flex-col">
-          <article>
-            <h2 class="text-3xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 dark:text-white">
-              <a href={`/blog/${post.data.slug}`}>{post.data.name}</a>
-            </h2>
-            <p class="mt-3 text-gray-900 dark:text-white">
-              Posted:{" "}
-              {new Date(post.data.datePublished).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          </article>
-          <p class="divider">{"/////"}</p>
-        </div>
-      ))
-    }
+    {posts.map(post => (
+      <div class="mt-20 flex w-full flex-col">
+        <article>
+          <h2 class="text-3xl font-bold text-gray-900 underline decoration-red-700 underline-offset-4 dark:text-white">
+            <a href={`/blog/${post.data.slug}`}>{post.data.name}</a>
+          </h2>
+          <p class="mt-3 text-gray-900 dark:text-white">
+            Posted:{" "}
+            {new Date(post.data.datePublished).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        </article>
+        <p class="divider">{"/////"}</p>
+      </div>
+    ))}
   </div>
 </BaseLayout>
 
