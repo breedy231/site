@@ -10,10 +10,10 @@ import BaseLayout from "../layouts/BaseLayout.astro"
       <section class="rounded border border-gray-300 p-4 dark:border-gray-600">
         <h2 class="mb-3 text-2xl font-bold text-red-600">Viewport Meta Tag</h2>
         <p class="mb-2">
-          This page includes: <code
-            class="rounded bg-gray-200 px-2 py-1 dark:bg-gray-700"
-            >width=device-width, initial-scale=1.0</code
-          >
+          This page includes:{" "}
+          <code class="rounded bg-gray-200 px-2 py-1 dark:bg-gray-700">
+            width=device-width, initial-scale=1.0
+          </code>
         </p>
         <p class="text-sm">
           Without this, iPhone renders at ~980px desktop width
@@ -26,14 +26,18 @@ import BaseLayout from "../layouts/BaseLayout.astro"
         </h2>
 
         <div class="space-y-3">
-          <div
-            class="rounded bg-blue-500 p-3 text-white md:bg-green-500 lg:bg-purple-500"
-          >
+          <div class="rounded bg-blue-500 p-3 text-white md:bg-green-500 lg:bg-purple-500">
             <strong>Color Test:</strong>
             <ul class="mt-1 ml-4 list-disc text-sm">
-              <li>Mobile (&lt;768px): <strong>Blue</strong></li>
-              <li>Tablet (768px-1023px): <strong>Green</strong></li>
-              <li>Desktop (≥1024px): <strong>Purple</strong></li>
+              <li>
+                Mobile (&lt;768px): <strong>Blue</strong>
+              </li>
+              <li>
+                Tablet (768px-1023px): <strong>Green</strong>
+              </li>
+              <li>
+                Desktop (≥1024px): <strong>Purple</strong>
+              </li>
             </ul>
           </div>
 
@@ -50,9 +54,8 @@ import BaseLayout from "../layouts/BaseLayout.astro"
             <div class="rounded bg-blue-100 p-2 dark:bg-blue-900">Box 3</div>
           </div>
           <p class="text-sm">
-            Boxes should <strong>stack vertically</strong> on mobile, <strong
-              >horizontal row</strong
-            > on tablet/desktop
+            Boxes should <strong>stack vertically</strong> on mobile,{" "}
+            <strong>horizontal row</strong> on tablet/desktop
           </p>
         </div>
       </section>
@@ -60,9 +63,7 @@ import BaseLayout from "../layouts/BaseLayout.astro"
       <section class="rounded border border-gray-300 p-4 dark:border-gray-600">
         <h2 class="mb-3 text-2xl font-bold text-red-600">Dark Mode Test</h2>
         <div class="space-y-2">
-          <div
-            class="rounded bg-white p-3 text-gray-900 dark:bg-gray-800 dark:text-white"
-          >
+          <div class="rounded bg-white p-3 text-gray-900 dark:bg-gray-800 dark:text-white">
             This box should have white background in light mode, dark background
             in dark mode
           </div>
@@ -95,10 +96,7 @@ import BaseLayout from "../layouts/BaseLayout.astro"
       <section class="rounded border border-gray-300 p-4 dark:border-gray-600">
         <h2 class="mb-3 text-2xl font-bold text-red-600">Image Scaling Test</h2>
         <div class="max-w-full">
-          <div
-            class="aspect-video w-full rounded bg-gradient-to-r from-blue-500 to-purple-500"
-          >
-          </div>
+          <div class="aspect-video w-full rounded bg-gradient-to-r from-blue-500 to-purple-500"></div>
         </div>
         <p class="mt-2 text-sm">
           This gradient box should scale to screen width, maintaining 16:9

@@ -1,0 +1,264 @@
+# Game definition for the tracker at /games/elden-ring.
+# Progress lives in Netlify Blobs, not here. Add a new game = add a new YAML file.
+slug: elden-ring
+title: Elden Ring
+character: Crim — sorcery run
+steam:
+  appid: 1245620
+links:
+  map: https://mapgenie.io/elden-ring/maps/the-lands-between?search={q}
+  wiki: https://eldenring.wiki.fextralife.com/{q+}
+stats:
+  - key: lvl
+    label: Level
+  - key: vig
+    label: Vigor
+  - key: mind
+    label: Mind
+  - key: int
+    label: Int
+regions:
+  - id: prep
+    name: Prep & leveling plan
+    items:
+      - id: lvl-vig35
+        kind: area
+        name: "Level: Vigor to 35"
+        hint: Step 1 of the plan. Survive first, then damage.
+      - id: lvl-int52
+        kind: area
+        name: "Level: Int to 52"
+        hint: Step 2. Unlocks Lusat's Staff and most late sorceries.
+      - id: lvl-vig40
+        kind: area
+        name: "Level: Vigor to 40"
+        hint: Step 3. Soft cap; do this before Radahn.
+      - id: lvl-int60
+        kind: area
+        name: "Level: Int to 60"
+        hint: Step 4. Damage soft cap for scaling.
+      - id: lvl-mind28
+        kind: area
+        name: "Level: Mind to 28"
+        hint: Step 5. Enough FP for Comet spam with Cerulean flask.
+      - id: sweep-churches
+        kind: item
+        name: "Limgrave/Weeping sweep: every church"
+        hint: Churches = Sacred Tears (flask potency). Elleh, Dragon Communion, Pilgrimage, Fourth Church of Marika, Callu Baptismal.
+      - id: sweep-saplings
+        kind: item
+        name: "Limgrave/Weeping sweep: golden saplings"
+        hint: Erdtree saplings = Golden Seeds (flask charges). Stormhill, Third Church, Fort Haight, Weeping Peninsula.
+      - id: sweep-avatars
+        kind: boss
+        name: "Limgrave/Weeping sweep: Erdtree Avatars"
+        hint: Minor Erdtree bosses drop Crystal Tears for the Wondrous Physick.
+      - id: castle-morne
+        kind: area
+        name: Castle Morne + Leonine Misbegotten
+        hint: Weeping Peninsula. Irina/Edgar quest, Grafted Blade Greatsword.
+      - id: tower-return
+        kind: area
+        name: Tower of Return
+        hint: Weeping Peninsula chest teleports you to Leyndell for an early Great Rune / Erdtree's Favor talisman.
+      - id: radahn-prep
+        kind: quest
+        name: Radahn prep checklist
+        hint: L65–70, Vigor 40, all summon signs used and re-used, Rock Sling from Torrent. Then go.
+  - id: limgrave
+    name: Limgrave & Weeping Peninsula
+    items:
+      - id: margit
+        kind: boss
+        name: Margit, the Fell Omen
+      - id: godrick
+        kind: boss
+        name: Godrick the Grafted
+        hint: Stormveil Castle. Grants a Great Rune (activate at the Divine Tower of Limgrave).
+        steam: ACH04
+      - id: sellen
+        kind: quest
+        name: Unlock Sorceress Sellen
+        hint: Waypoint Ruins cellar
+      - id: royal-scroll
+        kind: item
+        name: Royal House Scroll → Sellen
+        hint: Unlocks Carian Slicer and Glintblade Phalanx
+      - id: meteorite
+        kind: item
+        name: Meteorite Staff + Rock Sling
+        hint: Caelid, Street of Sages Ruins
+      - id: oridys
+        kind: item
+        name: Memory Stone — Oridys's Rise
+      - id: haight
+        kind: item
+        name: Dectus Medallion (left) — Fort Haight
+        hint: Chest at the top of the fort
+      - id: gael
+        kind: boss
+        name: Magma Wyrm — Gael Tunnel (Moonveil)
+        hint: Needs Dex 18 to wield. Optional.
+      - id: kenneth
+        kind: quest
+        name: Kenneth Haight / Fort Haight cleanup
+        hint: Optional
+  - id: liurnia
+    name: Liurnia of the Lakes
+    items:
+      - id: gkey
+        kind: item
+        name: Glintstone Key (crab)
+      - id: redwolf
+        kind: boss
+        name: Red Wolf of Radagon
+      - id: conspectus
+        kind: item
+        name: Conspectus Scroll → Sellen
+        hint: Cometshard, Star Shower
+      - id: rennala
+        kind: boss
+        name: Rennala, Queen of the Full Moon
+        hint: Rebirth unlocked. Great Rune (no Divine Tower needed).
+        steam: ACH18
+      - id: comet
+        kind: item
+        name: Comet (spell) — Academy
+        hint: Rooftop route past the Schoolhouse Classroom
+      - id: radagon-icon
+        kind: item
+        name: Radagon Icon talisman
+        hint: Chest in the Debate Parlor side room. Big cast-speed boost.
+      - id: acad-staff
+        kind: item
+        name: Academy Glintstone Staff
+        hint: Upgrade with normal smithing stones — replaces Meteorite around +12
+      - id: thops
+        kind: quest
+        name: Second Glintstone Key → Thops
+        hint: Church of Irith. He moves to the Academy afterward.
+      - id: acad-scroll
+        kind: item
+        name: Academy Scroll → Sellen
+        hint: Snail graveyard on the south shore. Great Glintstone Shard.
+      - id: study-hall
+        kind: boss
+        name: Carian Study Hall — Preceptor Miriam
+        hint: Cerulean Seed Talisman up top
+      - id: loretta
+        kind: boss
+        name: Royal Knight Loretta — Caria Manor
+        hint: Sword of Night and Flame below the Lower Level walkway
+      - id: ranni-start
+        kind: quest
+        name: Talk to Ranni + Blaidd/Iji/Seluvis
+        hint: Three Sisters, behind the manor
+      - id: bka
+        kind: boss
+        name: Black Knife Assassin — Royal Grave Evergaol
+        hint: Optional
+      - id: dectus
+        kind: area
+        name: Ride the Grand Lift of Dectus
+        hint: Needs both medallion halves
+  - id: caelid
+    name: Caelid & Dragonbarrow
+    items:
+      - id: sellia
+        kind: area
+        name: Sellia, Town of Sorcery (light the braziers)
+      - id: faroth
+        kind: item
+        name: Dectus Medallion (right) — Fort Faroth
+        hint: Ladder past the bats, chest on top
+      - id: hideaway
+        kind: boss
+        name: Sellia Hideaway — Putrid Crystalians
+        hint: Stars of Ruin (43 INT), Lusat's Staff (52 INT)
+      - id: sellen-primal
+        kind: quest
+        name: "Sellen: Primal Glintstone (Sellia Hideaway)"
+        hint: Talk to her in Sellia after finding it
+      - id: gurranq
+        kind: quest
+        name: Bestial Sanctum — Gurranq (Deathroot)
+        hint: Sending gate at Third Church of Marika
+      - id: redmane
+        kind: area
+        name: Redmane Castle + Festival
+        hint: Talk to Jerren / Blaidd first
+      - id: radahn
+        kind: boss
+        name: Starscourge Radahn
+        hint: Wait for ~L70, Vigor 40. Rock Sling from horseback. Re-summon allies constantly. Unlocks Nokron.
+        steam: ACH05
+  - id: underground
+    name: Underground
+    items:
+      - id: dragonkin-ainsel
+        kind: boss
+        name: Dragonkin Soldier — Ainsel River
+      - id: uhl
+        kind: area
+        name: Uhl Palace Ruins + Larval Tear
+        hint: Ainsel River
+      - id: siofra
+        kind: area
+        name: Siofra River — light the braziers
+        hint: Ancestor Spirit boss
+      - id: nokron
+        kind: quest
+        name: Nokron — Fingerslayer Blade → Ranni
+        hint: Opens after Radahn. Mimic Tear ashes here.
+      - id: nokstella
+        kind: quest
+        name: Nokstella + Lake of Rot → Ranni's Dark Moon
+        hint: Cathedral of Manus Celes
+  - id: altus
+    name: Altus Plateau & Leyndell
+    items:
+      - id: altus-first
+        kind: area
+        name: Reach Altus Plateau
+        hint: Via Dectus or Ruin-Strewn Precipice
+      - id: sorcery-town
+        kind: item
+        name: Sellia Crystal Tunnel / Altus Tunnel stones
+        hint: Smithing stone bell bearings
+      - id: volcano
+        kind: boss
+        name: Rykard — Volcano Manor
+        hint: Serpent-Hunter is handed to you in the arena
+        steam: ACH07
+      - id: godfrey-shade
+        kind: boss
+        name: Godfrey (Golden Shade) — Leyndell
+      - id: morgott
+        kind: boss
+        name: Morgott, the Omen King
+        hint: Rock Sling staggers him well
+        steam: ACH06
+  - id: late
+    name: Mountaintops & beyond
+    items:
+      - id: fire-giant
+        kind: boss
+        name: Fire Giant
+        steam: ACH21
+      - id: maliketh
+        kind: boss
+        name: Maliketh
+        steam: ACH10
+      - id: placidusax
+        kind: boss
+        name: Dragonlord Placidusax (optional)
+        steam: ACH12
+      - id: malenia
+        kind: boss
+        name: Malenia (optional)
+        steam: ACH08
+      - id: final
+        kind: boss
+        name: Elden Beast
+        # Any ending counts: Elden Lord / Age of the Stars / Frenzied Flame.
+        steam: [ACH01, ACH02, ACH03]
