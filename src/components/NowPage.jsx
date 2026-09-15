@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { BookDisplay, WatchDisplay, TrackDisplay } from "./mediaDisplay"
-import { countDone, pickNextUp } from "./games/selectors"
-import useSteam, { formatPlaytimeLine } from "./games/useSteam"
 
 const getApiUrl = endpoint => {
   const isDevelopment = import.meta.env.DEV
@@ -67,73 +65,7 @@ MediaSection.propTypes = {
   onReauth: PropTypes.func,
 }
 
-const GameCard = ({ game }) => {
-  const [progress, setProgress] = useState(null)
-  const [failed, setFailed] = useState(false)
-  const { achievements, playtime2w, lastPlayed } = useSteam(game.steam?.appid)
-
-  useEffect(() => {
-    if (typeof window === "undefined") return
-    fetch(`${getApiUrl("game-progress")}?game=${encodeURIComponent(game.slug)}`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(data => setProgress(data || {}))
-      .catch(() => setFailed(true))
-  }, [game.slug])
-
-  const doneCount = countDone(game.items, progress, achievements)
-  const next = progress ? pickNextUp(game.items, progress, achievements) : null
-  const playtimeLine = formatPlaytimeLine({ playtime2w, lastPlayed })
-
-  return (
-    <div className="mb-4">
-      <h3 className="mb-1 text-lg font-semibold">
-        <a
-          href={`/games/${game.slug}`}
-          className="underline decoration-red-500 underline-offset-4"
-        >
-          {game.title}
-        </a>
-      </h3>
-      {game.character && (
-        <div className="text-sm text-gray-500 dark:text-gray-300">
-          {game.character}
-        </div>
-      )}
-      <div className="mt-1 text-sm text-gray-500 tabular-nums dark:text-gray-300">
-        {progress
-          ? `${doneCount}/${game.items.length} done`
-          : failed
-            ? "Progress unavailable"
-            : "Loading progress..."}
-      </div>
-      {progress && (
-        <div className="mt-1 text-sm">
-          {next ? `Next: ${next.name}` : "Everything ticked."}
-        </div>
-      )}
-      {playtimeLine && (
-        <div className="mt-1 text-xs text-gray-500 dark:text-gray-300">
-          {playtimeLine}
-        </div>
-      )}
-    </div>
-  )
-}
-
-GameCard.propTypes = {
-  game: PropTypes.shape({
-    slug: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    character: PropTypes.string,
-    steam: PropTypes.shape({ appid: PropTypes.number }),
-    items: PropTypes.array.isRequired,
-  }).isRequired,
-}
-
-const NowPage = ({ games = [] }) => {
+const NowPage = () => {
   const [watchData, setWatchData] = useState(null)
   const [watchError, setWatchError] = useState(null)
   const [watchLoading, setWatchLoading] = useState(true)
@@ -207,7 +139,7 @@ const NowPage = ({ games = [] }) => {
     <div className="min-h-screen p-6 font-sans text-gray-900 dark:text-white">
       <h1 className="mb-6 text-4xl font-normal">{"What I'm Up To Now"}</h1>
 
-      <div className="grid auto-rows-auto grid-cols-1 gap-6 md:h-[calc(100vh-8rem)] md:auto-rows-fr md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid h-[calc(100vh-8rem)] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div className="rounded border border-gray-300 p-4 dark:border-gray-600">
           <MediaSection title="Reading" error={bookError} loading={bookLoading}>
             {bookData && (
@@ -288,25 +220,9 @@ const NowPage = ({ games = [] }) => {
             )}
           </MediaSection>
         </div>
-
-        <div className="rounded border border-gray-300 p-4 dark:border-gray-600">
-          <MediaSection title="Playing" loading={false}>
-            {games.length > 0 ? (
-              games.map(game => <GameCard key={game.slug} game={game} />)
-            ) : (
-              <div className="text-gray-500 dark:text-gray-300">
-                Nothing on the go right now.
-              </div>
-            )}
-          </MediaSection>
-        </div>
       </div>
     </div>
   )
-}
-
-NowPage.propTypes = {
-  games: PropTypes.array,
 }
 
 export default NowPage
