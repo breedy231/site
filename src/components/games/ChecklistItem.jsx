@@ -1,6 +1,7 @@
 import PropTypes from "prop-types"
 import { useState } from "react"
 import { buildLink } from "./links"
+import { formatUnlockDate } from "./useSteam"
 
 const KIND_STYLES = {
   boss: "border-red-400 text-red-600 dark:border-red-500 dark:text-red-300",
@@ -16,6 +17,7 @@ const ChecklistItem = ({
   done,
   note,
   pinned,
+  steamUnlock,
   canWrite,
   onToggleDone,
   onTogglePin,
@@ -23,18 +25,29 @@ const ChecklistItem = ({
 }) => {
   const [showNote, setShowNote] = useState(Boolean(note))
 
+  const steamConfirmed = steamUnlock !== null && steamUnlock !== undefined
+  const unlockedOn = formatUnlockDate(steamUnlock)
+  const steamTitle = unlockedOn
+    ? `Unlocked on Steam ${unlockedOn}`
+    : "Unlocked on Steam"
+
   const wiki = buildLink(links?.wiki, item.name)
   const map = buildLink(links?.map, item.name)
 
   return (
     <li className="border-b border-gray-300 py-1 last:border-b-0 dark:border-gray-600">
       <div className="flex items-start gap-2">
-        <label className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center">
+        <label
+          className={`flex h-11 w-11 shrink-0 items-center justify-center ${
+            steamConfirmed ? "cursor-default" : "cursor-pointer"
+          }`}
+          title={steamConfirmed ? steamTitle : undefined}
+        >
           <span className="sr-only">{`Mark ${item.name} done`}</span>
           <input
             type="checkbox"
-            checked={done}
-            disabled={!canWrite}
+            checked={steamConfirmed ? true : done}
+            disabled={!canWrite || steamConfirmed}
             onChange={onToggleDone}
             className="h-5 w-5 accent-red-500"
           />
@@ -61,6 +74,14 @@ const ChecklistItem = ({
             >
               {item.kind}
             </span>
+            {steamConfirmed && (
+              <span
+                title={steamTitle}
+                className="rounded border border-sky-600 bg-sky-600 px-1.5 py-0.5 text-white uppercase dark:border-sky-500 dark:bg-sky-500 dark:text-gray-900"
+              >
+                Steam
+              </span>
+            )}
             {wiki && (
               <a
                 href={wiki}
@@ -129,6 +150,7 @@ ChecklistItem.propTypes = {
   done: PropTypes.bool,
   note: PropTypes.string,
   pinned: PropTypes.bool,
+  steamUnlock: PropTypes.number,
   canWrite: PropTypes.bool,
   onToggleDone: PropTypes.func.isRequired,
   onTogglePin: PropTypes.func.isRequired,

@@ -8,11 +8,13 @@ const games = gameEntries.map(entry => ({
   slug: entry.data.slug,
   title: entry.data.title,
   character: entry.data.character,
+  steam: entry.data.steam,
   items: entry.data.regions.flatMap(region =>
     region.items.map(item => ({
       id: item.id,
       name: item.name,
       hint: item.hint,
+      steam: item.steam,
     })),
   ),
 }))

@@ -17,6 +17,8 @@ const games = defineCollection({
     slug: z.string(),
     title: z.string(),
     character: z.string().optional(),
+    // Steam app this game maps to; enables achievement/playtime sync.
+    steam: z.object({ appid: z.number() }).optional(),
     links: z
       .object({
         map: z.string().optional(),
@@ -38,6 +40,9 @@ const games = defineCollection({
                 kind: z.enum(["boss", "item", "quest", "area"]),
                 name: z.string(),
                 hint: z.string().optional(),
+                // Steam achievement apiname(s). Any one unlocked marks the
+                // item done (Elden Ring's endings are three separate names).
+                steam: z.union([z.string(), z.array(z.string())]).optional(),
               }),
             )
             .default([]),

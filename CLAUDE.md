@@ -69,6 +69,7 @@ All functions in `netlify/functions/` use modern Netlify Functions V2 format:
 4. **trakt-token.js** - OAuth token exchange (persists tokens to Blobs)
 5. **lib/trakt-tokens.js** - Shared module for token storage, retrieval, and refresh
 6. **game-progress.js** - Per-game checklist progress store (Netlify Blobs), public reads, key-gated writes
+7. **steam.js** - Steam achievements + playtime for one `appid`, cached 10 min in Blobs (`steam:<appid>` in the `game-tracker` store). `?refresh=1` bypasses the cache. Private profiles return 200 with empty `achievements` and a `warning`; upstream failures serve stale cache, else 502.
 
 ### Function Format
 
@@ -128,7 +129,13 @@ TRAKT_ACCESS_TOKEN=your_access_token     # Seeds Blobs on first use
 TRAKT_REFRESH_TOKEN=your_refresh_token   # Seeds Blobs on first use
 TMDB_API_KEY=your_tmdb_key              # Optional: poster images
 TRACKER_KEY=shared_write_secret         # Required: game tracker PUT auth
+STEAM_API_KEY=your_steam_web_api_key    # Required: /api/steam (else 503)
+STEAM_ID=your_64bit_steam_id            # Required: /api/steam (else 503)
 ```
+
+Steam achievement sync is opt-in per game: set `steam.appid` on the game YAML
+and `steam: <apiname>` (or a list) on the items it should tick. Steam-confirmed
+items render checked+disabled and are never written back to the progress blob.
 
 ### Client-side (Astro `import.meta.env`)
 

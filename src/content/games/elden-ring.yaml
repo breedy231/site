@@ -3,6 +3,8 @@
 slug: elden-ring
 title: Elden Ring
 character: Crim — sorcery run
+steam:
+  appid: 1245620
 links:
   map: https://mapgenie.io/elden-ring/maps/the-lands-between?search={q}
   wiki: https://eldenring.wiki.fextralife.com/{q+}
@@ -73,6 +75,7 @@ regions:
         kind: boss
         name: Godrick the Grafted
         hint: Stormveil Castle. Grants a Great Rune (activate at the Divine Tower of Limgrave).
+        steam: ACH04
       - id: sellen
         kind: quest
         name: Unlock Sorceress Sellen
@@ -117,6 +120,7 @@ regions:
         kind: boss
         name: Rennala, Queen of the Full Moon
         hint: Rebirth unlocked. Great Rune (no Divine Tower needed).
+        steam: ACH18
       - id: comet
         kind: item
         name: Comet (spell) — Academy
@@ -187,6 +191,7 @@ regions:
         kind: boss
         name: Starscourge Radahn
         hint: Wait for ~L70, Vigor 40. Rock Sling from horseback. Re-summon allies constantly. Unlocks Nokron.
+        steam: ACH05
   - id: underground
     name: Underground
     items:
@@ -224,6 +229,7 @@ regions:
         kind: boss
         name: Rykard — Volcano Manor
         hint: Serpent-Hunter is handed to you in the arena
+        steam: ACH07
       - id: godfrey-shade
         kind: boss
         name: Godfrey (Golden Shade) — Leyndell
@@ -231,21 +237,28 @@ regions:
         kind: boss
         name: Morgott, the Omen King
         hint: Rock Sling staggers him well
+        steam: ACH06
   - id: late
     name: Mountaintops & beyond
     items:
       - id: fire-giant
         kind: boss
         name: Fire Giant
+        steam: ACH21
       - id: maliketh
         kind: boss
         name: Maliketh
+        steam: ACH10
       - id: placidusax
         kind: boss
         name: Dragonlord Placidusax (optional)
+        steam: ACH12
       - id: malenia
         kind: boss
         name: Malenia (optional)
+        steam: ACH08
       - id: final
         kind: boss
         name: Elden Beast
+        # Any ending counts: Elden Lord / Age of the Stars / Frenzied Flame.
+        steam: [ACH01, ACH02, ACH03]

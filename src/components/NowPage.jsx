@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { BookDisplay, WatchDisplay, TrackDisplay } from "./mediaDisplay"
-import { pickNextUp } from "./games/selectors"
+import { countDone, pickNextUp } from "./games/selectors"
+import useSteam, { formatPlaytimeLine } from "./games/useSteam"
 
 const getApiUrl = endpoint => {
   const isDevelopment = import.meta.env.DEV
@@ -69,6 +70,7 @@ MediaSection.propTypes = {
 const GameCard = ({ game }) => {
   const [progress, setProgress] = useState(null)
   const [failed, setFailed] = useState(false)
+  const { achievements, playtime2w, lastPlayed } = useSteam(game.steam?.appid)
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -81,9 +83,9 @@ const GameCard = ({ game }) => {
       .catch(() => setFailed(true))
   }, [game.slug])
 
-  const done = progress?.done || {}
-  const doneCount = game.items.filter(item => done[item.id]).length
-  const next = progress ? pickNextUp(game.items, progress) : null
+  const doneCount = countDone(game.items, progress, achievements)
+  const next = progress ? pickNextUp(game.items, progress, achievements) : null
+  const playtimeLine = formatPlaytimeLine({ playtime2w, lastPlayed })
 
   return (
     <div className="mb-4">
@@ -112,6 +114,11 @@ const GameCard = ({ game }) => {
           {next ? `Next: ${next.name}` : "Everything ticked."}
         </div>
       )}
+      {playtimeLine && (
+        <div className="mt-1 text-xs text-gray-500 dark:text-gray-300">
+          {playtimeLine}
+        </div>
+      )}
     </div>
   )
 }
@@ -121,6 +128,7 @@ GameCard.propTypes = {
     slug: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     character: PropTypes.string,
+    steam: PropTypes.shape({ appid: PropTypes.number }),
     items: PropTypes.array.isRequired,
   }).isRequired,
 }

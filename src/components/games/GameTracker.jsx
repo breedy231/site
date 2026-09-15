@@ -1,7 +1,8 @@
 import PropTypes from "prop-types"
 import { useMemo, useState } from "react"
 import useProgress from "./useProgress"
-import { flattenItems, pickNextUp } from "./selectors"
+import useSteam, { formatPlaytimeLine } from "./useSteam"
+import { countDone, flattenItems, pickNextUp } from "./selectors"
 import NextUp from "./NextUp"
 import RegionSection from "./RegionSection"
 import StatFields from "./StatFields"
@@ -25,6 +26,8 @@ const GameTracker = ({ game }) => {
     dismissError,
   } = useProgress(game.slug)
 
+  const { achievements, playtime2w, lastPlayed } = useSteam(game.steam?.appid)
+
   const [showKeyInput, setShowKeyInput] = useState(false)
   const [keyDraft, setKeyDraft] = useState("")
 
@@ -33,8 +36,9 @@ const GameTracker = ({ game }) => {
     [game.regions, state.custom],
   )
   const total = ordered.length
-  const doneCount = ordered.filter(item => state.done[item.id]).length
-  const next = pickNextUp(ordered, state)
+  const doneCount = countDone(ordered, state, achievements)
+  const next = pickNextUp(ordered, state, achievements)
+  const playtimeLine = formatPlaytimeLine({ playtime2w, lastPlayed })
 
   const onToggleDone = id =>
     update(prev => ({ ...prev, done: toggleFlag(prev.done, id) }))
@@ -92,6 +96,12 @@ const GameTracker = ({ game }) => {
             </div>
           </div>
         </div>
+
+        {playtimeLine && (
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-300">
+            {playtimeLine}
+          </p>
+        )}
 
         <StatFields
           stats={game.stats}
@@ -159,6 +169,7 @@ const GameTracker = ({ game }) => {
             region={region}
             links={game.links}
             state={state}
+            achievements={achievements}
             canWrite={canWrite}
             onToggleClosed={() => onToggleClosed(region.id)}
             onToggleDone={onToggleDone}
@@ -178,6 +189,7 @@ GameTracker.propTypes = {
     title: PropTypes.string.isRequired,
     character: PropTypes.string,
     links: PropTypes.object,
+    steam: PropTypes.shape({ appid: PropTypes.number }),
     stats: PropTypes.array.isRequired,
     regions: PropTypes.array.isRequired,
   }).isRequired,

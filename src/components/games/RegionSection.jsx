@@ -1,11 +1,13 @@
 import PropTypes from "prop-types"
 import { useState } from "react"
 import ChecklistItem from "./ChecklistItem"
+import { countDone, isItemDone, steamUnlockAt } from "./selectors"
 
 const RegionSection = ({
   region,
   links,
   state,
+  achievements,
   canWrite,
   onToggleClosed,
   onToggleDone,
@@ -18,7 +20,7 @@ const RegionSection = ({
   const custom = state.custom[region.id] || []
   const items = [...region.items, ...custom]
   const total = items.length
-  const doneCount = items.filter(item => state.done[item.id]).length
+  const doneCount = countDone(items, state, achievements)
   const closed = Boolean(state.closed[region.id])
   const pct = total ? Math.round((doneCount / total) * 100) : 0
 
@@ -62,7 +64,8 @@ const RegionSection = ({
                 key={item.id}
                 item={item}
                 links={links}
-                done={Boolean(state.done[item.id])}
+                done={isItemDone(item, state, achievements)}
+                steamUnlock={steamUnlockAt(item, achievements)}
                 note={state.notes[item.id]}
                 pinned={state.pin === item.id}
                 canWrite={canWrite}
@@ -104,6 +107,7 @@ RegionSection.propTypes = {
   }).isRequired,
   links: PropTypes.object,
   state: PropTypes.object.isRequired,
+  achievements: PropTypes.object,
   canWrite: PropTypes.bool,
   onToggleClosed: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
