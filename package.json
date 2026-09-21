@@ -15,14 +15,14 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.1",
-    "@astrojs/netlify": "^8.2.5",
-    "@astrojs/react": "^6.0.5",
+    "@astrojs/netlify": "^8.2.6",
+    "@astrojs/react": "^6.0.6",
     "@astrojs/sitemap": "^3.7.4",
-    "@netlify/blobs": "^11.0.3",
+    "@netlify/blobs": "^11.1.0",
     "astro": "^7.3.3",
     "axios": "^1.20.0",
     "fast-xml-parser": "^5.11.1",
-    "framer-motion": "^13.2.0",
+    "framer-motion": "^13.4.0",
     "prop-types": "^15.8.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
