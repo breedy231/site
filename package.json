@@ -15,15 +15,15 @@
     "prepare": "husky install || true"
   },
   "dependencies": {
-    "@astrojs/mdx": "^8.0.1",
+    "@astrojs/mdx": "^8.0.2",
     "@astrojs/netlify": "^8.2.6",
-    "@astrojs/react": "^6.0.6",
+    "@astrojs/react": "^7.0.0",
     "@astrojs/sitemap": "^3.7.4",
-    "@netlify/blobs": "^11.1.0",
-    "astro": "^7.3.3",
+    "@netlify/blobs": "^11.1.1",
+    "astro": "^7.3.5",
     "axios": "^1.20.0",
     "fast-xml-parser": "^5.11.1",
-    "framer-motion": "^13.4.0",
+    "framer-motion": "^13.4.4",
     "prop-types": "^15.8.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
@@ -40,8 +40,8 @@
     "husky": ">=9",
     "lint-staged": ">=17",
     "postcss": "^8.5.28",
-    "prettier": "^3.9.8",
-    "prettier-plugin-astro": "^1.0.1",
+    "prettier": "^3.9.9",
+    "prettier-plugin-astro": "^1.1.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.1.18",
     "vitest": "^5.0.2"
