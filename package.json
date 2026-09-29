@@ -10,6 +10,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "preview": "astro preview",
+    "test": "vitest run",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,astro}\"",
     "prepare": "husky install || true"
   },
@@ -42,7 +43,8 @@
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vitest": "^5.0.2"
   },
   "overrides": {
     "sharp": "^0.35.0",

@@ -58,6 +58,11 @@
   `public/sounds/` (wav/mp3 only — Safari can't decode ogg/flac)
 - Sensor APIs need HTTPS: test on-device via `npx netlify dev --live` or a
   branch deploy (see `MOBILE_TESTING.md`)
+- Custom decks live in localStorage (`src/components/headsup/customDecks.js`).
+  Sharing is backend-free: `deckShare.js` encodes a deck into the URL
+  fragment (`/headsup#deck=<version><codec>.<base64url>`, deflate-raw via
+  CompressionStream with a plain-JSON fallback); opening the link prompts
+  to import. Bump `SHARE_VERSION` on any incompatible format change.
 
 ## Serverless Functions
 
@@ -192,6 +197,7 @@ Husky + lint-staged:
 ```bash
 npm run format          # Format all files
 npm run build           # Build for production
+npm test                # Unit tests (vitest, *.test.js next to the code)
 npm run dev             # Start dev server (port 4321)
 npx eslint src/ --fix   # Fix lint errors
 ```

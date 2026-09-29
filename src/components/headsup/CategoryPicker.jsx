@@ -1,13 +1,79 @@
 import { useEffect, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   loadCustomDecks,
   createCustomDeck,
   deleteCustomDeck,
+  importCustomDeck,
 } from "./customDecks"
+import {
+  buildShareUrl,
+  decodeDeck,
+  encodeDeck,
+  readSharePayload,
+} from "./deckShare"
 import { loadSeenWords, clearSeenWords } from "./trendingSeen"
 import CreateDeckScreen from "./CreateDeckScreen"
+import ImportDeckPrompt from "./ImportDeckPrompt"
 
 const MIN_TRENDING_WORDS = 10
+const TOAST_MS = 2200
+
+const IMPORT_ERRORS = {
+  version: "That deck is from a newer version — reload and try again",
+  unsupported: "This browser can't open deck links — try updating it",
+  "too-large": "That deck link is too big to import",
+}
+const IMPORT_ERROR_FALLBACK = "That deck link is broken or incomplete"
+
+// Drop #deck=… from the address bar so a reload doesn't prompt again.
+function clearShareHash() {
+  const { pathname, search } = window.location
+  history.replaceState(history.state, "", pathname + search)
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    // no async clipboard (e.g. plain-http LAN dev) — try the legacy path
+  }
+  try {
+    const textarea = document.createElement("textarea")
+    textarea.value = text
+    textarea.setAttribute("readonly", "")
+    textarea.style.position = "fixed"
+    textarea.style.opacity = "0"
+    document.body.appendChild(textarea)
+    textarea.select()
+    const copied = document.execCommand("copy")
+    textarea.remove()
+    return copied
+  } catch {
+    return false
+  }
+}
+
+// Native share sheet where available, clipboard otherwise.
+// Resolves to "shared" | "copied" | "cancelled" | "failed".
+async function shareLink(url, title) {
+  const data = {
+    title: `Heads Up: ${title}`,
+    text: `Play my "${title}" deck in Heads Up!`,
+    url,
+  }
+  if (navigator.share && (!navigator.canShare || navigator.canShare(data))) {
+    try {
+      await navigator.share(data)
+      return "shared"
+    } catch (err) {
+      if (err?.name === "AbortError") return "cancelled"
+      // share sheet refused (e.g. NotAllowedError) — fall back to copying
+    }
+  }
+  return (await copyText(url)) ? "copied" : "failed"
+}
 
 const CategoryPicker = ({ decks, onSelect }) => {
   const [customDecks, setCustomDecks] = useState([])
@@ -15,10 +81,65 @@ const CategoryPicker = ({ decks, onSelect }) => {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null)
   const [trendingLoading, setTrendingLoading] = useState(false)
   const [trendingError, setTrendingError] = useState(null)
+  const [shareUrls, setShareUrls] = useState({})
+  const [pendingImport, setPendingImport] = useState(null)
+  const [toast, setToast] = useState(null)
+
+  const showToast = message => setToast({ message, key: Date.now() })
 
   useEffect(() => {
     setCustomDecks(loadCustomDecks())
   }, [])
+
+  // Opened from a share link (or one pasted into this tab): decode the
+  // #deck= payload and ask before saving it.
+  useEffect(() => {
+    let cancelled = false
+    const checkHash = async () => {
+      const payload = readSharePayload(window.location.hash)
+      if (payload == null) return
+      try {
+        const shared = await decodeDeck(payload)
+        if (!cancelled) setPendingImport(shared)
+      } catch (err) {
+        clearShareHash()
+        if (!cancelled)
+          showToast(IMPORT_ERRORS[err.code] || IMPORT_ERROR_FALLBACK)
+      }
+    }
+    checkHash()
+    window.addEventListener("hashchange", checkHash)
+    return () => {
+      cancelled = true
+      window.removeEventListener("hashchange", checkHash)
+    }
+  }, [])
+
+  // Encode share links ahead of the tap: navigator.share and clipboard
+  // writes need the tap's user activation, which awaiting compression inside
+  // the click handler can lose (notably in iOS Safari).
+  useEffect(() => {
+    let cancelled = false
+    Promise.all(
+      customDecks.map(deck =>
+        encodeDeck(deck).then(
+          payload => [deck.id, buildShareUrl(payload, window.location)],
+          () => [deck.id, null],
+        ),
+      ),
+    ).then(entries => {
+      if (!cancelled) setShareUrls(Object.fromEntries(entries))
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [customDecks])
+
+  useEffect(() => {
+    if (!toast) return
+    const timeout = setTimeout(() => setToast(null), TOAST_MS)
+    return () => clearTimeout(timeout)
+  }, [toast])
 
   const handleSaveDeck = (title, words) => {
     createCustomDeck(title, words)
@@ -29,6 +150,45 @@ const CategoryPicker = ({ decks, onSelect }) => {
   const handleDeleteDeck = id => {
     setCustomDecks(deleteCustomDeck(id))
     setConfirmDeleteId(null)
+  }
+
+  const handleShareDeck = async deck => {
+    let url = shareUrls[deck.id]
+    if (!url) {
+      try {
+        url = buildShareUrl(await encodeDeck(deck), window.location)
+      } catch (err) {
+        showToast(
+          err.code === "too-large"
+            ? "This deck is too big to share"
+            : "Couldn't make a share link",
+        )
+        return
+      }
+    }
+    const outcome = await shareLink(url, deck.title)
+    if (outcome === "copied") showToast("Link copied")
+    else if (outcome === "failed") showToast("Couldn't share — try again")
+  }
+
+  const handleImportDeck = () => {
+    const { deck, alreadySaved } = importCustomDeck(
+      pendingImport.title,
+      pendingImport.words,
+    )
+    setCustomDecks(loadCustomDecks())
+    setPendingImport(null)
+    clearShareHash()
+    showToast(
+      alreadySaved
+        ? `"${deck.title}" is already in your decks`
+        : `Added "${deck.title}"`,
+    )
+  }
+
+  const handleCancelImport = () => {
+    setPendingImport(null)
+    clearShareHash()
   }
 
   const handleTrendingSelect = async () => {
@@ -55,12 +215,47 @@ const CategoryPicker = ({ decks, onSelect }) => {
     }
   }
 
+  const overlays = (
+    <>
+      <AnimatePresence>
+        {pendingImport && (
+          <ImportDeckPrompt
+            key="import"
+            deck={pendingImport}
+            onImport={handleImportDeck}
+            onCancel={handleCancelImport}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key={toast.key}
+            role="status"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.2 }}
+            className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)_+_1.5rem)] z-50 flex justify-center px-4"
+          >
+            <div className="rounded-lg bg-gray-900 px-4 py-3 text-center text-white shadow-lg dark:bg-white dark:text-gray-900">
+              {toast.message}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
+
   if (creating) {
     return (
-      <CreateDeckScreen
-        onSave={handleSaveDeck}
-        onCancel={() => setCreating(false)}
-      />
+      <>
+        <CreateDeckScreen
+          onSave={handleSaveDeck}
+          onCancel={() => setCreating(false)}
+        />
+        {overlays}
+      </>
     )
   }
 
@@ -133,13 +328,22 @@ const CategoryPicker = ({ decks, onSelect }) => {
                   </button>
                 </div>
               ) : (
-                <button
-                  onClick={() => setConfirmDeleteId(deck.id)}
-                  aria-label={`Delete ${deck.title}`}
-                  className="shrink-0 rounded-lg bg-gray-200 p-3 text-lg shadow hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500"
-                >
-                  🗑
-                </button>
+                <>
+                  <button
+                    onClick={() => handleShareDeck(deck)}
+                    aria-label={`Share ${deck.title}`}
+                    className="shrink-0 rounded-lg bg-gray-200 p-3 text-lg shadow hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500"
+                  >
+                    📤
+                  </button>
+                  <button
+                    onClick={() => setConfirmDeleteId(deck.id)}
+                    aria-label={`Delete ${deck.title}`}
+                    className="shrink-0 rounded-lg bg-gray-200 p-3 text-lg shadow hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500"
+                  >
+                    🗑
+                  </button>
+                </>
               )}
             </div>
           ))}
@@ -158,6 +362,7 @@ const CategoryPicker = ({ decks, onSelect }) => {
           ← back to brendanreed.me
         </a>
       </div>
+      {overlays}
     </div>
   )
 }
