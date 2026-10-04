@@ -1,6 +1,5 @@
 import { useState } from "react"
-
-const MIN_WORDS = 5
+import { MIN_DECK_WORDS, MAX_TITLE_LENGTH } from "./customDecks"
 
 function parseWords(raw) {
   const pieces = raw
@@ -23,7 +22,7 @@ const CreateDeckScreen = ({ onSave, onCancel }) => {
   const [wordsText, setWordsText] = useState("")
 
   const words = parseWords(wordsText)
-  const canSave = title.trim().length > 0 && words.length >= MIN_WORDS
+  const canSave = title.trim().length > 0 && words.length >= MIN_DECK_WORDS
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -52,7 +51,7 @@ const CreateDeckScreen = ({ onSave, onCancel }) => {
               onChange={event => setTitle(event.target.value)}
               placeholder="e.g. Office Inside Jokes"
               className="w-full rounded-lg border border-gray-300 p-3 text-lg dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-              maxLength={40}
+              maxLength={MAX_TITLE_LENGTH}
             />
           </div>
           <div>
@@ -74,8 +73,8 @@ const CreateDeckScreen = ({ onSave, onCancel }) => {
             />
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {words.length} word{words.length === 1 ? "" : "s"}
-              {words.length < MIN_WORDS &&
-                ` — need at least ${MIN_WORDS} to save`}
+              {words.length < MIN_DECK_WORDS &&
+                ` — need at least ${MIN_DECK_WORDS} to save`}
             </p>
           </div>
           <div className="flex gap-3 pb-4">
