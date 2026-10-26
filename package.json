@@ -20,7 +20,7 @@
     "@astrojs/react": "^7.1.0",
     "@astrojs/sitemap": "^3.7.4",
     "@netlify/blobs": "^11.1.4",
-    "astro": "^7.4.0",
+    "astro": "^7.4.2",
     "axios": "^1.20.0",
     "fast-xml-parser": "^5.11.2",
     "framer-motion": "^14.3.0",
