@@ -359,7 +359,7 @@ const CategoryPicker = ({ decks, onSelect }) => {
           href="/"
           className="inline-block pt-4 text-sm text-gray-500 no-underline hover:underline dark:text-gray-400"
         >
-          ← back to brendanreed.me
+          ← back to brendantreed.com
         </a>
       </div>
       {overlays}

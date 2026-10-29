@@ -12,7 +12,7 @@ import {
   readSharePayload,
 } from "./deckShare"
 
-const SITE = { origin: "https://brendanreed.me", pathname: "/headsup" }
+const SITE = { origin: "https://brendantreed.com", pathname: "/headsup" }
 
 const smallDeck = {
   title: "Office Jokes",
@@ -87,7 +87,7 @@ describe("round trip", () => {
   it("builds and reads back a share URL", async () => {
     const payload = await encodeDeck(smallDeck)
     const url = new URL(buildShareUrl(payload, SITE))
-    expect(url.origin + url.pathname).toBe("https://brendanreed.me/headsup")
+    expect(url.origin + url.pathname).toBe("https://brendantreed.com/headsup")
     expect(readSharePayload(url.hash)).toBe(payload)
     expect(await decodeDeck(readSharePayload(url.hash))).toEqual(smallDeck)
   })
