@@ -74,7 +74,9 @@ All functions in `netlify/functions/` use modern Netlify Functions V2 format:
 4. **trakt-token.js** - OAuth token exchange (persists tokens to Blobs)
 5. **lib/trakt-tokens.js** - Shared module for token storage, retrieval, and refresh
 6. **game-progress.js** - Per-game checklist progress store (Netlify Blobs), public reads, key-gated writes
-7. **steam.js** - Steam achievements + playtime for one `appid`, cached 10 min in Blobs (`steam:<appid>` in the `game-tracker` store). `?refresh=1` bypasses the cache. Private profiles return 200 with empty `achievements` and a `warning`; upstream failures serve stale cache, else 502.
+7. **reading-soundtrack.js** - Book -> lyrics-free Spotify playlist. `?step=picks` (Wikipedia description + Claude Haiku picks instrumental albums), then `?step=build` (Spotify search + create/replace private playlist "Reading: <Title>"). Split in two so each call fits the sync timeout. Public GET of cached results; POSTs key-gated by `TRACKER_KEY`. Logic in `lib/soundtrack.js` + `lib/spotify.js`. UI: `ReadingSoundtrack.jsx` under Reading on `/now` (only shows on a device with the tracker key).
+8. **spotify-auth.js** - One-time Spotify connect (key-gated POST returns the authorize URL; GET is the OAuth callback). Tokens in Blobs store `reading-soundtrack`.
+9. **steam.js** - Steam achievements + playtime for one `appid`, cached 10 min in Blobs (`steam:<appid>` in the `game-tracker` store). `?refresh=1` bypasses the cache. Private profiles return 200 with empty `achievements` and a `warning`; upstream failures serve stale cache, else 502.
 
 ### Function Format
 
@@ -136,6 +138,10 @@ TMDB_API_KEY=your_tmdb_key              # Optional: poster images
 TRACKER_KEY=shared_write_secret         # Required: game tracker PUT auth
 STEAM_API_KEY=your_steam_web_api_key    # Required: /api/steam (else 503)
 STEAM_ID=your_64bit_steam_id            # Required: /api/steam (else 503)
+ANTHROPIC_API_KEY=sk-ant-...            # Required: reading soundtrack picks (Claude Haiku)
+SPOTIFY_CLIENT_ID=...                   # Required: reading soundtrack (Spotify dev app)
+SPOTIFY_CLIENT_SECRET=...               # Required: reading soundtrack
+SPOTIFY_REDIRECT_URI=...                # Optional: defaults to <origin>/api/spotify-auth
 ```
 
 Steam achievement sync is opt-in per game: set `steam.appid` on the game YAML

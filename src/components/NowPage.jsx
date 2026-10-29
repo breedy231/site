@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { BookDisplay, WatchDisplay, TrackDisplay } from "./mediaDisplay"
+import ReadingSoundtrack from "./ReadingSoundtrack"
 
 const getApiUrl = endpoint => {
   const isDevelopment = import.meta.env.DEV
@@ -155,6 +156,9 @@ const NowPage = () => {
                     />
                   </div>
                 )}
+                <ReadingSoundtrack
+                  book={bookData.currentlyReading ?? undefined}
+                />
                 {bookData.recentlyRead && bookData.recentlyRead.length > 0 && (
                   <div>
                     <h3 className="mb-3 text-lg font-semibold">
