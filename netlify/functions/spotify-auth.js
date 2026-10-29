@@ -3,7 +3,7 @@
 //
 //   POST /api/spotify-auth   (X-Tracker-Key)  -> { url }  Spotify authorize URL
 //   GET  /api/spotify-auth?code=&state=       -> Spotify redirects here; saves
-//                                               tokens, then redirects to /now
+//                                               tokens, then redirects to /pages-per-day/
 
 import { randomBytes, timingSafeEqual } from "node:crypto"
 import { authorizeUrl, exchangeCode, store } from "./lib/spotify.js"
@@ -18,8 +18,11 @@ const json = (body, status) =>
     headers: { "Content-Type": "application/json" },
   })
 
-const backToNow = (req, result) =>
-  Response.redirect(`${new URL(req.url).origin}/now?spotify=${result}`, 302)
+const backToPage = (req, result) =>
+  Response.redirect(
+    `${new URL(req.url).origin}/pages-per-day/?spotify=${result}`,
+    302,
+  )
 
 const sameString = (a, b) => {
   const ab = Buffer.from(a)
@@ -52,7 +55,7 @@ export default async function handler(req) {
   if (req.method !== "GET") return json({ error: "Method not allowed" }, 405)
 
   const params = new URL(req.url).searchParams
-  if (params.get("error")) return backToNow(req, "denied")
+  if (params.get("error")) return backToPage(req, "denied")
 
   const code = params.get("code")
   const state = params.get("state") || ""
@@ -63,15 +66,15 @@ export default async function handler(req) {
     Date.now() > saved.expires_at ||
     !sameString(state, saved.state)
   ) {
-    return backToNow(req, "bad-state")
+    return backToPage(req, "bad-state")
   }
   await store().delete(STATE_KEY)
 
   try {
     await exchangeCode(req, code)
-    return backToNow(req, "connected")
+    return backToPage(req, "connected")
   } catch (err) {
     console.error("Spotify code exchange failed:", err)
-    return backToNow(req, "failed")
+    return backToPage(req, "failed")
   }
 }
