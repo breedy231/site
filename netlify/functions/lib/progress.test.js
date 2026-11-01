@@ -9,13 +9,13 @@ vi.mock("@netlify/blobs", () => ({
   getStore: vi.fn(() => store),
 }))
 
-vi.mock("./lib/auth-cookie.js", () => ({
+vi.mock("./auth-cookie.js", () => ({
   isAuthed: vi.fn(() => true),
 }))
 
 const { getStore } = await import("@netlify/blobs")
-const { isAuthed } = await import("./lib/auth-cookie.js")
-const handler = (await import("./progress.js")).default
+const { isAuthed } = await import("./auth-cookie.js")
+const handler = (await import("../progress.js")).default
 
 function req(url, { method = "GET", body } = {}) {
   return new Request(url, {
