@@ -36,7 +36,7 @@ The "/now" page integrates with Trakt.tv to display currently watching content. 
 #### Option 1: Test on Production (Recommended)
 
 ```
-https://brendanreed.net/now?admin
+https://brendantreed.com/now?admin
 ```
 
 - Click "Re-authenticate with Trakt" button

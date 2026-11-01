@@ -38,6 +38,16 @@
   to = "/.netlify/functions/steam"
   status = 200
 
+[[redirects]]
+  from = "/api/reading-soundtrack"
+  to = "/.netlify/functions/reading-soundtrack"
+  status = 200
+
+[[redirects]]
+  from = "/api/spotify-auth"
+  to = "/.netlify/functions/spotify-auth"
+  status = 200
+
 [build]
   command = "npm run build"
   publish = "dist"

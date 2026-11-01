@@ -6,7 +6,7 @@ import sitemap from "@astrojs/sitemap"
 import tailwindcss from "@tailwindcss/vite"
 
 export default defineConfig({
-  site: "https://brendanreed.net",
+  site: "https://brendantreed.com",
   output: "static",
   adapter: netlify(),
   integrations: [react(), mdx(), sitemap()],

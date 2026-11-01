@@ -6,8 +6,8 @@
 //   PUT  /api/game-progress?game=<slug>  { ... }      -> 204
 //   POST /api/game-progress?game=<slug>  { ... }      -> 204 (same as PUT)
 
-import { timingSafeEqual } from "node:crypto"
 import { getStore } from "@netlify/blobs"
+import { isAuthedForWrite } from "./lib/tracker-key.js"
 
 const STORE_NAME = "game-tracker"
 const MAX_BODY_BYTES = 64 * 1024
@@ -21,19 +21,6 @@ const json = (body, status) =>
     status,
     headers: { "Content-Type": "application/json" },
   })
-
-function isAuthedForWrite(req) {
-  const expected = process.env.TRACKER_KEY
-  if (!expected) return { ok: false, configured: false }
-
-  const provided = req.headers.get("x-tracker-key") || ""
-  const expectedBuf = Buffer.from(expected)
-  const providedBuf = Buffer.from(provided)
-  if (expectedBuf.length !== providedBuf.length) {
-    return { ok: false, configured: true }
-  }
-  return { ok: timingSafeEqual(expectedBuf, providedBuf), configured: true }
-}
 
 // Accept only the shape the client owns; ignore anything else that's sent.
 function sanitize(input) {

@@ -188,12 +188,45 @@
   }
   html.dark .done-card{background:#0a3a5c}
   .error-msg{background:#7f1d1d;color:#fca5a5;padding:16px 20px;border-radius:12px;font-size:14px;animation:slideUp .35s ease-out}
+
+  /* Reading soundtrack (lyrics-free Spotify playlist for the book) */
+  .st{margin-top:24px}
+  .st-label{
+    display:block;font-size:11px;font-weight:600;text-transform:uppercase;
+    letter-spacing:1.2px;color:#6b7280;margin-bottom:10px;
+  }
+  html.dark .st-label{color:#9ca3af}
+  .st-row{display:flex;gap:8px}
+  .st-row input{
+    flex:1;min-width:0;padding:12px 16px;border:1.5px solid #d1d5db;border-radius:8px;
+    background:#fff;font-family:'Poppins Regular',sans-serif;font-size:16px;
+    color:#111827;outline:none;-webkit-appearance:none;appearance:none;
+  }
+  html.dark .st-row input{background:#0a3a5c;border-color:#1e5a80;color:#fff}
+  .st-btn{
+    border:none;border-radius:8px;padding:12px 16px;cursor:pointer;
+    font-family:'Poppins Regular',sans-serif;font-size:14px;font-weight:600;
+    background:#111827;color:#fff;white-space:nowrap;transition:opacity .15s;
+  }
+  html.dark .st-btn{background:#1e5a80}
+  .st-btn:disabled{opacity:.5;cursor:default}
+  .st-btn.spotify,html.dark .st-btn.spotify{background:#1db954;color:#fff}
+  .st-open{display:inline-block;text-decoration:none;margin-bottom:10px}
+  .st-meta{font-size:13px;color:#6b7280;margin-bottom:4px}
+  html.dark .st-meta{color:#9ca3af}
+  .st-summary{font-size:13px;color:#4b5563;font-style:italic;margin-bottom:12px}
+  html.dark .st-summary{color:#d1d5db}
+  .st-picks{list-style:none;font-size:12px;color:#6b7280;margin-top:10px}
+  html.dark .st-picks{color:#9ca3af}
+  .st-msg{font-size:13px;margin-top:10px;color:#6b7280}
+  .st-msg.err{color:#b91c1c}
+  html.dark .st-msg.err{color:#fca5a5}
 </style>
 </head>
 <body>
 <div class="card">
   <div class="page-header">
-    <a href="/" class="back-link">&larr; brendanreed.com</a>
+    <a href="/" class="back-link">&larr; brendantreed.com</a>
     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode"></button>
   </div>
 
@@ -231,6 +264,7 @@
 
   <div class="divider"></div>
   <div id="result-slot"></div>
+  <div id="soundtrack-slot"></div>
 </div>
 
 <!-- Theme toggle (matches site's localStorage-based dark mode) -->
@@ -281,6 +315,7 @@
   // Progress input mode: 'pages' or 'pct'. Track pages and percent separately
   // so switching modes doesn't clobber the other value.
   let mode = 'pages';
+  let author = '';
   let pagesReadValue = '';
   let percentReadValue = '';
 
@@ -292,6 +327,7 @@
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if(saved){
       if(saved.title) titleInput.value = saved.title;
+      if(saved.author) author = saved.author;
       if(saved.totalPages) totalPagesInput.value = saved.totalPages;
       if(saved.pagesRead) pagesReadValue = String(saved.pagesRead);
       if(saved.percentRead) percentReadValue = String(saved.percentRead);
@@ -335,6 +371,7 @@
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         title: titleInput.value,
+        author,
         totalPages: totalPagesInput.value,
         pagesRead: pagesReadValue,
         percentRead: percentReadValue,
@@ -342,6 +379,7 @@
         deadline: deadlineInput.value,
       }));
     } catch(e){}
+    document.dispatchEvent(new CustomEvent('ppd:book'));
   }
 
   let lastResults = [];
@@ -395,6 +433,7 @@
       el.addEventListener('click', ()=>{
         const b = lastResults[+el.dataset.idx];
         titleInput.value = b.title;
+        author = b.authors === 'Unknown' ? '' : b.authors;
         if(b.pages) totalPagesInput.value = b.pages;
         dropdown.innerHTML = '';
         saveState();
@@ -421,7 +460,8 @@
   calc();
 
   // Save on title changes too
-  titleInput.addEventListener('input', saveState);
+  // A typed title no longer matches the looked-up author.
+  titleInput.addEventListener('input', ()=>{ author = ''; saveState(); });
 
   // --- Calculation ---
   totalPagesInput.addEventListener('input', ()=>{ saveState(); calc(); });
@@ -483,6 +523,186 @@
       </div>
     `;
   }
+})();
+</script>
+
+<!-- Reading soundtrack: lyrics-free Spotify playlist matched to the book.
+     Only shown on a device holding the tracker key (localStorage "tracker-key",
+     same as the game tracker); ?admin shows the unlock field. -->
+<script>
+(function(){
+  const slot = document.getElementById('soundtrack-slot');
+  const KEY = 'tracker-key';
+  const API = '/.netlify/functions/';
+  const params = new URLSearchParams(location.search);
+
+  let key = null;
+  try { key = localStorage.getItem(KEY); } catch(e){}
+  let status = null;   // { result, spotifyConnected }
+  let phase = 'idle';  // idle | picking | building
+  let picks = null;
+  let scene = '';
+  let msg = null;      // { text, err }
+
+  const spotifyParam = params.get('spotify');
+  if(spotifyParam === 'connected') msg = { text: 'Spotify connected.' };
+  else if(spotifyParam) msg = { text: `Spotify connect ${spotifyParam}. Try again.`, err: true };
+
+  function esc(s){ const d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
+
+  // Book from the calculator's saved state. Strip Open Library series suffixes.
+  function book(){
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem('ppd-book')) || {}; } catch(e){}
+    const title = (saved.title || '').replace(/\s*\([^)]*#\d+[^)]*\)\s*$/, '').trim();
+    return { title, author: (saved.author || '').split(',')[0].trim() };
+  }
+
+  function fmtDuration(min){ return min >= 60 ? `${Math.floor(min/60)}h ${min%60}m` : `${min}m`; }
+
+  async function post(path, body){
+    const res = await fetch(API + path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Tracker-Key': key },
+      body: JSON.stringify(body || {}),
+    });
+    const data = await res.json().catch(()=>({}));
+    if(!res.ok){
+      const err = new Error(data.error || `HTTP ${res.status}`);
+      err.status = res.status;
+      throw err;
+    }
+    return data;
+  }
+
+  function lostKey(err){
+    if(err.status !== 401) return false;
+    try { localStorage.removeItem(KEY); } catch(e){}
+    key = null;
+    msg = { text: 'Key rejected. Unlock again.', err: true };
+    render(true);
+    return true;
+  }
+
+  async function loadStatus(){
+    if(!key) return;
+    const { title } = book();
+    const q = title ? '?' + new URLSearchParams({ title }) : '';
+    try {
+      const res = await fetch(API + 'reading-soundtrack' + q);
+      if(res.ok){ status = await res.json(); render(); }
+    } catch(e){}
+  }
+
+  async function connect(){
+    msg = null;
+    try {
+      const { url } = await post('spotify-auth');
+      location.href = url;
+    } catch(err){
+      if(!lostKey(err)){ msg = { text: err.message, err: true }; render(); }
+    }
+  }
+
+  async function build(){
+    const b = book();
+    if(!b.title) return;
+    msg = null; picks = null;
+    const body = { title: b.title, author: b.author || undefined, chapter: scene.trim() || undefined };
+    try {
+      phase = 'picking'; render();
+      const picked = await post('reading-soundtrack?step=picks', body);
+      picks = picked.picks;
+      phase = 'building'; render();
+      const result = await post('reading-soundtrack?step=build', { ...body, ...picked });
+      status = { result, spotifyConnected: true };
+      picks = null;
+    } catch(err){
+      if(lostKey(err)) { phase = 'idle'; return; }
+      if(err.message === 'spotify_not_connected'){
+        status = { ...(status || {}), spotifyConnected: false };
+        msg = { text: 'Connect Spotify first.', err: true };
+      } else {
+        msg = { text: err.message, err: true };
+      }
+    }
+    phase = 'idle';
+    render();
+  }
+
+  function render(forceUnlock){
+    if(!key){
+      if(!forceUnlock && !params.has('admin')){ slot.innerHTML = ''; return; }
+      slot.innerHTML = `
+        <div class="st">
+          <div class="divider"></div>
+          <span class="st-label">Reading soundtrack</span>
+          <form class="st-row" id="st-unlock">
+            <input type="password" id="st-key" placeholder="Tracker key" autocomplete="off">
+            <button class="st-btn" type="submit">Unlock</button>
+          </form>
+          ${msg ? `<div class="st-msg${msg.err ? ' err' : ''}">${esc(msg.text)}</div>` : ''}
+        </div>`;
+      document.getElementById('st-unlock').addEventListener('submit', e=>{
+        e.preventDefault();
+        const v = document.getElementById('st-key').value.trim();
+        if(!v) return;
+        try { localStorage.setItem(KEY, v); } catch(err){}
+        key = v; msg = null;
+        render(); loadStatus();
+      });
+      return;
+    }
+
+    const b = book();
+    const result = status && status.result;
+    const busy = phase !== 'idle';
+    const missing = result && result.albums ? result.albums.filter(a => !a.found) : [];
+    const needsConnect = status && status.spotifyConnected === false;
+    const label = phase === 'picking' ? 'Picking albums\u2026'
+      : phase === 'building' ? 'Building playlist\u2026'
+      : result ? 'Rebuild' : 'Build';
+
+    slot.innerHTML = `
+      <div class="st">
+        <div class="divider"></div>
+        <span class="st-label">\u{1F3A7} Reading soundtrack</span>
+        ${result ? `
+          <a class="st-btn spotify st-open" href="${esc(result.playlistUrl)}" target="_blank" rel="noreferrer">Open in Spotify</a>
+          <div class="st-meta">${result.trackCount} tracks \u00B7 ${fmtDuration(result.durationMin)}, no lyrics</div>
+          ${result.summary ? `<div class="st-summary">${esc(result.summary)}</div>` : ''}
+          ${missing.length ? `<div class="st-meta">Not on Spotify: ${esc(missing.map(a => a.album).join(', '))}</div>` : ''}
+        ` : `<div class="st-meta">${b.title ? `Instrumental playlist matched to <em>${esc(b.title)}</em>.` : 'Pick a book above first.'}</div>`}
+        ${needsConnect ? `
+          <button class="st-btn spotify" id="st-connect" style="margin-top:8px">Connect Spotify</button>
+        ` : `
+          <div class="st-row" style="margin-top:10px">
+            <input type="text" id="st-scene" placeholder="Scene or chapter (optional)" value="${esc(scene)}" ${busy ? 'disabled' : ''}>
+            <button class="st-btn" id="st-build" ${busy || !b.title ? 'disabled' : ''}>${label}</button>
+          </div>
+        `}
+        ${picks ? `<ul class="st-picks">${picks.map(p => `<li>${esc(p.artist)} \u2014 ${esc(p.album)}</li>`).join('')}</ul>` : ''}
+        ${msg ? `<div class="st-msg${msg.err ? ' err' : ''}">${esc(msg.text)}</div>` : ''}
+      </div>`;
+
+    const sceneInput = document.getElementById('st-scene');
+    if(sceneInput) sceneInput.addEventListener('input', e => { scene = e.target.value; });
+    const buildBtn = document.getElementById('st-build');
+    if(buildBtn) buildBtn.addEventListener('click', build);
+    const connectBtn = document.getElementById('st-connect');
+    if(connectBtn) connectBtn.addEventListener('click', connect);
+  }
+
+  // Re-check the cached playlist when the book changes (debounced).
+  let timer = null;
+  document.addEventListener('ppd:book', ()=>{
+    if(phase !== 'idle') return;
+    clearTimeout(timer);
+    timer = setTimeout(()=>{ status = status && { spotifyConnected: status.spotifyConnected, result: null }; render(); loadStatus(); }, 600);
+  });
+
+  render();
+  loadStatus();
 })();
 </script>
 
