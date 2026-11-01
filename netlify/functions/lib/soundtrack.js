@@ -5,7 +5,8 @@
 import Anthropic from "@anthropic-ai/sdk"
 
 const UA = { "User-Agent": "brendanreed-site/1.0 (reading-soundtrack)" }
-const MODEL = "claude-haiku-4-5"
+const MODEL = "claude-haiku-5-5"
+const LOOKUP_TIMEOUT_MS = 5000
 
 // Track titles that usually mean vocals — dropped even from "instrumental" albums.
 export const VOCAL_HINTS =
@@ -79,7 +80,7 @@ export async function bookInfo(title, author) {
           srlimit: "3",
           format: "json",
         }),
-      { headers: UA },
+      { headers: UA, signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS) },
     ).then(r => r.json())
     const hit = search?.query?.search?.find(h =>
       slugify(h.title).includes(slugify(title)),
@@ -95,7 +96,7 @@ export async function bookInfo(title, author) {
             redirects: "1",
             format: "json",
           }),
-        { headers: UA },
+        { headers: UA, signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS) },
       ).then(r => r.json())
       const text = Object.values(pages?.query?.pages || {})[0]?.extract || ""
       const body = text.split(SECTION_CUT)[0].trim()
@@ -114,7 +115,7 @@ export async function bookInfo(title, author) {
     if (author) params.author = author
     const ol = await fetch(
       "https://openlibrary.org/search.json?" + new URLSearchParams(params),
-      { headers: UA },
+      { headers: UA, signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS) },
     ).then(r => r.json())
     const d = ol?.docs?.[0]
     if (d?.subject?.length) {
@@ -128,10 +129,10 @@ export async function bookInfo(title, author) {
 
 const SYSTEM = `You are a music supervisor choosing background music for someone READING a book.
 Hard rules:
-- Instrumental ONLY. No lyrics, no sung text, no choral works with words. Wordless drones are fine.
+- Instrumental ONLY. No lyrics, no sung text, no spoken word or narration, no choral works with words. Wordless drones are fine.
 - Real, commercially released albums that are on Spotify (film/TV/game scores, ambient, modern classical, post-rock without vocals). Use exact artist and album names as Spotify lists them.
 - Never pick generic "music for reading/study/sleep" filler artists.
-- Music must stay in the background: avoid loud action cues and heavy beats.
+- Music must stay in the background: avoid loud action cues, heavy beats, and harsh noise.
 - Base picks on the book description, not the title alone. Match its setting, era, mood and themes.
 - Order picks from quieter/establishing to most intense.`
 
@@ -163,7 +164,8 @@ const PICKS_SCHEMA = {
 
 /** Ask Claude for ~n instrumental album picks. Returns {summary, mood_tags, picks}. */
 export async function pickAlbums({ title, author, chapter, about, n = 10 }) {
-  const client = new Anthropic({ timeout: 25_000, maxRetries: 1 })
+  // Sync functions get 60s total; leave room for the book lookup.
+  const client = new Anthropic({ timeout: 45_000, maxRetries: 0 })
   const lines = [`Book: ${title}${author ? ` by ${author}` : ""}`]
   lines.push(
     about
@@ -175,10 +177,14 @@ export async function pickAlbums({ title, author, chapter, about, n = 10 }) {
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 2000,
+    // Haiku 5.5 thinks by default; low effort keeps it ~15s and still picks well.
+    max_tokens: 8000,
     system: SYSTEM,
     messages: [{ role: "user", content: lines.join("\n\n") }],
-    output_config: { format: { type: "json_schema", schema: PICKS_SCHEMA } },
+    output_config: {
+      effort: "low",
+      format: { type: "json_schema", schema: PICKS_SCHEMA },
+    },
   })
 
   if (response.stop_reason === "refusal") {

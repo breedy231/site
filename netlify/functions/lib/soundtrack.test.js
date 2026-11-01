@@ -132,7 +132,7 @@ describe("keys", () => {
 })
 
 describe("pickAlbums", () => {
-  it("sends a JSON-schema request to Haiku and parses the picks", async () => {
+  it("sends a low-effort JSON-schema request to Haiku 5.5 and parses the picks", async () => {
     const create = vi.fn().mockResolvedValue({
       stop_reason: "end_turn",
       content: [
@@ -165,7 +165,8 @@ describe("pickAlbums", () => {
       { artist: "Thomas Newman", album: "1917", why: "WWI" },
     ])
     const req = create.mock.calls[0][0]
-    expect(req.model).toBe("claude-haiku-4-5")
+    expect(req.model).toBe("claude-haiku-5-5")
+    expect(req.output_config.effort).toBe("low")
     expect(req.output_config.format.type).toBe("json_schema")
     expect(req.messages[0].content).toContain("A WWI novel")
     expect(req.messages[0].content).toContain("No Man's Land")
