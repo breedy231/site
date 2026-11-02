@@ -24,7 +24,7 @@
     "astro": "^7.4.4",
     "axios": "^1.21.0",
     "fast-xml-parser": "^5.11.2",
-    "framer-motion": "^14.7.1",
+    "framer-motion": "^14.9.0",
     "prop-types": "^15.8.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
