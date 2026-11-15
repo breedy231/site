@@ -12,8 +12,12 @@ const blog = defineCollection({
   }),
 })
 
+// Must match ID_RE in netlify/functions/game-progress.js, or progress for
+// the item is silently dropped on save.
+const progressId = z.string().regex(/^[A-Za-z0-9_-]{1,64}$/)
+
 const gameItem = z.object({
-  id: z.string(),
+  id: progressId,
   // Must be a default kind (boss/quest/item/area) or one declared in `kinds`.
   kind: z.string(),
   name: z.string(),
@@ -59,7 +63,7 @@ const games = defineCollection({
       regions: z
         .array(
           z.object({
-            id: z.string(),
+            id: progressId,
             name: z.string(),
             items: z.array(gameItem).default([]),
           }),
@@ -78,7 +82,7 @@ const games = defineCollection({
             })
           }
           ids.add(item.id)
-          if (!kinds[item.kind]) {
+          if (!Object.hasOwn(kinds, item.kind)) {
             ctx.addIssue({
               code: "custom",
               message: `Item "${item.id}" has unknown kind "${item.kind}"`,

@@ -29,8 +29,9 @@ notes: |
   **Research Core escape**
 
   - Keep the **Thermal Visor** on the whole way. The lights are out and Shadow Pirates are invisible without it.
-  - Use a **charged Wave Beam** on the drones.
-  - If a Metroid latches on, go to **Morph Ball and lay a bomb** to shake it off.
+  - The drones are **Sentry Drones** (they scramble your visor). Charged **Wave Beam** kills them fast.
+  - Dead door? Find its **Power Conduit** in Thermal and shoot it with the **Wave Beam**.
+  - Metroids drain energy fast. If one latches on, go to **Morph Ball and lay a bomb** to shake it off.
   - **Run.** Don't clear rooms; nothing in there is worth the energy.
 
   **Pick up more Energy Tanks.** You only have 1.
@@ -38,10 +39,6 @@ regions:
   - id: tallon
     name: Tallon Overworld
     items:
-      - id: meta-ridley
-        kind: boss
-        name: "Meta Ridley"
-        hint: "Artifact Temple, after all 12 artifacts are placed."
       - id: space-jump-boots
         kind: upgrade
         name: "Space Jump Boots"
@@ -91,10 +88,6 @@ regions:
       - id: life-grove-tunnel-missile
         kind: missile
         name: "Life Grove Tunnel — Missile Expansion"
-      - id: scan-meta-ridley
-        kind: scan
-        name: "Scan: Meta Ridley"
-        hint: "Missable: scan during the fight."
   - id: chozo
     name: Chozo Ruins
     items:
@@ -284,7 +277,7 @@ regions:
       - id: research-core-escape
         kind: quest
         name: "Escape the Research Core alive"
-        hint: "Power is out after the Thermal Visor. Keep Thermal on, run, save at the Ruined Courtyard. Then Thardus."
+        hint: "Exit is Research Core Access, up into Research Lab Aether. If a door is dead, find its Power Conduit in Thermal and hit it with the Wave Beam. Save at the Ruined Courtyard, then Thardus."
       - id: sheegoth
         kind: boss
         name: "Sheegoth"
@@ -292,7 +285,7 @@ regions:
       - id: thardus
         kind: boss
         name: "Thardus"
-        hint: "Quarantine Cave, via Quarantine Access off the Ruined Courtyard. Scan for the glowing Phazon rock; switch to Thermal when the visor jams. Drops the Spider Ball."
+        hint: "Quarantine Cave: Ruined Courtyard → Quarantine Access → North Quarantine Tunnel. The Courtyard door is unpowered: hit its Power Conduit (behind the Cordite statue, visible in Thermal) with the Wave Beam. Fight: Thermal finds the weak rock (and locks on), shoot it; Thermal sees through the snowstorm. Bomb it when it rolls, Boost or Space Jump out of the way. Drops the Spider Ball."
       - id: wave-beam
         kind: upgrade
         name: "Wave Beam"
@@ -374,7 +367,7 @@ regions:
       - id: scan-thardus
         kind: scan
         name: "Scan: Thardus"
-        hint: "Missable."
+        hint: "Missable: scan during the fight."
   - id: mines
     name: Phazon Mines
     items:
@@ -473,10 +466,18 @@ regions:
   - id: crater
     name: Impact Crater
     items:
+      - id: meta-ridley
+        kind: boss
+        name: "Meta Ridley"
+        hint: "Artifact Temple (Tallon), once all 12 artifacts are placed. Opens the way into the crater."
       - id: metroid-prime
         kind: boss
         name: "Metroid Prime"
         hint: "Exoskeleton, then the core essence. Final boss."
+      - id: scan-meta-ridley
+        kind: scan
+        name: "Scan: Meta Ridley"
+        hint: "Missable: scan during the fight."
       - id: scan-metroid-prime
         kind: scan
         name: "Scan: Metroid Prime"
