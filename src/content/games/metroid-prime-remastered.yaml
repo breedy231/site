@@ -1,0 +1,483 @@
+# Game definition for the tracker at /games/metroid-prime-remastered.
+# Progress lives in Netlify Blobs, not here. Switch game: no Steam sync, all manual.
+# Pickup list (100 items) is the vanilla layout, cross-checked against Randovania's
+# Prime 1 logic database. Expansion names lead with the room so the wiki link lands
+# on the room page, which explains how to reach it.
+slug: metroid-prime-remastered
+title: Metroid Prime Remastered
+character: Switch — manual tracking
+links:
+  wiki: https://metroid.fandom.com/wiki/{q}
+kinds:
+  upgrade: { label: Upgrade, color: amber }
+  etank: { label: Energy Tank, color: green }
+  missile: { label: Missile, color: orange }
+  pbomb: { label: Power Bomb, color: purple }
+  artifact: { label: Artifact, color: sky }
+  scan: { label: Scan, color: gray }
+# Suggested path from where I am now. Update this when I get stuck.
+route:
+  - research-core-escape
+  - thardus
+  - spider-ball
+stats:
+  - key: pct
+    label: Items %
+  - key: hrs
+    label: Hours
+notes: |
+  **Research Core escape**
+
+  - Keep the **Thermal Visor** on the whole way. The lights are out and Shadow Pirates are invisible without it.
+  - Use a **charged Wave Beam** on the drones.
+  - If a Metroid latches on, go to **Morph Ball and lay a bomb** to shake it off.
+  - **Run.** Don't clear rooms; nothing in there is worth the energy.
+
+  **Pick up more Energy Tanks.** You only have 1.
+regions:
+  - id: tallon
+    name: Tallon Overworld
+    items:
+      - id: meta-ridley
+        kind: boss
+        name: "Meta Ridley"
+        hint: "Artifact Temple, after all 12 artifacts are placed."
+      - id: space-jump-boots
+        kind: upgrade
+        name: "Space Jump Boots"
+        hint: "Alcove."
+      - id: x-ray-visor
+        kind: upgrade
+        name: "X-Ray Visor"
+        hint: "Life Grove."
+      - id: artifact-of-truth
+        kind: artifact
+        name: "Artifact of Truth"
+        hint: "Artifact Temple."
+      - id: artifact-of-chozo
+        kind: artifact
+        name: "Artifact of Chozo"
+        hint: "Life Grove."
+      - id: cargo-freight-lift-to-deck-gamma-etank
+        kind: etank
+        name: "Cargo Freight Lift to Deck Gamma — Energy Tank"
+      - id: hydro-access-tunnel-etank
+        kind: etank
+        name: "Hydro Access Tunnel — Energy Tank"
+      - id: landing-site-missile
+        kind: missile
+        name: "Landing Site — Missile Expansion"
+      - id: frigate-crash-site-missile
+        kind: missile
+        name: "Frigate Crash Site — Missile Expansion"
+      - id: overgrown-cavern-missile
+        kind: missile
+        name: "Overgrown Cavern — Missile Expansion"
+      - id: root-cave-missile
+        kind: missile
+        name: "Root Cave — Missile Expansion"
+      - id: transport-tunnel-b-missile
+        kind: missile
+        name: "Transport Tunnel B — Missile Expansion"
+      - id: arbor-chamber-missile
+        kind: missile
+        name: "Arbor Chamber — Missile Expansion"
+      - id: biohazard-containment-missile
+        kind: missile
+        name: "Biohazard Containment — Missile Expansion"
+      - id: great-tree-chamber-missile
+        kind: missile
+        name: "Great Tree Chamber — Missile Expansion"
+      - id: life-grove-tunnel-missile
+        kind: missile
+        name: "Life Grove Tunnel — Missile Expansion"
+      - id: scan-meta-ridley
+        kind: scan
+        name: "Scan: Meta Ridley"
+        hint: "Missable: scan during the fight."
+  - id: chozo
+    name: Chozo Ruins
+    items:
+      - id: plated-beetle
+        kind: boss
+        name: "Plated Beetle"
+        hint: "Ruined Shrine, ambushes you after the Morph Ball."
+      - id: hive-mecha
+        kind: boss
+        name: "Hive Mecha"
+        hint: "Hive Totem. Drops the Missile Launcher."
+      - id: incinerator-drone
+        kind: boss
+        name: "Incinerator Drone"
+        hint: "Burn Dome. Drops the Morph Ball Bomb."
+      - id: flaahgra
+        kind: boss
+        name: "Flaahgra"
+        hint: "Sunchamber. Drops the Varia Suit."
+      - id: morph-ball
+        kind: upgrade
+        name: "Morph Ball"
+        hint: "Ruined Shrine."
+      - id: wavebuster
+        kind: upgrade
+        name: "Wavebuster"
+        hint: "Tower of Light."
+      - id: missile-launcher
+        kind: upgrade
+        name: "Missile Launcher"
+        hint: "Hive Totem, after Hive Mecha."
+      - id: varia-suit
+        kind: upgrade
+        name: "Varia Suit"
+        hint: "Sunchamber, after Flaahgra."
+      - id: charge-beam
+        kind: upgrade
+        name: "Charge Beam"
+        hint: "Watery Hall."
+      - id: morph-ball-bomb
+        kind: upgrade
+        name: "Morph Ball Bomb"
+        hint: "Burn Dome, after Incinerator Drone."
+      - id: ice-beam
+        kind: upgrade
+        name: "Ice Beam"
+        hint: "Antechamber."
+      - id: artifact-of-lifegiver
+        kind: artifact
+        name: "Artifact of Lifegiver"
+        hint: "Tower Chamber."
+      - id: artifact-of-wild
+        kind: artifact
+        name: "Artifact of Wild"
+        hint: "Sunchamber."
+      - id: artifact-of-world
+        kind: artifact
+        name: "Artifact of World"
+        hint: "Elder Chamber."
+      - id: main-plaza-etank
+        kind: etank
+        name: "Main Plaza — Energy Tank"
+      - id: training-chamber-etank
+        kind: etank
+        name: "Training Chamber — Energy Tank"
+      - id: transport-access-north-etank
+        kind: etank
+        name: "Transport Access North — Energy Tank"
+      - id: furnace-etank
+        kind: etank
+        name: "Furnace — Energy Tank"
+      - id: hall-of-the-elders-etank
+        kind: etank
+        name: "Hall of the Elders — Energy Tank"
+      - id: main-plaza-missile
+        kind: missile
+        name: "Main Plaza — Missile Expansion (half pipe)"
+      - id: main-plaza-missile-2
+        kind: missile
+        name: "Main Plaza — Missile Expansion (grapple ledge)"
+      - id: main-plaza-missile-3
+        kind: missile
+        name: "Main Plaza — Missile Expansion (tree)"
+      - id: ruined-fountain-missile
+        kind: missile
+        name: "Ruined Fountain — Missile Expansion"
+      - id: ruined-shrine-missile
+        kind: missile
+        name: "Ruined Shrine — Missile Expansion (half pipe)"
+      - id: ruined-shrine-missile-2
+        kind: missile
+        name: "Ruined Shrine — Missile Expansion (bomb wall)"
+      - id: vault-missile
+        kind: missile
+        name: "Vault — Missile Expansion"
+      - id: ruined-nursery-missile
+        kind: missile
+        name: "Ruined Nursery — Missile Expansion"
+      - id: training-chamber-access-missile
+        kind: missile
+        name: "Training Chamber Access — Missile Expansion"
+      - id: ruined-gallery-missile
+        kind: missile
+        name: "Ruined Gallery — Missile Expansion"
+      - id: ruined-gallery-missile-2
+        kind: missile
+        name: "Ruined Gallery — Missile Expansion"
+      - id: gathering-hall-missile
+        kind: missile
+        name: "Gathering Hall — Missile Expansion"
+      - id: watery-hall-access-missile
+        kind: missile
+        name: "Watery Hall Access — Missile Expansion"
+      - id: watery-hall-missile
+        kind: missile
+        name: "Watery Hall — Missile Expansion"
+      - id: dynamo-missile
+        kind: missile
+        name: "Dynamo — Missile Expansion"
+      - id: dynamo-missile-2
+        kind: missile
+        name: "Dynamo — Missile Expansion"
+      - id: burn-dome-missile
+        kind: missile
+        name: "Burn Dome — Missile Expansion"
+      - id: furnace-missile
+        kind: missile
+        name: "Furnace — Missile Expansion"
+      - id: crossway-missile
+        kind: missile
+        name: "Crossway — Missile Expansion"
+      - id: magma-pool-pb
+        kind: pbomb
+        name: "Magma Pool — Power Bomb Expansion"
+      - id: scan-hive-mecha
+        kind: scan
+        name: "Scan: Hive Mecha"
+        hint: "Missable."
+      - id: scan-incinerator-drone
+        kind: scan
+        name: "Scan: Incinerator Drone"
+        hint: "Missable."
+      - id: scan-flaahgra
+        kind: scan
+        name: "Scan: Flaahgra"
+        hint: "Missable."
+  - id: magmoor
+    name: Magmoor Caverns
+    items:
+      - id: ice-spreader
+        kind: upgrade
+        name: "Ice Spreader"
+        hint: "Shore Tunnel."
+      - id: plasma-beam
+        kind: upgrade
+        name: "Plasma Beam"
+        hint: "Plasma Processing."
+      - id: artifact-of-nature
+        kind: artifact
+        name: "Artifact of Nature"
+        hint: "Lava Lake."
+      - id: artifact-of-strength
+        kind: artifact
+        name: "Artifact of Strength"
+        hint: "Warrior Shrine."
+      - id: transport-tunnel-a-etank
+        kind: etank
+        name: "Transport Tunnel A — Energy Tank"
+      - id: magmoor-workstation-etank
+        kind: etank
+        name: "Magmoor Workstation — Energy Tank"
+      - id: triclops-pit-missile
+        kind: missile
+        name: "Triclops Pit — Missile Expansion"
+      - id: storage-cavern-missile
+        kind: missile
+        name: "Storage Cavern — Missile Expansion"
+      - id: fiery-shores-missile
+        kind: missile
+        name: "Fiery Shores — Missile Expansion"
+      - id: fiery-shores-pb
+        kind: pbomb
+        name: "Fiery Shores — Power Bomb Expansion"
+  - id: phendrana
+    name: Phendrana Drifts
+    items:
+      - id: research-core-escape
+        kind: quest
+        name: "Escape the Research Core alive"
+        hint: "Power is out after the Thermal Visor. Keep Thermal on, run, save at the Ruined Courtyard. Then Thardus."
+      - id: sheegoth
+        kind: boss
+        name: "Sheegoth"
+        hint: "Chapel of the Elders. Drops the Wave Beam."
+      - id: thardus
+        kind: boss
+        name: "Thardus"
+        hint: "Quarantine Cave, via Quarantine Access off the Ruined Courtyard. Scan for the glowing Phazon rock; switch to Thermal when the visor jams. Drops the Spider Ball."
+      - id: wave-beam
+        kind: upgrade
+        name: "Wave Beam"
+        hint: "Chapel of the Elders, after Sheegoth."
+      - id: boost-ball
+        kind: upgrade
+        name: "Boost Ball"
+        hint: "Phendrana Canyon."
+      - id: spider-ball
+        kind: upgrade
+        name: "Spider Ball"
+        hint: "Quarantine Cave, after Thardus."
+      - id: super-missile
+        kind: upgrade
+        name: "Super Missile"
+        hint: "Observatory."
+      - id: thermal-visor
+        kind: upgrade
+        name: "Thermal Visor"
+        hint: "Research Core."
+      - id: gravity-suit
+        kind: upgrade
+        name: "Gravity Suit"
+        hint: "Gravity Chamber."
+      - id: artifact-of-sun
+        kind: artifact
+        name: "Artifact of Sun"
+        hint: "Chozo Ice Temple."
+      - id: artifact-of-elder
+        kind: artifact
+        name: "Artifact of Elder"
+        hint: "Control Tower."
+      - id: artifact-of-spirit
+        kind: artifact
+        name: "Artifact of Spirit"
+        hint: "Storage Cave."
+      - id: ruined-courtyard-etank
+        kind: etank
+        name: "Ruined Courtyard — Energy Tank"
+      - id: transport-access-etank
+        kind: etank
+        name: "Transport Access — Energy Tank"
+      - id: research-lab-aether-etank
+        kind: etank
+        name: "Research Lab Aether — Energy Tank"
+      - id: phendrana-shorelines-missile
+        kind: missile
+        name: "Phendrana Shorelines — Missile Expansion (behind ice)"
+      - id: phendrana-shorelines-missile-2
+        kind: missile
+        name: "Phendrana Shorelines — Missile Expansion (spider track)"
+      - id: ice-ruins-east-missile
+        kind: missile
+        name: "Ice Ruins East — Missile Expansion (behind ice)"
+      - id: ice-ruins-east-missile-2
+        kind: missile
+        name: "Ice Ruins East — Missile Expansion (spider track)"
+      - id: research-lab-hydra-missile
+        kind: missile
+        name: "Research Lab Hydra — Missile Expansion"
+      - id: quarantine-monitor-missile
+        kind: missile
+        name: "Quarantine Monitor — Missile Expansion"
+      - id: frost-cave-missile
+        kind: missile
+        name: "Frost Cave — Missile Expansion"
+      - id: research-lab-aether-missile
+        kind: missile
+        name: "Research Lab Aether — Missile Expansion"
+      - id: gravity-chamber-missile
+        kind: missile
+        name: "Gravity Chamber — Missile Expansion"
+      - id: ice-ruins-west-pb
+        kind: pbomb
+        name: "Ice Ruins West — Power Bomb Expansion"
+      - id: security-cave-pb
+        kind: pbomb
+        name: "Security Cave — Power Bomb Expansion"
+      - id: scan-thardus
+        kind: scan
+        name: "Scan: Thardus"
+        hint: "Missable."
+  - id: mines
+    name: Phazon Mines
+    items:
+      - id: omega-pirate
+        kind: boss
+        name: "Omega Pirate"
+        hint: "Elite Quarters. Drops the Phazon Suit. X-Ray shows him when he goes invisible."
+      - id: grapple-beam
+        kind: upgrade
+        name: "Grapple Beam"
+        hint: "Storage Depot B."
+      - id: flamethrower
+        kind: upgrade
+        name: "Flamethrower"
+        hint: "Storage Depot A."
+      - id: phazon-suit
+        kind: upgrade
+        name: "Phazon Suit"
+        hint: "Elite Quarters, after Omega Pirate."
+      - id: power-bomb
+        kind: upgrade
+        name: "Power Bomb"
+        hint: "Central Dynamo."
+      - id: artifact-of-warrior
+        kind: artifact
+        name: "Artifact of Warrior"
+        hint: "Elite Research."
+      - id: artifact-of-newborn
+        kind: artifact
+        name: "Artifact of Newborn"
+        hint: "Phazon Mining Tunnel."
+      - id: ventilation-shaft-etank
+        kind: etank
+        name: "Ventilation Shaft — Energy Tank"
+      - id: processing-center-access-etank
+        kind: etank
+        name: "Processing Center Access — Energy Tank"
+      - id: main-quarry-missile
+        kind: missile
+        name: "Main Quarry — Missile Expansion"
+      - id: security-access-a-missile
+        kind: missile
+        name: "Security Access A — Missile Expansion"
+      - id: elite-research-missile
+        kind: missile
+        name: "Elite Research — Missile Expansion"
+      - id: elite-control-access-missile
+        kind: missile
+        name: "Elite Control Access — Missile Expansion"
+      - id: phazon-processing-center-missile
+        kind: missile
+        name: "Phazon Processing Center — Missile Expansion"
+      - id: metroid-quarantine-b-missile
+        kind: missile
+        name: "Metroid Quarantine B — Missile Expansion"
+      - id: metroid-quarantine-a-missile
+        kind: missile
+        name: "Metroid Quarantine A — Missile Expansion"
+      - id: fungal-hall-b-missile
+        kind: missile
+        name: "Fungal Hall B — Missile Expansion"
+      - id: fungal-hall-access-missile
+        kind: missile
+        name: "Fungal Hall Access — Missile Expansion"
+      - id: scan-omega-pirate
+        kind: scan
+        name: "Scan: Omega Pirate"
+        hint: "Missable."
+  - id: frigate
+    name: Frigate Orpheon
+    items:
+      - id: parasite-queen
+        kind: boss
+        name: "Parasite Queen"
+        hint: "Reactor core. Then escape before the frigate blows."
+      - id: power-beam
+        kind: upgrade
+        name: "Power Beam"
+        hint: "Starting equipment."
+      - id: combat-visor
+        kind: upgrade
+        name: "Combat Visor"
+        hint: "Starting equipment."
+      - id: scan-visor
+        kind: upgrade
+        name: "Scan Visor"
+        hint: "Starting equipment."
+      - id: scan-parasite-queen
+        kind: scan
+        name: "Scan: Parasite Queen"
+        hint: "Missable: the frigate is gone after the intro."
+      - id: scan-frigate-logs
+        kind: scan
+        name: "Scan: Frigate research logs"
+        hint: "Missable: Space Pirate Data entries only on the frigate."
+  - id: crater
+    name: Impact Crater
+    items:
+      - id: metroid-prime
+        kind: boss
+        name: "Metroid Prime"
+        hint: "Exoskeleton, then the core essence. Final boss."
+      - id: scan-metroid-prime
+        kind: scan
+        name: "Scan: Metroid Prime"
+        hint: "Missable: scan both forms."

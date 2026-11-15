@@ -1,9 +1,9 @@
 import PropTypes from "prop-types"
 
-const NextUp = ({ item }) => (
+const NextUp = ({ item, pinned }) => (
   <div className="rounded border border-gray-300 p-4 dark:border-gray-600">
     <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-300">
-      Next up
+      Next up{pinned ? " · pinned" : ""}
     </h2>
     {item ? (
       <>
@@ -26,6 +26,7 @@ NextUp.propTypes = {
     name: PropTypes.string,
     hint: PropTypes.string,
   }),
+  pinned: PropTypes.bool,
 }
 
 export default NextUp

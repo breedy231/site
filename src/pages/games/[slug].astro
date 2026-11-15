@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getCollection } from "astro:content"
+import { marked } from "marked"
 import GameTracker from "../../components/games/GameTracker"
 
 export async function getStaticPaths() {
@@ -12,8 +13,12 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props
+// Notes are repo-authored markdown, so rendering to HTML here is trusted.
+const notesHtml = entry.data.notes
+  ? await marked.parse(entry.data.notes)
+  : undefined
 ---
 
 <BaseLayout title={`${entry.data.title} — Brendan Reed`}>
-  <GameTracker client:load game={entry.data} />
+  <GameTracker client:load game={entry.data} notesHtml={notesHtml} />
 </BaseLayout>

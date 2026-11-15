@@ -1,11 +1,14 @@
 import PropTypes from "prop-types"
 import { useState } from "react"
 import ChecklistItem from "./ChecklistItem"
+import { kindBadge } from "./kinds"
 import { countDone, isItemDone, steamUnlockAt } from "./selectors"
 
 const RegionSection = ({
   region,
   links,
+  kinds,
+  hideDone,
   state,
   achievements,
   canWrite,
@@ -23,6 +26,12 @@ const RegionSection = ({
   const doneCount = countDone(items, state, achievements)
   const closed = Boolean(state.closed[region.id])
   const pct = total ? Math.round((doneCount / total) * 100) : 0
+  // Pinned items stay visible even when done-hiding is on.
+  const visible = hideDone
+    ? items.filter(
+        item => state.pin === item.id || !isItemDone(item, state, achievements),
+      )
+    : items
 
   const submit = e => {
     e.preventDefault()
@@ -59,10 +68,11 @@ const RegionSection = ({
       {!closed && (
         <div className="px-4 pb-3">
           <ul>
-            {items.map(item => (
+            {visible.map(item => (
               <ChecklistItem
                 key={item.id}
                 item={item}
+                badge={kindBadge(kinds, item.kind)}
                 links={links}
                 done={isItemDone(item, state, achievements)}
                 steamUnlock={steamUnlockAt(item, achievements)}
@@ -75,6 +85,11 @@ const RegionSection = ({
               />
             ))}
           </ul>
+          {hideDone && visible.length === 0 && (
+            <p className="py-2 text-sm text-gray-500 dark:text-gray-300">
+              All done here.
+            </p>
+          )}
 
           <form onSubmit={submit} className="mt-3 flex gap-2">
             <input
@@ -106,6 +121,8 @@ RegionSection.propTypes = {
     items: PropTypes.array.isRequired,
   }).isRequired,
   links: PropTypes.object,
+  kinds: PropTypes.object.isRequired,
+  hideDone: PropTypes.bool,
   state: PropTypes.object.isRequired,
   achievements: PropTypes.object,
   canWrite: PropTypes.bool,

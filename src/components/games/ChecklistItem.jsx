@@ -3,16 +3,9 @@ import { useState } from "react"
 import { buildLink } from "./links"
 import { formatUnlockDate } from "./useSteam"
 
-const KIND_STYLES = {
-  boss: "border-red-400 text-red-600 dark:border-red-500 dark:text-red-300",
-  quest:
-    "border-blue-400 text-blue-600 dark:border-blue-400 dark:text-blue-300",
-  item: "border-amber-500 text-amber-700 dark:border-amber-400 dark:text-amber-300",
-  area: "border-gray-300 text-gray-500 dark:border-gray-600 dark:text-gray-300",
-}
-
 const ChecklistItem = ({
   item,
+  badge,
   links,
   done,
   note,
@@ -68,11 +61,9 @@ const ChecklistItem = ({
 
           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
             <span
-              className={`rounded border px-1.5 py-0.5 uppercase ${
-                KIND_STYLES[item.kind] || KIND_STYLES.area
-              }`}
+              className={`rounded border px-1.5 py-0.5 uppercase ${badge.className}`}
             >
-              {item.kind}
+              {badge.label}
             </span>
             {steamConfirmed && (
               <span
@@ -142,6 +133,10 @@ ChecklistItem.propTypes = {
     kind: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     hint: PropTypes.string,
+  }).isRequired,
+  badge: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    className: PropTypes.string.isRequired,
   }).isRequired,
   links: PropTypes.shape({
     map: PropTypes.string,

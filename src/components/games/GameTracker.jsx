@@ -3,6 +3,7 @@ import { useMemo, useState } from "react"
 import useProgress from "./useProgress"
 import useSteam, { formatPlaytimeLine } from "./useSteam"
 import { countDone, flattenItems, pickNextUp } from "./selectors"
+import { resolveKinds } from "./kinds"
 import NextUp from "./NextUp"
 import RegionSection from "./RegionSection"
 import StatFields from "./StatFields"
@@ -14,7 +15,8 @@ const toggleFlag = (map, id) => {
   return next
 }
 
-const GameTracker = ({ game }) => {
+// notesHtml is rendered at build time from the YAML `notes` (trusted repo content).
+const GameTracker = ({ game, notesHtml }) => {
   const {
     state,
     update,
@@ -30,6 +32,9 @@ const GameTracker = ({ game }) => {
 
   const [showKeyInput, setShowKeyInput] = useState(false)
   const [keyDraft, setKeyDraft] = useState("")
+  const [hideDone, setHideDone] = useState(false)
+
+  const kinds = useMemo(() => resolveKinds(game.kinds), [game.kinds])
 
   const ordered = useMemo(
     () => flattenItems(game.regions, state.custom),
@@ -37,7 +42,7 @@ const GameTracker = ({ game }) => {
   )
   const total = ordered.length
   const doneCount = countDone(ordered, state, achievements)
-  const next = pickNextUp(ordered, state, achievements)
+  const next = pickNextUp(ordered, state, achievements, game.route)
   const playtimeLine = formatPlaytimeLine({ playtime2w, lastPlayed })
 
   const onToggleDone = id =>
@@ -159,7 +164,34 @@ const GameTracker = ({ game }) => {
       )}
 
       <div className="mb-4">
-        <NextUp item={next} />
+        <NextUp item={next} pinned={Boolean(next && state.pin === next.id)} />
+      </div>
+
+      {notesHtml && (
+        <details
+          open
+          className="mb-4 rounded border border-gray-300 p-4 dark:border-gray-600"
+        >
+          <summary className="cursor-pointer text-xs tracking-wide text-gray-500 uppercase dark:text-gray-300">
+            Notes
+          </summary>
+          <div
+            className="prose prose-sm dark:prose-invert mt-2 max-w-none"
+            dangerouslySetInnerHTML={{ __html: notesHtml }}
+          />
+        </details>
+      )}
+
+      <div className="mb-3 flex justify-end text-sm">
+        <label className="flex cursor-pointer items-center gap-2 text-gray-500 dark:text-gray-300">
+          <input
+            type="checkbox"
+            checked={hideDone}
+            onChange={e => setHideDone(e.target.checked)}
+            className="h-4 w-4 accent-red-500"
+          />
+          Hide done
+        </label>
       </div>
 
       <div className="space-y-3">
@@ -168,6 +200,8 @@ const GameTracker = ({ game }) => {
             key={region.id}
             region={region}
             links={game.links}
+            kinds={kinds}
+            hideDone={hideDone}
             state={state}
             achievements={achievements}
             canWrite={canWrite}
@@ -190,9 +224,12 @@ GameTracker.propTypes = {
     character: PropTypes.string,
     links: PropTypes.object,
     steam: PropTypes.shape({ appid: PropTypes.number }),
+    kinds: PropTypes.object,
+    route: PropTypes.arrayOf(PropTypes.string),
     stats: PropTypes.array.isRequired,
     regions: PropTypes.array.isRequired,
   }).isRequired,
+  notesHtml: PropTypes.string,
 }
 
 export default GameTracker
