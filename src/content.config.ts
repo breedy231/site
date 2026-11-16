@@ -22,6 +22,9 @@ const gameItem = z.object({
   kind: z.string(),
   name: z.string(),
   hint: z.string().optional(),
+  // HUD inventory tile: short code (else initials) and grouping heading.
+  icon: z.string().max(4).optional(),
+  group: z.string().optional(),
   // Steam achievement apiname(s). Any one unlocked marks the
   // item done (Elden Ring's endings are three separate names).
   steam: z.union([z.string(), z.array(z.string())]).optional(),
@@ -51,6 +54,32 @@ const games = defineCollection({
             color: z.enum(KIND_COLOR_NAMES),
           }),
         )
+        .optional(),
+      // Visual theme; see src/styles/game-themes.css.
+      theme: z.enum(["plain", "visor", "erdtree"]).default("plain"),
+      // HUD layout. Without it, every kind gets a progress bar.
+      hud: z
+        .object({
+          // One kind shown as a tile grid (owned = lit), grouped by item `group`.
+          inventory: z
+            .object({
+              kind: z.string(),
+              title: z.string().optional(),
+              groups: z.array(z.string()).default([]),
+              // Tile order within groups (item ids); others follow page order.
+              order: z.array(z.string()).default([]),
+            })
+            .optional(),
+          counters: z
+            .array(
+              z.object({
+                kind: z.string(),
+                label: z.string().optional(),
+                style: z.enum(["bar", "pips", "slots"]).default("bar"),
+              }),
+            )
+            .default([]),
+        })
         .optional(),
       // Short markdown shown under "Next up": tips, where I'm stuck.
       notes: z.string().optional(),
@@ -88,6 +117,18 @@ const games = defineCollection({
               message: `Item "${item.id}" has unknown kind "${item.kind}"`,
             })
           }
+        }
+      }
+      const hudKinds = [
+        game.hud?.inventory?.kind,
+        ...(game.hud?.counters || []).map(c => c.kind),
+      ].filter(Boolean)
+      for (const kind of hudKinds) {
+        if (!Object.hasOwn(kinds, kind)) {
+          ctx.addIssue({
+            code: "custom",
+            message: `hud references unknown kind "${kind}"`,
+          })
         }
       }
       for (const id of game.route) {

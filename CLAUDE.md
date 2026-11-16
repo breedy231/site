@@ -74,6 +74,12 @@
 - YAML holds the definition only: `regions → items` (`id`, `kind`, `name`, `hint`,
   optional `steam`), optional `kinds` (label + color from `kinds.js`, merged over
   boss/quest/item/area), `notes` (markdown, rendered at build time), `route`.
+- Look: `theme:` (`plain` / `visor` / `erdtree`, CSS vars in
+  `src/styles/game-themes.css`) and `hud:` (`inventory` = one kind as a lit/dim
+  tile grid with `groups` + `order`; `counters` = per-kind `bar`/`pips`/`slots`).
+  Items can set `icon` (tile code) and `group`. Page = objective + field notes →
+  inventory → counters → area cards; tapping any of them opens a detail list.
+  Astro dev caches content: restart `astro dev` (or build) after YAML edits.
 - Progress (done, pin, stats, per-item notes) lives in the `game-tracker` blob.
   Read it with `GET /api/game-progress?game=<slug>` (public).
 - "Next up" = pinned item, else the first undone `route` id, else the first

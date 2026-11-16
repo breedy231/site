@@ -3,6 +3,13 @@
 slug: elden-ring
 title: Elden Ring
 character: Crim — sorcery run
+theme: erdtree
+hud:
+  counters:
+    - { kind: boss, label: Great enemies felled, style: slots }
+    - { kind: item, label: Spells & gear, style: bar }
+    - { kind: quest, label: Quests, style: bar }
+    - { kind: area, label: Plan & areas, style: bar }
 steam:
   appid: 1245620
 links:

@@ -1,0 +1,240 @@
+/* Game tracker themes. A game YAML picks one with `theme:`; every tracker
+   component reads these variables, so a new theme is just a new block here.
+   Dark themes also put `.dark` on the wrapper (see GameTracker) so the kind
+   badges and inputs use their dark-mode colors. Original styling — evocative
+   of in-game menus, no copied game art. */
+
+.hud {
+  --hud-bg: transparent;
+  --hud-panel: transparent;
+  --hud-line: #d1d5db;
+  --hud-text: #111827;
+  --hud-muted: #6b7280;
+  --hud-accent: #ef4444;
+  --hud-accent-2: #ef4444;
+  --hud-off: #e5e7eb;
+  --hud-font: inherit;
+  --hud-title-font: inherit;
+  --hud-label-font: inherit;
+
+  position: relative;
+  isolation: isolate;
+  background: var(--hud-bg);
+  color: var(--hud-text);
+  font-family: var(--hud-font);
+}
+
+.dark .hud-plain {
+  --hud-line: #4b5563;
+  --hud-text: #ffffff;
+  --hud-muted: #d1d5db;
+  --hud-off: #374151;
+}
+
+/* Visor: dark scanner readout, cyan linework, amber highlights. */
+.hud-visor {
+  --hud-bg: #060b12;
+  --hud-panel: rgba(56, 225, 255, 0.045);
+  --hud-line: rgba(56, 225, 255, 0.3);
+  --hud-text: #d7f6ff;
+  --hud-muted: #7fa9b8;
+  --hud-accent: #ff9f1c;
+  --hud-accent-2: #38e1ff;
+  --hud-off: rgba(56, 225, 255, 0.12);
+  --hud-label-font: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --hud-title-font: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+  border-radius: 0.75rem;
+  border: 1px solid var(--hud-line);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(56, 225, 255, 0.08) inset;
+}
+
+.hud-visor::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(56, 225, 255, 0.1),
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.025) 0 1px,
+      transparent 1px 3px
+    );
+}
+
+/* Erdtree: dusk-gold, serif titles, warm parchment text. */
+.hud-erdtree {
+  --hud-bg: #15120c;
+  --hud-panel: rgba(212, 175, 55, 0.05);
+  --hud-line: rgba(212, 175, 55, 0.3);
+  --hud-text: #efe6cf;
+  --hud-muted: #a89a78;
+  --hud-accent: #d4af37;
+  --hud-accent-2: #f1dc9a;
+  --hud-off: rgba(212, 175, 55, 0.12);
+  --hud-title-font: ui-serif, Georgia, "Times New Roman", serif;
+  --hud-label-font: ui-serif, Georgia, "Times New Roman", serif;
+  color-scheme: dark;
+  border-radius: 0.75rem;
+  border: 1px solid var(--hud-line);
+}
+
+.hud-erdtree::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% -10%,
+    rgba(212, 175, 55, 0.16),
+    transparent 55%
+  );
+}
+
+/* Building blocks */
+
+.hud-panel {
+  position: relative;
+  background: var(--hud-panel);
+  border: 1px solid var(--hud-line);
+  border-radius: 0.375rem;
+}
+
+/* Corner brackets on visor panels. */
+.hud-visor .hud-panel::before,
+.hud-visor .hud-panel::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  border-color: var(--hud-accent-2);
+  border-style: solid;
+}
+.hud-visor .hud-panel::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+.hud-visor .hud-panel::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+.hud-label {
+  font-family: var(--hud-label-font);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hud-muted);
+}
+
+.hud-title {
+  font-family: var(--hud-title-font);
+}
+
+.hud-glow {
+  color: var(--hud-accent);
+}
+.hud-visor .hud-glow {
+  text-shadow: 0 0 8px rgba(255, 159, 28, 0.55);
+}
+.hud-erdtree .hud-glow {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Inventory tiles */
+.hud-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: 4.25rem;
+  padding: 0.4rem 0.25rem;
+  border: 1px dashed var(--hud-line);
+  border-radius: 0.375rem;
+  color: var(--hud-muted);
+  opacity: 0.55;
+  transition:
+    opacity 120ms,
+    border-color 120ms,
+    box-shadow 120ms;
+}
+.hud-tile[data-on="true"] {
+  opacity: 1;
+  border-style: solid;
+  border-color: var(--hud-accent);
+  color: var(--hud-text);
+  background: var(--hud-panel);
+}
+.hud-visor .hud-tile[data-on="true"] {
+  box-shadow: 0 0 12px rgba(255, 159, 28, 0.22) inset;
+}
+.hud-tile-code {
+  font-family: var(--hud-label-font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.hud-tile[data-on="true"] .hud-tile-code {
+  color: var(--hud-accent);
+}
+.hud-tile-name {
+  font-size: 0.62rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+/* Counters */
+.hud-pip {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 1px solid var(--hud-line);
+  background: var(--hud-off);
+}
+.hud-pip[data-on="true"] {
+  border-color: var(--hud-accent);
+  background: var(--hud-accent);
+}
+.hud-slot {
+  width: 0.85rem;
+  height: 0.85rem;
+  transform: rotate(45deg);
+  border: 1px solid var(--hud-line);
+  background: transparent;
+}
+.hud-slot[data-on="true"] {
+  border-color: var(--hud-accent-2);
+  background: var(--hud-accent-2);
+}
+.hud-bar {
+  display: block;
+  height: 0.35rem;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--hud-off);
+  overflow: hidden;
+}
+.hud-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--hud-accent);
+}
+
+/* Selected card / counter */
+.hud-selected {
+  border-color: var(--hud-accent) !important;
+}

@@ -42,25 +42,25 @@ const RegionSection = ({
   }
 
   return (
-    <section className="rounded border border-gray-300 dark:border-gray-600">
+    <section className="rounded border border-(--hud-line)">
       <button
         type="button"
         onClick={onToggleClosed}
         className="flex w-full items-center gap-3 p-4 text-left"
       >
-        <span className="w-4 shrink-0 text-gray-500 dark:text-gray-300">
+        <span className="w-4 shrink-0 text-(--hud-muted)">
           {closed ? "▸" : "▾"}
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-lg leading-tight">{region.name}</span>
-          <span className="mt-2 block h-1 w-full rounded bg-gray-300 dark:bg-gray-600">
+          <span className="mt-2 block h-1 w-full rounded bg-(--hud-off)">
             <span
-              className="block h-1 rounded bg-red-500"
+              className="block h-1 rounded bg-(--hud-accent)"
               style={{ width: `${pct}%` }}
             />
           </span>
         </span>
-        <span className="shrink-0 text-sm text-gray-500 tabular-nums dark:text-gray-300">
+        <span className="shrink-0 text-sm text-(--hud-muted) tabular-nums">
           {doneCount}/{total}
         </span>
       </button>
@@ -86,9 +86,7 @@ const RegionSection = ({
             ))}
           </ul>
           {hideDone && visible.length === 0 && (
-            <p className="py-2 text-sm text-gray-500 dark:text-gray-300">
-              All done here.
-            </p>
+            <p className="py-2 text-sm text-(--hud-muted)">All done here.</p>
           )}
 
           <form onSubmit={submit} className="mt-3 flex gap-2">
@@ -98,12 +96,12 @@ const RegionSection = ({
               disabled={!canWrite}
               onChange={e => setDraft(e.target.value)}
               placeholder="Add an item"
-              className="min-w-0 flex-1 rounded border border-gray-300 bg-transparent px-3 py-2 text-base text-gray-900 disabled:opacity-40 dark:border-gray-600 dark:text-white"
+              className="min-w-0 flex-1 rounded border border-(--hud-line) bg-transparent px-3 py-2 text-base text-(--hud-text) disabled:opacity-40"
             />
             <button
               type="submit"
               disabled={!canWrite}
-              className="shrink-0 rounded border border-gray-300 px-4 py-2 text-sm disabled:opacity-40 dark:border-gray-600"
+              className="shrink-0 rounded border border-(--hud-line) px-4 py-2 text-sm disabled:opacity-40"
             >
               Add
             </button>

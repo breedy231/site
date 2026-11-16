@@ -8,6 +8,20 @@ title: Metroid Prime Remastered
 character: Switch — manual tracking
 links:
   wiki: https://metroid.fandom.com/wiki/{q}
+theme: visor
+hud:
+  inventory:
+    kind: upgrade
+    title: Inventory
+    groups: [Beams, Missiles, Visors, Suits, Morph Ball, Mobility]
+    order: [power-beam, charge-beam, wave-beam, ice-beam, plasma-beam, missile-launcher, super-missile, wavebuster, ice-spreader, flamethrower, combat-visor, scan-visor, thermal-visor, x-ray-visor, varia-suit, gravity-suit, phazon-suit, morph-ball, morph-ball-bomb, boost-ball, spider-ball, power-bomb, space-jump-boots, grapple-beam]
+  counters:
+    - { kind: etank, label: Energy Tanks, style: pips }
+    - { kind: artifact, label: Chozo Artifacts, style: slots }
+    - { kind: missile, label: Missile Expansions, style: bar }
+    - { kind: pbomb, label: Power Bomb Expansions, style: pips }
+    - { kind: boss, label: Bosses, style: slots }
+    - { kind: scan, label: Key scans, style: bar }
 kinds:
   upgrade: { label: Upgrade, color: amber }
   etank: { label: Energy Tank, color: green }
@@ -43,10 +57,14 @@ regions:
         kind: upgrade
         name: "Space Jump Boots"
         hint: "Alcove."
+        icon: JMP
+        group: Mobility
       - id: x-ray-visor
         kind: upgrade
         name: "X-Ray Visor"
         hint: "Life Grove."
+        icon: XRY
+        group: Visors
       - id: artifact-of-truth
         kind: artifact
         name: "Artifact of Truth"
@@ -111,30 +129,44 @@ regions:
         kind: upgrade
         name: "Morph Ball"
         hint: "Ruined Shrine."
+        icon: MRP
+        group: Morph Ball
       - id: wavebuster
         kind: upgrade
         name: "Wavebuster"
         hint: "Tower of Light."
+        icon: WVB
+        group: Missiles
       - id: missile-launcher
         kind: upgrade
         name: "Missile Launcher"
         hint: "Hive Totem, after Hive Mecha."
+        icon: MSL
+        group: Missiles
       - id: varia-suit
         kind: upgrade
         name: "Varia Suit"
         hint: "Sunchamber, after Flaahgra."
+        icon: VAR
+        group: Suits
       - id: charge-beam
         kind: upgrade
         name: "Charge Beam"
         hint: "Watery Hall."
+        icon: CHG
+        group: Beams
       - id: morph-ball-bomb
         kind: upgrade
         name: "Morph Ball Bomb"
         hint: "Burn Dome, after Incinerator Drone."
+        icon: BMB
+        group: Morph Ball
       - id: ice-beam
         kind: upgrade
         name: "Ice Beam"
         hint: "Antechamber."
+        icon: ICE
+        group: Beams
       - id: artifact-of-lifegiver
         kind: artifact
         name: "Artifact of Lifegiver"
@@ -241,10 +273,14 @@ regions:
         kind: upgrade
         name: "Ice Spreader"
         hint: "Shore Tunnel."
+        icon: ISP
+        group: Missiles
       - id: plasma-beam
         kind: upgrade
         name: "Plasma Beam"
         hint: "Plasma Processing."
+        icon: PLS
+        group: Beams
       - id: artifact-of-nature
         kind: artifact
         name: "Artifact of Nature"
@@ -290,26 +326,38 @@ regions:
         kind: upgrade
         name: "Wave Beam"
         hint: "Chapel of the Elders, after Sheegoth."
+        icon: WAV
+        group: Beams
       - id: boost-ball
         kind: upgrade
         name: "Boost Ball"
         hint: "Phendrana Canyon."
+        icon: BST
+        group: Morph Ball
       - id: spider-ball
         kind: upgrade
         name: "Spider Ball"
         hint: "Quarantine Cave, after Thardus."
+        icon: SPD
+        group: Morph Ball
       - id: super-missile
         kind: upgrade
         name: "Super Missile"
         hint: "Observatory."
+        icon: SUP
+        group: Missiles
       - id: thermal-visor
         kind: upgrade
         name: "Thermal Visor"
         hint: "Research Core."
+        icon: THM
+        group: Visors
       - id: gravity-suit
         kind: upgrade
         name: "Gravity Suit"
         hint: "Gravity Chamber."
+        icon: GRV
+        group: Suits
       - id: artifact-of-sun
         kind: artifact
         name: "Artifact of Sun"
@@ -379,18 +427,26 @@ regions:
         kind: upgrade
         name: "Grapple Beam"
         hint: "Storage Depot B."
+        icon: GRP
+        group: Mobility
       - id: flamethrower
         kind: upgrade
         name: "Flamethrower"
         hint: "Storage Depot A."
+        icon: FLM
+        group: Missiles
       - id: phazon-suit
         kind: upgrade
         name: "Phazon Suit"
         hint: "Elite Quarters, after Omega Pirate."
+        icon: PHZ
+        group: Suits
       - id: power-bomb
         kind: upgrade
         name: "Power Bomb"
         hint: "Central Dynamo."
+        icon: PB
+        group: Morph Ball
       - id: artifact-of-warrior
         kind: artifact
         name: "Artifact of Warrior"
@@ -447,14 +503,20 @@ regions:
         kind: upgrade
         name: "Power Beam"
         hint: "Starting equipment."
+        icon: PWR
+        group: Beams
       - id: combat-visor
         kind: upgrade
         name: "Combat Visor"
         hint: "Starting equipment."
+        icon: CMB
+        group: Visors
       - id: scan-visor
         kind: upgrade
         name: "Scan Visor"
         hint: "Starting equipment."
+        icon: SCN
+        group: Visors
       - id: scan-parasite-queen
         kind: scan
         name: "Scan: Parasite Queen"

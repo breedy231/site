@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getCollection } from "astro:content"
 import { marked } from "marked"
 import GameTracker from "../../components/games/GameTracker"
+import "../../styles/game-themes.css"
 
 export async function getStaticPaths() {
   const games = await getCollection("games")
