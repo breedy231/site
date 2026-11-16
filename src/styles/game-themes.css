@@ -238,3 +238,74 @@
 .hud-selected {
   border-color: var(--hud-accent) !important;
 }
+
+/* Visor view */
+.hud {
+  --hud-area: var(--area-accent, var(--hud-accent-2));
+}
+.hud-location {
+  color: var(--hud-area);
+  letter-spacing: 0.3em;
+}
+.hud-reticle {
+  position: relative;
+}
+/* Lock-on brackets: four corners drawn with two pseudo-elements. */
+.hud-reticle::before,
+.hud-reticle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 2px solid var(--hud-area);
+  opacity: 0.8;
+  -webkit-mask:
+    linear-gradient(#000 0 0) top left / 18px 18px,
+    linear-gradient(#000 0 0) top right / 18px 18px,
+    linear-gradient(#000 0 0) bottom left / 18px 18px,
+    linear-gradient(#000 0 0) bottom right / 18px 18px;
+  mask:
+    linear-gradient(#000 0 0) top left / 18px 18px,
+    linear-gradient(#000 0 0) top right / 18px 18px,
+    linear-gradient(#000 0 0) bottom left / 18px 18px,
+    linear-gradient(#000 0 0) bottom right / 18px 18px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.hud-reticle::after {
+  inset: 6px;
+  border-width: 1px;
+  opacity: 0.35;
+}
+.hud-button {
+  font-family: var(--hud-label-font);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--hud-accent);
+  border-radius: 0.25rem;
+  color: var(--hud-accent);
+}
+.hud-button:active {
+  background: var(--hud-accent);
+  color: var(--hud-bg);
+}
+.hud-waypoint {
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  transform: translateY(-0.05rem) rotate(45deg);
+  border: 1px solid var(--hud-area);
+}
+.hud-pip-sm {
+  width: 0.55rem;
+  height: 0.55rem;
+}
+.hud-notes {
+  color: var(--hud-text);
+  --tw-prose-body: var(--hud-text);
+  --tw-prose-bold: var(--hud-accent);
+  --tw-prose-bullets: var(--hud-area);
+  --tw-prose-links: var(--hud-accent);
+}

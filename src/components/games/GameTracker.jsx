@@ -7,6 +7,7 @@ import {
   flattenItems,
   isItemDone,
   pickNextUp,
+  pickWaypoints,
   steamUnlockAt,
 } from "./selectors"
 import { kindBadge, resolveKinds } from "./kinds"
@@ -22,7 +23,7 @@ import AreaCards from "./AreaCards"
 import ChecklistItem from "./ChecklistItem"
 import Counters from "./Counters"
 import Inventory from "./Inventory"
-import Objective from "./Objective"
+import VisorHud from "./VisorHud"
 import RegionSection from "./RegionSection"
 import StatFields from "./StatFields"
 
@@ -60,6 +61,19 @@ const GameTracker = ({ game, notesHtml }) => {
   // What the detail panel shows: {type: "item"|"kind"|"region"|"all", id}.
   const [focus, setFocus] = useState(null)
   const detailRef = useRef(null)
+  // "visor" (default HUD) or "log" (inventory, areas, checklist); #log in the URL.
+  const [view, setView] = useState("visor")
+  useEffect(() => {
+    const sync = () =>
+      setView(window.location.hash === "#log" ? "log" : "visor")
+    sync()
+    window.addEventListener("hashchange", sync)
+    return () => window.removeEventListener("hashchange", sync)
+  }, [])
+  const openView = target => {
+    window.location.hash = target === "log" ? "log" : ""
+    window.scrollTo({ top: 0 })
+  }
 
   const kinds = useMemo(() => resolveKinds(game.kinds), [game.kinds])
   const ordered = useMemo(
@@ -77,6 +91,14 @@ const GameTracker = ({ game, notesHtml }) => {
   const doneCount = countDone(ordered, state, achievements)
   const pct = total ? Math.round((doneCount / total) * 100) : 0
   const next = pickNextUp(ordered, state, achievements, game.route)
+  const waypoints = pickWaypoints(
+    ordered,
+    state,
+    achievements,
+    game.route,
+    next?.id,
+  )
+  const nextRegion = next ? regionOf[next.id] : null
   const playtimeLine = formatPlaytimeLine({ playtime2w, lastPlayed })
 
   const groups = inventoryGroups(ordered, hud.inventory)
@@ -87,6 +109,18 @@ const GameTracker = ({ game, notesHtml }) => {
       state,
       achievements,
     ),
+  )
+  const readouts = (
+    hud.readouts?.length ? hud.readouts : hud.counters.slice(0, 2)
+  ).map(
+    cfg =>
+      counters.find(c => c.kind === cfg.kind) ||
+      counterFor(
+        ordered,
+        { label: kinds[cfg.kind]?.label || cfg.kind, style: "bar", ...cfg },
+        state,
+        achievements,
+      ),
   )
   const areas = game.regions.map(region =>
     areaSummary(region, state.custom, state, achievements),
@@ -103,6 +137,13 @@ const GameTracker = ({ game, notesHtml }) => {
 
   const onToggleDone = id =>
     update(prev => ({ ...prev, done: toggleFlag(prev.done, id) }))
+  // Completing the objective also clears its pin so the route moves on.
+  const onComplete = id =>
+    update(prev => ({
+      ...prev,
+      done: { ...prev.done, [id]: true },
+      pin: prev.pin === id ? null : prev.pin,
+    }))
   const onTogglePin = id =>
     update(prev => ({ ...prev, pin: prev.pin === id ? null : id }))
   const onNoteChange = (id, value) =>
@@ -262,11 +303,62 @@ const GameTracker = ({ game, notesHtml }) => {
   }
 
   const theme = game.theme || "plain"
+  const wrapperClass = `hud hud-${theme} ${DARK_THEMES.has(theme) ? "dark" : ""} mx-auto max-w-2xl p-4 sm:p-5`
+  // Tint the HUD with the accent of the area the objective is in.
+  const wrapperStyle = nextRegion?.accent
+    ? { "--area-accent": nextRegion.accent }
+    : undefined
+  const statusText =
+    status === "loading"
+      ? "loading…"
+      : status === "saving"
+        ? "saving…"
+        : canWrite
+          ? "editing"
+          : "read-only"
+
+  const errorBanner = error && (
+    <div
+      role="alert"
+      onClick={dismissError}
+      className="mb-4 cursor-pointer rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-600 dark:bg-red-900/20 dark:text-red-300"
+    >
+      {error}
+    </div>
+  )
+
+  if (view === "visor") {
+    return (
+      <div className={wrapperClass} style={wrapperStyle}>
+        {errorBanner}
+        <VisorHud
+          title={game.title}
+          pct={pct}
+          status={statusText}
+          readouts={readouts}
+          location={nextRegion?.name}
+          objective={next}
+          pinned={Boolean(next && state.pin === next.id)}
+          waypoints={waypoints}
+          notesHtml={notesHtml}
+          canWrite={canWrite}
+          onComplete={onComplete}
+          onOpenLog={() => openView("log")}
+          logLabel={hud.logLabel || "Logbook"}
+        />
+      </div>
+    )
+  }
 
   return (
-    <div
-      className={`hud hud-${theme} ${DARK_THEMES.has(theme) ? "dark" : ""} mx-auto max-w-2xl space-y-4 p-4 sm:p-5`}
-    >
+    <div className={`${wrapperClass} space-y-4`} style={wrapperStyle}>
+      <button
+        type="button"
+        onClick={() => openView("visor")}
+        className="hud-label"
+      >
+        ‹ Back to visor
+      </button>
       <header>
         <div className="flex items-start gap-3">
           <div className="min-w-0 flex-1">
@@ -282,14 +374,7 @@ const GameTracker = ({ game, notesHtml }) => {
               {pct}%
             </div>
             <div className="mt-1 text-xs text-(--hud-muted) tabular-nums">
-              {doneCount}/{total} ·{" "}
-              {status === "loading"
-                ? "loading…"
-                : status === "saving"
-                  ? "saving…"
-                  : canWrite
-                    ? "editing"
-                    : "read-only"}
+              {doneCount}/{total} · {statusText}
             </div>
           </div>
         </div>
@@ -344,22 +429,7 @@ const GameTracker = ({ game, notesHtml }) => {
         </div>
       </header>
 
-      {error && (
-        <div
-          role="alert"
-          onClick={dismissError}
-          className="cursor-pointer rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700 dark:border-red-600 dark:bg-red-900/20 dark:text-red-300"
-        >
-          {error}
-        </div>
-      )}
-
-      <Objective
-        item={next}
-        pinned={Boolean(next && state.pin === next.id)}
-        region={next ? regionOf[next.id]?.name : undefined}
-        notesHtml={notesHtml}
-      />
+      {errorBanner}
 
       <Inventory
         title={hud.inventory?.title || kinds[hud.inventory?.kind]?.label || ""}

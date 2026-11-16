@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { pickNextUp } from "./selectors"
+import { pickNextUp, pickWaypoints } from "./selectors"
 import { DEFAULT_KINDS, KIND_COLORS, kindBadge, resolveKinds } from "./kinds"
 
 const items = [
@@ -67,5 +67,22 @@ describe("kinds", () => {
 
   it("renders unknown kinds as the area badge", () => {
     expect(kindBadge(resolveKinds(), "nope").className).toBe(KIND_COLORS.gray)
+  })
+})
+
+describe("pickWaypoints", () => {
+  it("lists undone route steps after the current objective", () => {
+    expect(
+      pickWaypoints(items, state(["b"]), null, ["a", "b", "c", "d"], "a").map(
+        i => i.id,
+      ),
+    ).toEqual(["c", "d"])
+  })
+  it("respects the limit and skips unknown ids", () => {
+    expect(
+      pickWaypoints(items, state(), null, ["x", "b", "c", "d"], null, 1).map(
+        i => i.id,
+      ),
+    ).toEqual(["b"])
   })
 })

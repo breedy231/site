@@ -79,6 +79,18 @@ const games = defineCollection({
               }),
             )
             .default([]),
+          // Vitals on the visor view (default: the first two counters).
+          readouts: z
+            .array(
+              z.object({
+                kind: z.string(),
+                label: z.string().optional(),
+                style: z.enum(["bar", "pips"]).default("bar"),
+              }),
+            )
+            .default([]),
+          // Button that opens inventory/areas/checklist from the visor.
+          logLabel: z.string().optional(),
         })
         .optional(),
       // Short markdown shown under "Next up": tips, where I'm stuck.
@@ -94,6 +106,11 @@ const games = defineCollection({
           z.object({
             id: progressId,
             name: z.string(),
+            // Tints the HUD while the objective is in this region.
+            accent: z
+              .string()
+              .regex(/^#[0-9a-fA-F]{6}$/)
+              .optional(),
             items: z.array(gameItem).default([]),
           }),
         )
@@ -122,6 +139,7 @@ const games = defineCollection({
       const hudKinds = [
         game.hud?.inventory?.kind,
         ...(game.hud?.counters || []).map(c => c.kind),
+        ...(game.hud?.readouts || []).map(c => c.kind),
       ].filter(Boolean)
       for (const kind of hudKinds) {
         if (!Object.hasOwn(kinds, kind)) {

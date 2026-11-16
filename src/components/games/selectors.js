@@ -47,3 +47,23 @@ export const pickNextUp = (items, state, achievements, route = []) => {
 
 export const flattenItems = (regions, custom = {}) =>
   regions.flatMap(region => [...region.items, ...(custom[region.id] || [])])
+
+// The route steps after the current objective that are still undone.
+export const pickWaypoints = (
+  items,
+  state,
+  achievements,
+  route = [],
+  currentId = null,
+  limit = 2,
+) => {
+  const out = []
+  for (const id of route) {
+    if (id === currentId) continue
+    const item = items.find(i => i.id === id)
+    if (!item || isItemDone(item, state, achievements)) continue
+    out.push(item)
+    if (out.length >= limit) break
+  }
+  return out
+}
