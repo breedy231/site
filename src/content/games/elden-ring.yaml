@@ -5,6 +5,10 @@ title: Elden Ring
 character: Crim — sorcery run
 theme: erdtree
 hud:
+  logLabel: Inventory & map
+  readouts:
+    - { kind: boss, label: Bosses }
+    - { kind: quest, label: Quests }
   counters:
     - { kind: boss, label: Great enemies felled, style: slots }
     - { kind: item, label: Spells & gear, style: bar }

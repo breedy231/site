@@ -31,44 +31,69 @@
   --hud-off: #374151;
 }
 
-/* Visor: dark scanner readout, cyan linework, amber highlights. */
+/* Visor: inside a helmet. Pale cyan linework, orange for vitals, an area
+   tint for location; curved-glass vignette. Original CSS, evocative only. */
 .hud-visor {
-  --hud-bg: #060b12;
-  --hud-panel: rgba(56, 225, 255, 0.045);
-  --hud-line: rgba(56, 225, 255, 0.3);
-  --hud-text: #d7f6ff;
-  --hud-muted: #7fa9b8;
-  --hud-accent: #ff9f1c;
-  --hud-accent-2: #38e1ff;
-  --hud-off: rgba(56, 225, 255, 0.12);
-  --hud-label-font: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --hud-title-font: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --hud-bg: #050c12;
+  --hud-panel: rgba(95, 230, 255, 0.04);
+  --hud-line: rgba(95, 230, 255, 0.32);
+  --hud-text: #dff8ff;
+  --hud-muted: #7ea7b5;
+  --hud-accent: #ff9a2e;
+  --hud-accent-2: #5fe6ff;
+  --hud-off: rgba(95, 230, 255, 0.12);
+  --hud-font: "Exo 2", ui-sans-serif, system-ui, sans-serif;
+  --hud-label-font: "Exo 2", ui-sans-serif, system-ui, sans-serif;
+  --hud-title-font: "Exo 2", ui-sans-serif, system-ui, sans-serif;
+  --hud-mono-font: "Share Tech Mono", ui-monospace, Menlo, monospace;
   color-scheme: dark;
-  border-radius: 0.75rem;
+  border-radius: 1.25rem;
   border: 1px solid var(--hud-line);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.6),
-    0 0 40px rgba(56, 225, 255, 0.08) inset;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
 }
 
+/* Curved glass: dark vignette at the rim, a soft area-tinted glow at the
+   top, faint scanlines. */
 .hud-visor::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  border-radius: inherit;
   pointer-events: none;
   background:
     radial-gradient(
-      ellipse at 50% 0%,
-      rgba(56, 225, 255, 0.1),
-      transparent 60%
+      ellipse 120% 90% at 50% 45%,
+      transparent 55%,
+      rgba(0, 0, 0, 0.75) 100%
+    ),
+    radial-gradient(
+      ellipse 90% 40% at 50% 0%,
+      color-mix(in srgb, var(--hud-area) 18%, transparent),
+      transparent 70%
     ),
     repeating-linear-gradient(
       0deg,
-      rgba(255, 255, 255, 0.025) 0 1px,
+      rgba(255, 255, 255, 0.022) 0 1px,
       transparent 1px 3px
     );
+}
+
+.hud-visor .hud-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.hud-visor .hud-label {
+  font-weight: 500;
+  letter-spacing: 0.16em;
+}
+.hud-visor .hud-glow {
+  text-shadow: 0 0 10px rgba(255, 154, 46, 0.5);
+}
+/* Objective title reads in pale cyan-white; vitals stay orange. */
+.hud-visor .hud-reticle .hud-glow {
+  color: var(--hud-text);
+  text-shadow: 0 0 14px rgba(95, 230, 255, 0.45);
 }
 
 /* Erdtree: dusk-gold, serif titles, warm parchment text. */
@@ -148,9 +173,6 @@
 .hud-glow {
   color: var(--hud-accent);
 }
-.hud-visor .hud-glow {
-  text-shadow: 0 0 8px rgba(255, 159, 28, 0.55);
-}
 .hud-erdtree .hud-glow {
   text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
 }
@@ -181,7 +203,7 @@
   background: var(--hud-panel);
 }
 .hud-visor .hud-tile[data-on="true"] {
-  box-shadow: 0 0 12px rgba(255, 159, 28, 0.22) inset;
+  box-shadow: 0 0 12px rgba(255, 154, 46, 0.22) inset;
 }
 .hud-tile-code {
   font-family: var(--hud-label-font);
@@ -257,7 +279,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  border: 2px solid var(--hud-area);
+  border: 2px solid var(--hud-accent-2);
   opacity: 0.8;
   -webkit-mask:
     linear-gradient(#000 0 0) top left / 18px 18px,
@@ -293,10 +315,10 @@
 }
 .hud-waypoint {
   flex: none;
-  width: 0.45rem;
-  height: 0.45rem;
-  transform: translateY(-0.05rem) rotate(45deg);
-  border: 1px solid var(--hud-area);
+  font-family: var(--hud-mono-font, inherit);
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--hud-area);
 }
 .hud-pip-sm {
   width: 0.55rem;
@@ -308,4 +330,98 @@
   --tw-prose-bold: var(--hud-accent);
   --tw-prose-bullets: var(--hud-area);
   --tw-prose-links: var(--hud-accent);
+}
+
+/* Visor top edge */
+.hud-mono {
+  font-family: var(--hud-mono-font, var(--hud-label-font));
+}
+.hud-readout {
+  position: relative;
+  padding: 0.35rem 0.5rem;
+}
+/* Thick brackets on the outer top corner of each readout. */
+.hud-readout::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-top: 3px solid var(--hud-accent-2);
+  border-left: 3px solid var(--hud-accent-2);
+  opacity: 0.85;
+}
+.hud-readout.text-right::before {
+  left: auto;
+  right: 0;
+  border-left: 0;
+  border-right: 3px solid var(--hud-accent-2);
+}
+.hud-readout-box {
+  min-width: 2.1rem;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--hud-line);
+  font-size: 1.25rem;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--hud-accent);
+}
+.hud-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--hud-line);
+}
+.hud-dot[data-on="true"] {
+  background: var(--hud-accent);
+  border-color: var(--hud-accent);
+  box-shadow: 0 0 6px rgba(255, 154, 46, 0.6);
+}
+.hud-light {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--hud-off);
+}
+.hud-light[data-on="true"] {
+  background: var(--hud-accent-2);
+  box-shadow: 0 0 6px var(--hud-accent-2);
+}
+
+/* Boot-up: brackets and readouts flicker on once. */
+@media (prefers-reduced-motion: no-preference) {
+  .hud-visor .hud-topbar,
+  .hud-visor .hud-reticle::before {
+    animation: hud-boot 900ms steps(1, end) both;
+  }
+  .hud-visor .hud-reticle {
+    animation: hud-fade 700ms ease-out 250ms both;
+  }
+}
+@keyframes hud-boot {
+  0%,
+  20% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  35% {
+    opacity: 0.2;
+  }
+  45%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes hud-fade {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

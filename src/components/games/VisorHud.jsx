@@ -4,34 +4,57 @@ import { useState } from "react"
 // The default, low-density view: where you are, what to do now, what comes
 // after, and a couple of vital readouts. Everything else lives in the log.
 
-const Readout = ({ counter, align = "left" }) => (
-  <div className={align === "right" ? "text-right" : ""}>
-    <div className="hud-label text-[0.6rem]">{counter.label}</div>
-    {counter.style === "pips" ? (
-      <div
-        className={`mt-1 flex flex-wrap gap-0.5 ${align === "right" ? "justify-end" : ""}`}
-        aria-label={`${counter.done} of ${counter.total}`}
-      >
-        {counter.items.map((item, i) => (
-          <span
-            key={item.id}
-            data-on={i < counter.done}
-            className="hud-pip hud-pip-sm"
-          />
-        ))}
-      </div>
-    ) : (
-      <div className="hud-title text-lg leading-none tabular-nums">
-        <span className="hud-glow">{counter.done}</span>
-        <span className="text-xs text-(--hud-muted)">/{counter.total}</span>
-      </div>
-    )}
-  </div>
-)
+const pad3 = n => String(n).padStart(3, "0")
+
+// Vital readouts. "pips": a count in a thin box with a row of dots (one per
+// item, lit when collected). "bar": a three-digit current/max counter.
+const Readout = ({ counter, align = "left" }) => {
+  const right = align === "right"
+  return (
+    <div className={`hud-readout ${right ? "text-right" : ""}`}>
+      <div className="hud-label text-[0.58rem]">{counter.label}</div>
+      {counter.style === "pips" ? (
+        <div
+          className={`mt-1 flex items-center gap-2 ${right ? "flex-row-reverse" : ""}`}
+          aria-label={`${counter.done} of ${counter.total}`}
+        >
+          <span className="hud-readout-box hud-mono">
+            {String(counter.done).padStart(2, "0")}
+          </span>
+          <span className="flex max-w-[9rem] flex-wrap gap-[3px]">
+            {counter.items.map((item, i) => (
+              <span
+                key={item.id}
+                data-on={i < counter.done}
+                className="hud-dot"
+              />
+            ))}
+          </span>
+        </div>
+      ) : (
+        <div
+          className="hud-mono mt-1 text-lg leading-none tabular-nums"
+          aria-label={`${counter.done} of ${counter.total}`}
+        >
+          <span className="hud-glow">{pad3(counter.done)}</span>
+          <span className="text-(--hud-muted)">/{pad3(counter.total)}</span>
+        </div>
+      )}
+    </div>
+  )
+}
 
 Readout.propTypes = {
   counter: PropTypes.object.isRequired,
   align: PropTypes.oneOf(["left", "right"]),
+}
+
+// Four small lights along the top edge double as the sync status.
+const STATUS_LIGHTS = {
+  "loading…": 1,
+  "saving…": 2,
+  "read-only": 3,
+  editing: 4,
 }
 
 const VisorHud = ({
@@ -48,27 +71,37 @@ const VisorHud = ({
   onComplete,
   onOpenLog,
   logLabel,
+  footnote,
 }) => {
   const [showNotes, setShowNotes] = useState(false)
   const [left, right] = readouts
 
   return (
     <div className="hud-visor-frame flex min-h-[78svh] flex-col">
-      {/* Top edge: game + vitals */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="hud-label truncate">{title}</div>
-          <div className="mt-0.5 text-[0.65rem] text-(--hud-muted) tabular-nums">
-            {pct}% · {status}
-          </div>
+      {/* Top edge: vitals in the corners, status lights between */}
+      <div className="hud-topbar flex items-start justify-between gap-2">
+        {left ? <Readout counter={left} /> : <span />}
+        <div
+          className="flex shrink-0 gap-1.5 pt-1"
+          title={status}
+          aria-label={`Sync: ${status}`}
+        >
+          {[1, 2, 3, 4].map(n => (
+            <span
+              key={n}
+              data-on={n <= (STATUS_LIGHTS[status] || 0)}
+              className="hud-light"
+            />
+          ))}
         </div>
-        {right && <Readout counter={right} align="right" />}
+        {right ? <Readout counter={right} align="right" /> : <span />}
       </div>
-      {left && (
-        <div className="mt-3">
-          <Readout counter={left} />
-        </div>
-      )}
+      <div className="mt-3 flex items-baseline justify-between gap-3 text-[0.65rem] text-(--hud-muted)">
+        <span className="hud-label truncate text-[0.6rem]">{title}</span>
+        <span className="hud-mono shrink-0 tabular-nums">
+          {pct}% · {status}
+        </span>
+      </div>
 
       {/* Center: the objective, framed like a lock-on */}
       <div className="flex flex-1 flex-col justify-center py-8">
@@ -108,7 +141,9 @@ const VisorHud = ({
             <ol className="mt-1 space-y-1">
               {waypoints.map(item => (
                 <li key={item.id} className="flex items-baseline gap-2">
-                  <span className="hud-waypoint" aria-hidden="true" />
+                  <span className="hud-waypoint" aria-hidden="true">
+                    ›
+                  </span>
                   <span className="text-sm">{item.name}</span>
                 </li>
               ))}
@@ -143,6 +178,11 @@ const VisorHud = ({
       >
         {logLabel}
       </button>
+      {footnote && (
+        <p className="mt-3 text-center text-[0.6rem] text-(--hud-muted)">
+          {footnote}
+        </p>
+      )}
     </div>
   )
 }
@@ -165,6 +205,7 @@ VisorHud.propTypes = {
   onComplete: PropTypes.func.isRequired,
   onOpenLog: PropTypes.func.isRequired,
   logLabel: PropTypes.string.isRequired,
+  footnote: PropTypes.string,
 }
 
 export default VisorHud

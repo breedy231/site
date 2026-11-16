@@ -112,15 +112,13 @@ const GameTracker = ({ game, notesHtml }) => {
   )
   const readouts = (
     hud.readouts?.length ? hud.readouts : hud.counters.slice(0, 2)
-  ).map(
-    cfg =>
-      counters.find(c => c.kind === cfg.kind) ||
-      counterFor(
-        ordered,
-        { label: kinds[cfg.kind]?.label || cfg.kind, style: "bar", ...cfg },
-        state,
-        achievements,
-      ),
+  ).map(cfg =>
+    counterFor(
+      ordered,
+      { label: kinds[cfg.kind]?.label || cfg.kind, style: "bar", ...cfg },
+      state,
+      achievements,
+    ),
   )
   const areas = game.regions.map(region =>
     areaSummary(region, state.custom, state, achievements),
@@ -345,6 +343,7 @@ const GameTracker = ({ game, notesHtml }) => {
           onComplete={onComplete}
           onOpenLog={() => openView("log")}
           logLabel={hud.logLabel || "Logbook"}
+          footnote={game.footnote}
         />
       </div>
     )
@@ -477,6 +476,7 @@ GameTracker.propTypes = {
     steam: PropTypes.shape({ appid: PropTypes.number }),
     kinds: PropTypes.object,
     hud: PropTypes.object,
+    footnote: PropTypes.string,
     route: PropTypes.arrayOf(PropTypes.string),
     stats: PropTypes.array.isRequired,
     regions: PropTypes.array.isRequired,

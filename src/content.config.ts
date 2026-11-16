@@ -55,6 +55,8 @@ const games = defineCollection({
           }),
         )
         .optional(),
+      // Small print under the visor (e.g. "fan-made, unofficial").
+      footnote: z.string().optional(),
       // Visual theme; see src/styles/game-themes.css.
       theme: z.enum(["plain", "visor", "erdtree"]).default("plain"),
       // HUD layout. Without it, every kind gets a progress bar.

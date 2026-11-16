@@ -77,8 +77,12 @@
 - Look: `theme:` (`plain` / `visor` / `erdtree`, CSS vars in
   `src/styles/game-themes.css`) and `hud:` (`inventory` = one kind as a lit/dim
   tile grid with `groups` + `order`; `counters` = per-kind `bar`/`pips`/`slots`).
-  Items can set `icon` (tile code) and `group`. Page = objective + field notes →
-  inventory → counters → area cards; tapping any of them opens a detail list.
+  Items can set `icon` (tile code) and `group`. Default view is the sparse
+  **visor**: two `hud.readouts` vitals, sync lights, the objective's area
+  (tinted by `regions[].accent`), the objective with "Objective complete",
+  next `route` waypoints, field notes on demand. `#log` (`hud.logLabel`) opens
+  the logbook: inventory → counters → area cards → detail lists.
+  `footnote` prints small text under the visor.
   Astro dev caches content: restart `astro dev` (or build) after YAML edits.
 - Progress (done, pin, stats, per-item notes) lives in the `game-tracker` blob.
   Read it with `GET /api/game-progress?game=<slug>` (public).
