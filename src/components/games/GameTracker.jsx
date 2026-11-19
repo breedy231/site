@@ -41,7 +41,7 @@ const toggleFlag = (map, id) => {
 const sameFocus = (a, b) => a && b && a.type === b.type && a.id === b.id
 
 // notesHtml is rendered at build time from the YAML `notes` (trusted repo content).
-const GameTracker = ({ game, notesHtml }) => {
+const GameTracker = ({ game, notesHtml, fullBleed = false }) => {
   const {
     state,
     update,
@@ -301,11 +301,34 @@ const GameTracker = ({ game, notesHtml }) => {
   }
 
   const theme = game.theme || "plain"
-  const wrapperClass = `hud hud-${theme} ${DARK_THEMES.has(theme) ? "dark" : ""} mx-auto max-w-2xl p-4 sm:p-5`
   // Tint the HUD with the accent of the area the objective is in.
   const wrapperStyle = nextRegion?.accent
     ? { "--area-accent": nextRegion.accent }
     : undefined
+  const hudClass = `hud hud-${theme} ${DARK_THEMES.has(theme) ? "dark" : ""}`
+  // Full-bleed: the HUD background fills the viewport, content stays a
+  // readable column. Otherwise it's a framed panel inside the site chrome.
+  const shell = (children, extra = "", width = "max-w-xl") =>
+    fullBleed ? (
+      <div
+        className={`${hudClass} hud-full min-h-dvh w-full`}
+        style={wrapperStyle}
+      >
+        <div
+          className={`mx-auto ${width} px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] ${extra}`}
+        >
+          {children}
+        </div>
+      </div>
+    ) : (
+      <div
+        className={`${hudClass} mx-auto max-w-2xl p-4 sm:p-5 ${extra}`}
+        style={wrapperStyle}
+      >
+        {children}
+      </div>
+    )
+
   const statusText =
     status === "loading"
       ? "loading…"
@@ -326,10 +349,11 @@ const GameTracker = ({ game, notesHtml }) => {
   )
 
   if (view === "visor") {
-    return (
-      <div className={wrapperClass} style={wrapperStyle}>
+    return shell(
+      <>
         {errorBanner}
         <VisorHud
+          tall={fullBleed}
           title={game.title}
           pct={pct}
           status={statusText}
@@ -345,12 +369,22 @@ const GameTracker = ({ game, notesHtml }) => {
           logLabel={hud.logLabel || "Logbook"}
           footnote={game.footnote}
         />
-      </div>
+        {fullBleed && (
+          <a
+            href="/games"
+            className="hud-label mx-auto mt-4 block max-w-xl text-center text-[0.6rem] opacity-70"
+          >
+            ‹ All games
+          </a>
+        )}
+      </>,
+      "",
+      "max-w-6xl sm:px-8",
     )
   }
 
-  return (
-    <div className={`${wrapperClass} space-y-4`} style={wrapperStyle}>
+  return shell(
+    <>
       <button
         type="button"
         onClick={() => openView("visor")}
@@ -462,7 +496,8 @@ const GameTracker = ({ game, notesHtml }) => {
           Full checklist
         </button>
       )}
-    </div>
+    </>,
+    "space-y-4",
   )
 }
 
@@ -482,6 +517,7 @@ GameTracker.propTypes = {
     regions: PropTypes.array.isRequired,
   }).isRequired,
   notesHtml: PropTypes.string,
+  fullBleed: PropTypes.bool,
 }
 
 export default GameTracker

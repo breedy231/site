@@ -1,7 +1,8 @@
 # Game definition for the tracker at /games/metroid-prime-remastered.
 # Progress lives in Netlify Blobs, not here. Switch game: no Steam sync, all manual.
 # Pickup list (100 items) is the vanilla layout, cross-checked against Randovania's
-# Prime 1 logic database. Expansion names lead with the room so the wiki link lands
+# Prime 1 logic database. Edit this file directly (the one-off generator is gone).
+# Expansion names lead with the room so the wiki link lands
 # on the room page, which explains how to reach it.
 slug: metroid-prime-remastered
 title: Metroid Prime Remastered
@@ -18,12 +19,12 @@ hud:
     order: [power-beam, charge-beam, wave-beam, ice-beam, plasma-beam, missile-launcher, super-missile, wavebuster, ice-spreader, flamethrower, combat-visor, scan-visor, thermal-visor, x-ray-visor, varia-suit, gravity-suit, phazon-suit, morph-ball, morph-ball-bomb, boost-ball, spider-ball, power-bomb, space-jump-boots, grapple-beam]
   logLabel: Logbook
   readouts:
-    - { kind: etank, label: Energy, style: pips }
-    - { kind: missile, label: Missiles, style: bar }
+    - { kind: etank, label: Energy, style: pips, stat: etanks, max: 14 }
+    - { kind: missile, label: Missiles, style: bar, stat: missiles, max: 250 }
   counters:
-    - { kind: etank, label: Energy Tanks, style: pips }
+    - { kind: etank, label: Energy Tanks, style: pips, stat: etanks, max: 14 }
     - { kind: artifact, label: Chozo Artifacts, style: slots }
-    - { kind: missile, label: Missile Expansions, style: bar }
+    - { kind: missile, label: Missile capacity, style: bar, stat: missiles, max: 250 }
     - { kind: pbomb, label: Power Bomb Expansions, style: pips }
     - { kind: boss, label: Bosses, style: slots }
     - { kind: scan, label: Key scans, style: bar }
@@ -36,24 +37,31 @@ kinds:
   scan: { label: Scan, color: gray }
 # Suggested path from where I am now. Update this when I get stuck.
 route:
-  - research-core-escape
-  - thardus
-  - spider-ball
+  - power-bomb
+  - grapple-beam
+  - x-ray-visor
+  - plasma-beam
+  - omega-pirate
+  - phazon-suit
 stats:
+  - key: etanks
+    label: Energy Tanks
+  - key: missiles
+    label: Missile cap
   - key: pct
     label: Items %
   - key: hrs
     label: Hours
 notes: |
-  **Research Core escape**
+  **Ore Processing** (the rotating pillar)
 
-  - Keep the **Thermal Visor** on the whole way. The lights are out and Shadow Pirates are invisible without it.
-  - The drones are **Sentry Drones** (they scramble your visor). Charged **Wave Beam** kills them fast.
-  - Dead door? Find its **Power Conduit** in Thermal and shoot it with the **Wave Beam**.
-  - Metroids drain energy fast. If one latches on, go to **Morph Ball and lay a bomb** to shake it off.
-  - **Run.** Don't clear rooms; nothing in there is worth the energy.
+  - The pillar has three sections, each with a Spider Ball track. **Bomb the Rotation Control Units** to turn a section until the tracks line up.
+  - The last control unit is buried in Bendezium, which only a **Power Bomb** clears. No Power Bombs yet? This room is a pass-through for now; push on down to level 2.
+  - The top of the pillar leads to Storage Depot B and the **Grapple Beam**.
 
-  **Pick up more Energy Tanks.** You only have 1.
+  **Power Bomb:** Central Dynamo, level 2, via Omega Research → Dynamo Access (the door in the floor). After the fight, morph into the hatch and work through the electric maze.
+
+  **Troopers** only take damage from their own beam color: Power Troopers → Power Beam, Wave Troopers → Wave Beam, Ice Troopers → Ice Beam.
 regions:
   - id: tallon
     name: Tallon Overworld
@@ -436,7 +444,7 @@ regions:
       - id: grapple-beam
         kind: upgrade
         name: "Grapple Beam"
-        hint: "Storage Depot B."
+        hint: "Storage Depot B, top of Ore Processing. Power Bomb the Bendezium on the last Rotation Control Unit, bomb the units to line up the Spider Ball tracks, ride up."
         icon: GRP
         group: Mobility
       - id: flamethrower
@@ -454,7 +462,7 @@ regions:
       - id: power-bomb
         kind: upgrade
         name: "Power Bomb"
-        hint: "Central Dynamo."
+        hint: "Central Dynamo (Mines level 2): Omega Research → Dynamo Access, floor door. After the fight, morph into the hatch and through the electric maze."
         icon: PB
         group: Morph Ball
       - id: artifact-of-warrior

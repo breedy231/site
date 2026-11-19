@@ -21,13 +21,9 @@ const Readout = ({ counter, align = "left" }) => {
           <span className="hud-readout-box hud-mono">
             {String(counter.done).padStart(2, "0")}
           </span>
-          <span className="flex max-w-[9rem] flex-wrap gap-[3px]">
-            {counter.items.map((item, i) => (
-              <span
-                key={item.id}
-                data-on={i < counter.done}
-                className="hud-dot"
-              />
+          <span className="flex max-w-[10.5rem] flex-wrap gap-[2px]">
+            {Array.from({ length: counter.total }, (_, i) => (
+              <span key={i} data-on={i < counter.done} className="hud-dot" />
             ))}
           </span>
         </div>
@@ -72,12 +68,15 @@ const VisorHud = ({
   onOpenLog,
   logLabel,
   footnote,
+  tall = false,
 }) => {
   const [showNotes, setShowNotes] = useState(false)
   const [left, right] = readouts
 
   return (
-    <div className="hud-visor-frame flex min-h-[78svh] flex-col">
+    <div
+      className={`hud-visor-frame flex flex-col ${tall ? "min-h-[calc(100svh-5rem)]" : "min-h-[78svh]"}`}
+    >
       {/* Top edge: vitals in the corners, status lights between */}
       <div className="hud-topbar flex items-start justify-between gap-2">
         {left ? <Readout counter={left} /> : <span />}
@@ -96,7 +95,7 @@ const VisorHud = ({
         </div>
         {right ? <Readout counter={right} align="right" /> : <span />}
       </div>
-      <div className="mt-3 flex items-baseline justify-between gap-3 text-[0.65rem] text-(--hud-muted)">
+      <div className="mx-auto mt-3 flex w-full max-w-xl items-baseline justify-between gap-3 text-[0.65rem] text-(--hud-muted)">
         <span className="hud-label truncate text-[0.6rem]">{title}</span>
         <span className="hud-mono shrink-0 tabular-nums">
           {pct}% · {status}
@@ -153,36 +152,38 @@ const VisorHud = ({
       </div>
 
       {/* Bottom edge: notes on demand, then the log */}
-      {notesHtml && (
-        <div className="mb-3">
-          <button
-            type="button"
-            onClick={() => setShowNotes(v => !v)}
-            aria-expanded={showNotes}
-            className="hud-label w-full text-left"
-          >
-            {showNotes ? "▾" : "▸"} Field notes
-          </button>
-          {showNotes && (
-            <div
-              className="hud-notes prose prose-sm mt-2 max-w-none"
-              dangerouslySetInnerHTML={{ __html: notesHtml }}
-            />
-          )}
-        </div>
-      )}
-      <button
-        type="button"
-        onClick={onOpenLog}
-        className="hud-label w-full rounded border border-(--hud-line) py-3"
-      >
-        {logLabel}
-      </button>
-      {footnote && (
-        <p className="mt-3 text-center text-[0.6rem] text-(--hud-muted)">
-          {footnote}
-        </p>
-      )}
+      <div className="mx-auto w-full max-w-xl">
+        {notesHtml && (
+          <div className="mb-3">
+            <button
+              type="button"
+              onClick={() => setShowNotes(v => !v)}
+              aria-expanded={showNotes}
+              className="hud-label w-full text-left"
+            >
+              {showNotes ? "▾" : "▸"} Field notes
+            </button>
+            {showNotes && (
+              <div
+                className="hud-notes prose prose-sm mt-2 max-w-none"
+                dangerouslySetInnerHTML={{ __html: notesHtml }}
+              />
+            )}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={onOpenLog}
+          className="hud-label w-full rounded border border-(--hud-line) py-3"
+        >
+          {logLabel}
+        </button>
+        {footnote && (
+          <p className="mt-3 text-center text-[0.6rem] text-(--hud-muted)">
+            {footnote}
+          </p>
+        )}
+      </div>
     </div>
   )
 }
@@ -206,6 +207,7 @@ VisorHud.propTypes = {
   onOpenLog: PropTypes.func.isRequired,
   logLabel: PropTypes.string.isRequired,
   footnote: PropTypes.string,
+  tall: PropTypes.bool,
 }
 
 export default VisorHud

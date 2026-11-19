@@ -78,6 +78,9 @@ const games = defineCollection({
                 kind: z.string(),
                 label: z.string().optional(),
                 style: z.enum(["bar", "pips", "slots"]).default("bar"),
+                // Read the count from this stat key instead of ticked items.
+                stat: z.string().optional(),
+                max: z.number().int().positive().optional(),
               }),
             )
             .default([]),
@@ -88,6 +91,9 @@ const games = defineCollection({
                 kind: z.string(),
                 label: z.string().optional(),
                 style: z.enum(["bar", "pips"]).default("bar"),
+                // Read the count from this stat key instead of ticked items.
+                stat: z.string().optional(),
+                max: z.number().int().positive().optional(),
               }),
             )
             .default([]),

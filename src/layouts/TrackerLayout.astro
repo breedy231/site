@@ -1,0 +1,39 @@
+---
+import "../styles/global.css"
+
+// Full-bleed layout for themed game trackers: no site nav, the page itself is
+// the HUD. Zoom stays enabled (unlike GameLayout) since this is read, not played.
+interface Props {
+  title?: string
+  themeColor?: string
+}
+
+const { title = "Brendan Reed", themeColor = "#000000" } = Astro.props
+
+const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN
+const enableAnalytics = import.meta.env.PROD && Boolean(cfBeaconToken)
+---
+
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content={themeColor} />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>{title}</title>
+    {enableAnalytics && (
+      <script
+        is:inline
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${cfBeaconToken}"}`}
+      />
+    )}
+  </head>
+  <body style={`background:${themeColor};margin:0`}>
+    <slot />
+  </body>
+</html>

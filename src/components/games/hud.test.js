@@ -96,3 +96,24 @@ describe("inventoryGroups order", () => {
     expect(groups[0].items.map(i => i.id)).toEqual(["u3", "u1"])
   })
 })
+
+describe("counterFor with a stat", () => {
+  const cfg = { kind: "etank", style: "pips", stat: "etanks", max: 14 }
+  it("uses the typed stat over ticked items, clamped to max", () => {
+    const s = { done: { e1: true }, stats: { etanks: "5" } }
+    expect(counterFor(items, cfg, s, null)).toMatchObject({
+      done: 5,
+      total: 14,
+      ticked: 1,
+    })
+    expect(
+      counterFor(items, cfg, { ...s, stats: { etanks: "99" } }, null).done,
+    ).toBe(14)
+  })
+  it("falls back to ticked items when the stat is blank or not a number", () => {
+    for (const v of [undefined, "", "lots"]) {
+      const s = { done: { e1: true }, stats: { etanks: v } }
+      expect(counterFor(items, cfg, s, null).done).toBe(1)
+    }
+  })
+})

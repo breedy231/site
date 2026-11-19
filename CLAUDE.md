@@ -82,7 +82,10 @@
   (tinted by `regions[].accent`), the objective with "Objective complete",
   next `route` waypoints, field notes on demand. `#log` (`hud.logLabel`) opens
   the logbook: inventory → counters → area cards → detail lists.
-  `footnote` prints small text under the visor.
+  `footnote` prints small text under the visor. Themed games (visor/erdtree)
+  render full-bleed via `src/layouts/TrackerLayout.astro` (no site nav);
+  `plain` stays in BaseLayout. Counters/readouts can take `stat` + `max` to
+  show a typed number (e.g. missile capacity) instead of counting ticks.
   Astro dev caches content: restart `astro dev` (or build) after YAML edits.
 - Progress (done, pin, stats, per-item notes) lives in the `game-tracker` blob.
   Read it with `GET /api/game-progress?game=<slug>` (public).

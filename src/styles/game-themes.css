@@ -368,8 +368,8 @@
   color: var(--hud-accent);
 }
 .hud-dot {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.45rem;
+  height: 0.45rem;
   border-radius: 999px;
   border: 1px solid var(--hud-line);
 }
@@ -424,4 +424,14 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* Full-bleed page: no frame, the viewport is the visor. */
+.hud-full {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.hud-full::before {
+  position: fixed;
 }

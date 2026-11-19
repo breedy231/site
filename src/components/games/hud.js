@@ -47,13 +47,25 @@ export const inventoryGroups = (items, inventory) => {
     .map(([name, list]) => ({ name, items: list }))
 }
 
+// A counter normally counts ticked items of its kind. With `stat`, a number
+// typed into that stat wins (e.g. missile capacity when you don't know which
+// expansions you've found); `max` overrides the total.
 export const counterFor = (items, counter, state, achievements) => {
   const list = items.filter(item => item.kind === counter.kind)
+  const ticked = list.filter(item =>
+    isItemDone(item, state, achievements),
+  ).length
+  const raw = counter.stat ? state?.stats?.[counter.stat] : undefined
+  const fromStat = raw === undefined || raw === "" ? NaN : Number(raw)
+  const total = counter.max ?? list.length
   return {
     ...counter,
     items: list,
-    done: list.filter(item => isItemDone(item, state, achievements)).length,
-    total: list.length,
+    done: Number.isFinite(fromStat)
+      ? Math.max(0, Math.min(fromStat, total))
+      : ticked,
+    total,
+    ticked,
   }
 }
 

@@ -6,8 +6,8 @@ const Meter = ({ counter, isDone }) => {
   if (counter.style === "pips") {
     return (
       <span className="mt-1 flex flex-wrap gap-1">
-        {counter.items.map((item, i) => (
-          <span key={item.id} data-on={i < counter.done} className="hud-pip" />
+        {Array.from({ length: counter.total }, (_, i) => (
+          <span key={i} data-on={i < counter.done} className="hud-pip" />
         ))}
       </span>
     )
