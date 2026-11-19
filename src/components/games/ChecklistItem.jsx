@@ -3,16 +3,9 @@ import { useState } from "react"
 import { buildLink } from "./links"
 import { formatUnlockDate } from "./useSteam"
 
-const KIND_STYLES = {
-  boss: "border-red-400 text-red-600 dark:border-red-500 dark:text-red-300",
-  quest:
-    "border-blue-400 text-blue-600 dark:border-blue-400 dark:text-blue-300",
-  item: "border-amber-500 text-amber-700 dark:border-amber-400 dark:text-amber-300",
-  area: "border-gray-300 text-gray-500 dark:border-gray-600 dark:text-gray-300",
-}
-
 const ChecklistItem = ({
   item,
+  badge,
   links,
   done,
   note,
@@ -35,7 +28,7 @@ const ChecklistItem = ({
   const map = buildLink(links?.map, item.name)
 
   return (
-    <li className="border-b border-gray-300 py-1 last:border-b-0 dark:border-gray-600">
+    <li className="border-b border-(--hud-line) py-1 last:border-b-0">
       <div className="flex items-start gap-2">
         <label
           className={`flex h-11 w-11 shrink-0 items-center justify-center ${
@@ -49,7 +42,7 @@ const ChecklistItem = ({
             checked={steamConfirmed ? true : done}
             disabled={!canWrite || steamConfirmed}
             onChange={onToggleDone}
-            className="h-5 w-5 accent-red-500"
+            className="h-5 w-5 accent-(--hud-accent)"
           />
         </label>
 
@@ -58,9 +51,7 @@ const ChecklistItem = ({
             type="button"
             onClick={() => setShowNote(v => !v)}
             className={`block w-full text-left text-base leading-snug ${
-              done
-                ? "text-gray-500 line-through dark:text-gray-300"
-                : "text-gray-900 dark:text-white"
+              done ? "text-(--hud-muted) line-through" : "text-(--hud-text)"
             }`}
           >
             {item.name}
@@ -68,11 +59,9 @@ const ChecklistItem = ({
 
           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
             <span
-              className={`rounded border px-1.5 py-0.5 uppercase ${
-                KIND_STYLES[item.kind] || KIND_STYLES.area
-              }`}
+              className={`rounded border px-1.5 py-0.5 uppercase ${badge.className}`}
             >
-              {item.kind}
+              {badge.label}
             </span>
             {steamConfirmed && (
               <span
@@ -87,7 +76,7 @@ const ChecklistItem = ({
                 href={wiki}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline decoration-red-500 underline-offset-2"
+                className="underline decoration-(--hud-accent) underline-offset-2"
               >
                 wiki
               </a>
@@ -97,7 +86,7 @@ const ChecklistItem = ({
                 href={map}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline decoration-red-500 underline-offset-2"
+                className="underline decoration-(--hud-accent) underline-offset-2"
               >
                 map
               </a>
@@ -105,9 +94,7 @@ const ChecklistItem = ({
           </div>
 
           {item.hint && (
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">
-              {item.hint}
-            </p>
+            <p className="mt-1 text-xs text-(--hud-muted)">{item.hint}</p>
           )}
 
           {showNote && (
@@ -117,7 +104,7 @@ const ChecklistItem = ({
               onChange={e => onNoteChange(e.target.value)}
               placeholder="Notes"
               rows={2}
-              className="mt-2 w-full rounded border border-gray-300 bg-transparent p-2 text-sm text-gray-900 dark:border-gray-600 dark:text-white"
+              className="mt-2 w-full rounded border border-(--hud-line) bg-transparent p-2 text-sm text-(--hud-text)"
             />
           )}
         </div>
@@ -127,7 +114,7 @@ const ChecklistItem = ({
           onClick={onTogglePin}
           disabled={!canWrite}
           aria-label={pinned ? `Unpin ${item.name}` : `Pin ${item.name}`}
-          className="h-11 w-11 shrink-0 text-lg text-gray-500 disabled:opacity-40 dark:text-gray-300"
+          className="h-11 w-11 shrink-0 text-lg text-(--hud-muted) disabled:opacity-40"
         >
           {pinned ? "★" : "☆"}
         </button>
@@ -142,6 +129,10 @@ ChecklistItem.propTypes = {
     kind: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     hint: PropTypes.string,
+  }).isRequired,
+  badge: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    className: PropTypes.string.isRequired,
   }).isRequired,
   links: PropTypes.shape({
     map: PropTypes.string,

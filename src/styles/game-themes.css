@@ -1,0 +1,437 @@
+/* Game tracker themes. A game YAML picks one with `theme:`; every tracker
+   component reads these variables, so a new theme is just a new block here.
+   Dark themes also put `.dark` on the wrapper (see GameTracker) so the kind
+   badges and inputs use their dark-mode colors. Original styling — evocative
+   of in-game menus, no copied game art. */
+
+.hud {
+  --hud-bg: transparent;
+  --hud-panel: transparent;
+  --hud-line: #d1d5db;
+  --hud-text: #111827;
+  --hud-muted: #6b7280;
+  --hud-accent: #ef4444;
+  --hud-accent-2: #ef4444;
+  --hud-off: #e5e7eb;
+  --hud-font: inherit;
+  --hud-title-font: inherit;
+  --hud-label-font: inherit;
+
+  position: relative;
+  isolation: isolate;
+  background: var(--hud-bg);
+  color: var(--hud-text);
+  font-family: var(--hud-font);
+}
+
+.dark .hud-plain {
+  --hud-line: #4b5563;
+  --hud-text: #ffffff;
+  --hud-muted: #d1d5db;
+  --hud-off: #374151;
+}
+
+/* Visor: inside a helmet. Pale cyan linework, orange for vitals, an area
+   tint for location; curved-glass vignette. Original CSS, evocative only. */
+.hud-visor {
+  --hud-bg: #050c12;
+  --hud-panel: rgba(95, 230, 255, 0.04);
+  --hud-line: rgba(95, 230, 255, 0.32);
+  --hud-text: #dff8ff;
+  --hud-muted: #7ea7b5;
+  --hud-accent: #ff9a2e;
+  --hud-accent-2: #5fe6ff;
+  --hud-off: rgba(95, 230, 255, 0.12);
+  --hud-font: "Exo 2", ui-sans-serif, system-ui, sans-serif;
+  --hud-label-font: "Exo 2", ui-sans-serif, system-ui, sans-serif;
+  --hud-title-font: "Exo 2", ui-sans-serif, system-ui, sans-serif;
+  --hud-mono-font: "Share Tech Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+  border-radius: 1.25rem;
+  border: 1px solid var(--hud-line);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+
+/* Curved glass: dark vignette at the rim, a soft area-tinted glow at the
+   top, faint scanlines. */
+.hud-visor::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 120% 90% at 50% 45%,
+      transparent 55%,
+      rgba(0, 0, 0, 0.75) 100%
+    ),
+    radial-gradient(
+      ellipse 90% 40% at 50% 0%,
+      color-mix(in srgb, var(--hud-area) 18%, transparent),
+      transparent 70%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.022) 0 1px,
+      transparent 1px 3px
+    );
+}
+
+.hud-visor .hud-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.hud-visor .hud-label {
+  font-weight: 500;
+  letter-spacing: 0.16em;
+}
+.hud-visor .hud-glow {
+  text-shadow: 0 0 10px rgba(255, 154, 46, 0.5);
+}
+/* Objective title reads in pale cyan-white; vitals stay orange. */
+.hud-visor .hud-reticle .hud-glow {
+  color: var(--hud-text);
+  text-shadow: 0 0 14px rgba(95, 230, 255, 0.45);
+}
+
+/* Erdtree: dusk-gold, serif titles, warm parchment text. */
+.hud-erdtree {
+  --hud-bg: #15120c;
+  --hud-panel: rgba(212, 175, 55, 0.05);
+  --hud-line: rgba(212, 175, 55, 0.3);
+  --hud-text: #efe6cf;
+  --hud-muted: #a89a78;
+  --hud-accent: #d4af37;
+  --hud-accent-2: #f1dc9a;
+  --hud-off: rgba(212, 175, 55, 0.12);
+  --hud-title-font: ui-serif, Georgia, "Times New Roman", serif;
+  --hud-label-font: ui-serif, Georgia, "Times New Roman", serif;
+  color-scheme: dark;
+  border-radius: 0.75rem;
+  border: 1px solid var(--hud-line);
+}
+
+.hud-erdtree::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% -10%,
+    rgba(212, 175, 55, 0.16),
+    transparent 55%
+  );
+}
+
+/* Building blocks */
+
+.hud-panel {
+  position: relative;
+  background: var(--hud-panel);
+  border: 1px solid var(--hud-line);
+  border-radius: 0.375rem;
+}
+
+/* Corner brackets on visor panels. */
+.hud-visor .hud-panel::before,
+.hud-visor .hud-panel::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  border-color: var(--hud-accent-2);
+  border-style: solid;
+}
+.hud-visor .hud-panel::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+}
+.hud-visor .hud-panel::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+.hud-label {
+  font-family: var(--hud-label-font);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hud-muted);
+}
+
+.hud-title {
+  font-family: var(--hud-title-font);
+}
+
+.hud-glow {
+  color: var(--hud-accent);
+}
+.hud-erdtree .hud-glow {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Inventory tiles */
+.hud-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: 4.25rem;
+  padding: 0.4rem 0.25rem;
+  border: 1px dashed var(--hud-line);
+  border-radius: 0.375rem;
+  color: var(--hud-muted);
+  opacity: 0.55;
+  transition:
+    opacity 120ms,
+    border-color 120ms,
+    box-shadow 120ms;
+}
+.hud-tile[data-on="true"] {
+  opacity: 1;
+  border-style: solid;
+  border-color: var(--hud-accent);
+  color: var(--hud-text);
+  background: var(--hud-panel);
+}
+.hud-visor .hud-tile[data-on="true"] {
+  box-shadow: 0 0 12px rgba(255, 154, 46, 0.22) inset;
+}
+.hud-tile-code {
+  font-family: var(--hud-label-font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.hud-tile[data-on="true"] .hud-tile-code {
+  color: var(--hud-accent);
+}
+.hud-tile-name {
+  font-size: 0.62rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+/* Counters */
+.hud-pip {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 1px solid var(--hud-line);
+  background: var(--hud-off);
+}
+.hud-pip[data-on="true"] {
+  border-color: var(--hud-accent);
+  background: var(--hud-accent);
+}
+.hud-slot {
+  width: 0.85rem;
+  height: 0.85rem;
+  transform: rotate(45deg);
+  border: 1px solid var(--hud-line);
+  background: transparent;
+}
+.hud-slot[data-on="true"] {
+  border-color: var(--hud-accent-2);
+  background: var(--hud-accent-2);
+}
+.hud-bar {
+  display: block;
+  height: 0.35rem;
+  width: 100%;
+  border-radius: 999px;
+  background: var(--hud-off);
+  overflow: hidden;
+}
+.hud-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--hud-accent);
+}
+
+/* Selected card / counter */
+.hud-selected {
+  border-color: var(--hud-accent) !important;
+}
+
+/* Visor view */
+.hud {
+  --hud-area: var(--area-accent, var(--hud-accent-2));
+}
+.hud-location {
+  color: var(--hud-area);
+  letter-spacing: 0.3em;
+}
+.hud-reticle {
+  position: relative;
+}
+/* Lock-on brackets: four corners drawn with two pseudo-elements. */
+.hud-reticle::before,
+.hud-reticle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 2px solid var(--hud-accent-2);
+  opacity: 0.8;
+  -webkit-mask:
+    linear-gradient(#000 0 0) top left / 18px 18px,
+    linear-gradient(#000 0 0) top right / 18px 18px,
+    linear-gradient(#000 0 0) bottom left / 18px 18px,
+    linear-gradient(#000 0 0) bottom right / 18px 18px;
+  mask:
+    linear-gradient(#000 0 0) top left / 18px 18px,
+    linear-gradient(#000 0 0) top right / 18px 18px,
+    linear-gradient(#000 0 0) bottom left / 18px 18px,
+    linear-gradient(#000 0 0) bottom right / 18px 18px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.hud-reticle::after {
+  inset: 6px;
+  border-width: 1px;
+  opacity: 0.35;
+}
+.hud-button {
+  font-family: var(--hud-label-font);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--hud-accent);
+  border-radius: 0.25rem;
+  color: var(--hud-accent);
+}
+.hud-button:active {
+  background: var(--hud-accent);
+  color: var(--hud-bg);
+}
+.hud-waypoint {
+  flex: none;
+  font-family: var(--hud-mono-font, inherit);
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--hud-area);
+}
+.hud-pip-sm {
+  width: 0.55rem;
+  height: 0.55rem;
+}
+.hud-notes {
+  color: var(--hud-text);
+  --tw-prose-body: var(--hud-text);
+  --tw-prose-bold: var(--hud-accent);
+  --tw-prose-bullets: var(--hud-area);
+  --tw-prose-links: var(--hud-accent);
+}
+
+/* Visor top edge */
+.hud-mono {
+  font-family: var(--hud-mono-font, var(--hud-label-font));
+}
+.hud-readout {
+  position: relative;
+  padding: 0.35rem 0.5rem;
+}
+/* Thick brackets on the outer top corner of each readout. */
+.hud-readout::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-top: 3px solid var(--hud-accent-2);
+  border-left: 3px solid var(--hud-accent-2);
+  opacity: 0.85;
+}
+.hud-readout.text-right::before {
+  left: auto;
+  right: 0;
+  border-left: 0;
+  border-right: 3px solid var(--hud-accent-2);
+}
+.hud-readout-box {
+  min-width: 2.1rem;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid var(--hud-line);
+  font-size: 1.25rem;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--hud-accent);
+}
+.hud-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--hud-line);
+}
+.hud-dot[data-on="true"] {
+  background: var(--hud-accent);
+  border-color: var(--hud-accent);
+  box-shadow: 0 0 6px rgba(255, 154, 46, 0.6);
+}
+.hud-light {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--hud-off);
+}
+.hud-light[data-on="true"] {
+  background: var(--hud-accent-2);
+  box-shadow: 0 0 6px var(--hud-accent-2);
+}
+
+/* Boot-up: brackets and readouts flicker on once. */
+@media (prefers-reduced-motion: no-preference) {
+  .hud-visor .hud-topbar,
+  .hud-visor .hud-reticle::before {
+    animation: hud-boot 900ms steps(1, end) both;
+  }
+  .hud-visor .hud-reticle {
+    animation: hud-fade 700ms ease-out 250ms both;
+  }
+}
+@keyframes hud-boot {
+  0%,
+  20% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  35% {
+    opacity: 0.2;
+  }
+  45%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes hud-fade {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Full-bleed page: no frame, the viewport is the visor. */
+.hud-full {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.hud-full::before {
+  position: fixed;
+}

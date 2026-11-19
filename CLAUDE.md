@@ -47,6 +47,8 @@
 | `/headsup`         | `src/pages/headsup.astro`         | React island (`headsup/HeadsUpGame.jsx`, `GameLayout`) |
 | `/motion-test`     | `src/pages/motion-test.astro`     | React island (`MotionTest.jsx`)                        |
 | `/callback/oauth`  | `src/pages/callback/oauth.astro`  | React island (`OAuthCallback.jsx`)                     |
+| `/games`           | `src/pages/games/index.astro`     | Static (games content collection)                      |
+| `/games/[slug]`    | `src/pages/games/[slug].astro`    | React island (`games/GameTracker.jsx`)                 |
 
 ### Heads Up game notes
 
@@ -63,6 +65,36 @@
   fragment (`/headsup#deck=<version><codec>.<base64url>`, deflate-raw via
   CompressionStream with a plain-JSON fallback); opening the link prompts
   to import. Bump `SHARE_VERSION` on any incompatible format change.
+
+### Game tracker notes
+
+- `/games` lists every game; `/games/<slug>` is the tracker (`src/components/games/`).
+- Adding a game = one YAML in `src/content/games/` (schema in `src/content.config.ts`,
+  which rejects unknown kinds, duplicate ids, and bad `route` ids).
+- YAML holds the definition only: `regions → items` (`id`, `kind`, `name`, `hint`,
+  optional `steam`), optional `kinds` (label + color from `kinds.js`, merged over
+  boss/quest/item/area), `notes` (markdown, rendered at build time), `route`.
+- Look: `theme:` (`plain` / `visor` / `erdtree`, CSS vars in
+  `src/styles/game-themes.css`) and `hud:` (`inventory` = one kind as a lit/dim
+  tile grid with `groups` + `order`; `counters` = per-kind `bar`/`pips`/`slots`).
+  Items can set `icon` (tile code) and `group`. Default view is the sparse
+  **visor**: two `hud.readouts` vitals, sync lights, the objective's area
+  (tinted by `regions[].accent`), the objective with "Objective complete",
+  next `route` waypoints, field notes on demand. `#log` (`hud.logLabel`) opens
+  the logbook: inventory → counters → area cards → detail lists.
+  `footnote` prints small text under the visor. Themed games (visor/erdtree)
+  render full-bleed via `src/layouts/TrackerLayout.astro` (no site nav);
+  `plain` stays in BaseLayout. Counters/readouts can take `stat` + `max` to
+  show a typed number (e.g. missile capacity) instead of counting ticks.
+  Astro dev caches content: restart `astro dev` (or build) after YAML edits.
+- Progress (done, pin, stats, per-item notes) lives in the `game-tracker` blob.
+  Read it with `GET /api/game-progress?game=<slug>` (public).
+- "Next up" = pinned item, else the first undone `route` id, else the first
+  undone item on the page.
+- **"I'm stuck, what next?" workflow:** GET the progress blob first. Then update
+  that game's `notes` (tips for where they're stuck) and `route` (the next few
+  item ids), and ship it like any other change. Notes are rendered unsanitized, so
+  write plain markdown and never paste in raw HTML.
 
 ## Serverless Functions
 
