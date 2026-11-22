@@ -25,9 +25,9 @@ describe("isAuthedForWrite", () => {
   it("checks a named env var when given", () => {
     process.env.TRACKER_KEY = "strong-token"
     process.env.GAME_TRACKER_KEY = "short-passphrase"
-    expect(isAuthedForWrite(req("short-passphrase"), "GAME_TRACKER_KEY").ok).toBe(
-      true,
-    )
+    expect(
+      isAuthedForWrite(req("short-passphrase"), "GAME_TRACKER_KEY").ok,
+    ).toBe(true)
     expect(isAuthedForWrite(req("strong-token"), "GAME_TRACKER_KEY").ok).toBe(
       false,
     )
