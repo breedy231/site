@@ -1,7 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro"
+import TrackerLayout from "../../layouts/TrackerLayout.astro"
 import { getCollection } from "astro:content"
+import { marked } from "marked"
 import GameTracker from "../../components/games/GameTracker"
+import "@fontsource/exo-2/500.css"
+import "@fontsource/exo-2/700.css"
+import "@fontsource/share-tech-mono/400.css"
+import "../../styles/game-themes.css"
 
 export async function getStaticPaths() {
   const games = await getCollection("games")
@@ -11,9 +17,29 @@ export async function getStaticPaths() {
   }))
 }
 
+// Themed games take over the whole page; keep in sync with --hud-bg.
+const THEME_BG = { visor: "#050c12", erdtree: "#15120c" }
+
 const { entry } = Astro.props
+// Notes are repo-authored markdown, so rendering to HTML here is trusted.
+const notesHtml = entry.data.notes
+  ? await marked.parse(entry.data.notes)
+  : undefined
+const pageTitle = `${entry.data.title} — Brendan Reed`
+const themeBg = THEME_BG[entry.data.theme]
 ---
 
-<BaseLayout title={`${entry.data.title} — Brendan Reed`}>
-  <GameTracker client:load game={entry.data} />
-</BaseLayout>
+{themeBg ? (
+  <TrackerLayout title={pageTitle} themeColor={themeBg}>
+    <GameTracker
+      client:load
+      game={entry.data}
+      notesHtml={notesHtml}
+      fullBleed
+    />
+  </TrackerLayout>
+) : (
+  <BaseLayout title={pageTitle}>
+    <GameTracker client:load game={entry.data} notesHtml={notesHtml} />
+  </BaseLayout>
+)}

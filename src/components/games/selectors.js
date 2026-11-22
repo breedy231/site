@@ -24,16 +24,46 @@ export const isItemDone = (item, state, achievements) =>
 export const countDone = (items, state, achievements) =>
   items.filter(item => isItemDone(item, state, achievements)).length
 
-// Pinned item wins if it exists and isn't done; otherwise the first undone
-// item in document order. `items` must already be in document order.
-export const pickNextUp = (items, state, achievements) => {
+// What to do next, in priority order:
+//   1. the pinned item, if it exists and isn't done
+//   2. the first undone item on the game's suggested `route` (ids)
+//   3. the first undone item in document order
+// `items` must already be in document order.
+export const pickNextUp = (items, state, achievements, route = []) => {
+  const undone = item => item && !isItemDone(item, state, achievements)
+  const byId = id => items.find(item => item.id === id)
+
   const pin = state?.pin
   if (pin) {
-    const pinned = items.find(item => item.id === pin)
-    if (pinned && !isItemDone(pinned, state, achievements)) return pinned
+    const pinned = byId(pin)
+    if (undone(pinned)) return pinned
   }
-  return items.find(item => !isItemDone(item, state, achievements)) || null
+  for (const id of route) {
+    const step = byId(id)
+    if (undone(step)) return step
+  }
+  return items.find(undone) || null
 }
 
 export const flattenItems = (regions, custom = {}) =>
   regions.flatMap(region => [...region.items, ...(custom[region.id] || [])])
+
+// The route steps after the current objective that are still undone.
+export const pickWaypoints = (
+  items,
+  state,
+  achievements,
+  route = [],
+  currentId = null,
+  limit = 2,
+) => {
+  const out = []
+  for (const id of route) {
+    if (id === currentId) continue
+    const item = items.find(i => i.id === id)
+    if (!item || isItemDone(item, state, achievements)) continue
+    out.push(item)
+    if (out.length >= limit) break
+  }
+  return out
+}

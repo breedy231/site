@@ -1,0 +1,566 @@
+# Game definition for the tracker at /games/metroid-prime-remastered.
+# Progress lives in Netlify Blobs, not here. Switch game: no Steam sync, all manual.
+# Pickup list (100 items) is the vanilla layout, cross-checked against Randovania's
+# Prime 1 logic database. Edit this file directly (the one-off generator is gone).
+# Expansion names lead with the room so the wiki link lands
+# on the room page, which explains how to reach it.
+slug: metroid-prime-remastered
+title: Metroid Prime Remastered
+character: Switch — manual tracking
+links:
+  wiki: https://metroid.fandom.com/wiki/{q}
+footnote: Fan-made tracker. Not affiliated with Nintendo or Retro Studios.
+theme: visor
+hud:
+  inventory:
+    kind: upgrade
+    title: Inventory
+    groups: [Beams, Missiles, Visors, Suits, Morph Ball, Mobility]
+    order: [power-beam, charge-beam, wave-beam, ice-beam, plasma-beam, missile-launcher, super-missile, wavebuster, ice-spreader, flamethrower, combat-visor, scan-visor, thermal-visor, x-ray-visor, varia-suit, gravity-suit, phazon-suit, morph-ball, morph-ball-bomb, boost-ball, spider-ball, power-bomb, space-jump-boots, grapple-beam]
+  logLabel: Logbook
+  readouts:
+    - { kind: etank, label: Energy, style: pips, stat: etanks, max: 14 }
+    - { kind: missile, label: Missiles, style: bar, stat: missiles, max: 250 }
+  counters:
+    - { kind: etank, label: Energy Tanks, style: pips, stat: etanks, max: 14 }
+    - { kind: artifact, label: Chozo Artifacts, style: slots }
+    - { kind: missile, label: Missile capacity, style: bar, stat: missiles, max: 250 }
+    - { kind: pbomb, label: Power Bomb Expansions, style: pips }
+    - { kind: boss, label: Bosses, style: slots }
+    - { kind: scan, label: Key scans, style: bar }
+kinds:
+  upgrade: { label: Upgrade, color: amber }
+  etank: { label: Energy Tank, color: green }
+  missile: { label: Missile, color: orange }
+  pbomb: { label: Power Bomb, color: purple }
+  artifact: { label: Artifact, color: sky }
+  scan: { label: Scan, color: gray }
+# Suggested path from where I am now. Update this when I get stuck.
+route:
+  - power-bomb
+  - grapple-beam
+  - x-ray-visor
+  - plasma-beam
+  - omega-pirate
+  - phazon-suit
+stats:
+  - key: etanks
+    label: Energy Tanks
+  - key: missiles
+    label: Missile cap
+  - key: pct
+    label: Items %
+  - key: hrs
+    label: Hours
+notes: |
+  **Ore Processing** (the rotating pillar)
+
+  - The pillar has three sections, each with a Spider Ball track. **Bomb the Rotation Control Units** to turn a section until the tracks line up.
+  - The last control unit is buried in Bendezium, which only a **Power Bomb** clears. No Power Bombs yet? This room is a pass-through for now; push on down to level 2.
+  - The top of the pillar leads to Storage Depot B and the **Grapple Beam**.
+
+  **Power Bomb:** Central Dynamo, level 2, via Omega Research → Dynamo Access (the door in the floor). After the fight, morph into the hatch and work through the electric maze.
+
+  **Troopers** only take damage from their own beam color: Power Troopers → Power Beam, Wave Troopers → Wave Beam, Ice Troopers → Ice Beam.
+regions:
+  - id: tallon
+    name: Tallon Overworld
+    accent: "#4fbf8a"
+    items:
+      - id: space-jump-boots
+        kind: upgrade
+        name: "Space Jump Boots"
+        hint: "Alcove."
+        icon: JMP
+        group: Mobility
+      - id: x-ray-visor
+        kind: upgrade
+        name: "X-Ray Visor"
+        hint: "Life Grove."
+        icon: XRY
+        group: Visors
+      - id: artifact-of-truth
+        kind: artifact
+        name: "Artifact of Truth"
+        hint: "Artifact Temple."
+      - id: artifact-of-chozo
+        kind: artifact
+        name: "Artifact of Chozo"
+        hint: "Life Grove."
+      - id: cargo-freight-lift-to-deck-gamma-etank
+        kind: etank
+        name: "Cargo Freight Lift to Deck Gamma — Energy Tank"
+      - id: hydro-access-tunnel-etank
+        kind: etank
+        name: "Hydro Access Tunnel — Energy Tank"
+      - id: landing-site-missile
+        kind: missile
+        name: "Landing Site — Missile Expansion"
+      - id: frigate-crash-site-missile
+        kind: missile
+        name: "Frigate Crash Site — Missile Expansion"
+      - id: overgrown-cavern-missile
+        kind: missile
+        name: "Overgrown Cavern — Missile Expansion"
+      - id: root-cave-missile
+        kind: missile
+        name: "Root Cave — Missile Expansion"
+      - id: transport-tunnel-b-missile
+        kind: missile
+        name: "Transport Tunnel B — Missile Expansion"
+      - id: arbor-chamber-missile
+        kind: missile
+        name: "Arbor Chamber — Missile Expansion"
+      - id: biohazard-containment-missile
+        kind: missile
+        name: "Biohazard Containment — Missile Expansion"
+      - id: great-tree-chamber-missile
+        kind: missile
+        name: "Great Tree Chamber — Missile Expansion"
+      - id: life-grove-tunnel-missile
+        kind: missile
+        name: "Life Grove Tunnel — Missile Expansion"
+  - id: chozo
+    name: Chozo Ruins
+    accent: "#d9a441"
+    items:
+      - id: plated-beetle
+        kind: boss
+        name: "Plated Beetle"
+        hint: "Ruined Shrine, ambushes you after the Morph Ball."
+      - id: hive-mecha
+        kind: boss
+        name: "Hive Mecha"
+        hint: "Hive Totem. Drops the Missile Launcher."
+      - id: incinerator-drone
+        kind: boss
+        name: "Incinerator Drone"
+        hint: "Burn Dome. Drops the Morph Ball Bomb."
+      - id: flaahgra
+        kind: boss
+        name: "Flaahgra"
+        hint: "Sunchamber. Drops the Varia Suit."
+      - id: morph-ball
+        kind: upgrade
+        name: "Morph Ball"
+        hint: "Ruined Shrine."
+        icon: MRP
+        group: Morph Ball
+      - id: wavebuster
+        kind: upgrade
+        name: "Wavebuster"
+        hint: "Tower of Light."
+        icon: WVB
+        group: Missiles
+      - id: missile-launcher
+        kind: upgrade
+        name: "Missile Launcher"
+        hint: "Hive Totem, after Hive Mecha."
+        icon: MSL
+        group: Missiles
+      - id: varia-suit
+        kind: upgrade
+        name: "Varia Suit"
+        hint: "Sunchamber, after Flaahgra."
+        icon: VAR
+        group: Suits
+      - id: charge-beam
+        kind: upgrade
+        name: "Charge Beam"
+        hint: "Watery Hall."
+        icon: CHG
+        group: Beams
+      - id: morph-ball-bomb
+        kind: upgrade
+        name: "Morph Ball Bomb"
+        hint: "Burn Dome, after Incinerator Drone."
+        icon: BMB
+        group: Morph Ball
+      - id: ice-beam
+        kind: upgrade
+        name: "Ice Beam"
+        hint: "Antechamber."
+        icon: ICE
+        group: Beams
+      - id: artifact-of-lifegiver
+        kind: artifact
+        name: "Artifact of Lifegiver"
+        hint: "Tower Chamber."
+      - id: artifact-of-wild
+        kind: artifact
+        name: "Artifact of Wild"
+        hint: "Sunchamber."
+      - id: artifact-of-world
+        kind: artifact
+        name: "Artifact of World"
+        hint: "Elder Chamber."
+      - id: main-plaza-etank
+        kind: etank
+        name: "Main Plaza — Energy Tank"
+      - id: training-chamber-etank
+        kind: etank
+        name: "Training Chamber — Energy Tank"
+      - id: transport-access-north-etank
+        kind: etank
+        name: "Transport Access North — Energy Tank"
+      - id: furnace-etank
+        kind: etank
+        name: "Furnace — Energy Tank"
+      - id: hall-of-the-elders-etank
+        kind: etank
+        name: "Hall of the Elders — Energy Tank"
+      - id: main-plaza-missile
+        kind: missile
+        name: "Main Plaza — Missile Expansion (half pipe)"
+      - id: main-plaza-missile-2
+        kind: missile
+        name: "Main Plaza — Missile Expansion (grapple ledge)"
+      - id: main-plaza-missile-3
+        kind: missile
+        name: "Main Plaza — Missile Expansion (tree)"
+      - id: ruined-fountain-missile
+        kind: missile
+        name: "Ruined Fountain — Missile Expansion"
+      - id: ruined-shrine-missile
+        kind: missile
+        name: "Ruined Shrine — Missile Expansion (half pipe)"
+      - id: ruined-shrine-missile-2
+        kind: missile
+        name: "Ruined Shrine — Missile Expansion (bomb wall)"
+      - id: vault-missile
+        kind: missile
+        name: "Vault — Missile Expansion"
+      - id: ruined-nursery-missile
+        kind: missile
+        name: "Ruined Nursery — Missile Expansion"
+      - id: training-chamber-access-missile
+        kind: missile
+        name: "Training Chamber Access — Missile Expansion"
+      - id: ruined-gallery-missile
+        kind: missile
+        name: "Ruined Gallery — Missile Expansion"
+      - id: ruined-gallery-missile-2
+        kind: missile
+        name: "Ruined Gallery — Missile Expansion"
+      - id: gathering-hall-missile
+        kind: missile
+        name: "Gathering Hall — Missile Expansion"
+      - id: watery-hall-access-missile
+        kind: missile
+        name: "Watery Hall Access — Missile Expansion"
+      - id: watery-hall-missile
+        kind: missile
+        name: "Watery Hall — Missile Expansion"
+      - id: dynamo-missile
+        kind: missile
+        name: "Dynamo — Missile Expansion"
+      - id: dynamo-missile-2
+        kind: missile
+        name: "Dynamo — Missile Expansion"
+      - id: burn-dome-missile
+        kind: missile
+        name: "Burn Dome — Missile Expansion"
+      - id: furnace-missile
+        kind: missile
+        name: "Furnace — Missile Expansion"
+      - id: crossway-missile
+        kind: missile
+        name: "Crossway — Missile Expansion"
+      - id: magma-pool-pb
+        kind: pbomb
+        name: "Magma Pool — Power Bomb Expansion"
+      - id: scan-hive-mecha
+        kind: scan
+        name: "Scan: Hive Mecha"
+        hint: "Missable."
+      - id: scan-incinerator-drone
+        kind: scan
+        name: "Scan: Incinerator Drone"
+        hint: "Missable."
+      - id: scan-flaahgra
+        kind: scan
+        name: "Scan: Flaahgra"
+        hint: "Missable."
+  - id: magmoor
+    name: Magmoor Caverns
+    accent: "#ff6a1f"
+    items:
+      - id: ice-spreader
+        kind: upgrade
+        name: "Ice Spreader"
+        hint: "Shore Tunnel."
+        icon: ISP
+        group: Missiles
+      - id: plasma-beam
+        kind: upgrade
+        name: "Plasma Beam"
+        hint: "Plasma Processing."
+        icon: PLS
+        group: Beams
+      - id: artifact-of-nature
+        kind: artifact
+        name: "Artifact of Nature"
+        hint: "Lava Lake."
+      - id: artifact-of-strength
+        kind: artifact
+        name: "Artifact of Strength"
+        hint: "Warrior Shrine."
+      - id: transport-tunnel-a-etank
+        kind: etank
+        name: "Transport Tunnel A — Energy Tank"
+      - id: magmoor-workstation-etank
+        kind: etank
+        name: "Magmoor Workstation — Energy Tank"
+      - id: triclops-pit-missile
+        kind: missile
+        name: "Triclops Pit — Missile Expansion"
+      - id: storage-cavern-missile
+        kind: missile
+        name: "Storage Cavern — Missile Expansion"
+      - id: fiery-shores-missile
+        kind: missile
+        name: "Fiery Shores — Missile Expansion"
+      - id: fiery-shores-pb
+        kind: pbomb
+        name: "Fiery Shores — Power Bomb Expansion"
+  - id: phendrana
+    name: Phendrana Drifts
+    accent: "#9fd8ff"
+    items:
+      - id: research-core-escape
+        kind: quest
+        name: "Escape the Research Core alive"
+        hint: "Exit is Research Core Access, up into Research Lab Aether. If a door is dead, find its Power Conduit in Thermal and hit it with the Wave Beam. Save at the Ruined Courtyard, then Thardus."
+      - id: sheegoth
+        kind: boss
+        name: "Sheegoth"
+        hint: "Chapel of the Elders. Drops the Wave Beam."
+      - id: thardus
+        kind: boss
+        name: "Thardus"
+        hint: "Quarantine Cave: Ruined Courtyard → Quarantine Access → North Quarantine Tunnel. The Courtyard door is unpowered: hit its Power Conduit (behind the Cordite statue, visible in Thermal) with the Wave Beam. Fight: Thermal finds the weak rock (and locks on), shoot it; Thermal sees through the snowstorm. Bomb it when it rolls, Boost or Space Jump out of the way. Drops the Spider Ball."
+      - id: wave-beam
+        kind: upgrade
+        name: "Wave Beam"
+        hint: "Chapel of the Elders, after Sheegoth."
+        icon: WAV
+        group: Beams
+      - id: boost-ball
+        kind: upgrade
+        name: "Boost Ball"
+        hint: "Phendrana Canyon."
+        icon: BST
+        group: Morph Ball
+      - id: spider-ball
+        kind: upgrade
+        name: "Spider Ball"
+        hint: "Quarantine Cave, after Thardus."
+        icon: SPD
+        group: Morph Ball
+      - id: super-missile
+        kind: upgrade
+        name: "Super Missile"
+        hint: "Observatory."
+        icon: SUP
+        group: Missiles
+      - id: thermal-visor
+        kind: upgrade
+        name: "Thermal Visor"
+        hint: "Research Core."
+        icon: THM
+        group: Visors
+      - id: gravity-suit
+        kind: upgrade
+        name: "Gravity Suit"
+        hint: "Gravity Chamber."
+        icon: GRV
+        group: Suits
+      - id: artifact-of-sun
+        kind: artifact
+        name: "Artifact of Sun"
+        hint: "Chozo Ice Temple."
+      - id: artifact-of-elder
+        kind: artifact
+        name: "Artifact of Elder"
+        hint: "Control Tower."
+      - id: artifact-of-spirit
+        kind: artifact
+        name: "Artifact of Spirit"
+        hint: "Storage Cave."
+      - id: ruined-courtyard-etank
+        kind: etank
+        name: "Ruined Courtyard — Energy Tank"
+      - id: transport-access-etank
+        kind: etank
+        name: "Transport Access — Energy Tank"
+      - id: research-lab-aether-etank
+        kind: etank
+        name: "Research Lab Aether — Energy Tank"
+      - id: phendrana-shorelines-missile
+        kind: missile
+        name: "Phendrana Shorelines — Missile Expansion (behind ice)"
+      - id: phendrana-shorelines-missile-2
+        kind: missile
+        name: "Phendrana Shorelines — Missile Expansion (spider track)"
+      - id: ice-ruins-east-missile
+        kind: missile
+        name: "Ice Ruins East — Missile Expansion (behind ice)"
+      - id: ice-ruins-east-missile-2
+        kind: missile
+        name: "Ice Ruins East — Missile Expansion (spider track)"
+      - id: research-lab-hydra-missile
+        kind: missile
+        name: "Research Lab Hydra — Missile Expansion"
+      - id: quarantine-monitor-missile
+        kind: missile
+        name: "Quarantine Monitor — Missile Expansion"
+      - id: frost-cave-missile
+        kind: missile
+        name: "Frost Cave — Missile Expansion"
+      - id: research-lab-aether-missile
+        kind: missile
+        name: "Research Lab Aether — Missile Expansion"
+      - id: gravity-chamber-missile
+        kind: missile
+        name: "Gravity Chamber — Missile Expansion"
+      - id: ice-ruins-west-pb
+        kind: pbomb
+        name: "Ice Ruins West — Power Bomb Expansion"
+      - id: security-cave-pb
+        kind: pbomb
+        name: "Security Cave — Power Bomb Expansion"
+      - id: scan-thardus
+        kind: scan
+        name: "Scan: Thardus"
+        hint: "Missable: scan during the fight."
+  - id: mines
+    name: Phazon Mines
+    accent: "#3fe0d0"
+    items:
+      - id: omega-pirate
+        kind: boss
+        name: "Omega Pirate"
+        hint: "Elite Quarters. Drops the Phazon Suit. X-Ray shows him when he goes invisible."
+      - id: grapple-beam
+        kind: upgrade
+        name: "Grapple Beam"
+        hint: "Storage Depot B, top of Ore Processing. Power Bomb the Bendezium on the last Rotation Control Unit, bomb the units to line up the Spider Ball tracks, ride up."
+        icon: GRP
+        group: Mobility
+      - id: flamethrower
+        kind: upgrade
+        name: "Flamethrower"
+        hint: "Storage Depot A."
+        icon: FLM
+        group: Missiles
+      - id: phazon-suit
+        kind: upgrade
+        name: "Phazon Suit"
+        hint: "Elite Quarters, after Omega Pirate."
+        icon: PHZ
+        group: Suits
+      - id: power-bomb
+        kind: upgrade
+        name: "Power Bomb"
+        hint: "Central Dynamo (Mines level 2): Omega Research → Dynamo Access, floor door. After the fight, morph into the hatch and through the electric maze."
+        icon: PB
+        group: Morph Ball
+      - id: artifact-of-warrior
+        kind: artifact
+        name: "Artifact of Warrior"
+        hint: "Elite Research."
+      - id: artifact-of-newborn
+        kind: artifact
+        name: "Artifact of Newborn"
+        hint: "Phazon Mining Tunnel."
+      - id: ventilation-shaft-etank
+        kind: etank
+        name: "Ventilation Shaft — Energy Tank"
+      - id: processing-center-access-etank
+        kind: etank
+        name: "Processing Center Access — Energy Tank"
+      - id: main-quarry-missile
+        kind: missile
+        name: "Main Quarry — Missile Expansion"
+      - id: security-access-a-missile
+        kind: missile
+        name: "Security Access A — Missile Expansion"
+      - id: elite-research-missile
+        kind: missile
+        name: "Elite Research — Missile Expansion"
+      - id: elite-control-access-missile
+        kind: missile
+        name: "Elite Control Access — Missile Expansion"
+      - id: phazon-processing-center-missile
+        kind: missile
+        name: "Phazon Processing Center — Missile Expansion"
+      - id: metroid-quarantine-b-missile
+        kind: missile
+        name: "Metroid Quarantine B — Missile Expansion"
+      - id: metroid-quarantine-a-missile
+        kind: missile
+        name: "Metroid Quarantine A — Missile Expansion"
+      - id: fungal-hall-b-missile
+        kind: missile
+        name: "Fungal Hall B — Missile Expansion"
+      - id: fungal-hall-access-missile
+        kind: missile
+        name: "Fungal Hall Access — Missile Expansion"
+      - id: scan-omega-pirate
+        kind: scan
+        name: "Scan: Omega Pirate"
+        hint: "Missable."
+  - id: frigate
+    name: Frigate Orpheon
+    accent: "#8fa3b0"
+    items:
+      - id: parasite-queen
+        kind: boss
+        name: "Parasite Queen"
+        hint: "Reactor core. Then escape before the frigate blows."
+      - id: power-beam
+        kind: upgrade
+        name: "Power Beam"
+        hint: "Starting equipment."
+        icon: PWR
+        group: Beams
+      - id: combat-visor
+        kind: upgrade
+        name: "Combat Visor"
+        hint: "Starting equipment."
+        icon: CMB
+        group: Visors
+      - id: scan-visor
+        kind: upgrade
+        name: "Scan Visor"
+        hint: "Starting equipment."
+        icon: SCN
+        group: Visors
+      - id: scan-parasite-queen
+        kind: scan
+        name: "Scan: Parasite Queen"
+        hint: "Missable: the frigate is gone after the intro."
+      - id: scan-frigate-logs
+        kind: scan
+        name: "Scan: Frigate research logs"
+        hint: "Missable: Space Pirate Data entries only on the frigate."
+  - id: crater
+    name: Impact Crater
+    accent: "#9b5cff"
+    items:
+      - id: meta-ridley
+        kind: boss
+        name: "Meta Ridley"
+        hint: "Artifact Temple (Tallon), once all 12 artifacts are placed. Opens the way into the crater."
+      - id: metroid-prime
+        kind: boss
+        name: "Metroid Prime"
+        hint: "Exoskeleton, then the core essence. Final boss."
+      - id: scan-meta-ridley
+        kind: scan
+        name: "Scan: Meta Ridley"
+        hint: "Missable: scan during the fight."
+      - id: scan-metroid-prime
+        kind: scan
+        name: "Scan: Metroid Prime"
+        hint: "Missable: scan both forms."
