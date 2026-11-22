@@ -1,10 +1,11 @@
 // netlify/functions/lib/tracker-key.js
-// Shared write-auth: X-Tracker-Key header must match the TRACKER_KEY env var.
+// Shared write-auth: X-Tracker-Key header must match a secret env var
+// (TRACKER_KEY by default; the game tracker passes its own, GAME_TRACKER_KEY).
 
 import { timingSafeEqual } from "node:crypto"
 
-export function isAuthedForWrite(req) {
-  const expected = process.env.TRACKER_KEY
+export function isAuthedForWrite(req, envName = "TRACKER_KEY") {
+  const expected = process.env[envName]
   if (!expected) return { ok: false, configured: false }
 
   const provided = req.headers.get("x-tracker-key") || ""

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const KEY_STORAGE = "tracker-key"
+// Own slot: /pages-per-day keeps the (different) soundtrack key in "tracker-key".
+const KEY_STORAGE = "game-tracker-key"
 const SAVE_DEBOUNCE_MS = 300
 
 const getApiUrl = () =>

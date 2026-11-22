@@ -1,6 +1,8 @@
 // netlify/functions/game-progress.js
 // Per-game progress store for the game checklist tracker, backed by Netlify Blobs.
-// Public reads, key-gated writes (X-Tracker-Key header must match TRACKER_KEY).
+// Public reads, key-gated writes. X-Tracker-Key must match GAME_TRACKER_KEY
+// (a low-stakes passphrase, separate from TRACKER_KEY, which also gates the
+// paid reading-soundtrack calls); falls back to TRACKER_KEY when unset.
 //
 //   GET  /api/game-progress?game=<slug>              -> stored JSON, or {}
 //   PUT  /api/game-progress?game=<slug>  { ... }      -> 204
@@ -87,9 +89,12 @@ function sanitize(input) {
 }
 
 async function handleWrite(req, game) {
-  const auth = isAuthedForWrite(req)
+  const auth = isAuthedForWrite(
+    req,
+    process.env.GAME_TRACKER_KEY ? "GAME_TRACKER_KEY" : "TRACKER_KEY",
+  )
   if (!auth.configured) {
-    return json({ error: "TRACKER_KEY not configured" }, 503)
+    return json({ error: "GAME_TRACKER_KEY not configured" }, 503)
   }
   if (!auth.ok) return json({ error: "Unauthorized" }, 401)
 
