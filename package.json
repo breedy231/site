@@ -15,16 +15,16 @@
     "prepare": "husky install || true"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.8.0",
-    "@astrojs/mdx": "^8.1.5",
-    "@astrojs/netlify": "^8.2.13",
-    "@astrojs/react": "^7.1.8",
-    "@astrojs/sitemap": "^3.7.4",
+    "@anthropic-ai/sdk": "^1.11.0",
+    "@astrojs/mdx": "^8.1.6",
+    "@astrojs/netlify": "^8.2.14",
+    "@astrojs/react": "^7.1.9",
+    "@astrojs/sitemap": "^3.7.6",
     "@netlify/blobs": "^11.1.9",
     "astro": "^7.4.13",
     "axios": "^1.21.1",
     "fast-xml-parser": "^5.12.1",
-    "framer-motion": "^14.13.0",
+    "framer-motion": "^14.14.0",
     "prop-types": "^15.8.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
